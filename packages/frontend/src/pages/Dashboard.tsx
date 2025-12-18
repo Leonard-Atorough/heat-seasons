@@ -43,7 +43,7 @@ export default function Dashboard() {
       {/* Hero Section */}
       <PageHeader
         title="SEASON ONE WINTER 2026"
-        subtitle="Races: 5 / 12"
+        subtitle="Races: 1 / 4"
         variant="hero"
         backgroundImage="/images/dashboard-hero.webp"
         action={

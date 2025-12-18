@@ -13,12 +13,13 @@
 }
 
 .title {
-  font-size: 2rem;
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  color: var(--primary-red);
   margin-bottom: 0.25rem;
 }
 
 .nav {
-  font-size: 1rem;
   opacity: 0.9;
   display: flex;
   justify-content: center;
@@ -32,13 +33,24 @@
   transition: text-decoration 0.2s;
   font-weight: var(--fw-semibold);
   font-size: var(--fs-body-large);
-}
-.nav__link:hover {
-  text-decoration: underline;
+  position: relative;
 }
 
 .nav__link::before {
   content: "";
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--gold);
+  transform: scaleX(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+.nav__link:hover::before {
+  transform: scaleX(1);
 }
 
 .nav__link-button {
