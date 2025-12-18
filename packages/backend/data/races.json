@@ -1,0 +1,137 @@
+[
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440000",
+    "seasonId": "660e8400-e29b-41d4-a716-446655440000",
+    "raceNumber": 5,
+    "date": "2025-12-14",
+    "results": [
+      {
+        "position": 1,
+        "racerId": "550e8400-e29b-41d4-a716-446655440000",
+        "racerName": "John Doe",
+        "points": 25
+      },
+      {
+        "position": 2,
+        "racerId": "550e8400-e29b-41d4-a716-446655440001",
+        "racerName": "Jane Smith",
+        "points": 18
+      },
+      {
+        "position": 3,
+        "racerId": "550e8400-e29b-41d4-a716-446655440002",
+        "racerName": "Bob Wilson",
+        "points": 15
+      }
+    ],
+    "createdAt": "2025-12-14T14:30:00Z"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440001",
+    "seasonId": "660e8400-e29b-41d4-a716-446655440000",
+    "raceNumber": 4,
+    "date": "2025-12-07",
+    "results": [
+      {
+        "position": 1,
+        "racerId": "550e8400-e29b-41d4-a716-446655440002",
+        "racerName": "Bob Wilson",
+        "points": 25
+      },
+      {
+        "position": 2,
+        "racerId": "550e8400-e29b-41d4-a716-446655440003",
+        "racerName": "Alice Johnson",
+        "points": 18
+      },
+      {
+        "position": 3,
+        "racerId": "550e8400-e29b-41d4-a716-446655440000",
+        "racerName": "John Doe",
+        "points": 15
+      }
+    ],
+    "createdAt": "2025-12-07T14:30:00Z"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440002",
+    "seasonId": "660e8400-e29b-41d4-a716-446655440000",
+    "raceNumber": 3,
+    "date": "2025-11-30",
+    "results": [
+      {
+        "position": 1,
+        "racerId": "550e8400-e29b-41d4-a716-446655440001",
+        "racerName": "Jane Smith",
+        "points": 25
+      },
+      {
+        "position": 2,
+        "racerId": "550e8400-e29b-41d4-a716-446655440004",
+        "racerName": "Charlie Brown",
+        "points": 18
+      },
+      {
+        "position": 3,
+        "racerId": "550e8400-e29b-41d4-a716-446655440000",
+        "racerName": "John Doe",
+        "points": 15
+      }
+    ],
+    "createdAt": "2025-11-30T14:30:00Z"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440003",
+    "seasonId": "660e8400-e29b-41d4-a716-446655440000",
+    "raceNumber": 2,
+    "date": "2025-11-23",
+    "results": [
+      {
+        "position": 1,
+        "racerId": "550e8400-e29b-41d4-a716-446655440000",
+        "racerName": "John Doe",
+        "points": 25
+      },
+      {
+        "position": 2,
+        "racerId": "550e8400-e29b-41d4-a716-446655440005",
+        "racerName": "Diana Prince",
+        "points": 18
+      },
+      {
+        "position": 3,
+        "racerId": "550e8400-e29b-41d4-a716-446655440001",
+        "racerName": "Jane Smith",
+        "points": 15
+      }
+    ],
+    "createdAt": "2025-11-23T14:30:00Z"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440004",
+    "seasonId": "660e8400-e29b-41d4-a716-446655440000",
+    "raceNumber": 1,
+    "date": "2025-11-16",
+    "results": [
+      {
+        "position": 1,
+        "racerId": "550e8400-e29b-41d4-a716-446655440006",
+        "racerName": "Ethan Hunt",
+        "points": 25
+      },
+      {
+        "position": 2,
+        "racerId": "550e8400-e29b-41d4-a716-446655440000",
+        "racerName": "John Doe",
+        "points": 18
+      },
+      {
+        "position": 3,
+        "racerId": "550e8400-e29b-41d4-a716-446655440007",
+        "racerName": "Fiona Apple",
+        "points": 15
+      }
+    ],
+    "createdAt": "2025-11-16T14:30:00Z"
+  }
+]

@@ -1,0 +1,31 @@
+.racerCard {
+  padding: 16px;
+  margin: 8px;
+  min-width: 300px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.racerCard__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.racerCard__picture {
+  flex: 0 0 auto;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+  color: var(--text-primary);
+}
+
+.racerCard__image {
+  width: 100%;
+  height: auto;
+}

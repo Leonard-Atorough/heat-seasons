@@ -1,0 +1,32 @@
+.leaderboardHeader {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.leaderboardHeader__position {
+  min-width: 2rem;
+  flex-shrink: 0;
+}
+
+.leaderboardHeader__name {
+  flex: 1;
+  min-width: 150px;
+}
+
+.leaderboardHeader__team {
+  flex: 0 0 100px;
+  min-width: 80px;
+}
+
+.leaderboardHeader__races {
+  flex: 0 0 auto;
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+.leaderboardHeader__points {
+  flex: 0 0 auto;
+  min-width: 4rem;
+  text-align: right;
+}

@@ -1,0 +1,127 @@
+:root {
+  /* Primary Colors */
+  --primary-red: #e63946;
+  --primary-red-dark: #d62828;
+  --track-black: #0a0e27;
+  --dark-surface: #1a1f3a;
+  --asphalt-gray: #457b9d;
+  --light-text: #e8eaf6;
+
+  /* Accent Colors */
+  --gold: #f1c40f;
+  --silver: #95a5a6;
+  --bronze: #cd7f32;
+  --success-green: #06d6a0;
+  --warning-yellow: #ff9f1c;
+  --error-red: #ef476f;
+
+  /* Semantic Colors */
+  --background: #0a0e27;
+  --card-white: #1a1f3a;
+  --text-primary: #e8eaf6;
+  --text-secondary: #b0bec5;
+  --border-color: #455a64;
+
+  --shadow-color: 0deg 0% 0%;
+  --shadow-elevation-low: 0.4px 0.5px 0.6px hsl(var(--shadow-color) / 0.3),
+    0.6px 0.7px 0.9px -1.8px hsl(var(--shadow-color) / 0.25),
+    1.6px 1.8px 2.3px -3.5px hsl(var(--shadow-color) / 0.2);
+  --shadow-elevation-medium: 0.4px 0.5px 0.6px hsl(var(--shadow-color) / 0.3),
+    1px 1.2px 1.5px -1.2px hsl(var(--shadow-color) / 0.28),
+    3px 3.5px 4.5px -2.4px hsl(var(--shadow-color) / 0.11),
+    7.9px 9.2px 11.7px -3.5px hsl(var(--shadow-color) / 0.09);
+  --shadow-elevation-high: 0.4px 0.5px 0.6px hsl(var(--shadow-color) / 0.14),
+    1.6px 1.8px 2.3px -0.5px hsl(var(--shadow-color) / 0.13),
+    3px 3.6px 4.5px -1px hsl(var(--shadow-color) / 0.12),
+    5.6px 6.5px 8.3px -1.5px hsl(var(--shadow-color) / 0.11),
+    9.8px 11.4px 14.5px -2px hsl(var(--shadow-color) / 0.1),
+    16.4px 19.1px 24.4px -2.5px hsl(var(--shadow-color) / 0.09),
+    26.1px 30.4px 38.8px -3px hsl(var(--shadow-color) / 0.08),
+    39.6px 46.1px 58.8px -3.5px hsl(var(--shadow-color) / 0.07);
+
+  /* Typography */
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Courier New", monospace;
+
+  /* Font Sizes */
+  --fs-h1: 2.5rem;
+  --fs-h2: 2rem;
+  --fs-h3: 1.5rem;
+  --fs-body-large: 1.125rem;
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-hero: 3.5rem;
+  --fs-display: 3rem;
+
+  /* Font Weights */
+  --fw-semibold: 600;
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-bold: 700;
+
+  /* Line Height */
+  --line-height: 1.5;
+
+  color-scheme: dark;
+  color: var(--text-primary);
+  background-color: var(--background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  line-height: var(--line-height);
+}
+
+h1 {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+}
+
+h2 {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+}
+
+h3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+}
+
+small {
+  font-size: var(--fs-small);
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: var(--background);
+  color: var(--text-primary);
+}

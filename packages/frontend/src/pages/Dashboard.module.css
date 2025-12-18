@@ -1,0 +1,111 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.dashboard__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.dashboard__stats {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard__stats > * {
+  flex: 1;
+}
+
+.dashboard__leaderboardPreview {
+  width: 100%;
+}
+
+.dashboard__sectionTitle {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.dashboard__leaderboardCards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dashboard__leaderboardRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+  background-color: var(--card-white);
+  border-radius: 8px;
+  box-shadow: var(--shadow-elevation-medium);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+}
+
+.dashboard__leaderboardPosition {
+  font-size: 1.5rem;
+  min-width: 2rem;
+  flex-shrink: 0;
+}
+
+.dashboard__leaderboardName {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+  min-width: 150px;
+}
+
+.dashboard__leaderboardTeam {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  flex: 0 0 100px;
+  min-width: 80px;
+}
+
+.dashboard__leaderboardRaces {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  flex: 0 0 auto;
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+.dashboard__leaderboardPoints {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--primary-red);
+  flex: 0 0 auto;
+  min-width: 4rem;
+  text-align: right;
+}
+
+.dashboard__colorBadge {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+.dashboard__colorBadge--gold {
+  background-color: var(--gold);
+}
+
+.dashboard__colorBadge--silver {
+  background-color: var(--silver);
+}
+
+.dashboard__colorBadge--bronze {
+  background-color: var(--bronze);
+}

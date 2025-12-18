@@ -1,0 +1,32 @@
+[
+  {
+    "id": "880e8400-e29b-41d4-a716-446655440000",
+    "email": "john@example.com",
+    "passwordHash": "$2b$10$example_hash_john",
+    "name": "John Doe",
+    "role": "user",
+    "racerId": "550e8400-e29b-41d4-a716-446655440000",
+    "active": true,
+    "createdAt": "2025-08-15T10:00:00Z"
+  },
+  {
+    "id": "880e8400-e29b-41d4-a716-446655440001",
+    "email": "admin@example.com",
+    "passwordHash": "$2b$10$example_hash_admin",
+    "name": "Admin User",
+    "role": "admin",
+    "racerId": null,
+    "active": true,
+    "createdAt": "2025-08-01T10:00:00Z"
+  },
+  {
+    "id": "880e8400-e29b-41d4-a716-446655440002",
+    "email": "jane@example.com",
+    "passwordHash": "$2b$10$example_hash_jane",
+    "name": "Jane Smith",
+    "role": "user",
+    "racerId": "550e8400-e29b-41d4-a716-446655440001",
+    "active": true,
+    "createdAt": "2025-08-20T10:00:00Z"
+  }
+]

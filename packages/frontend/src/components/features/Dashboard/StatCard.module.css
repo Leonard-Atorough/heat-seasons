@@ -1,0 +1,38 @@
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevation-medium);
+}
+
+.statCard__icon {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3rem;
+}
+
+.statCard__content {
+  flex: 1;
+}
+
+.statCard__title {
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+.statCard__value {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin: 0.5rem 0 0 0;
+  font-weight: 600;
+}

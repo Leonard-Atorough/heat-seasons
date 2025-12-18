@@ -1,0 +1,38 @@
+.leaderboardRow__position {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--primary-red);
+  min-width: 2rem;
+  flex-shrink: 0;
+}
+
+.leaderboardRow__name {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+  min-width: 150px;
+}
+
+.leaderboardRow__team {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  flex: 0 0 100px;
+  min-width: 80px;
+}
+
+.leaderboardRow__races {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  flex: 0 0 auto;
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+.leaderboardRow__points {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--primary-red);
+  flex: 0 0 auto;
+  min-width: 4rem;
+  text-align: right;
+}

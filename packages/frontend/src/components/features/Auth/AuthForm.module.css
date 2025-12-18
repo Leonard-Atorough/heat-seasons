@@ -1,0 +1,18 @@
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.authForm__title {
+  font-size: var(--fs-h2);
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+.authForm__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

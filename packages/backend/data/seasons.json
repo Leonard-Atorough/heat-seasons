@@ -1,0 +1,35 @@
+[
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440000",
+    "name": "Winter 2026",
+    "status": "active",
+    "startDate": "2025-11-01",
+    "endDate": null,
+    "totalRaces": 12,
+    "racesCompleted": 5,
+    "totalParticipants": 9,
+    "createdAt": "2025-11-01T10:00:00Z"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440001",
+    "name": "Fall 2025",
+    "status": "completed",
+    "startDate": "2025-08-01",
+    "endDate": "2025-10-31",
+    "totalRaces": 8,
+    "racesCompleted": 8,
+    "totalParticipants": 8,
+    "createdAt": "2025-08-01T10:00:00Z"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440002",
+    "name": "Summer 2025",
+    "status": "completed",
+    "startDate": "2025-05-01",
+    "endDate": "2025-07-31",
+    "totalRaces": 6,
+    "racesCompleted": 6,
+    "totalParticipants": 7,
+    "createdAt": "2025-05-01T10:00:00Z"
+  }
+]
