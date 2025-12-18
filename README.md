@@ -2,7 +2,7 @@
 
 A leaderboard application for tracking Heat (boardgame) racing seasons.
 
-![Heat Seasons splashscreen](./assets/heat-seasons-splashscreen.png)
+![Heat Seasons splashscreen](./assets/heat_seasons_splashscreen.png)
 
 ## Project Structure
 
