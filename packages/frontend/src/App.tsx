@@ -7,8 +7,8 @@ import Leaderboard from "./pages/Leaderboard.tsx";
 import LoginRegister from "./pages/LoginRegister.tsx";
 import Drivers from "./pages/Drivers.tsx";
 import Footer from "./components/layout/Footer.tsx";
-import { useState } from "react";
-import useFetch from "./hooks/useFetch.ts";
+// import { useState } from "react";
+// import useFetch from "./hooks/useFetch.ts";
 
 function App() {
   // const [drivers, setDrivers] = useState<FetchDriversResponse[]>([]);
