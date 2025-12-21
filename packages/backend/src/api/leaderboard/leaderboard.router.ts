@@ -17,4 +17,4 @@ router.get("/alltime", (req, res) => {
   res.status(501).json({ error: "Not implemented" });
 });
 
-export default router;
+export { router as leaderboardRouter };

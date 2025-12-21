@@ -5,9 +5,9 @@ import dotenv from "dotenv";
 // Import routes from feature-scoped API structure
 import { authRouter } from "./api/auth/index.js";
 import { racerRouter } from "./api/racer/index.js";
-import seasonRoutes from "./api/season/season.router.js";
-import raceRoutes from "./api/race/race.router.js";
-import leaderboardRoutes from "./api/leaderboard/leaderboard.router.js";
+import { seasonRouter } from "./api/season/index.js";
+import { raceRouter } from "./api/race/index.js";
+import { leaderboardRouter } from "./api/leaderboard/index.js";
 
 dotenv.config();
 
@@ -24,12 +24,11 @@ app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ status: "ok", message: "Heat Seasons API is running" });
 });
 
-// Routes
 app.use("/api/auth", authRouter);
 app.use("/api/racers", racerRouter);
-app.use("/api/seasons", seasonRoutes);
-app.use("/api/races", raceRoutes);
-app.use("/api/leaderboard", leaderboardRoutes);
+app.use("/api/seasons", seasonRouter);
+app.use("/api/races", raceRouter);
+app.use("/api/leaderboard", leaderboardRouter);
 
 // Error handling middleware
 interface AppError extends Error {
