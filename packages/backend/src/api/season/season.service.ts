@@ -1,3 +1,5 @@
+import { ISeasonRepository } from "./season.repository.interface.js";
+import { ISeasonService } from "./season.service.interface.js";
 import { SeasonStatus } from "shared";
 
 export interface Season {
@@ -8,7 +10,9 @@ export interface Season {
   status: SeasonStatus;
 }
 
-export class SeasonService {
+export class SeasonService implements ISeasonService {
+  constructor(private seasonRepository: ISeasonRepository) {}
+
   async getAll(filters?: { status?: SeasonStatus }): Promise<Season[]> {
     throw new Error("Not implemented");
   }
@@ -33,5 +37,3 @@ export class SeasonService {
     throw new Error("Not implemented");
   }
 }
-
-export default new SeasonService();

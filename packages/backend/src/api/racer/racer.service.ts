@@ -1,12 +1,10 @@
-export interface Racer {
-  id: string;
-  name: string;
-  email: string;
-  active: boolean;
-  joinDate: Date;
-}
+import { Racer } from "../../models/";
+import { IRacerRepository } from "./racer.repository.interface.js";
+import { IRacerService } from "./racer.service.interface.js";
 
-export class RacerService {
+export class RacerService implements IRacerService {
+  constructor(private racerRepository: IRacerRepository) {}
+
   async getAll(filters?: { active?: boolean }): Promise<Racer[]> {
     throw new Error("Not implemented");
   }
@@ -30,15 +28,4 @@ export class RacerService {
   async getStats(id: string): Promise<any> {
     throw new Error("Not implemented");
   }
-}
-
-export default new RacerService();
-
-export interface RacerServiceInterface {
-  getAll(filters?: { active?: boolean }): Promise<Racer[]>;
-  getById(id: string): Promise<Racer | null>;
-  create(data: Omit<Racer, "id" | "joinDate">): Promise<Racer>;
-  update(id: string, data: Partial<Racer>): Promise<Racer>;
-  delete(id: string): Promise<void>;
-  getStats(id: string): Promise<any>;
 }

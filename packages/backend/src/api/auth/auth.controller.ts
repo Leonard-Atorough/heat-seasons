@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
+import { IAuthService } from "./auth.service.interface";
 
 export class AuthController {
+  constructor(private authService: IAuthService) {}
+
   async register(req: Request, res: Response): Promise<void> {
     res.status(501).json({ error: "Not implemented" });
   }
@@ -17,5 +20,3 @@ export class AuthController {
     res.status(501).json({ error: "Not implemented" });
   }
 }
-
-export default new AuthController();

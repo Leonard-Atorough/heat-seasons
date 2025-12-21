@@ -1,6 +1,10 @@
+import { StorageAdapter } from "../../storage/";
 import { LeaderboardEntry } from "shared";
+import { ILeaderboardRepository } from "./leaderboard.repository.interface.js";
 
-export class LeaderboardRepository {
+export class LeaderboardRepository implements ILeaderboardRepository {
+  constructor(private storageAdapter: StorageAdapter) {}
+
   async getCurrentSeason(): Promise<LeaderboardEntry[]> {
     throw new Error("Not implemented");
   }
@@ -13,5 +17,3 @@ export class LeaderboardRepository {
     throw new Error("Not implemented");
   }
 }
-
-export default new LeaderboardRepository();

@@ -1,6 +1,10 @@
-import { Racer } from "./racer.service.js";
+import { StorageAdapter } from "../../storage/";
+import { Racer } from "../../models/";
+import { IRacerRepository } from "./racer.repository.interface.js";
 
-export class RacerRepository {
+export class RacerRepository implements IRacerRepository {
+  constructor(private storageAdapter: StorageAdapter) {}
+
   async findAll(filters?: { active?: boolean }): Promise<Racer[]> {
     throw new Error("Not implemented");
   }
@@ -21,5 +25,3 @@ export class RacerRepository {
     throw new Error("Not implemented");
   }
 }
-
-export default new RacerRepository();

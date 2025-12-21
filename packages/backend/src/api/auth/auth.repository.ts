@@ -1,11 +1,13 @@
-import { JsonStorageAdapter } from "../../storage/index.js";
-import { User } from "../../models/user.model.js";
+import { StorageAdapter } from "../../storage/";
+import { User } from "../../models/";
+import { IAuthRepository } from "./auth.repository.interface";
 
-export class AuthRepository {
+export class AuthRepository implements IAuthRepository {
+  constructor(private storageAdapter: StorageAdapter) {}
+
   async findAll(): Promise<User[]> {
     try {
-      const storage = new JsonStorageAdapter();
-      return await storage.findAll<User>("users");
+      return await this.storageAdapter.findAll<User>("users");
     } catch (error) {
       throw new Error("Not implemented");
     }
@@ -31,5 +33,3 @@ export class AuthRepository {
     throw new Error("Not implemented");
   }
 }
-
-export default new AuthRepository();

@@ -1,7 +1,11 @@
+import { StorageAdapter } from "../../storage/";
 import { Season } from "./season.service.js";
+import { ISeasonRepository } from "./season.repository.interface.js";
 import { SeasonStatus } from "shared";
 
-export class SeasonRepository {
+export class SeasonRepository implements ISeasonRepository {
+  constructor(private storageAdapter: StorageAdapter) {}
+
   async findAll(filters?: { status?: SeasonStatus }): Promise<Season[]> {
     throw new Error("Not implemented");
   }
@@ -26,5 +30,3 @@ export class SeasonRepository {
     throw new Error("Not implemented");
   }
 }
-
-export default new SeasonRepository();

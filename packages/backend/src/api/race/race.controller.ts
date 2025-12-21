@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
+import { IRaceService } from "./race.service.interface.js";
 
 export class RaceController {
+  constructor(private raceService: IRaceService) {}
+
   async getBySeasonId(req: Request, res: Response): Promise<void> {
     res.status(501).json({ error: "Not implemented" });
   }
@@ -21,5 +24,3 @@ export class RaceController {
     res.status(501).json({ error: "Not implemented" });
   }
 }
-
-export default new RaceController();

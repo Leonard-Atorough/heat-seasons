@@ -1,6 +1,10 @@
+import { StorageAdapter } from "../../storage/";
 import { Race } from "./race.service.js";
+import { IRaceRepository } from "./race.repository.interface.js";
 
-export class RaceRepository {
+export class RaceRepository implements IRaceRepository {
+  constructor(private storageAdapter: StorageAdapter) {}
+
   async findAll(): Promise<Race[]> {
     throw new Error("Not implemented");
   }
@@ -25,5 +29,3 @@ export class RaceRepository {
     throw new Error("Not implemented");
   }
 }
-
-export default new RaceRepository();

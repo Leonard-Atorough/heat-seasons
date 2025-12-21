@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
+import { ISeasonService } from "./season.service.interface.js";
 
 export class SeasonController {
+  constructor(private seasonService: ISeasonService) {}
+
   async getAll(req: Request, res: Response): Promise<void> {
     res.status(501).json({ error: "Not implemented" });
   }
@@ -21,5 +24,3 @@ export class SeasonController {
     res.status(501).json({ error: "Not implemented" });
   }
 }
-
-export default new SeasonController();

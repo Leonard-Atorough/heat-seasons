@@ -1,25 +1,27 @@
 import { Router } from "express";
+import container from "../../containers/container";
 
 const router = Router();
+const authController = container.createAuthController();
 
 // POST /api/auth/register
 router.post("/register", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  authController.register(req, res);
 });
 
 // POST /api/auth/login
 router.post("/login", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  authController.login(req, res);
 });
 
 // POST /api/auth/refresh
 router.post("/refresh", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  authController.refresh(req, res);
 });
 
 // POST /api/auth/logout
 router.post("/logout", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  authController.logout(req, res);
 });
 
 export { router as authRouter };

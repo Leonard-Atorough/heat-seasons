@@ -1,30 +1,32 @@
 import { Router } from "express";
+import container from "../../containers/container";
 
 const router = Router();
+const racerController = container.createRacerController();
 
 // GET /api/racers
 router.get("/", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  racerController.getAll(req, res);
 });
 
 // GET /api/racers/:id
 router.get("/:id", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  racerController.getById(req, res);
 });
 
 // POST /api/racers
 router.post("/", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  racerController.create(req, res);
 });
 
 // PUT /api/racers/:id
 router.put("/:id", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  racerController.update(req, res);
 });
 
 // DELETE /api/racers/:id
 router.delete("/:id", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  racerController.delete(req, res);
 });
 
 export { router as racerRouter };

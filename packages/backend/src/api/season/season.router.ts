@@ -1,30 +1,32 @@
 import { Router } from "express";
+import container from "../../containers/container";
 
 const router = Router();
+const seasonController = container.createSeasonController();
 
 // GET /api/seasons
 router.get("/", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  seasonController.getAll(req, res);
 });
 
 // GET /api/seasons/:id
 router.get("/:id", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  seasonController.getById(req, res);
 });
 
 // POST /api/seasons
 router.post("/", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  seasonController.create(req, res);
 });
 
 // PUT /api/seasons/:id
 router.put("/:id", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  seasonController.update(req, res);
 });
 
 // DELETE /api/seasons/:id
 router.delete("/:id", (req, res) => {
-  res.status(501).json({ error: "Not implemented" });
+  seasonController.delete(req, res);
 });
 
 export { router as seasonRouter };

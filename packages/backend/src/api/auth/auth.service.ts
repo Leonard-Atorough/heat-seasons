@@ -1,4 +1,9 @@
-export class AuthService {
+import { IAuthRepository } from "./auth.repository.interface";
+import { IAuthService } from "./auth.service.interface";
+
+export class AuthService implements IAuthService {
+  constructor(private authRepository: IAuthRepository) {}
+
   async register(email: string, password: string, name: string): Promise<any> {
     throw new Error("Not implemented");
   }
@@ -19,5 +24,3 @@ export class AuthService {
     throw new Error("Not implemented");
   }
 }
-
-export default new AuthService();

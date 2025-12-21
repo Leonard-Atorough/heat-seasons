@@ -1,3 +1,6 @@
+import { IRaceRepository } from "./race.repository.interface.js";
+import { IRaceService } from "./race.service.interface.js";
+
 export interface RaceResult {
   racerId: string;
   position: number;
@@ -12,7 +15,9 @@ export interface Race {
   results: RaceResult[];
 }
 
-export class RaceService {
+export class RaceService implements IRaceService {
+  constructor(private raceRepository: IRaceRepository) {}
+
   async getBySeasonId(seasonId: string): Promise<Race[]> {
     throw new Error("Not implemented");
   }
@@ -40,8 +45,6 @@ export class RaceService {
     throw new Error("Not implemented");
   }
 }
-
-export default new RaceService();
 
 export interface RaceServiceInterface {
   getBySeasonId(seasonId: string): Promise<Race[]>;
