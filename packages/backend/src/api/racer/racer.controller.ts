@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { RacerService, RacerServiceInterface } from "../services/racers.service";
+import { RacerService, RacerServiceInterface } from "./racer.service.js";
 
 export class RacerController {
   constructor(private racerService: RacerServiceInterface) {

@@ -1,4 +1,4 @@
-import { Season } from "../services/season.service.js";
+import { Season } from "./season.service.js";
 import { SeasonStatus } from "shared";
 
 export class SeasonRepository {

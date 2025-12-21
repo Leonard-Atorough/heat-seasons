@@ -1,7 +1,7 @@
-import { JsonStorageAdapter } from "../storage";
-import { User } from "../models/user.model";
+import { JsonStorageAdapter } from "../../storage/index.js";
+import { User } from "../../models/user.model.js";
 
-export class UserRepository {
+export class AuthRepository {
   async findAll(): Promise<User[]> {
     try {
       const storage = new JsonStorageAdapter();
@@ -32,4 +32,4 @@ export class UserRepository {
   }
 }
 
-export default new UserRepository();
+export default new AuthRepository();

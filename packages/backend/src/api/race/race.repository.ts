@@ -1,4 +1,4 @@
-import { Race } from "../services/race.service.js";
+import { Race } from "./race.service.js";
 
 export class RaceRepository {
   async findAll(): Promise<Race[]> {

@@ -2,12 +2,12 @@ import express, { Request, Response, NextFunction, Application } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-// Import routes
-import authRoutes from "./routes/auth.routes.js";
-import racerRoutes from "./routes/racers.routes.js";
-import seasonRoutes from "./routes/seasons.routes.js";
-import raceRoutes from "./routes/races.routes.js";
-import leaderboardRoutes from "./routes/leaderboard.routes.js";
+// Import routes from feature-scoped API structure
+import { authRouter } from "./api/auth/index.js";
+import { racerRouter } from "./api/racer/index.js";
+import seasonRoutes from "./api/season/season.router.js";
+import raceRoutes from "./api/race/race.router.js";
+import leaderboardRoutes from "./api/leaderboard/leaderboard.router.js";
 
 dotenv.config();
 
@@ -25,8 +25,8 @@ app.get("/api/health", (_req: Request, res: Response) => {
 });
 
 // Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/racers", racerRoutes);
+app.use("/api/auth", authRouter);
+app.use("/api/racers", racerRouter);
 app.use("/api/seasons", seasonRoutes);
 app.use("/api/races", raceRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
