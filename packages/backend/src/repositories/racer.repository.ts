@@ -1,4 +1,4 @@
-import { Racer } from "../services/racer.service.js";
+import { Racer } from "../services/racers.service.js";
 
 export class RacerRepository {
   async findAll(filters?: { active?: boolean }): Promise<Racer[]> {

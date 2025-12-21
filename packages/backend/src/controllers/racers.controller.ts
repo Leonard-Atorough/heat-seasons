@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
+import { RacerService, RacerServiceInterface } from "../services/racers.service";
 
 export class RacerController {
+  constructor(private racerService: RacerServiceInterface) {
+    this.racerService = racerService;
+  }
+
   async getAll(req: Request, res: Response): Promise<void> {
     res.status(501).json({ error: "Not implemented" });
   }
@@ -22,4 +27,4 @@ export class RacerController {
   }
 }
 
-export default new RacerController();
+export default new RacerController(new RacerService());
