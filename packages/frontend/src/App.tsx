@@ -7,22 +7,13 @@ import Leaderboard from "./pages/Leaderboard.tsx";
 import LoginRegister from "./pages/LoginRegister.tsx";
 import Drivers from "./pages/Drivers.tsx";
 import Footer from "./components/layout/Footer.tsx";
-// import { useState } from "react";
+import { useState } from "react";
 // import useFetch from "./hooks/useFetch.ts";
 
 function App() {
-  // const [drivers, setDrivers] = useState<FetchDriversResponse[]>([]);
-
-  // const { data, error, loading } = useFetch<FetchDriversResponse[]>("/api/drivers");
-
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
-
-  // setDrivers((data as FetchDriversResponse[]) || []);
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [drivers, setDrivers] = useState([]);
+  const [season, setSeason] = useState(null);
 
   return (
     <Router>
@@ -43,14 +34,6 @@ function App() {
       </div>
     </Router>
   );
-}
-
-interface FetchDriversResponse {
-  id: number;
-  name: string;
-  team: string;
-  points: number;
-  profileUrl: string;
 }
 
 export default App;

@@ -1,5 +1,7 @@
 import { useState, useEffect, ReactNode } from "react";
 import { AuthContext, AuthContextType, User } from "../contexts/AuthContext";
+import { config } from "../config";
+import useFetch from "../hooks/useFetch";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -13,7 +15,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch("/api/auth/me");
+        const response = await fetch(`${config.authRoute}/me`);
         if (response.ok) {
           const userData = await response.json();
           setUser(userData);
@@ -31,7 +33,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(`${config.authRoute}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -51,7 +53,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = async (): Promise<void> => {
     setIsLoading(true);
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await fetch(`${config.authRoute}/logout`, { method: "POST" });
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -61,7 +63,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const register = async (email: string, password: string, name: string): Promise<void> => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch(`${config.authRoute}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, name }),

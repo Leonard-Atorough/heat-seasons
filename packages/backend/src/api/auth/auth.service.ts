@@ -9,7 +9,14 @@ export class AuthService implements IAuthService {
   }
 
   async login(email: string, password: string): Promise<any> {
-    throw new Error("Not implemented");
+    const user = await this.authRepository.findByEmail(email);
+    if (!user || user.password !== password) {
+      throw new Error("Invalid credentials");
+    }
+    return {
+      accessToken: "dummy-access-token",
+      refreshToken: "dummy-refresh-token",
+    };
   }
 
   async refreshToken(refreshToken: string): Promise<any> {

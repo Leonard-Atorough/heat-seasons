@@ -4,7 +4,8 @@
     "module": "ESNext",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "../../",
+    "baseUrl": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,7 +15,10 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@shared/*": ["../shared/src/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

@@ -1,4 +1,4 @@
-export { StorageAdapter } from "./StorageAdapter";
+export type { StorageAdapter } from "./StorageAdapter";
 export { JsonStorageAdapter } from "./JsonStorageAdapter";
 
 // Future implementations:

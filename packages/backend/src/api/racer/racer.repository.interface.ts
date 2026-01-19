@@ -1,10 +1,9 @@
-import { Racer } from "../../models";
-
+import { RacerDTO } from "src/models";
 
 export interface IRacerRepository {
-  findAll(filters?: { active?: boolean }): Promise<Racer[]>;
-  findById(id: string): Promise<Racer | null>;
-  create(data: Omit<Racer, "id" | "joinDate">): Promise<Racer>;
-  update(id: string, data: Partial<Racer>): Promise<Racer>;
+  findAll(filters?: { active?: boolean }): Promise<RacerDTO[]>;
+  findById(id: string): Promise<RacerDTO | null>;
+  create(data: Omit<RacerDTO, "id" | "joinDate">): Promise<RacerDTO>;
+  update(id: string, data: Partial<RacerDTO>): Promise<RacerDTO>;
   delete(id: string): Promise<void>;
 }

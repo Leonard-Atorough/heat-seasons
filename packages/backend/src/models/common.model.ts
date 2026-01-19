@@ -6,7 +6,7 @@ export interface ApiError {
 }
 
 export interface ValidationError extends ApiError {
-  code: 'VALIDATION_ERROR';
+  code: "VALIDATION_ERROR";
   details: {
     field: string;
     message: string;
@@ -17,7 +17,7 @@ export interface PaginationParams {
   limit?: number;
   offset?: number;
   sort?: string;
-  order?: 'asc' | 'desc';
+  order?: "asc" | "desc";
 }
 
 export interface PaginatedResponse<T> {

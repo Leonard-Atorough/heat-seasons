@@ -18,7 +18,12 @@ export class AuthRepository implements IAuthRepository {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    throw new Error("Not implemented");
+    try {
+      const users = await this.storageAdapter.findAll<User>("users");
+      return users.find((user) => user.email === email) || null;
+    } catch (error) {
+      throw new Error("Not implemented");
+    }
   }
 
   async create(data: Omit<User, "id" | "createdAt">): Promise<User> {

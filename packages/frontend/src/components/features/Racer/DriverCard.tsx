@@ -1,30 +1,20 @@
 import { Card } from "../../common/Card";
-import { Button } from "../../common/Button";
 import styles from "./DriverCard.module.css";
 import { useNavigate } from "react-router-dom";
+import { RacerWithStats } from "@shared/index";
 
-export interface TempRacerModel {
-  id: string;
-  name: string;
-  team: string;
-  points: number;
-  badgeUrl?: string;
-  profileUrl?: string;
-  teamColor?: string;
+export interface DriverCardProps {
+  racer: RacerWithStats;
 }
 
-export interface RacerCardProps {
-  racer: TempRacerModel;
-}
-
-export default function RacerCard({ racer }: RacerCardProps) {
+export default function DriverCard({ racer }: DriverCardProps) {
   const navigate = useNavigate();
 
   return (
     <Card
       variant="compact"
       className={styles.racerCard}
-      onClick={() => navigate(`/racers/${racer.id}`)}
+      onClick={() => navigate(`/racers/${racer.id}`, { state: { racer } })}
       style={{ backgroundColor: racer.teamColor || "inherit" }}
     >
       {/* F1 style. Info on the left, picture on the right, card clickable. Card colour set to teamColor */}
@@ -33,19 +23,14 @@ export default function RacerCard({ racer }: RacerCardProps) {
         <p className={styles.racerCard__team} style={{ color: racer.teamColor || "inherit" }}>
           {racer.team}
         </p>
-        <p className={styles.racerCard__points}>{racer.points} pts</p>
+        <p className={styles.racerCard__points}>{racer.stats?.totalPoints ?? 0} pts</p>
         {racer.badgeUrl && (
           <img
             src={racer.badgeUrl}
             alt={`${racer.name} badge`}
             className={styles.racerCard__badge}
           />
-        )}
-        {racer.profileUrl && (
-          <Button variant="primary" onClick={() => navigate(`/racers/${racer.id}`)} type="button">
-            View Profile
-          </Button>
-        )}
+        )}  
       </div>
       <div className={styles.racerCard__picture}>
         <img

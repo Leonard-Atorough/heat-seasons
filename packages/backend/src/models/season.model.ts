@@ -1,29 +1,13 @@
+import { Season } from "@shared/index";
 import { SeasonStatus } from "shared";
 
-export interface Season {
-  id: string;
-  name: string;
-  startDate: Date;
-  endDate?: Date;
-  status: SeasonStatus;
+export interface SeasonDTO extends Season {
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface SeasonCreateInput {
-  name: string;
-  startDate: Date;
-  status?: SeasonStatus;
-}
+export interface SeasonCreateInput extends Omit<Season, "id"> {}
 
-export interface SeasonUpdateInput {
-  name?: string;
-  startDate?: Date;
-  endDate?: Date;
-  status?: SeasonStatus;
-}
+export interface SeasonUpdateInput extends Partial<Omit<Season, "id">> {}
 
-export interface SeasonWithStats extends Season {
-  raceCount: number;
-  participantCount: number;
-}
+export type SeasonResponse = Season;

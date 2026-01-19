@@ -1,60 +1,49 @@
-// container is a singleton class that will, in this initial implementation,
-// serve as a factory for building our different features dependency chains.
-// In the future, this could be extended to a full-featured dependency injection
-// container if needed.
-
 import { JsonStorageAdapter } from "../storage";
 
-// Auth imports
 import { AuthRepository } from "../api/auth";
 import { IAuthRepository } from "../api/auth/auth.repository.interface";
 import { AuthController } from "../api/auth";
 import { AuthService } from "../api/auth/";
 import { IAuthService } from "../api/auth/auth.service.interface";
 
-// Racer imports
 import { RacerRepository } from "../api/racer";
 import { IRacerRepository } from "../api/racer/racer.repository.interface.js";
 import { RacerController } from "../api/racer";
 import { RacerService } from "../api/racer";
 import { IRacerService } from "../api/racer/racer.service.interface.js";
 
-// Race imports
 import { RaceRepository } from "../api/race";
 import { IRaceRepository } from "../api/race/race.repository.interface.js";
 import { RaceController } from "../api/race";
 import { RaceService } from "../api/race";
 import { IRaceService } from "../api/race/race.service.interface.js";
 
-// Season imports
 import { SeasonRepository } from "../api/season";
 import { ISeasonRepository } from "../api/season/season.repository.interface.js";
 import { SeasonController } from "../api/season";
 import { SeasonService } from "../api/season";
 import { ISeasonService } from "../api/season/season.service.interface.js";
 
-// Leaderboard imports
 import { LeaderboardRepository } from "../api/leaderboard";
 import { ILeaderboardRepository } from "../api/leaderboard/leaderboard.repository.interface.js";
 import { LeaderboardController } from "../api/leaderboard";
 import { LeaderboardService } from "../api/leaderboard";
 import { ILeaderboardService } from "../api/leaderboard/leaderboard.service.interface.js";
 
-class container {
-  private static instance: container;
+class Container {
+  private static instance: Container | null = null;
 
   private storageAdapter: JsonStorageAdapter;
 
   private constructor() {
-    // Private constructor to prevent direct instantiation
     this.storageAdapter = new JsonStorageAdapter("./data");
   }
 
-  public static getInstance(): container {
-    if (!container.instance) {
-      container.instance = new container();
+  public static getInstance(): Container {
+    if (Container.instance === null) {
+      Container.instance = new Container();
     }
-    return container.instance;
+    return Container.instance;
   }
 
   public async initializeStorageAdapter(): Promise<void> {
@@ -96,4 +85,7 @@ class container {
   }
 }
 
-export default container.getInstance();
+export { Container };
+export function getContainerInstance(): Container {
+  return Container.getInstance();
+}

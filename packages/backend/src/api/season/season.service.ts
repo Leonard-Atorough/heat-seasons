@@ -1,31 +1,30 @@
+import {
+  SeasonCreateInput,
+  SeasonDTO,
+  SeasonResponse,
+  SeasonUpdateInput,
+} from "../../models/season.model.js";
 import { ISeasonRepository } from "./season.repository.interface.js";
 import { ISeasonService } from "./season.service.interface.js";
 import { SeasonStatus } from "shared";
 
-export interface Season {
-  id: string;
-  name: string;
-  startDate: Date;
-  endDate?: Date;
-  status: SeasonStatus;
-}
-
 export class SeasonService implements ISeasonService {
   constructor(private seasonRepository: ISeasonRepository) {}
 
-  async getAll(filters?: { status?: SeasonStatus }): Promise<Season[]> {
+  async getAll(filters?: { status?: SeasonStatus }): Promise<SeasonResponse[]> {
+    const seasons = await this.seasonRepository.findAll(filters);
+    return this.mapDTOToSeason(seasons);
+  }
+
+  async getById(id: string): Promise<SeasonResponse | null> {
     throw new Error("Not implemented");
   }
 
-  async getById(id: string): Promise<Season | null> {
+  async create(data: Omit<SeasonCreateInput, "id">): Promise<SeasonResponse> {
     throw new Error("Not implemented");
   }
 
-  async create(data: Omit<Season, "id">): Promise<Season> {
-    throw new Error("Not implemented");
-  }
-
-  async update(id: string, data: Partial<Season>): Promise<Season> {
+  async update(id: string, data: Partial<SeasonUpdateInput>): Promise<SeasonResponse> {
     throw new Error("Not implemented");
   }
 
@@ -33,7 +32,17 @@ export class SeasonService implements ISeasonService {
     throw new Error("Not implemented");
   }
 
-  async getActiveSeason(): Promise<Season | null> {
+  async getActiveSeason(): Promise<SeasonResponse | null> {
     throw new Error("Not implemented");
+  }
+
+  private mapDTOToSeason(dtos: SeasonDTO[]): SeasonResponse[] {
+    return dtos.map((dto) => ({
+      id: dto.id,
+      name: dto.name,
+      startDate: dto.startDate,
+      endDate: dto.endDate,
+      status: dto.status,
+    }));
   }
 }

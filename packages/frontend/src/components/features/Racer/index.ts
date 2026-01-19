@@ -1,2 +1,2 @@
-export { default as RacerCard } from "./DriverCard";
-export type { RacerCardProps, TempRacerModel } from "./DriverCard";
+export { default as DriverCard } from "./DriverCard";
+export type { DriverCardProps } from "./DriverCard";

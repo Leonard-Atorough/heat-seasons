@@ -1,0 +1,47 @@
+import { SeasonStatus } from ".";
+
+export interface Racer {
+  id: string;
+  name: string;
+  active: boolean;
+  joinDate: Date;
+  team: string;
+  teamColor: string;
+  nationality: string;
+  age: number;
+  badgeUrl?: string;
+  profileUrl?: string;
+}
+
+export interface RacerStats {
+  totalRaces: number;
+  wins: number;
+  podiums: number;
+  avgPosition: number;
+  totalPoints: number;
+}
+
+export interface RacerWithStats extends Racer {
+  stats: RacerStats | null;
+}
+
+export interface Season {
+  id: string;
+  name: string;
+  startDate: Date;
+  endDate?: Date;
+  status: SeasonStatus;
+}
+
+export interface SeasonWithStats extends Season {
+  raceCount: number;
+  participantCount: number;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  timestamp: Date;
+  message?: string;
+  error?: string;
+  data: T;
+}

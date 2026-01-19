@@ -3,11 +3,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 // Import routes from feature-scoped API structure
-import { authRouter } from "./api/auth/index.js";
-import { racerRouter } from "./api/racer/index.js";
-import { seasonRouter } from "./api/season/index.js";
-import { raceRouter } from "./api/race/index.js";
-import { leaderboardRouter } from "./api/leaderboard/index.js";
+import { authRouter } from "./api/auth/auth.route.js";
+import { racerRouter } from "./api/racer/racer.route.js";
+import { seasonRouter } from "./api/season/season.route.js";
+import { raceRouter } from "./api/race/race.route.js";
+import { leaderboardRouter } from "./api/leaderboard/leaderboard.route.js";
 
 dotenv.config();
 

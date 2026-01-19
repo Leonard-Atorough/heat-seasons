@@ -1,31 +1,13 @@
-export interface Racer {
-  id: string;
-  name: string;
-  email: string;
-  active: boolean;
-  joinDate: Date;
+import { Racer, RacerWithStats } from "@shared/index";
+
+export interface RacerDTO extends Racer {
+  createdAt: Date;
   updatedAt: Date;
+  lastActiveAt: Date | null;
 }
 
-export interface RacerCreateInput {
-  name: string;
-  email: string;
-}
+export interface RacerCreateInput extends Omit<Racer, "id" | "joinDate"> {}
 
-export interface RacerUpdateInput {
-  name?: string;
-  email?: string;
-  active?: boolean;
-}
+export interface RacerUpdateInput extends Partial<Omit<Racer, "id" | "joinDate">> {}
 
-export interface RacerStats {
-  totalRaces: number;
-  wins: number;
-  podiums: number;
-  avgPosition: number;
-  totalPoints: number;
-}
-
-export interface RacerWithStats extends Racer {
-  stats: RacerStats;
-}
+export type RacerResponse = RacerWithStats;
