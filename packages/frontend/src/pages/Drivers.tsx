@@ -6,15 +6,22 @@ import { useMemo } from "react";
 import { config } from "../config";
 
 export default function Drivers() {
-  const { data: drivers, error, loading } = useFetch<ApiResponse<RacerWithStats[]>>(config.racerRoute);
+  const {
+    data: drivers,
+    error,
+    loading,
+  } = useFetch<ApiResponse<RacerWithStats[]>>(config.racerRoute);
 
   // Derive the transformed racers instead of storing in state
+  // This ensures the data is always in sync with the source
   const racers = useMemo(() => {
     if (!drivers) return [];
-    return drivers.data.map((driver) => ({
-      ...driver,
-      profileUrl: driver.profileUrl || "https://avatar.iran.liara.run/public/1",
-    }));
+    return drivers.data
+      .map((driver) => ({
+        ...driver,
+        profileUrl: driver.profileUrl || "https://avatar.iran.liara.run/public/1",
+      }))
+      .sort((a, b) => a.team.localeCompare(b.team));
   }, [drivers]);
 
   if (loading) {

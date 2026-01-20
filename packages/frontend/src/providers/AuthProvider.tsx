@@ -15,7 +15,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch(`${config.authRoute}/me`);
+        const response = await fetch(`${config.authRoute}/me`, {
+          method: "GET",
+          credentials: "include",
+          cache: "no-cache",
+          headers: {
+            "Content-Type": "application/json",
+            "X-User-Id": "880e8400-e29b-41d4-a716-446655440000", // Dev only, will be swapped out when test db implemented
+          },
+        });
         if (response.ok) {
           const userData = await response.json();
           setUser(userData);

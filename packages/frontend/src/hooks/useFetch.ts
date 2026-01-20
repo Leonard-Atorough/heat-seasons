@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 function useFetch<T>(
   route: string,
   endpoint?: string,
-  method?: "GET"
+  method?: "GET",
 ): {
   data: T | null;
   error: Error | null;
@@ -16,7 +16,7 @@ function useFetch<T, B>(
   route: string,
   endpoint: string | undefined,
   method: "POST" | "PUT" | "DELETE",
-  body: B
+  body: B,
 ): {
   data: T | null;
   error: Error | null;
@@ -28,7 +28,7 @@ function useFetch<T, B = any>(
   route: string,
   endpoint?: string,
   method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
-  body?: B
+  body?: B,
 ): {
   data: T | null;
   error: Error | null;
@@ -61,11 +61,17 @@ function useFetch<T, B = any>(
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
         const result: T = await response.json();
-        setData(result);
+        if (!controller.signal.aborted) {
+          setData(result);
+        }
       } catch (err) {
-        setError(err as Error);
+        if ((err as Error).name !== "AbortError" && !controller.signal.aborted) {
+          setError(err as Error);
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
     fetchData();
@@ -73,7 +79,7 @@ function useFetch<T, B = any>(
     return () => {
       controller.abort();
     };
-  }, [route, endpoint, method, body]);
+  }, [route, endpoint, method, JSON.stringify(body)]);
 
   return { data, error, loading };
 }
