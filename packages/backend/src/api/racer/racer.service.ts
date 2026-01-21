@@ -1,24 +1,25 @@
-import { RacerCreateInput, RacerDTO, RacerResponse, RacerUpdateInput } from "../../models/";
+import { Racer, RacerWithStats } from "@shared/index";
+import { RacerCreateInput, RacerUpdateInput } from "../../models/";
 import { IRacerRepository } from "./racer.repository.interface.js";
 import { IRacerService } from "./racer.service.interface.js";
 
 export class RacerService implements IRacerService {
   constructor(private racerRepository: IRacerRepository) {}
 
-  async getAll(filters?: { active?: boolean }): Promise<RacerResponse[]> {
+  async getAll(filters?: { active?: boolean }): Promise<RacerWithStats[]> {
     const racers = await this.racerRepository.findAll(filters);
-    return this.mapDTOToRacer(racers);
+    return racers.map((racer) => ({ ...racer, stats: null }));
   }
 
-  async getById(id: string): Promise<RacerResponse | null> {
+  async getById(id: string): Promise<RacerWithStats | null> {
     throw new Error("Not implemented");
   }
 
-  async create(data: RacerCreateInput): Promise<RacerResponse> {
+  async create(data: RacerCreateInput): Promise<Racer> {
     throw new Error("Not implemented");
   }
 
-  async update(id: string, data: RacerUpdateInput): Promise<RacerResponse> {
+  async update(id: string, data: RacerUpdateInput): Promise<Racer> {
     throw new Error("Not implemented");
   }
 
@@ -28,19 +29,5 @@ export class RacerService implements IRacerService {
 
   async getStats(id: string): Promise<any> {
     throw new Error("Not implemented");
-  }
-
-  private mapDTOToRacer(dtos: RacerDTO[]): RacerResponse[] {
-    return dtos.map((dto) => ({
-      id: dto.id,
-      name: dto.name,
-      active: dto.active,
-      joinDate: dto.joinDate,
-      team: dto.team,
-      teamColor: dto.teamColor,
-      nationality: dto.nationality,
-      age: dto.age,
-      stats: null,
-    }));
   }
 }

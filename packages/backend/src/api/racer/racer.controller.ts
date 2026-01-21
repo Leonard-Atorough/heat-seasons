@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { IRacerService } from "./racer.service.interface.js";
-import { RacerResponse } from "../../models/";
-import { ApiResponse } from "@shared/index";
+import { ApiResponse, RacerWithStats } from "@shared/index";
 
 export class RacerController {
   constructor(private racerService: IRacerService) {}
@@ -12,7 +11,7 @@ export class RacerController {
 
       const racers = await this.racerService.getAll(filters);
 
-      const response: ApiResponse<RacerResponse[]> = {
+      const response: ApiResponse<RacerWithStats[]> = {
         success: true,
         timestamp: new Date(),
         message: `Successfully retrieved ${racers.length} racers`,

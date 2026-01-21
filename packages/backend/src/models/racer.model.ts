@@ -1,13 +1,6 @@
-import { Racer, RacerWithStats } from "@shared/index";
+import { Racer } from "@shared/index";
 
-export interface RacerDTO extends Racer {
-  createdAt: Date;
-  updatedAt: Date;
-  lastActiveAt: Date | null;
-}
+// Input types for racer operations
+export type RacerCreateInput = Omit<Racer, "id" | "joinDate">;
 
-export interface RacerCreateInput extends Omit<Racer, "id" | "joinDate"> {}
-
-export interface RacerUpdateInput extends Partial<Omit<Racer, "id" | "joinDate">> {}
-
-export type RacerResponse = RacerWithStats;
+export type RacerUpdateInput = Partial<Omit<Racer, "id" | "joinDate">>;

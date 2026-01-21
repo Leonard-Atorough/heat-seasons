@@ -1,13 +1,13 @@
-import { RacerDTO, RacerResponse } from "../../models";
+import { Racer } from "@shared/index";
 import { StorageAdapter } from "../../storage/";
 import { IRacerRepository } from "./racer.repository.interface.js";
 
 export class RacerRepository implements IRacerRepository {
   constructor(private storageAdapter: StorageAdapter) {}
 
-  async findAll(filters?: { active?: boolean }): Promise<RacerDTO[]> {
+  async findAll(filters?: { active?: boolean }): Promise<Racer[]> {
     try {
-      const response = await this.storageAdapter.findAll<RacerDTO>("racers", filters);
+      const response = await this.storageAdapter.findAll<Racer>("racers", filters);
       const sortedResponse = response.sort((a, b) => a.name.localeCompare(b.name));
       return sortedResponse;
     } catch (error) {
@@ -15,16 +15,16 @@ export class RacerRepository implements IRacerRepository {
       throw new Error(
         `Failed to fetch racers with filters ${JSON.stringify(filters)}: ${
           error instanceof Error ? error.message : "Unknown error"
-        }`
+        }`,
       );
     }
   }
 
-  async findById(id: string): Promise<RacerDTO | null> {
+  async findById(id: string): Promise<Racer | null> {
     throw new Error("Not implemented");
   }
 
-  async create(data: Omit<RacerDTO, "id">): Promise<RacerDTO> {
+  async create(data: Omit<Racer, "id">): Promise<Racer> {
     throw new Error("Not implemented");
   }
 
