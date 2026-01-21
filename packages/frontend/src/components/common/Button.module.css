@@ -7,7 +7,9 @@
   cursor: pointer;
   font-size: 1rem;
   box-shadow: var(--shadow-elevation-low);
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 .btn__primary:hover {
   background-color: var(--primary-red-dark);
@@ -28,7 +30,9 @@
   cursor: pointer;
   font-size: 1rem;
   box-shadow: var(--shadow-elevation-low);
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 .btn__secondary:hover {
   background-color: var(--bg-elevated);
@@ -49,7 +53,9 @@
   cursor: pointer;
   font-size: 1rem;
   box-shadow: var(--shadow-elevation-low);
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 .btn__danger:hover {
   background-color: var(--error-red-dark);
@@ -69,6 +75,24 @@
   font-size: 1rem;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.btn__ghost {
+  background: none;
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+}
+
+.btn__ghost:hover {
+  background-color: var(--bg-elevated);
+  transform: scale(1.02);
 }
 
 .btn__primary-small,

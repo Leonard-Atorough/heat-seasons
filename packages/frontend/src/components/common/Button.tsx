@@ -22,7 +22,7 @@ export function Button({
 
 interface ButtonProps {
   type: "button" | "submit" | "reset";
-  variant?: "primary" | "secondary" | "tertiary" | "danger" | "link";
+  variant?: "primary" | "secondary" | "tertiary" | "danger" | "link" | "ghost";
   className?: string;
   onClick?: (event: React.FormEvent<HTMLButtonElement>) => void;
   disabled?: boolean;

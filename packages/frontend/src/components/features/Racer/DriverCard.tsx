@@ -17,7 +17,6 @@ export default function DriverCard({ racer }: DriverCardProps) {
       onClick={() => navigate(`/racers/${racer.id}`, { state: { racer } })}
       style={{ backgroundColor: racer.teamColor || "inherit" }}
     >
-      {/* F1 style. Info on the left, picture on the right, card clickable. Card colour set to teamColor */}
       <div className={styles.racerCard__info}>
         <h3 className={styles.racerCard__name}>{racer.name}</h3>
         <p className={styles.racerCard__team} style={{ color: racer.teamColor || "inherit" }}>
