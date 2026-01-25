@@ -67,7 +67,7 @@ export function calculateLeaderboard(
       if (!standings[racerId]) {
         standings[racerId] = {
           racerId,
-          racerName: result.racerName,
+          racerName: "result.racerName", // Placeholder, should be set properly elsewhere
           totalPoints: 0,
           racesParticipated: 0,
           wins: 0,

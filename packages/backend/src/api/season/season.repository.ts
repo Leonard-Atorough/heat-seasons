@@ -23,7 +23,9 @@ export class SeasonRepository implements ISeasonRepository {
   }
 
   async findActive(): Promise<SeasonDTO | null> {
-    throw new Error("Not implemented");
+    const seasons = await this.storageAdapter.findAll<SeasonDTO>("seasons");
+    const season = seasons.find((season) => season.status === "active");
+    return season || null;
   }
 
   async create(data: Omit<SeasonDTO, "id">): Promise<SeasonDTO> {
