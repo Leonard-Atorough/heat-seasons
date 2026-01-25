@@ -8,6 +8,7 @@ import { racerRouter } from "./api/racer/racer.route.js";
 import { seasonRouter } from "./api/season/season.route.js";
 import { raceRouter } from "./api/race/race.route.js";
 import { leaderboardRouter } from "./api/leaderboard/leaderboard.route.js";
+import { AppError } from "./errors/appError.js";
 
 dotenv.config();
 
@@ -31,16 +32,11 @@ app.use("/api/races", raceRouter);
 app.use("/api/leaderboard", leaderboardRouter);
 
 // Error handling middleware
-interface AppError extends Error {
-  status?: number;
-  code?: string;
-}
-
 app.use((err: AppError, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err.stack);
-  res.status(err.status || 500).json({
-    error: err.message || "Internal server error",
-    code: err.code || "INTERNAL_ERROR",
+  res.status(err.apiError.statusCode || 500).json({
+    error: err.apiError.message || "Internal server error",
+    code: err.apiError.code || "INTERNAL_ERROR",
     timestamp: new Date().toISOString(),
   });
 });

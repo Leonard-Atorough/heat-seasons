@@ -15,8 +15,9 @@
 }
 
 .leaderboardHeader__team {
-  flex: 0 0 100px;
+  flex: 0 0 200px;
   min-width: 80px;
+  text-align: center;
 }
 
 .leaderboardHeader__races {
@@ -29,4 +30,16 @@
   flex: 0 0 auto;
   min-width: 4rem;
   text-align: right;
+}
+
+.leaderboardHeader__wins {
+  flex: 0 0 auto;
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+.leaderboardHeader__podiums {
+  flex: 0 0 auto;
+  min-width: 4rem;
+  text-align: center;
 }

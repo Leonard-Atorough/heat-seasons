@@ -16,8 +16,9 @@
 .leaderboardRow__team {
   font-size: var(--fs-small);
   color: var(--text-secondary);
-  flex: 0 0 100px;
+  flex: 0 0 200px;
   min-width: 80px;
+  text-align: center;
 }
 
 .leaderboardRow__races {
@@ -35,4 +36,20 @@
   flex: 0 0 auto;
   min-width: 4rem;
   text-align: right;
+}
+
+.leaderboardRow__wins {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  flex: 0 0 auto;
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+.leaderboardRow__podiums {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  flex: 0 0 auto;
+  min-width: 4rem;
+  text-align: center;
 }

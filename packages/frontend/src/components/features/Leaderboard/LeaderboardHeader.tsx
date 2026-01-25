@@ -3,9 +3,13 @@ import styles from "./LeaderboardHeader.module.css";
 
 export interface LeaderboardHeaderProps {
   compact?: boolean;
+  variant?: "default" | "dashboard";
 }
 
-export default function LeaderboardHeader({ compact = true }: LeaderboardHeaderProps) {
+export default function LeaderboardHeader({
+  compact = true,
+  variant = "default",
+}: LeaderboardHeaderProps) {
   return (
     <Card variant={compact ? "compact" : "default"} className={styles.leaderboardHeader}>
       <span className={styles.leaderboardHeader__position}>#</span>
@@ -13,6 +17,8 @@ export default function LeaderboardHeader({ compact = true }: LeaderboardHeaderP
       <span className={styles.leaderboardHeader__team}>Team</span>
       <span className={styles.leaderboardHeader__races}>Races</span>
       <span className={styles.leaderboardHeader__points}>Points</span>
+      <span className={styles.leaderboardHeader__wins}>{variant === "default" ? "Wins" : ""}</span>
+      {variant === "default" && <span className={styles.leaderboardHeader__podiums}>Podiums</span>}
     </Card>
   );
 }

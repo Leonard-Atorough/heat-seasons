@@ -7,13 +7,32 @@ import Leaderboard from "./pages/Leaderboard.tsx";
 import LoginRegister from "./pages/LoginRegister.tsx";
 import Drivers from "./pages/Drivers.tsx";
 import Footer from "./components/layout/Footer.tsx";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { config } from "./config.ts";
+import { ApiResponse, Leaderboard as standings, LeaderboardEntry } from "@shared/models";
+import useFetch from "./hooks/useFetch.ts";
 // import useFetch from "./hooks/useFetch.ts";
 
 function App() {
-  const [leaderboard, setLeaderboard] = useState([]);
+  const [leaderboard, setLeaderboard] = useState<standings>({
+    seasonId: "",
+    seasonName: "",
+    asOfDate: new Date(),
+    standings: [],
+  });
   const [drivers, setDrivers] = useState([]);
-  const [season, setSeason] = useState(null);
+  const [season, setSeason] = useState<string | null>(null);
+
+  const { data, error, loading } = useFetch<ApiResponse<standings>>(
+    `${config.leaderboardRoute}/current`,
+  );
+
+  useMemo(() => {
+    if (data && data.data) {
+      setLeaderboard(data.data);
+      setSeason(data.data.seasonName);
+    }
+  }, [data]);
 
   return (
     <Router>
@@ -22,8 +41,11 @@ function App() {
 
         <main className="main">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route
+              path="/"
+              element={<Dashboard topThreeRacers={leaderboard.standings.slice(0, 3)} />}
+            />
+            <Route path="/leaderboard" element={<Leaderboard leaderboard={leaderboard} />} />
             <Route path="/login" element={<LoginRegister />} />
             <Route path="/drivers" element={<Drivers />} />
             <Route path="*" element={<div>404 Not Found</div>} />

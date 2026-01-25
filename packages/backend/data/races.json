@@ -3,135 +3,116 @@
     "id": "770e8400-e29b-41d4-a716-446655440000",
     "seasonId": "660e8400-e29b-41d4-a716-446655440000",
     "raceNumber": 1,
-    "date": "2025-12-14",
+    "name": "British Grand Prix",
+    "date": "2026-01-20",
     "results": [
       {
-        "position": 1,
+        "position": 3,
         "racerId": "550e8400-e29b-41d4-a716-446655440000",
-        "racerName": "John Doe",
-        "points": 25
+        "racerName": "Mohamed ibn Mohamed ibn Mohamed Al Baghdadi",
+        "points": 4
+      },
+      {
+        "position": 6,
+        "racerId": "550e8400-e29b-41d4-a716-446655440001",
+        "racerName": "Bames Jond",
+        "points": 1
+      },
+      {
+        "position": 8,
+        "racerId": "550e8400-e29b-41d4-a716-446655440002",
+        "racerName": "Jimmy \"The Milkman\" Watkins",
+        "points": 0
+      },
+      {
+        "position": 1,
+        "racerId": "550e8400-e29b-41d4-a716-446655440003",
+        "racerName": "The Slow Hoe",
+        "points": 9
+      },
+      {
+        "position": 4,
+        "racerId": "550e8400-e29b-41d4-a716-446655440004",
+        "racerName": "Lenobo the Bonobo",
+        "points": 3
+      },
+      {
+        "position": 5,
+        "racerId": "550e8400-e29b-41d4-a716-446655440005",
+        "racerName": "Lightning McCar",
+        "points": 2
       },
       {
         "position": 2,
-        "racerId": "550e8400-e29b-41d4-a716-446655440001",
-        "racerName": "Jane Smith",
-        "points": 18
+        "racerId": "550e8400-e29b-41d4-a716-446655440006",
+        "racerName": "Richard \"Dick\" Rider",
+        "points": 6
       },
       {
-        "position": 3,
-        "racerId": "550e8400-e29b-41d4-a716-446655440002",
-        "racerName": "Bob Wilson",
-        "points": 15
+        "position": 7,
+        "racerId": "550e8400-e29b-41d4-a716-446655440007",
+        "racerName": "William Tigris",
+        "points": 0
       }
     ],
-    "createdAt": "2025-12-14T14:30:00Z"
+    "createdAt": "2026-01-20T14:30:00Z"
   },
   {
     "id": "770e8400-e29b-41d4-a716-446655440001",
     "seasonId": "660e8400-e29b-41d4-a716-446655440000",
-    "raceNumber": 4,
-    "date": "2025-12-07",
-    "results": [
-      {
-        "position": 1,
-        "racerId": "550e8400-e29b-41d4-a716-446655440002",
-        "racerName": "Bob Wilson",
-        "points": 25
-      },
-      {
-        "position": 2,
-        "racerId": "550e8400-e29b-41d4-a716-446655440003",
-        "racerName": "Alice Johnson",
-        "points": 18
-      },
-      {
-        "position": 3,
-        "racerId": "550e8400-e29b-41d4-a716-446655440000",
-        "racerName": "John Doe",
-        "points": 15
-      }
-    ],
-    "createdAt": "2025-12-07T14:30:00Z"
-  },
-  {
-    "id": "770e8400-e29b-41d4-a716-446655440002",
-    "seasonId": "660e8400-e29b-41d4-a716-446655440000",
-    "raceNumber": 3,
-    "date": "2025-11-30",
-    "results": [
-      {
-        "position": 1,
-        "racerId": "550e8400-e29b-41d4-a716-446655440001",
-        "racerName": "Jane Smith",
-        "points": 25
-      },
-      {
-        "position": 2,
-        "racerId": "550e8400-e29b-41d4-a716-446655440004",
-        "racerName": "Charlie Brown",
-        "points": 18
-      },
-      {
-        "position": 3,
-        "racerId": "550e8400-e29b-41d4-a716-446655440000",
-        "racerName": "John Doe",
-        "points": 15
-      }
-    ],
-    "createdAt": "2025-11-30T14:30:00Z"
-  },
-  {
-    "id": "770e8400-e29b-41d4-a716-446655440003",
-    "seasonId": "660e8400-e29b-41d4-a716-446655440000",
     "raceNumber": 2,
-    "date": "2025-11-23",
+    "name": "French Grand Prix",
+    "date": "2026-01-20",
     "results": [
       {
-        "position": 1,
+        "position": 4,
         "racerId": "550e8400-e29b-41d4-a716-446655440000",
-        "racerName": "John Doe",
-        "points": 25
+        "racerName": "Mohamed ibn Mohamed ibn Mohamed Al Baghdadi",
+        "points": 3
       },
       {
         "position": 2,
-        "racerId": "550e8400-e29b-41d4-a716-446655440005",
-        "racerName": "Diana Prince",
-        "points": 18
-      },
-      {
-        "position": 3,
         "racerId": "550e8400-e29b-41d4-a716-446655440001",
-        "racerName": "Jane Smith",
-        "points": 15
-      }
-    ],
-    "createdAt": "2025-11-23T14:30:00Z"
-  },
-  {
-    "id": "770e8400-e29b-41d4-a716-446655440004",
-    "seasonId": "660e8400-e29b-41d4-a716-446655440000",
-    "raceNumber": 1,
-    "date": "2025-11-16",
-    "results": [
-      {
-        "position": 1,
-        "racerId": "550e8400-e29b-41d4-a716-446655440006",
-        "racerName": "Ethan Hunt",
-        "points": 25
+        "racerName": "Bames Jond",
+        "points": 7
       },
       {
-        "position": 2,
-        "racerId": "550e8400-e29b-41d4-a716-446655440000",
-        "racerName": "John Doe",
-        "points": 18
+        "position": 8,
+        "racerId": "550e8400-e29b-41d4-a716-446655440002",
+        "racerName": "Jimmy \"The Milkman\" Watkins",
+        "points": 0
+      },
+      {
+        "position": 6,
+        "racerId": "550e8400-e29b-41d4-a716-446655440003",
+        "racerName": "The Slow Hoe",
+        "points": 1
+      },
+      {
+        "position": 1,
+        "racerId": "550e8400-e29b-41d4-a716-446655440004",
+        "racerName": "Lenobo the Bonobo",
+        "points": 10
+      },
+      {
+        "position": 7,
+        "racerId": "550e8400-e29b-41d4-a716-446655440005",
+        "racerName": "Lightning McCar",
+        "points": 0
       },
       {
         "position": 3,
+        "racerId": "550e8400-e29b-41d4-a716-446655440006",
+        "racerName": "Richard \"Dick\" Rider",
+        "points": 5
+      },
+      {
+        "position": 5,
         "racerId": "550e8400-e29b-41d4-a716-446655440007",
-        "racerName": "Fiona Apple",
-        "points": 15
+        "racerName": "William Tigris",
+        "points": 2
       }
     ],
-    "createdAt": "2025-11-16T14:30:00Z"
+    "createdAt": "2026-01-20T14:30:00Z"
   }
 ]
