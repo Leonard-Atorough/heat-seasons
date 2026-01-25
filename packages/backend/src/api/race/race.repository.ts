@@ -1,5 +1,5 @@
+import { Race } from "@shared/index";
 import { StorageAdapter } from "../../storage/";
-import { Race } from "./race.service.js";
 import { IRaceRepository } from "./race.repository.interface.js";
 
 export class RaceRepository implements IRaceRepository {
@@ -10,7 +10,8 @@ export class RaceRepository implements IRaceRepository {
   }
 
   async findBySeasonId(seasonId: string): Promise<Race[]> {
-    throw new Error("Not implemented");
+    const response = await this.storageAdapter.findAll<Race>("races", { seasonId });
+    return response.filter((race) => race.results.length > 0 && race.results !== null);
   }
 
   async findById(id: string): Promise<Race | null> {

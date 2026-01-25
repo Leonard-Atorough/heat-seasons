@@ -32,8 +32,8 @@ import { ILeaderboardService } from "../api/leaderboard/leaderboard.service.inte
 
 class Container {
   private static instance: Container | null = null;
-
   private storageAdapter: JsonStorageAdapter;
+  private repositories: Map<string, any> = new Map();
 
   private constructor() {
     this.storageAdapter = new JsonStorageAdapter("./data");
@@ -55,33 +55,56 @@ class Container {
   }
 
   createAuthController(): AuthController {
-    const repository: IAuthRepository = new AuthRepository(this.storageAdapter);
+    const repository: IAuthRepository = this.getRepository<IAuthRepository>("AuthRepository");
     const service: IAuthService = new AuthService(repository);
     return new AuthController(service);
   }
 
   createRacerController(): RacerController {
-    const repository: IRacerRepository = new RacerRepository(this.storageAdapter);
+    const repository: IRacerRepository = this.getRepository<IRacerRepository>("RacerRepository");
     const service: IRacerService = new RacerService(repository);
     return new RacerController(service);
   }
 
   createRaceController(): RaceController {
-    const repository: IRaceRepository = new RaceRepository(this.storageAdapter);
+    const repository: IRaceRepository = this.getRepository<IRaceRepository>("RaceRepository");
     const service: IRaceService = new RaceService(repository);
     return new RaceController(service);
   }
 
   createSeasonController(): SeasonController {
-    const repository: ISeasonRepository = new SeasonRepository(this.storageAdapter);
+    const repository: ISeasonRepository = this.getRepository<ISeasonRepository>("SeasonRepository");
     const service: ISeasonService = new SeasonService(repository);
     return new SeasonController(service);
   }
 
   createLeaderboardController(): LeaderboardController {
-    const repository: ILeaderboardRepository = new LeaderboardRepository(this.storageAdapter);
-    const service: ILeaderboardService = new LeaderboardService(repository);
+    const seasonRepository: ISeasonRepository =
+      this.getRepository<ISeasonRepository>("SeasonRepository");
+    const raceRepository: IRaceRepository = this.getRepository<IRaceRepository>("RaceRepository");
+    const racerRepository: IRacerRepository =
+      this.getRepository<IRacerRepository>("RacerRepository");
+    const service: ILeaderboardService = new LeaderboardService(
+      seasonRepository,
+      raceRepository,
+      racerRepository,
+    );
     return new LeaderboardController(service);
+  }
+
+  private initializeRepositories(): void {
+    this.repositories.set("AuthRepository", new AuthRepository(this.storageAdapter));
+    this.repositories.set("RacerRepository", new RacerRepository(this.storageAdapter));
+    this.repositories.set("RaceRepository", new RaceRepository(this.storageAdapter));
+    this.repositories.set("SeasonRepository", new SeasonRepository(this.storageAdapter));
+    this.repositories.set("LeaderboardRepository", new LeaderboardRepository(this.storageAdapter));
+  }
+
+  private getRepository<T>(name: string): T {
+    if (this.repositories.size === 0) {
+      this.initializeRepositories();
+    }
+    return this.repositories.get(name) as T;
   }
 }
 

@@ -5,7 +5,7 @@ import { IRacerRepository } from "./racer.repository.interface.js";
 export class RacerRepository implements IRacerRepository {
   constructor(private storageAdapter: StorageAdapter) {}
 
-  async findAll(filters?: { active?: boolean }): Promise<Racer[]> {
+  async findAll(filters?: { active?: boolean; racerIds?: string[] }): Promise<Racer[]> {
     try {
       const response = await this.storageAdapter.findAll<Racer>("racers", filters);
       const sortedResponse = response.sort((a, b) => a.name.localeCompare(b.name));
@@ -28,7 +28,7 @@ export class RacerRepository implements IRacerRepository {
     throw new Error("Not implemented");
   }
 
-  async update(id: string, data: Partial<RacerDTO>): Promise<RacerDTO> {
+  async update(id: string, data: Partial<Racer>): Promise<Racer> {
     throw new Error("Not implemented");
   }
 

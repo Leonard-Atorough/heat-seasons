@@ -1,4 +1,4 @@
-import { Race } from "./race.service.js";
+import { Race } from "@shared/index";
 
 export interface IRaceRepository {
   findAll(): Promise<Race[]>;

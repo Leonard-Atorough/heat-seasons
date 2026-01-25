@@ -1,19 +1,6 @@
+import { Race, RaceResult } from "@shared/index.js";
 import { IRaceRepository } from "./race.repository.interface.js";
 import { IRaceService } from "./race.service.interface.js";
-
-export interface RaceResult {
-  racerId: string;
-  position: number;
-  points: number;
-}
-
-export interface Race {
-  id: string;
-  seasonId: string;
-  raceNumber: number;
-  date: Date;
-  results: RaceResult[];
-}
 
 export class RaceService implements IRaceService {
   constructor(private raceRepository: IRaceRepository) {}
@@ -28,7 +15,7 @@ export class RaceService implements IRaceService {
 
   async create(
     seasonId: string,
-    data: { date: Date; results: Omit<RaceResult, "points">[] }
+    data: { date: Date; results: Omit<RaceResult, "points">[] },
   ): Promise<Race> {
     throw new Error("Not implemented");
   }
@@ -51,7 +38,7 @@ export interface RaceServiceInterface {
   getById(id: string): Promise<Race | null>;
   create(
     seasonId: string,
-    data: { date: Date; results: Omit<RaceResult, "points">[] }
+    data: { date: Date; results: Omit<RaceResult, "points">[] },
   ): Promise<Race>;
   update(id: string, data: Partial<Race>): Promise<Race>;
   delete(id: string): Promise<void>;
