@@ -7,7 +7,6 @@ export class LeaderboardController {
   constructor(private leaderboardService: ILeaderboardService) {}
 
   async getCurrentSeason(req: Request, res: Response, next: NextFunction): Promise<void> {
-    console.log("Fetching current season leaderboard");
     try {
       const leaderboard = await this.leaderboardService.getCurrentSeasonLeaderboard();
 

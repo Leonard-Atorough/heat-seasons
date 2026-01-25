@@ -43,14 +43,13 @@
 
 .dashboard__leaderboardRow {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  text-align: left;
   background-color: var(--card-white);
   border-radius: 8px;
   box-shadow: var(--shadow-elevation-medium);
   border: 1px solid var(--border-color);
   padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .dashboard__leaderboardPosition {
@@ -69,8 +68,9 @@
 .dashboard__leaderboardTeam {
   font-size: var(--fs-small);
   color: var(--text-secondary);
-  flex: 0 0 100px;
+  flex: 0 0 200px;
   min-width: 80px;
+  text-align: center;
 }
 
 .dashboard__leaderboardRaces {

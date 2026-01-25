@@ -41,8 +41,6 @@ export class LeaderboardService implements ILeaderboardService {
       }
     }
 
-    console.log("Results map computed:", resultsMap);
-
     const racers = await this.racerRepository.findByIds(Array.from(resultsMap.keys()));
     if (!racers || racers.length === 0) {
       console.log("No racers found for leaderboard");
@@ -74,8 +72,6 @@ export class LeaderboardService implements ILeaderboardService {
       }
       return a.racerName.localeCompare(b.racerName);
     });
-
-    console.log("Leaderboard entries computed:", leaderboardEntries);
 
     const leaderboard: Leaderboard = {
       seasonId: season.id,

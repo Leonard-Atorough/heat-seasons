@@ -7,13 +7,40 @@ export interface StatCardProps {
   icon?: React.ReactNode;
   onClick?: () => void;
   compact?: boolean;
+  backgroundImage?: string;
 }
 
-export default function StatCard({ title, value, icon, onClick, compact = true }: StatCardProps) {
+export default function StatCard({
+  title,
+  value,
+  icon,
+  onClick,
+  compact = true,
+  backgroundImage,
+}: StatCardProps) {
   return (
-    <Card variant={compact ? "compact" : "default"} onClick={onClick} className={styles.statCard}>
+    <Card
+      variant={compact ? "compact" : "default"}
+      onClick={onClick}
+      className={styles.statCard}
+      style={
+        backgroundImage
+          ? {
+              background: `url(${backgroundImage}) center center / cover no-repeat`,
+              backgroundColor: "var(--card-dark-overlay)",
+            }
+          : undefined
+      }
+    >
       {icon && <div className={styles.statCard__icon}>{icon}</div>}
-      <div className={styles.statCard__content}>
+      <div
+        className={styles.statCard__content}
+        style={
+          backgroundImage
+            ? { backgroundColor: "rgba(0, 0, 0, 0.6)", padding: "1rem", borderRadius: "8px" }
+            : undefined
+        }
+      >
         <h3 className={styles.statCard__title}>{title}</h3>
         {value && <p className={styles.statCard__value}>{value}</p>}
       </div>

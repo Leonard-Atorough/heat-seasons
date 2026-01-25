@@ -5,6 +5,7 @@ import { LeaderboardHeader } from "../components/features/Leaderboard";
 import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.css";
 import { LeaderboardEntry } from "@shared/models";
+import { Card } from "../components/common/Card";
 
 export default function Dashboard({ topThreeRacers }: { topThreeRacers?: LeaderboardEntry[] }) {
   const navigate = useNavigate();
@@ -41,8 +42,16 @@ export default function Dashboard({ topThreeRacers }: { topThreeRacers?: Leaderb
       <section className={styles.dashboard__content}>
         <div className={styles.dashboard__stats}>
           <StatCard title="Current Leader" value={topRacers[0].name} />
-          <StatCard title="Recent Race" value="Race 2: French Grand Prix" />
-          <StatCard title="Next Race" value="Coming Soon" />
+          <StatCard
+            title="Recent Race"
+            value="Race 2: French Grand Prix"
+            backgroundImage="/images/previous-race-bg.jpg"
+          />
+          <StatCard
+            title="Next Race"
+            value="Coming Soon"
+            backgroundImage="/images/next-race-bg.jpg"
+          />
         </div>
 
         {/* Leaderboard Preview Section */}
@@ -51,7 +60,7 @@ export default function Dashboard({ topThreeRacers }: { topThreeRacers?: Leaderb
           <div className={styles.dashboard__leaderboardCards}>
             <LeaderboardHeader variant="dashboard" />
             {topRacers.map((racer) => (
-              <div key={racer.position} className={styles.dashboard__leaderboardRow}>
+              <Card key={racer.position} className={styles.dashboard__leaderboardRow}>
                 <span className={styles.dashboard__leaderboardPosition}>{racer.medal}</span>
                 <span className={styles.dashboard__leaderboardName}>{racer.name}</span>
                 <span className={styles.dashboard__leaderboardTeam}>{racer.team}</span>
@@ -62,7 +71,7 @@ export default function Dashboard({ topThreeRacers }: { topThreeRacers?: Leaderb
                     styles[`dashboard__colorBadge--${racer.badgeColor}`]
                   }`}
                 ></span>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
