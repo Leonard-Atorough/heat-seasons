@@ -4,28 +4,28 @@ import { getContainerInstance } from "../../containers/container";
 const router = Router();
 const seasonController = getContainerInstance().createSeasonController();
 
-router.get("/", (req, res) => {
-  seasonController.getAll(req, res);
+router.get("/", (req, res, next) => {
+  seasonController.getAll(req, res, next);
 });
 
-router.get("/:id", (req, res) => {
-  seasonController.getById(req, res);
+router.get("/:id", (req, res, next) => {
+  seasonController.getById(req, res, next);
 });
 
-router.get("/current/active", (req, res) => {
-  seasonController.getCurrent(req, res);
+router.get("/active", (req, res, next) => {
+  seasonController.getCurrent(req, res, next);
 });
 
-router.post("/", (req, res) => {
-  seasonController.create(req, res);
+router.post("/", (req, res, next) => {
+  seasonController.create(req, res, next);
 });
 
-router.put("/:id", (req, res) => {
-  seasonController.update(req, res);
+router.put("/:id", (req, res, next) => {
+  seasonController.update(req, res, next);
 });
 
-router.delete("/:id", (req, res) => {
-  seasonController.delete(req, res);
+router.delete("/:id", (req, res, next) => {
+  seasonController.delete(req, res, next);
 });
 
 export { router as seasonRouter };

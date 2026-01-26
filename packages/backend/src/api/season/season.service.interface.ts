@@ -1,11 +1,11 @@
-import { Season } from "./season.service.js";
-import { SeasonStatus } from "shared";
+import { Season, SeasonStatus } from "@shared/models";
+import { SeasonCreateInput, SeasonUpdateInput } from "src/models";
 
 export interface ISeasonService {
   getAll(filters?: { status?: SeasonStatus }): Promise<Season[]>;
-  getById(id: string): Promise<Season | null>;
-  create(data: Omit<Season, "id">): Promise<Season>;
-  update(id: string, data: Partial<Season>): Promise<Season>;
+  getById(id: string): Promise<Season>;
+  create(data: SeasonCreateInput): Promise<Season>;
+  update(id: string, data: SeasonUpdateInput): Promise<Season>;
   delete(id: string): Promise<void>;
-  getActiveSeason(): Promise<Season | null>;
+  getActiveSeason(): Promise<Season>;
 }

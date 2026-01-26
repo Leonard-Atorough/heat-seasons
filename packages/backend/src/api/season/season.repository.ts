@@ -1,14 +1,13 @@
 import { StorageAdapter } from "../../storage/";
 import { ISeasonRepository } from "./season.repository.interface.js";
-import { SeasonStatus } from "shared";
-import { SeasonDTO } from "src/models";
+import { Season, SeasonStatus } from "@shared/models";
 
 export class SeasonRepository implements ISeasonRepository {
   constructor(private storageAdapter: StorageAdapter) {}
 
-  async findAll(filters?: { status?: SeasonStatus }): Promise<SeasonDTO[]> {
+  async findAll(filters?: { status?: SeasonStatus }): Promise<Season[]> {
     try {
-      const seasons = await this.storageAdapter.findAll<SeasonDTO>("seasons");
+      const seasons = await this.storageAdapter.findAll<Season>("seasons");
       if (filters?.status) {
         return seasons.filter((season) => season.status === filters.status);
       }
@@ -18,21 +17,21 @@ export class SeasonRepository implements ISeasonRepository {
     }
   }
 
-  async findById(id: string): Promise<SeasonDTO | null> {
+  async findById(id: string): Promise<Season> {
     throw new Error("Not implemented");
   }
 
-  async findActive(): Promise<SeasonDTO | null> {
-    const seasons = await this.storageAdapter.findAll<SeasonDTO>("seasons");
+  async findActive(): Promise<Season | null> {
+    const seasons = await this.storageAdapter.findAll<Season>("seasons");
     const season = seasons.find((season) => season.status === "active");
     return season || null;
   }
 
-  async create(data: Omit<SeasonDTO, "id">): Promise<SeasonDTO> {
+  async create(data: Omit<Season, "id">): Promise<Season> {
     throw new Error("Not implemented");
   }
 
-  async update(id: string, data: Partial<SeasonDTO>): Promise<SeasonDTO> {
+  async update(id: string, data: Partial<Season>): Promise<Season> {
     throw new Error("Not implemented");
   }
 
