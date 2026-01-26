@@ -4,14 +4,15 @@ import { StatCard } from "../components/features/Dashboard";
 import { LeaderboardHeader } from "../components/features/Leaderboard";
 import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.css";
-import { LeaderboardEntry } from "@shared/models";
+import { Leaderboard } from "@shared/models";
 import { Card } from "../components/common/Card";
 
-export default function Dashboard({ topThreeRacers }: { topThreeRacers?: LeaderboardEntry[] }) {
+export default function Dashboard({ leaderboard }: { leaderboard?: Leaderboard }) {
   const navigate = useNavigate();
 
   const MEDALS = ["🥇", "🥈", "🥉"];
   const BADGE_COLORS = ["gold", "silver", "bronze"];
+  const topThreeRacers = leaderboard?.standings.slice(0, 3) || [];
 
   const topRacers = Array.from({ length: 3 }, (_, i) => ({
     position: i + 1,
@@ -27,7 +28,7 @@ export default function Dashboard({ topThreeRacers }: { topThreeRacers?: Leaderb
     <div className={styles.dashboard}>
       {/* Hero Section */}
       <PageHeader
-        title="SEASON ONE WINTER 2026"
+        title={leaderboard?.seasonName.toUpperCase() ?? "SEASON ONE WINTER 2026"}
         subtitle="Races: 2 / 8 Completed"
         variant="hero"
         backgroundImage="/images/dashboard-hero.webp"
