@@ -34,7 +34,7 @@ export class SeasonController {
   async getCurrent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const season = await this.seasonService.getActiveSeason();
-
+      console.log("Here", season);
       const response: ApiResponse<Season> = {
         success: true,
         timestamp: new Date(),

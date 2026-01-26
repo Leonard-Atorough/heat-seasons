@@ -8,12 +8,12 @@ router.get("/", (req, res, next) => {
   seasonController.getAll(req, res, next);
 });
 
-router.get("/:id", (req, res, next) => {
-  seasonController.getById(req, res, next);
-});
-
 router.get("/active", (req, res, next) => {
   seasonController.getCurrent(req, res, next);
+});
+
+router.get("/:id", (req, res, next) => {
+  seasonController.getById(req, res, next);
 });
 
 router.post("/", (req, res, next) => {
