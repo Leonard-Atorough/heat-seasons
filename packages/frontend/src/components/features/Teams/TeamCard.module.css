@@ -1,0 +1,30 @@
+.teamCard {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.teamCard__info {
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.teamCard__name {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.teamCard__drivers {
+  display: flex;
+  width: 100%;
+  gap: 3rem;
+}
+
+.teamCard__driver {
+  font-size: var(--fs-body-large);
+  font-weight: var(--fw-semibold);
+}

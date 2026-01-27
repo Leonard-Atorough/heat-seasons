@@ -42,6 +42,9 @@ export default function Header() {
         <a className={styles["nav__link"]} href="/drivers">
           Drivers
         </a>
+        <a className={styles["nav__link"]} href="/teams">
+          Teams
+        </a>
         <a className={styles["nav__link"]} href="/leaderboard">
           Leaderboard
         </a>
