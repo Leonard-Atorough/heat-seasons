@@ -15,11 +15,13 @@ export default function DriverCard({ racer }: DriverCardProps) {
       variant="compact"
       className={styles.racerCard}
       onClick={() => navigate(`/racers/${racer.id}`, { state: { racer } })}
-      style={{ backgroundColor: racer.teamColor || "inherit" }}
+      style={{
+        backgroundImage: `linear-gradient(to right, ${racer.teamColor || "var(--card-white)"} 30%, white 100%)`,
+      }}
     >
       <div className={styles.racerCard__info}>
         <h3 className={styles.racerCard__name}>{racer.name}</h3>
-        <p className={styles.racerCard__team} style={{ color: racer.teamColor || "inherit" }}>
+        <p className={styles.racerCard__team}>
           {racer.team}
         </p>
         <p className={styles.racerCard__points}>{racer.stats?.totalPoints ?? 0} pts</p>
@@ -29,7 +31,7 @@ export default function DriverCard({ racer }: DriverCardProps) {
             alt={`${racer.name} badge`}
             className={styles.racerCard__badge}
           />
-        )}  
+        )}
       </div>
       <div className={styles.racerCard__picture}>
         <img
