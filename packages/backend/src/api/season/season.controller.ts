@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { ISeasonService } from "./season.service.interface.js";
-import { ApiResponse } from "@shared/models.js";
+import { ApiResponse, SeasonStatus, Season } from "@shared/index";
 import { SeasonResponse } from "../../models/season.model.js";
-import { SeasonStatus, Season } from "@shared/models";
 import { NextFunction } from "express-serve-static-core";
 
 export class SeasonController {

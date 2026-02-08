@@ -1,4 +1,4 @@
-import { type Leaderboard } from "@shared/models";
+import { type Leaderboard } from "@shared/index";
 import { PageHeader } from "../components/common/PageHeader";
 import { LeaderboardRow, LeaderboardHeader } from "../components/features/Leaderboard";
 import styles from "./Leaderboard.module.css";

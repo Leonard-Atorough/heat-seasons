@@ -1,32 +1,7 @@
-import { UserRole } from "shared";
+import { UserRole, User } from "@shared/index";
 
-export interface User {
-  id: string;
-  email: string;
-  password: string;
-  name: string;
-  role: UserRole;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export interface UserCreateInput extends Omit<User, "id" | "createdAt" | "updatedAt"> {}
 
-export interface UserCreateInput {
-  email: string;
-  password: string;
-  name: string;
-  role?: UserRole;
-}
+export interface UserUpdateInput extends Partial<Omit<User, "id" | "createdAt" | "updatedAt">> {}
 
-export interface UserUpdateInput {
-  email?: string;
-  name?: string;
-  role?: UserRole;
-}
-
-export interface UserResponse {
-  id: string;
-  email: string;
-  name: string;
-  role: UserRole;
-  createdAt: Date;
-}
+export interface UserResponse extends Omit<User, "googleId" | "updatedAt"> {}

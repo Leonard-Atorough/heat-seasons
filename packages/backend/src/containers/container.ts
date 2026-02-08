@@ -35,14 +35,39 @@ class Container {
   private storageAdapter: JsonStorageAdapter;
   private repositories: Map<string, any> = new Map();
 
+  serviceLocator = new ServiceLocator();
+
   private constructor() {
     this.storageAdapter = new JsonStorageAdapter("./data");
+
+    // Register services in the service locator
+    const authService = new AuthService(this.getRepository<IAuthRepository>("AuthRepository"));
+    this.serviceLocator.register("AuthService", authService);
+
+    const racerService = new RacerService(this.getRepository<IRacerRepository>("RacerRepository"));
+    this.serviceLocator.register("RacerService", racerService);
+
+    const raceService = new RaceService(this.getRepository<IRaceRepository>("RaceRepository"));
+    this.serviceLocator.register("RaceService", raceService);
+
+    const seasonService = new SeasonService(
+      this.getRepository<ISeasonRepository>("SeasonRepository"),
+    );
+    this.serviceLocator.register("SeasonService", seasonService);
+
+    const leaderboardService = new LeaderboardService(
+      this.getRepository<ISeasonRepository>("SeasonRepository"),
+      this.getRepository<IRaceRepository>("RaceRepository"),
+      this.getRepository<IRacerRepository>("RacerRepository"),
+    );
+    this.serviceLocator.register("LeaderboardService", leaderboardService);
   }
 
   public static getInstance(): Container {
     if (Container.instance === null) {
       Container.instance = new Container();
     }
+
     return Container.instance;
   }
 
@@ -50,65 +75,70 @@ class Container {
     await this.storageAdapter.initialize();
   }
 
+  /**
+   * Registers a service in the service locator. This allows us to access the service from anywhere in the application without needing to pass it through constructors or function parameters.
+   *
+   * @param name - The name of the service
+   * @param service - The class or interface of the service
+   */
+  public registerService<T>(name: string, service: T): void {
+    this.serviceLocator.register(name, service);
+  }
+
   public getStorageAdapter(): JsonStorageAdapter {
     return this.storageAdapter;
   }
 
   createAuthController(): AuthController {
-    const repository: IAuthRepository = this.getRepository<IAuthRepository>("AuthRepository");
-    const service: IAuthService = new AuthService(repository);
+    // Use the service locator to get the AuthService instance instead
+    const service = this.serviceLocator.get<IAuthService>("AuthService");
     return new AuthController(service);
   }
 
   createRacerController(): RacerController {
-    const repository: IRacerRepository = this.getRepository<IRacerRepository>("RacerRepository");
-    const service: IRacerService = new RacerService(repository);
+    const service = this.serviceLocator.get<IRacerService>("RacerService");
     return new RacerController(service);
   }
 
   createRaceController(): RaceController {
-    const repository: IRaceRepository = this.getRepository<IRaceRepository>("RaceRepository");
-    const service: IRaceService = new RaceService(repository);
+    const service = this.serviceLocator.get<IRaceService>("RaceService");
     return new RaceController(service);
   }
 
   createSeasonController(): SeasonController {
-    const repository: ISeasonRepository = this.getRepository<ISeasonRepository>("SeasonRepository");
-    const service: ISeasonService = new SeasonService(repository);
+    const service = this.serviceLocator.get<ISeasonService>("SeasonService");
     return new SeasonController(service);
   }
 
   createLeaderboardController(): LeaderboardController {
-    const seasonRepository: ISeasonRepository =
-      this.getRepository<ISeasonRepository>("SeasonRepository");
-    const raceRepository: IRaceRepository = this.getRepository<IRaceRepository>("RaceRepository");
-    const racerRepository: IRacerRepository =
-      this.getRepository<IRacerRepository>("RacerRepository");
-    const service: ILeaderboardService = new LeaderboardService(
-      seasonRepository,
-      raceRepository,
-      racerRepository,
-    );
+    const service = this.serviceLocator.get<ILeaderboardService>("LeaderboardService");
     return new LeaderboardController(service);
   }
 
-  private initializeRepositories(): void {
-    this.repositories.set("AuthRepository", new AuthRepository(this.storageAdapter));
-    this.repositories.set("RacerRepository", new RacerRepository(this.storageAdapter));
-    this.repositories.set("RaceRepository", new RaceRepository(this.storageAdapter));
-    this.repositories.set("SeasonRepository", new SeasonRepository(this.storageAdapter));
-    this.repositories.set("LeaderboardRepository", new LeaderboardRepository(this.storageAdapter));
+  private createRepository<T>(name: string): T {
+    switch (name) {
+      case "AuthRepository":
+        return new AuthRepository(this.storageAdapter) as unknown as T;
+      case "RacerRepository":
+        return new RacerRepository(this.storageAdapter) as unknown as T;
+      case "RaceRepository":
+        return new RaceRepository(this.storageAdapter) as unknown as T;
+      case "SeasonRepository":
+        return new SeasonRepository(this.storageAdapter) as unknown as T;
+      case "LeaderboardRepository":
+        return new LeaderboardRepository(this.storageAdapter) as unknown as T;
+      default:
+        throw new Error(`Repository ${name} not found`);
+    }
   }
 
   private getRepository<T>(name: string): T {
-    if (this.repositories.size === 0) {
-      this.initializeRepositories();
+    // Might be better to initialize each repo lazily when its requested for the first time.
+    if (!this.repositories.has(name)) {
+      this.repositories.set(name, this.createRepository<T>(name));
     }
     return this.repositories.get(name) as T;
   }
 }
 
 export { Container };
-export function getContainerInstance(): Container {
-  return Container.getInstance();
-}

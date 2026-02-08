@@ -1,37 +1,5 @@
-export interface RaceResult {
-  id: string;
-  raceId: string;
-  racerId: string;
-  racerName: string;
-  position: number;
-  points: number;
-}
+import { Race } from "@shared/index";
 
-export interface Race {
-  id: string;
-  seasonId: string;
-  raceNumber: number;
-  date: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export interface RaceCreateInput extends Omit<Race, "id" | "createdAt" | "updatedAt"> {}
 
-export interface RaceWithResults extends Race {
-  results: RaceResult[];
-}
-
-export interface RaceResultInput {
-  racerId: string;
-  position: number;
-}
-
-export interface RaceCreateInput {
-  seasonId: string;
-  date: Date;
-  results: RaceResultInput[];
-}
-
-export interface RaceUpdateInput {
-  date?: Date;
-  results?: RaceResultInput[];
-}
+export interface RaceUpdateInput extends Partial<Omit<Race, "id" | "createdAt" | "updatedAt">> {}

@@ -4,7 +4,7 @@ import { StatCard } from "../components/features/Dashboard";
 import { LeaderboardHeader } from "../components/features/Leaderboard";
 import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.css";
-import { Leaderboard } from "@shared/models";
+import { Leaderboard } from "@shared/index";
 import { Card } from "../components/common/Card";
 
 export default function Dashboard({ leaderboard }: { leaderboard?: Leaderboard }) {

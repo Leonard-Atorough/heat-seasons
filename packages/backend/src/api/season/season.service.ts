@@ -2,7 +2,7 @@ import { NotFoundError } from "src/errors/appError.js";
 import { SeasonCreateInput, SeasonUpdateInput } from "../../models";
 import { ISeasonRepository } from "./season.repository.interface.js";
 import { ISeasonService } from "./season.service.interface.js";
-import { Season, SeasonStatus } from "@shared/models";
+import { Season, SeasonStatus } from "@shared/index";
 
 export class SeasonService implements ISeasonService {
   constructor(private seasonRepository: ISeasonRepository) {}

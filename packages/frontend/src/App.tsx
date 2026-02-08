@@ -8,7 +8,7 @@ import LoginRegister from "./pages/LoginRegister.tsx";
 import Drivers from "./pages/Drivers.tsx";
 import Footer from "./components/layout/Footer.tsx";
 import { config } from "./config.ts";
-import { ApiResponse, Leaderboard as Standings, Racer } from "@shared/models";
+import { ApiResponse, Leaderboard as Standings, Racer } from "@shared/index";
 import useFetch from "./hooks/useFetch.ts";
 import Seasons from "./pages/Seasons.tsx";
 import { Teams } from "./pages/Teams.tsx";

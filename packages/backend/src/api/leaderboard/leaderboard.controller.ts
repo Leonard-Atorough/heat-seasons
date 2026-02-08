@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ILeaderboardService } from "./leaderboard.service.interface.js";
-import { ApiError, ApiResponse, Leaderboard } from "@shared/models";
-import { LeaderboardEntry } from "shared";
+import { Leaderboard, ApiResponse } from "@shared/index";
 
 export class LeaderboardController {
   constructor(private leaderboardService: ILeaderboardService) {}

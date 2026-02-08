@@ -1,6 +1,6 @@
 import { StorageAdapter } from "../../storage/";
 import { ISeasonRepository } from "./season.repository.interface.js";
-import { Season, SeasonStatus } from "@shared/models";
+import { Season, SeasonStatus } from "@shared/index";
 
 export class SeasonRepository implements ISeasonRepository {
   constructor(private storageAdapter: StorageAdapter) {}

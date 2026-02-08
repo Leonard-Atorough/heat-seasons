@@ -1,7 +1,7 @@
 import { useState, useEffect, ReactNode } from "react";
 import { AuthContext, AuthContextType, User } from "../contexts/AuthContext";
 import { config } from "../config";
-import useFetch from "../hooks/useFetch";
+import { TokenManager } from "../utils/tokenManager";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -11,78 +11,57 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if user is already authenticated on mount
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch(`${config.authRoute}/me`, {
-          method: "GET",
-          credentials: "include",
-          cache: "no-cache",
-          headers: {
-            "Content-Type": "application/json",
-            "X-User-Id": "880e8400-e29b-41d4-a716-446655440000", // Dev only, will be swapped out when test db implemented
-          },
-        });
-        if (response.ok) {
-          const userData = await response.json();
-          setUser(userData);
-        }
-      } catch (error) {
-        console.error("Auth check failed:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
+    const token = TokenManager.getToken();
+    if (token) {
+      checkAuth(token);
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
-  const login = async (email: string, password: string): Promise<void> => {
-    setIsLoading(true);
+  const checkAuth = async (token: string) => {
     try {
-      const response = await fetch(`${config.authRoute}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const response = await fetch(`${config.authRoute}/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-
-      if (!response.ok) {
-        throw new Error("Login failed");
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData);
+      } else {
+        TokenManager.removeToken();
       }
-
-      const userData = await response.json();
-      setUser(userData);
+    } catch (error) {
+      console.error("Auth check failed:", error);
+      TokenManager.removeToken();
     } finally {
       setIsLoading(false);
     }
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token) {
+      TokenManager.setToken(token);
+      checkAuth(token);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  const loginWithGoogle = () => {
+    window.location.href = `${config.apiBaseUrl}/auth/google`;
   };
 
   const logout = async (): Promise<void> => {
     setIsLoading(true);
     try {
-      await fetch(`${config.authRoute}/logout`, { method: "POST" });
+      TokenManager.removeToken();
       setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const register = async (email: string, password: string, name: string): Promise<void> => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${config.authRoute}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, name }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Registration failed");
-      }
-
-      const userData = await response.json();
-      setUser(userData);
+      window.location.href = "/";
     } finally {
       setIsLoading(false);
     }
@@ -92,10 +71,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     user,
     isLoading,
     isAuthenticated: !!user,
-    login,
+    loginWithGoogle,
     logout,
-    register,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
 }

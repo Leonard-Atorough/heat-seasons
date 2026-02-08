@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { IRacerService } from "./racer.service.interface.js";
 import { ApiResponse, RacerWithStats } from "@shared/index";
 
+
 export class RacerController {
   constructor(private racerService: IRacerService) {}
 

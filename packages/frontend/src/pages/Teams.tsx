@@ -1,4 +1,4 @@
-import { Racer } from "@shared/models";
+import { Racer } from "@shared/index";
 import { useMemo } from "react";
 import { TeamCard } from "../components/features";
 import styles from "./Teams.module.css";

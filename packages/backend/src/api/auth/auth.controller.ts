@@ -1,31 +1,26 @@
 import { Request, Response } from "express";
 import { IAuthService } from "./auth.service.interface";
-import { env } from "process";
+import { JwtService } from "../../utils/jwt";
 
 export class AuthController {
   constructor(private authService: IAuthService) {}
 
-  /**
-   *
-   * @param {string} req - Express Request object
-   * @param {string} res - Express Response object
-   * @returns {Promise<void>} 
-   */
   async getMe(req: Request, res: Response): Promise<void> {
-    let userId: string | undefined;
     try {
-      if (env.NODE_ENV === "test" || env.NODE_ENV === "development") {
-        userId = (req.query.userId as string) || (req.headers["x-user-id"] as string);
-      } else {
-        // In Production we would extract userId from a verified token in our Auth middleware and attach it to req.user
-        userId = (req as any).user?.id; //TODO: Proper typing and implementation
-      }
-      if (!userId) {
-        res.status(401).json({ error: "User ID not provided" });
+      const authHeader = req.headers.authorization;
+      if (!authHeader?.startsWith("Bearer ")) {
+        res.status(401).json({ error: "Not authenticated" });
         return;
       }
 
-      const user = await this.authService.getMe(userId);
+      const token = authHeader.substring(7);
+      const payload = JwtService.verifyToken(token);
+      if (!payload) {
+        res.status(401).json({ error: "Invalid token" });
+        return;
+      }
+
+      const user = await this.authService.getMe(payload.id);
       res.status(200).json(user);
     } catch (error) {
       if (error instanceof Error && error.message === "User not found") {
@@ -36,25 +31,33 @@ export class AuthController {
     }
   }
 
-  async register(req: Request, res: Response): Promise<void> {
-    res.status(501).json({ error: "Not implemented" });
-  }
-
-  async login(req: Request, res: Response): Promise<void> {
-    const { email, password } = req.body;
+  async googleCallback(req: Request, res: Response): Promise<void> {
     try {
-      const tokens = await this.authService.login(email, password);
-      res.status(200).json(tokens);
+      const user = (req as any).user;
+      if (!user) {
+        res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+        return;
+      }
+
+      const token = this.authService.generateToken(user);
+      res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
     } catch (error) {
-      res.status(401).json({ error: "Invalid credentials" });
+      res.redirect(`${process.env.FRONTEND_URL}/login?error=token_generation_failed`);
     }
   }
 
-  async refresh(req: Request, res: Response): Promise<void> {
-    res.status(501).json({ error: "Not implemented" });
+  async logout(req: Request, res: Response): Promise<void> {
+    res.status(200).json({ message: "Logged out successfully" });
+  }
+  async register(req: Request, res: Response): Promise<void> {
+    res.status(400).json({ error: "Use Google OAuth to register" });
   }
 
-  async logout(req: Request, res: Response): Promise<void> {
-    res.status(501).json({ error: "Not implemented" });
+  async login(req: Request, res: Response): Promise<void> {
+    res.status(400).json({ error: "Use Google OAuth to login" });
+  }
+
+  async refresh(req: Request, res: Response): Promise<void> {
+    res.status(400).json({ error: "Not applicable with OAuth" });
   }
 }

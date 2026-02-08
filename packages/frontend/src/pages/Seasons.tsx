@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import useFetch from "../hooks/useFetch";
 import { config } from "../config";
-import { ApiResponse, Season } from "@shared/models";
+import { ApiResponse, Season } from "@shared/index";
 import { Card } from "../components/common/Card";
 import styles from "./Seasons.module.css";
 

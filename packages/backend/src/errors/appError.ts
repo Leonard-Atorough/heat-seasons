@@ -1,85 +1,68 @@
-import { ApiError, ValidationResult } from "@shared/models";
-
 export class AppError extends Error {
-  constructor(public apiError: ApiError) {
-    super(apiError.message);
-    this.name = "AppError";
+  constructor(
+    public readonly statusCode: number,
+    public readonly code: string,
+    public readonly message: string,
+    public readonly details?: any,
+  ) {
+    super(message);
+    this.name = this.constructor.name;
+    Object.setPrototypeOf(this, AppError.prototype);
+  }
+
+  toJSON() {
+    return {
+      code: this.code,
+      statusCode: this.statusCode,
+      message: this.message,
+      details: this.details,
+      timestamp: new Date().toISOString(),
+    };
   }
 }
 
 export class NotFoundError extends AppError {
   constructor(message: string, details?: any) {
-    super({
-      code: "NOT_FOUND",
-      statusCode: 404,
-      message,
-      details,
-      timestamp: new Date().toISOString(),
-    });
-    this.name = "NotFoundError";
+    super(404, "NOT_FOUND", message, details);
+    Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 }
 
 export class InternalServerError extends AppError {
   constructor(message: string, details?: any) {
-    super({
-      code: "INTERNAL_SERVER_ERROR",
-      statusCode: 500,
-      message,
-      details,
-      timestamp: new Date().toISOString(),
-    });
-    this.name = "InternalServerError";
+    super(500, "INTERNAL_SERVER_ERROR", message, details);
+    Object.setPrototypeOf(this, InternalServerError.prototype);
   }
 }
+
 export class ValidationError extends AppError {
-  constructor(message: string, details?: any, validationErrors?: ValidationResult) {
-    super({
-      code: "VALIDATION_ERROR",
-      statusCode: 400,
-      message,
-      details,
-      timestamp: new Date().toISOString(),
-    });
-    this.name = "ValidationError";
+  constructor(
+    message: string,
+    details?: any,
+    public readonly validationErrors?: any[],
+  ) {
+    super(400, "VALIDATION_ERROR", message, details);
+    Object.setPrototypeOf(this, ValidationError.prototype);
   }
 }
 
 export class UnauthorizedError extends AppError {
   constructor(message: string, details?: any) {
-    super({
-      code: "UNAUTHORIZED",
-      statusCode: 401,
-      message,
-      details,
-      timestamp: new Date().toISOString(),
-    });
-    this.name = "UnauthorizedError";
+    super(401, "UNAUTHORIZED", message, details);
+    Object.setPrototypeOf(this, UnauthorizedError.prototype);
   }
 }
 
 export class ForbiddenError extends AppError {
   constructor(message: string, details?: any) {
-    super({
-      code: "FORBIDDEN",
-      statusCode: 403,
-      message,
-      details,
-      timestamp: new Date().toISOString(),
-    });
-    this.name = "ForbiddenError";
+    super(403, "FORBIDDEN", message, details);
+    Object.setPrototypeOf(this, ForbiddenError.prototype);
   }
 }
 
 export class BadRequestError extends AppError {
   constructor(message: string, details?: any) {
-    super({
-      code: "BAD_REQUEST",
-      statusCode: 400,
-      message,
-      details,
-      timestamp: new Date().toISOString(),
-    });
-    this.name = "BadRequestError";
+    super(400, "BAD_REQUEST", message, details);
+    Object.setPrototypeOf(this, BadRequestError.prototype);
   }
 }

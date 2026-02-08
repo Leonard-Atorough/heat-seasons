@@ -1,4 +1,4 @@
-import { Leaderboard } from "@shared/models";
+import { Leaderboard } from "@shared/index";
 
 export interface ILeaderboardService {
   getCurrentSeasonLeaderboard(): Promise<Leaderboard>;

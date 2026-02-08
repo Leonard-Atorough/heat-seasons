@@ -1,6 +1,8 @@
 import { IAuthRepository } from "./auth.repository.interface";
 import { IAuthService } from "./auth.service.interface";
-import { UserResponse } from "../../models/user.model";
+import { UserResponse, UserCreateInput } from "../../models/user.model";
+import { User } from "@shared/index";
+import { JwtService } from "../../utils/jwt";
 
 export class AuthService implements IAuthService {
   constructor(private authRepository: IAuthRepository) {}
@@ -14,28 +16,34 @@ export class AuthService implements IAuthService {
       id: user.id,
       email: user.email,
       name: user.name,
+      profilePicture: user.profilePicture,
       role: user.role,
       createdAt: user.createdAt,
     };
   }
 
-  async register(email: string, password: string, name: string): Promise<any> {
-    throw new Error("Not implemented");
+  async getUser(userId: string): Promise<UserResponse | null> {
+    return await this.authRepository.findById(userId);
   }
 
-  async login(email: string, password: string): Promise<any> {
-    const user = await this.authRepository.findByEmail(email);
-    if (!user || user.password !== password) {
-      throw new Error("Invalid credentials");
+  async findOrCreateUser(profile: UserCreateInput): Promise<UserResponse> {
+    let user = await this.authRepository.findById(profile.googleId);
+
+    if (!user) {
+      user = await this.authRepository.create({
+        googleId: profile.googleId,
+        email: profile.email,
+        name: profile.name,
+        profilePicture: profile.profilePicture,
+        role: "user",
+      });
     }
-    return {
-      accessToken: "dummy-access-token",
-      refreshToken: "dummy-refresh-token",
-    };
+
+    return user;
   }
 
-  async refreshToken(refreshToken: string): Promise<any> {
-    throw new Error("Not implemented");
+  generateToken(user: User): string {
+    return JwtService.generateToken(user);
   }
 
   async logout(token: string): Promise<void> {
