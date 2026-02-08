@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getContainerInstance } from "../../containers/container";
+import { Container } from "../../containers/container";
 
 const router = Router();
-const leaderboardController = getContainerInstance().createLeaderboardController();
+const leaderboardController = Container.getInstance().createLeaderboardController();
 
 router.get("/current", (req, res, next) => {
   leaderboardController.getCurrentSeason(req, res, next);

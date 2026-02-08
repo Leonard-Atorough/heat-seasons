@@ -16,6 +16,8 @@ export class SeasonController {
       const seasons = await this.seasonService.getAll(filters);
       const response: ApiResponse<SeasonResponse[]> = {
         success: true,
+        status: 200,
+        statusText: "OK",
         timestamp: new Date(),
         message: "Successfully retrieved seasons",
         data: seasons,
@@ -36,6 +38,8 @@ export class SeasonController {
       console.log("Here", season);
       const response: ApiResponse<Season> = {
         success: true,
+        status: 200,
+        statusText: "OK",
         timestamp: new Date(),
         message: "Successfully retrieved active season",
         data: season,

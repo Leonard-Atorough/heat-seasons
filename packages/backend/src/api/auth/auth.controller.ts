@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { IAuthService } from "./auth.service.interface";
 import { JwtService } from "../../utils/jwt";
+import { UserResponse } from "src/models/user.model";
+import { ApiResponse } from "@shared/index";
 
 export class AuthController {
   constructor(private authService: IAuthService) {}
@@ -21,7 +23,14 @@ export class AuthController {
       }
 
       const user = await this.authService.getMe(payload.id);
-      res.status(200).json(user);
+      const response: ApiResponse<UserResponse> = {
+        success: true,
+        status: 200,
+        statusText: "OK",
+        timestamp: new Date(),
+        data: user,
+      };
+      res.status(200).json(response);
     } catch (error) {
       if (error instanceof Error && error.message === "User not found") {
         res.status(404).json({ error: "User not found" });
@@ -48,16 +57,5 @@ export class AuthController {
 
   async logout(req: Request, res: Response): Promise<void> {
     res.status(200).json({ message: "Logged out successfully" });
-  }
-  async register(req: Request, res: Response): Promise<void> {
-    res.status(400).json({ error: "Use Google OAuth to register" });
-  }
-
-  async login(req: Request, res: Response): Promise<void> {
-    res.status(400).json({ error: "Use Google OAuth to login" });
-  }
-
-  async refresh(req: Request, res: Response): Promise<void> {
-    res.status(400).json({ error: "Not applicable with OAuth" });
   }
 }

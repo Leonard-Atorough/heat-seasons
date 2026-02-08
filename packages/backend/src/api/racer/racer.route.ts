@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getContainerInstance } from "../../containers/container";
+import { Container } from "../../containers/container";
 
 const router = Router();
-const racerController = getContainerInstance().createRacerController();
+const racerController = Container.getInstance().createRacerController();
 
 router.get("/", (req, res) => {
   racerController.getAll(req, res);

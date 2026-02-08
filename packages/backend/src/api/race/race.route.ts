@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getContainerInstance } from "../../containers/container";
+import { Container } from "../../containers/container";
 
 const router = Router();
-const raceController = getContainerInstance().createRaceController();
+const raceController = Container.getInstance().createRaceController();
 
 router.get("/", (req, res) => {
   raceController.getBySeasonId(req, res);

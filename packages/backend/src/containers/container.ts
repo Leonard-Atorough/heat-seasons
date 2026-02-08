@@ -1,4 +1,5 @@
 import { JsonStorageAdapter } from "../storage";
+import { ServiceLocator } from "./serviceLocator";
 
 import { AuthRepository } from "../api/auth";
 import { IAuthRepository } from "../api/auth/auth.repository.interface";
@@ -35,7 +36,7 @@ class Container {
   private storageAdapter: JsonStorageAdapter;
   private repositories: Map<string, any> = new Map();
 
-  serviceLocator = new ServiceLocator();
+  serviceLocator: ServiceLocator = new ServiceLocator();
 
   private constructor() {
     this.storageAdapter = new JsonStorageAdapter("./data");

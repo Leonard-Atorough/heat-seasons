@@ -22,10 +22,6 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async getUser(userId: string): Promise<UserResponse | null> {
-    return await this.authRepository.findById(userId);
-  }
-
   async findOrCreateUser(profile: UserCreateInput): Promise<UserResponse> {
     let user = await this.authRepository.findById(profile.googleId);
 

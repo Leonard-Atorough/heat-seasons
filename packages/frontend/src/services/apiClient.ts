@@ -2,18 +2,13 @@
  * Core API Client - Handles all HTTP requests
  * No React dependencies, no business logic
  */
+import { ApiResponse } from "@shared/index";
 
 export interface RequestConfig {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   headers?: Record<string, string>;
   body?: any;
   signal?: AbortSignal;
-}
-
-export interface ApiResponse<T> {
-  data: T;
-  status: number;
-  statusText: string;
 }
 
 export class ApiClient {
@@ -49,6 +44,7 @@ export class ApiClient {
     const url = `${this.baseUrl}${endpoint}`;
     const finalHeaders = { ...this.defaultHeaders, ...headers };
 
+    console.log(`Making ${method} request to ${url}`);
     const requestInit: RequestInit = {
       method,
       headers: finalHeaders,
@@ -70,13 +66,8 @@ export class ApiClient {
         );
       }
 
-      const data = await response.json();
-
-      return {
-        data,
-        status: response.status,
-        statusText: response.statusText,
-      };
+      const data: ApiResponse<T> = await response.json();
+      return data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -179,6 +170,6 @@ export class ApiError extends Error {
 /**
  * Create and export a singleton instance
  */
-const apiClient = new ApiClient(import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api");
+const apiClient = new ApiClient(import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/api");
 
 export default apiClient;

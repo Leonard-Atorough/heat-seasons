@@ -14,3 +14,6 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   loginWithGoogle: () => void;
   logout: () => Promise<void>;
+}
+
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);

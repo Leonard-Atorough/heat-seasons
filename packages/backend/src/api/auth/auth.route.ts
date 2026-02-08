@@ -1,9 +1,9 @@
 import { Router } from "express";
 import passport from "passport";
-import { getContainerInstance } from "../../containers/container";
+import { Container } from "../../containers/container";
 
 const router = Router();
-const authController = getContainerInstance().createAuthController();
+const authController = Container.getInstance().createAuthController();
 
 router.get("/me", (req, res) => {
   authController.getMe(req, res);
@@ -21,18 +21,6 @@ router.get(
 
 router.post("/logout", (req, res) => {
   authController.logout(req, res);
-});
-
-router.post("/login", (req, res) => {
-  authController.login(req, res);
-});
-
-router.post("/register", (req, res) => {
-  authController.register(req, res);
-});
-
-router.post("/refresh", (req, res) => {
-  authController.refresh(req, res);
 });
 
 export { router as authRouter };

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getContainerInstance } from "../../containers/container";
+import { Container } from "../../containers/container";
 
 const router = Router();
-const seasonController = getContainerInstance().createSeasonController();
+const seasonController = Container.getInstance().createSeasonController();
 
 router.get("/", (req, res, next) => {
   seasonController.getAll(req, res, next);

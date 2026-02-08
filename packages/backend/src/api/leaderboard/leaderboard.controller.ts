@@ -11,6 +11,8 @@ export class LeaderboardController {
 
       const response: ApiResponse<Leaderboard> = {
         success: true,
+        status: 200,
+        statusText: "OK",
         timestamp: new Date(),
         message: `Successfully retrieved leaderboard with ${leaderboard.standings.length} entries`,
         data: leaderboard,

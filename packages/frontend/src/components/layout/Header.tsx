@@ -23,7 +23,7 @@ export default function Header() {
     };
   }, []);
   return (
-    <header className={styles.header}>
+    <header className={styles.header + (headerScrolled ? ` ${styles["header--scrolled"]}` : "")}>
       <h1 className={styles.title}>🏁 HEAT</h1>
       <Button
         type="button"

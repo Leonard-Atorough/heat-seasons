@@ -1,4 +1,4 @@
-class ServiceLocator {
+export class ServiceLocator {
   private services: Map<string, any> = new Map();
 
   register<T>(name: string, service: T): void {

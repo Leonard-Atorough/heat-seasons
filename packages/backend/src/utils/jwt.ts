@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.model";
+import { User } from "@shared/index";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-key-change-in-production";
 const JWT_EXPIRES_IN = "24h";

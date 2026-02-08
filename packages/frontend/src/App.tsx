@@ -5,6 +5,7 @@ import Header from "./components/layout/Header.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Leaderboard from "./pages/Leaderboard.tsx";
 import LoginRegister from "./pages/LoginRegister.tsx";
+import AuthCallback from "./pages/AuthCallback.tsx";
 import Drivers from "./pages/Drivers.tsx";
 import Footer from "./components/layout/Footer.tsx";
 import { config } from "./config.ts";
@@ -12,7 +13,6 @@ import { ApiResponse, Leaderboard as Standings, Racer } from "@shared/index";
 import useFetch from "./hooks/useFetch.ts";
 import Seasons from "./pages/Seasons.tsx";
 import { Teams } from "./pages/Teams.tsx";
-// import useFetch from "./hooks/useFetch.ts";
 
 function App() {
   const { data: leaderboardData } = useFetch<ApiResponse<Standings>>(
@@ -35,6 +35,7 @@ function App() {
               element={<Leaderboard leaderboard={leaderboardData?.data} />}
             />
             <Route path="/login" element={<LoginRegister />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/drivers" element={<Drivers />} />
             <Route path="/teams" element={<Teams drivers={driversData?.data} />} />
             <Route path="/seasons" element={<Seasons />} />

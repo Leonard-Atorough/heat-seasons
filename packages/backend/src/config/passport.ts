@@ -24,6 +24,7 @@ passport.use(
           email: profile.emails?.[0]?.value || "",
           name: profile.displayName,
           profilePicture: profile.photos?.[0]?.value,
+          role: "user",
         });
 
         return done(null, user);
@@ -42,7 +43,7 @@ passport.deserializeUser(async (id: string, done) => {
   try {
     const container = Container.getInstance();
     const authService = container.serviceLocator.get("AuthService") as IAuthService;
-    const user = await authService.getUser(id);
+    const user = await authService.getMe(id);
     done(null, user);
   } catch (error) {
     done(error);

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { TokenManager } from "../utils/tokenManager";
-import { apiClient } from "../services/apiClient";
+import apiClient from "../services/apiClient";
 
 export function useAuthToken() {
   useEffect(() => {
