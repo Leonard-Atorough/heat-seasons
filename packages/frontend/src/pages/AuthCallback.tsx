@@ -17,7 +17,11 @@ export default function AuthCallback() {
 
     if (token) {
       TokenManager.setToken(token);
-      navigate("/dashboard");
+      // Give the auth provider a moment to verify the token
+      const timer = setTimeout(() => {
+        navigate("/dashboard");
+      }, 500);
+      return () => clearTimeout(timer);
     } else {
       navigate("/login?error=no_token");
     }

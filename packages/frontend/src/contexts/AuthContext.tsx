@@ -1,12 +1,5 @@
 import { createContext } from "react";
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  profilePicture?: string;
-  role: "admin" | "user";
-}
+import { User } from "../../types/domain/models";
 
 export interface AuthContextType {
   user: User | null;

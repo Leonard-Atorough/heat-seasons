@@ -29,6 +29,7 @@ function App() {
 
         <main className="main">
           <Routes>
+            // TODO: Add auth callback route and page
             <Route path="/" element={<Dashboard leaderboard={leaderboardData?.data} />} />
             <Route
               path="/leaderboard"

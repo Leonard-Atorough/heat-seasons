@@ -22,7 +22,10 @@ export class ApiClient {
   }
 
   /**
-   * Set default headers (e.g., for auth tokens)
+   * Set a default header for all requests
+   *
+   * @param key
+   * @param value
    */
   setDefaultHeader(key: string, value: string): void {
     this.defaultHeaders[key] = value;
@@ -88,19 +91,29 @@ export class ApiClient {
   /**
    * GET request
    */
-  async get<T>(endpoint: string, signal?: AbortSignal): Promise<T> {
-    const response = await this.request<T>(endpoint, { method: "GET", signal });
+  async get<T>(
+    endpoint: string,
+    signal?: AbortSignal,
+    headers?: Record<string, string>,
+  ): Promise<T> {
+    const response = await this.request<T>(endpoint, { method: "GET", signal, headers });
     return response.data;
   }
 
   /**
    * POST request
    */
-  async post<T, B = any>(endpoint: string, body: B, signal?: AbortSignal): Promise<T> {
+  async post<T, B = any>(
+    endpoint: string,
+    body: B,
+    signal?: AbortSignal,
+    headers?: Record<string, string>,
+  ): Promise<T> {
     const response = await this.request<T>(endpoint, {
       method: "POST",
       body,
       signal,
+      headers,
     });
     return response.data;
   }
@@ -108,11 +121,17 @@ export class ApiClient {
   /**
    * PUT request
    */
-  async put<T, B = any>(endpoint: string, body: B, signal?: AbortSignal): Promise<T> {
+  async put<T, B = any>(
+    endpoint: string,
+    body: B,
+    signal?: AbortSignal,
+    headers?: Record<string, string>,
+  ): Promise<T> {
     const response = await this.request<T>(endpoint, {
       method: "PUT",
       body,
       signal,
+      headers,
     });
     return response.data;
   }
@@ -120,10 +139,15 @@ export class ApiClient {
   /**
    * DELETE request
    */
-  async delete<T>(endpoint: string, signal?: AbortSignal): Promise<T> {
+  async delete<T>(
+    endpoint: string,
+    signal?: AbortSignal,
+    headers?: Record<string, string>,
+  ): Promise<T> {
     const response = await this.request<T>(endpoint, {
       method: "DELETE",
       signal,
+      headers,
     });
     return response.data;
   }
@@ -131,11 +155,17 @@ export class ApiClient {
   /**
    * PATCH request
    */
-  async patch<T, B = any>(endpoint: string, body: B, signal?: AbortSignal): Promise<T> {
+  async patch<T, B = any>(
+    endpoint: string,
+    body: B,
+    signal?: AbortSignal,
+    headers?: Record<string, string>,
+  ): Promise<T> {
     const response = await this.request<T>(endpoint, {
       method: "PATCH",
       body,
       signal,
+      headers,
     });
     return response.data;
   }

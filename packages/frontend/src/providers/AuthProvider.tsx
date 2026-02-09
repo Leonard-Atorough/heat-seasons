@@ -1,7 +1,9 @@
 import { useState, useEffect, ReactNode } from "react";
-import { AuthContext, AuthContextType, User } from "../contexts/AuthContext";
+import { AuthContext, AuthContextType } from "../contexts/AuthContext";
+import { User } from "../../types/domain/models";
 import { config } from "../config";
 import { TokenManager } from "../utils/tokenManager";
+import apiClient from "../services/apiClient";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -22,18 +24,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const checkAuth = async (token: string) => {
     try {
-      const response = await fetch(`${config.authRoute}/me`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await apiClient.get<User>("/auth/me", undefined, {
+        Authorization: `Bearer ${token}`,
       });
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-      } else {
-        TokenManager.removeToken();
-      }
+      setUser(response);
     } catch (error) {
       console.error("Auth check failed:", error);
       TokenManager.removeToken();
@@ -42,15 +36,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  // Watch for token changes from AuthCallback or TokenManager
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-    if (token) {
-      TokenManager.setToken(token);
+    const token = TokenManager.getToken();
+    if (token && !user) {
       checkAuth(token);
-      window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, []);
+  }, [user]);
 
   const loginWithGoogle = () => {
     window.location.href = `${config.apiBaseUrl}/auth/google`;

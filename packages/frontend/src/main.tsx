@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { AuthProvider } from "./providers/AuthProvider.tsx";
 import { useAuthToken } from "./hooks/useAuthToken.ts";
+import { DataProvider } from "./providers/DataProvider.tsx";
 
 function RootWithAuth() {
   useAuthToken();
@@ -13,7 +14,9 @@ function RootWithAuth() {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
-      <RootWithAuth />
+      <DataProvider>
+        <RootWithAuth />
+      </DataProvider>
     </AuthProvider>
   </React.StrictMode>,
 );

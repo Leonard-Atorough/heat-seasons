@@ -1,6 +1,6 @@
 import { DriverCard } from "../components/features/Racer";
 import styles from "./Drivers.module.css";
-import { ApiResponse, RacerWithStats } from "@shared/index";
+import { RacerWithStats } from "@shared/index";
 import { useEffect, useMemo, useState } from "react";
 import apiClient from "../services/apiClient";
 
