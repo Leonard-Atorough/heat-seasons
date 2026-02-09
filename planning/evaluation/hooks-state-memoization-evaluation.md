@@ -340,24 +340,24 @@ useEffect(() => {
 
 ---
 
-## 4. Drivers.tsx - Correct Pattern ✅
+## 4. Racers.tsx - Correct Pattern ✅
 
 This component shows the **right approach**:
 
 ```typescript
 const {
-  data: drivers,
+  data: racers,
   error,
   loading,
 } = useFetch<ApiResponse<RacerWithStats[]>>(config.racerRoute);
 
 // Derive data without storing in state
 const racers = useMemo(() => {
-  if (!drivers) return [];
-  return drivers.data
-    .map((driver) => ({ ...driver, profileUrl: driver.profileUrl || "..." }))
+  if (!racers) return [];
+  return racers.data
+    .map((racer) => ({ ...racer, profileUrl: racer.profileUrl || "..." }))
     .sort((a, b) => a.team.localeCompare(b.team));
-}, [drivers]);
+}, [racers]);
 ```
 
 **Why this is better:**
@@ -366,7 +366,7 @@ const racers = useMemo(() => {
 - ✅ Transformation cached with `useMemo`
 - ✅ Single source of truth
 - ✅ No state duplication
-- ✅ `racers` always in sync with `drivers`
+- ✅ `racers` always in sync with `racers`
 
 ---
 
@@ -374,13 +374,13 @@ const racers = useMemo(() => {
 
 ### Current Usage
 
-#### ✅ Good: Drivers.tsx
+#### ✅ Good: Racers.tsx
 
 ```typescript
 const racers = useMemo(() => {
   // expensive transformation
-  return drivers.data.map(...).sort(...);
-}, [drivers]);
+  return racers.data.map(...).sort(...);
+}, [racers]);
 ```
 
 - Used correctly for expensive derivations

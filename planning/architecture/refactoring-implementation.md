@@ -15,21 +15,18 @@
 #### New Components Created
 
 1. **LeaderboardRow** (`components/features/Leaderboard/`)
-
    - Reusable row component for leaderboard entries
    - Consolidated duplicate code from Dashboard & Leaderboard pages
    - Props: `racer` (LeaderboardRowData), `compact` (boolean)
    - CSS module with dark mode styling
 
 2. **LeaderboardHeader** (`components/features/Leaderboard/`)
-
    - Extracted header row component for leaderboard tables
    - Provides consistent column headers across pages
    - Props: `compact` (boolean)
    - CSS module with dark mode styling
 
 3. **StatCard** (`components/features/Dashboard/`)
-
    - New component for dashboard stat displays
    - Replaced generic Card usage in stats section
    - Props: `title`, `value`, `icon`, `onClick`, `compact`
@@ -37,7 +34,6 @@
    - CSS module with dark mode styling
 
 4. **AuthForm** (`components/features/Auth/`)
-
    - Extracted form logic from LoginRegister page
    - Handles login/register mode switching
    - Props: `isRegistering`, `onToggleMode`
@@ -57,7 +53,7 @@
 
 - From: `components/RacerCard.tsx`
 - To: `components/features/Racer/RacerCard.tsx`
-- Updated imports in Drivers.tsx to use named export
+- Updated imports in Racers.tsx to use named export
 - Maintains all original functionality
 
 ### ✅ Phase 3: Page Refactoring
@@ -99,7 +95,7 @@
 **Before:** 65 lines mixing page logic with form logic
 **After:** 20 lines of page composition
 
-#### Drivers.tsx (1 line import change)
+#### Racers.tsx (1 line import change)
 
 **Changes:**
 
@@ -214,7 +210,7 @@ pages/
 ├── Dashboard.tsx ✨ REFACTORED
 ├── Leaderboard.tsx ✨ REFACTORED
 ├── LoginRegister.tsx ✨ REFACTORED
-├── Drivers.tsx ✨ UPDATED (import fix)
+├── Racers.tsx ✨ UPDATED (import fix)
 └── *.module.css ✨ CLEANED UP
 ```
 
@@ -245,7 +241,6 @@ pages/
 3. **Component Documentation** - Add JSDoc comments to new components
 
 4. **Unit Tests** - Create tests for:
-
    - LeaderboardRow rendering with different data
    - PageHeader variants
    - StatCard click handlers

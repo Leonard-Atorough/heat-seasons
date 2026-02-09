@@ -80,7 +80,7 @@
 .btn__ghost {
   background: none;
   color: var(--text-primary);
-  border: 2px solid var(--border-color);
+  border: 1px solid var(--border-color);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;

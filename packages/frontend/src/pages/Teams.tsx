@@ -1,30 +1,40 @@
 import { Racer } from "@shared/index";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { TeamCard } from "../components/features";
 import styles from "./Teams.module.css";
-
-interface TeamsProps {
-  drivers?: Racer[];
-}
+import { useRacers } from "../hooks/data/useRacer";
 
 interface Team {
   name: string;
   color?: string;
-  drivers: Racer[];
+  racers: Racer[];
 }
 
-export function Teams({ drivers }: TeamsProps) {
+export function Teams() {
+  const { data: racers, refresh } = useRacers();
+
+  const handleRefresh = async () => {
+    await refresh();
+  };
+
+  // we could periodically refresh the racers data every 10 minutes to ensure it's up to date
+  useEffect(() => {
+    handleRefresh();
+    const intervalId = setInterval(handleRefresh, 10 * 60 * 1000); // refresh every 10 minutes
+    return () => clearInterval(intervalId); // cleanup on unmount
+  }, []);
+
   const teams = useMemo<Team[]>(() => {
-    if (!drivers) return [];
+    if (!racers) return [];
     const teamMap: { [key: string]: Team } = {};
-    drivers.forEach((driver) => {
-      if (!teamMap[driver.team]) {
-        teamMap[driver.team] = { name: driver.team, color: driver.teamColor, drivers: [] };
+    racers.forEach((racer) => {
+      if (!teamMap[racer.team]) {
+        teamMap[racer.team] = { name: racer.team, color: racer.teamColor, racers: [] };
       }
-      teamMap[driver.team].drivers.push(driver);
+      teamMap[racer.team].racers.push(racer);
     });
     return Object.values(teamMap);
-  }, [drivers]);
+  }, [racers]);
 
   return (
     <div className="container">
@@ -36,7 +46,7 @@ export function Teams({ drivers }: TeamsProps) {
             key={team.name}
             teamName={team.name}
             teamColor={team.color}
-            drivers={team.drivers.map((driver: Racer) => driver.name)}
+            racers={team.racers.map((racer: Racer) => racer.name)}
           />
         ))}
       </div>

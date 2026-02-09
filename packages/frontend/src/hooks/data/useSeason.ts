@@ -2,6 +2,6 @@ import { useContext } from "react";
 import { DataContext, DataContextType } from "../../contexts/DataContext";
 
 export const useSeasons = () => {
-  const { season, isLoading, error, refreshSeason } = useContext(DataContext) as DataContextType;
-  return { data: season, isLoading, error, refresh: refreshSeason };
-}
+  const { seasons, isLoading, error, refreshSeasons } = useContext(DataContext) as DataContextType;
+  return { data: seasons, isLoading, error, refresh: refreshSeasons };
+};

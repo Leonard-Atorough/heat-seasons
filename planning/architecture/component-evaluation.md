@@ -21,7 +21,7 @@ components/
 ```
 pages/
 ├── Dashboard.tsx/css
-├── Drivers.tsx/css
+├── Racers.tsx/css
 ├── Leaderboard.tsx/css
 └── LoginRegister.tsx/css
 ```

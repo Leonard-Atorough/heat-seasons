@@ -4,11 +4,25 @@ import { StatCard } from "../components/features/Dashboard";
 import { LeaderboardHeader } from "../components/features/Leaderboard";
 import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.css";
-import { Leaderboard } from "@shared/index";
 import { Card } from "../components/common/Card";
+import { useLeaderboard } from "../hooks/data/useLeaderboard";
+import { useEffect } from "react";
 
-export default function Dashboard({ leaderboard }: { leaderboard?: Leaderboard }) {
+export default function Dashboard() {
   const navigate = useNavigate();
+  const { data: leaderboard, refresh } = useLeaderboard();
+
+  const handleRefresh = async () => {
+    await refresh();
+  };
+
+  // we could periodically refresh the leaderboard data every 5 minutes to ensure it's up to date
+  useEffect(() => {
+    handleRefresh();
+    const intervalId = setInterval(handleRefresh, 5 * 60 * 1000); // refresh every 5 minutes
+    return () => clearInterval(intervalId); // cleanup on unmount
+  }, []);
+  // This is a bit hacky, but it allows us to show the most up to date leaderboard data on the dashboard without having to wait for the user to navigate to the leaderboard page. We can look into a more elegant solution later, but for now this should work fine.
 
   const MEDALS = ["🥇", "🥈", "🥉"];
   const BADGE_COLORS = ["gold", "silver", "bronze"];

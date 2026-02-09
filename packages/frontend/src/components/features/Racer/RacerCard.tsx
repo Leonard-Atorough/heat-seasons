@@ -1,13 +1,13 @@
 import { Card } from "../../common/Card";
-import styles from "./DriverCard.module.css";
+import styles from "./RacerCard.module.css";
 import { useNavigate } from "react-router-dom";
 import { RacerWithStats } from "@shared/index";
 
-export interface DriverCardProps {
+export interface RacerCardProps {
   racer: RacerWithStats;
 }
 
-export default function DriverCard({ racer }: DriverCardProps) {
+export default function RacerCard({ racer }: RacerCardProps) {
   const navigate = useNavigate();
 
   return (
@@ -21,9 +21,7 @@ export default function DriverCard({ racer }: DriverCardProps) {
     >
       <div className={styles.racerCard__info}>
         <h3 className={styles.racerCard__name}>{racer.name}</h3>
-        <p className={styles.racerCard__team}>
-          {racer.team}
-        </p>
+        <p className={styles.racerCard__team}>{racer.team}</p>
         <p className={styles.racerCard__points}>{racer.stats?.totalPoints ?? 0} pts</p>
         {racer.badgeUrl && (
           <img

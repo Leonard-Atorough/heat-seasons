@@ -4,9 +4,9 @@ import styles from "./TeamCard.module.css";
 export interface TeamCardProps {
   teamName: string;
   teamColor?: string;
-  drivers: string[];
+  racers: string[];
 }
-export default function TeamCard({ teamName, teamColor, drivers }: TeamCardProps) {
+export default function TeamCard({ teamName, teamColor, racers }: TeamCardProps) {
   return (
     <Card
       variant="default"
@@ -17,10 +17,10 @@ export default function TeamCard({ teamName, teamColor, drivers }: TeamCardProps
     >
       <div className={styles.teamCard__info}>
         <h3 className={styles.teamCard__name}>{teamName}</h3>
-        <ul className={styles.teamCard__drivers}>
-          {drivers.map((driver) => (
-            <li key={driver} className={styles.teamCard__driver}>
-              {driver}
+        <ul className={styles.teamCard__racers}>
+          {racers.map((racer) => (
+            <li key={racer} className={styles.teamCard__racer}>
+              {racer}
             </li>
           ))}
         </ul>

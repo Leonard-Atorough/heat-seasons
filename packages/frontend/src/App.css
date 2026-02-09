@@ -66,6 +66,12 @@
   /* Line Height */
   --line-height: 1.5;
 
+  /* Border Radius */
+  --border: 8px;
+  --border-radius-md: var(--border);
+  --border-radius-lg: calc(var(--border) * 1.5);
+  --border-radius-full: 9999px;
+
   color-scheme: dark;
   color: var(--text-primary);
   background-color: var(--background);

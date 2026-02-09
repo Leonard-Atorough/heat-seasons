@@ -90,8 +90,8 @@ export class JsonStorageAdapter implements StorageAdapter {
   async create<T>(collection: string, data: Omit<T, "id">): Promise<T> {
     const records = await this.loadCollection<T>(collection);
     const newRecord = {
-      id: this.generateId(),
       ...data,
+      id: (data as any).id || this.generateId(),
     } as T;
     records.push(newRecord);
     await this.saveCollection(collection, records);

@@ -3,7 +3,7 @@ import { DataContext, DataContextType } from "../contexts/DataContext";
 import { Leaderboard, RacerWithStats, Season } from "@shared/models";
 import { getAllRacers } from "../services/api/racer";
 import { getCurrentLeaderboard } from "../services/api/leaderboard";
-import { getCurrentSeason } from "../services/api/season";
+import { getSeasons } from "../services/api/season";
 
 interface DataProviderProps {
   children: ReactNode;
@@ -39,7 +39,7 @@ const createWithLoading =
 export function DataProvider({ children }: DataProviderProps) {
   const [racers, setRacers] = useState<RacerWithStats[]>([]);
   const [leaderboard, setLeaderboard] = useState<Leaderboard>();
-  const [season, setSeason] = useState<Season>();
+  const [seasons, setSeasons] = useState<Season[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -48,15 +48,15 @@ export function DataProvider({ children }: DataProviderProps) {
 
   // Fetch all data
   const fetchAllData = useCallback(async () => {
-    const [newRacers, newLeaderboard, newSeason] = await Promise.all([
+    const [newRacers, newLeaderboard, newSeasons] = await Promise.all([
       executeWithLoading(() => getAllRacers()),
       executeWithLoading(() => getCurrentLeaderboard()),
-      executeWithLoading(() => getCurrentSeason()),
+      executeWithLoading(() => getSeasons()),
     ]);
 
     if (newRacers) setRacers(newRacers);
     if (newLeaderboard) setLeaderboard(newLeaderboard);
-    if (newSeason) setSeason(newSeason);
+    if (newSeasons) setSeasons(newSeasons);
   }, [executeWithLoading]);
 
   // Fetch individual data sources
@@ -70,21 +70,21 @@ export function DataProvider({ children }: DataProviderProps) {
     if (data) setLeaderboard(data);
   }, [executeWithLoading]);
 
-  const refreshSeason = useCallback(async () => {
-    const data = await executeWithLoading(() => getCurrentSeason());
-    if (data) setSeason(data);
+  const refreshSeasons = useCallback(async () => {
+    const data = await executeWithLoading(() => getSeasons());
+    if (data) setSeasons(data);
   }, [executeWithLoading]);
 
   const value: DataContextType = {
     racers,
     leaderboard,
-    season,
+    seasons,
     isLoading,
     error,
     refresh: fetchAllData,
     refreshRacers,
     refreshLeaderboard,
-    refreshSeason,
+    refreshSeasons,
   };
 
   // Fetch all data on mount

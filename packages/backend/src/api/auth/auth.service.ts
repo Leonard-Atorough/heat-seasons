@@ -23,7 +23,7 @@ export class AuthService implements IAuthService {
   }
 
   async findOrCreateUser(profile: UserCreateInput): Promise<UserResponse> {
-    let user = await this.authRepository.findById(profile.googleId);
+    let user = await this.authRepository.findByGoogleId(profile.googleId);
 
     if (!user) {
       user = await this.authRepository.create({
