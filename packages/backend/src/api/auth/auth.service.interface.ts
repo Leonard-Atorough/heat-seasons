@@ -5,5 +5,4 @@ export interface IAuthService {
   generateToken(user: UserResponse): string;
   findOrCreateUser(profile: UserCreateInput): Promise<UserResponse>;
   logout(token: string): Promise<void>;
-  verifyToken(token: string): Promise<any>;
 }
