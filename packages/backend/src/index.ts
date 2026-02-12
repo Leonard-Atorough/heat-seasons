@@ -1,6 +1,7 @@
 import "./env";
 import express, { Request, Response, NextFunction, Application } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "./config/passport";
 
@@ -28,16 +29,26 @@ container
 app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+const SESSION_SECRET = process.env.SESSION_SECRET;
+if (!SESSION_SECRET) {
+  throw new Error(
+    //TODO: Replace with a proper logging mechanism in production
+    "Warning: SESSION_SECRET is not set. Using default secret key. This should be changed in production.",
+  );
+}
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "dev-secret",
+    secret: SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
     },
   }),
 );

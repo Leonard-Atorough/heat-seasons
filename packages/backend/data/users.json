@@ -8,5 +8,15 @@
     "role": "user",
     "createdAt": "2026-02-09T01:42:40.561Z",
     "updatedAt": "2026-02-09T01:42:40.561Z"
+  },
+  {
+    "id": "045c1530-6235-4026-89f6-86922b5b71b8",
+    "googleId": "113490818917086230102",
+    "email": "letorough@gmail.com",
+    "name": "Leo A.",
+    "profilePicture": "https://lh3.googleusercontent.com/a/ACg8ocLm-MN_LShz1D62l06HXvGZUynGGZhO62z13ltb_twhyycj5EsX0Q=s96-c",
+    "role": "user",
+    "createdAt": "2026-02-12T00:44:58.164Z",
+    "updatedAt": "2026-02-12T00:44:58.164Z"
   }
 ]

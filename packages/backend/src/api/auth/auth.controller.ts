@@ -9,13 +9,12 @@ export class AuthController {
 
   async getMe(req: Request, res: Response): Promise<void> {
     try {
-      const authHeader = req.headers.authorization;
-      if (!authHeader?.startsWith("Bearer ")) {
+      const token = req.cookies.token;
+      if (!token) {
         res.status(401).json({ error: "Not authenticated" });
         return;
       }
 
-      const token = authHeader.substring(7);
       const payload = JwtService.verifyToken(token);
       if (!payload) {
         res.status(401).json({ error: "Invalid token" });
@@ -48,14 +47,37 @@ export class AuthController {
         return;
       }
 
+      // Q. This should really be set as a httponly cookie right?
+      // A. Yes
+      // Let's set the token as an HTTP-only cookie to enhance security.
+      // Q. Cors should be configured to allow credentials and the frontend should send requests with credentials to include the cookie, right?
+      // A. Yes, CORS should be configured to allow credentials, and the frontend should send requests with credentials to include the cookie.
       const token = this.authService.generateToken(user);
-      res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+      });
+      res.redirect(`${process.env.FRONTEND_URL}/auth/callback`);
     } catch (error) {
       res.redirect(`${process.env.FRONTEND_URL}/login?error=token_generation_failed`);
     }
   }
 
   async logout(req: Request, res: Response): Promise<void> {
-    res.status(200).json({ message: "Logged out successfully" });
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    const response: ApiResponse<null> = {
+      success: true,
+      status: 200,
+      statusText: "OK",
+      timestamp: new Date(),
+      data: null,
+    };
+    res.json(response);
   }
 }

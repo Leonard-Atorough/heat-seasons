@@ -16,6 +16,7 @@
     "frontend": "npm run dev -w frontend"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "concurrently": "^9.2.1"
   },
   "keywords": [

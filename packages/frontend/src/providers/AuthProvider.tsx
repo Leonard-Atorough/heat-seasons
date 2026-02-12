@@ -2,8 +2,8 @@ import { useState, useEffect, ReactNode } from "react";
 import { AuthContext, AuthContextType } from "../contexts/AuthContext";
 import { User } from "../../types/domain/models";
 import { config } from "../config";
-import { TokenManager } from "../utils/tokenManager";
 import apiClient from "../services/apiClient";
+import { ApiResponse } from "@shared/index";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -14,44 +14,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = TokenManager.getToken();
-    if (token) {
-      checkAuth(token);
-    } else {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    checkAuth();
   }, []);
 
-  const checkAuth = async (token: string) => {
+  const checkAuth = async () => {
     try {
-      const response = await apiClient.get<User>("/auth/me", undefined, {
-        Authorization: `Bearer ${token}`,
-      });
+      const response = await apiClient.get<User>("/auth/me");
       setUser(response);
     } catch (error) {
       console.error("Auth check failed:", error);
-      TokenManager.removeToken();
+      await logout();
     } finally {
       setIsLoading(false);
     }
   };
-
-  // Watch for token changes from AuthCallback or TokenManager
-  useEffect(() => {
-    const token = TokenManager.getToken();
-    if (token && !user) {
-      checkAuth(token);
-    }
-  }, [user]);
 
   const loginWithGoogle = () => {
     window.location.href = `${config.apiBaseUrl}/auth/google`;
   };
 
   const logout = async (): Promise<void> => {
+    // TODO: Handle loading suspense transitions better
     setIsLoading(true);
     try {
-      TokenManager.removeToken();
+      const response: ApiResponse<null> = await apiClient.post("/auth/logout", {});
+      if (!response.success) {
+        // fail silently, we still want to clear the user and redirect to login page even if the logout request fails
+        console.error("Logout failed:", response);
+      }
       setUser(null);
       window.location.href = "/";
     } finally {

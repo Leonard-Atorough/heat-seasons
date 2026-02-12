@@ -22,7 +22,7 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async findOrCreateUser(profile: UserCreateInput): Promise<UserResponse> {
+  async upsertUser(profile: UserCreateInput): Promise<UserResponse> {
     let user = await this.authRepository.findByGoogleId(profile.googleId);
 
     if (!user) {
@@ -33,6 +33,20 @@ export class AuthService implements IAuthService {
         profilePicture: profile.profilePicture,
         role: "user",
       });
+    } else {
+      console.log("Existing user found:", user);
+      // Update user info if it has changed
+      if (
+        user.email !== profile.email ||
+        user.name !== profile.name ||
+        user.profilePicture !== profile.profilePicture
+      ) {
+        user = await this.authRepository.update(user.id, {
+          email: profile.email,
+          name: profile.name,
+          profilePicture: profile.profilePicture,
+        });
+      }
     }
 
     return user;

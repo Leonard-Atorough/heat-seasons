@@ -4,7 +4,6 @@ import { AuthService } from "../../../../src/api/auth/auth.service";
 import { testUsers } from "../../../fixtures/testData";
 import { User } from "shared/src/models/user";
 
-
 describe("AuthController", () => {
   let authController: AuthController;
   let mockAuthService: jest.Mocked<AuthService>;
@@ -14,7 +13,7 @@ describe("AuthController", () => {
   beforeEach(() => {
     mockAuthService = {
       getMe: jest.fn(),
-      findOrCreateUser: jest.fn(),
+      upsertUser: jest.fn(),
       generateToken: jest.fn(),
       logout: jest.fn(),
     } as unknown as jest.Mocked<AuthService>;
@@ -32,7 +31,7 @@ describe("AuthController", () => {
 
   test("should authenticate with Google and return a token", async () => {
     const mockUser = Array.from(testUsers as unknown as User[])[0];
-    mockAuthService.findOrCreateUser.mockResolvedValue(mockUser);
+    mockAuthService.upsertUser.mockResolvedValue(mockUser);
     mockAuthService.generateToken.mockReturnValue("mock-token");
   });
 });

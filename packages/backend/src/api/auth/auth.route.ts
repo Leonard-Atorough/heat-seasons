@@ -1,25 +1,43 @@
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 import passport from "passport";
 import { Container } from "../../containers/container";
 
 const router = Router();
 const authController = Container.getInstance().createAuthController();
 
-router.get("/me", (req, res) => {
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many authentication attempts from this IP, please try again later.",
+});
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 5 login attempts per windowMs
+  message: "Too many login attempts from this IP, please try again later.",
+});
+
+router.get("/me", authLimiter, (req, res) => {
   authController.getMe(req, res);
 });
 
-router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get(
+  "/google",
+  loginLimiter,
+  passport.authenticate("google", { scope: ["profile", "email"] }),
+);
 
 router.get(
   "/google/callback",
+  loginLimiter,
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req, res) => {
     authController.googleCallback(req, res);
   },
 );
 
-router.post("/logout", (req, res) => {
+router.post("/logout", authLimiter, (req, res) => {
   authController.logout(req, res);
 });
 

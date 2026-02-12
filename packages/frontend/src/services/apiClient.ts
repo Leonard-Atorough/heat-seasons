@@ -52,6 +52,7 @@ export class ApiClient {
       method,
       headers: finalHeaders,
       signal,
+      credentials: "include",
     };
 
     if (body && (method === "POST" || method === "PUT" || method === "PATCH")) {

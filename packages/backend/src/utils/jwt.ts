@@ -2,7 +2,13 @@ import jwt from "jsonwebtoken";
 import { User } from "@shared/index";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-key-change-in-production";
-const JWT_EXPIRES_IN = "24h";
+if (!process.env.JWT_SECRET) {
+  // TODO: Replace with a proper logging mechanism in production
+  console.warn(
+    "Warning: JWT_SECRET is not set. Using default secret key. This should be changed in production.",
+  );
+}
+const JWT_EXPIRES_IN: string = process.env.JWT_EXPIRES_IN || "24h";
 
 export interface TokenPayload {
   id: string;
@@ -17,7 +23,7 @@ export class JwtService {
       email: user.email,
       role: user.role,
     };
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
   }
 
   static verifyToken(token: string): TokenPayload | null {

@@ -34,7 +34,7 @@ Heat Seasons has been migrated from a custom email/password authentication syste
 
 3. **packages/backend/src/api/auth/**
    - `auth.repository.ts`: Added `findByGoogleId()`, implemented `create()` and `update()`
-   - `auth.service.ts`: Added `findOrCreateUser()`, `getUser()`, OAuth-focused methods
+   - `auth.service.ts`: Added `upsertUser()`, `getUser()`, OAuth-focused methods
    - `auth.controller.ts`: Added `googleCallback()`, simplified `logout()`
    - `auth.route.ts`: Added `GET /google`, `GET /google/callback`
 

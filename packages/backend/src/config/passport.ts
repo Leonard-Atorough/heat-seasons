@@ -19,7 +19,7 @@ passport.use(
         const container = Container.getInstance();
         const authService = container.serviceLocator.get("AuthService") as IAuthService;
 
-        const user = await authService.findOrCreateUser({
+        const user = await authService.upsertUser({
           googleId: profile.id,
           email: profile.emails?.[0]?.value || "",
           name: profile.displayName,
