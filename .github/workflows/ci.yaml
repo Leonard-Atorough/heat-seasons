@@ -10,17 +10,13 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    outputs:
-      build-frontend-shared: ${{ steps.build-frontend-shared.outputs.artifact-path }}
-      build-backend-shared: ${{ steps.build-backend-shared.outputs.artifact-path }}
-      build-shared: ${{ steps.build-shared.outputs.artifact-path }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18"
           cache: "npm"
@@ -44,7 +40,7 @@ jobs:
         run: npm test
 
       - name: Upload Test coverage report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-coverage
           path: |
@@ -53,21 +49,21 @@ jobs:
 
       - name: Upload build artefact for frontend
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-frontend-shared
           path: packages/frontend/dist
 
       - name: Upload build artefact for backend
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-backend-shared
           path: packages/backend/dist
 
       - name: Upload build artefact for shared
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-shared
           path: packages/shared/dist
