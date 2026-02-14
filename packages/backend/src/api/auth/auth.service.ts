@@ -35,18 +35,7 @@ export class AuthService implements IAuthService {
       });
     } else {
       console.log("Existing user found:", user);
-      // Update user info if it has changed
-      if (
-        user.email !== profile.email ||
-        user.name !== profile.name ||
-        user.profilePicture !== profile.profilePicture
-      ) {
-        user = await this.authRepository.update(user.id, {
-          email: profile.email,
-          name: profile.name,
-          profilePicture: profile.profilePicture,
-        });
-      }
+      user = await this.authRepository.update(user.id, { ...user, ...profile });
     }
 
     return user;

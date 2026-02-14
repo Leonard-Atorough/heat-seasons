@@ -1,6 +1,9 @@
 .loginRegister__card {
   min-width: 400px;
-  width: 720px;
+  max-width: 600px;
+  width: 100%;
+  min-height: 400px;
+  height: 100%;
   padding: 32px;
   border-radius: 8px;
   display: flex;

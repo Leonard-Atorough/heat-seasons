@@ -84,11 +84,6 @@ export class AuthController {
         return;
       }
 
-      // Q. This should really be set as a httponly cookie right?
-      // A. Yes
-      // Let's set the token as an HTTP-only cookie to enhance security.
-      // Q. Cors should be configured to allow credentials and the frontend should send requests with credentials to include the cookie, right?
-      // A. Yes, CORS should be configured to allow credentials, and the frontend should send requests with credentials to include the cookie.
       const token = this.authService.generateToken(user);
       res.cookie("token", token, {
         httpOnly: true,
