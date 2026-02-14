@@ -10,7 +10,7 @@ import Racers from "./pages/Racers.tsx";
 import Footer from "./components/layout/Footer.tsx";
 import Seasons from "./pages/Seasons.tsx";
 import { Teams } from "./pages/Teams.tsx";
-import ProfilePage from "./components/features/Auth/ProfilePage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
 
 function App() {
   return (

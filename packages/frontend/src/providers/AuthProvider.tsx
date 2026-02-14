@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode, useMemo } from "react";
 import { AuthContext, AuthContextType } from "../contexts/AuthContext";
 import { User } from "../../types/domain/models";
 import { config } from "../config";
@@ -21,6 +21,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     checkAuth();
   }, []);
 
+  // Should we be using a useCallback here to memoize the function and prevent unnecessary re-renders of the component?
+  // A. In this case, using useCallback may not be necessary since checkAuth is only called once on component mount.
   const checkAuth = async () => {
     try {
       const response = await apiClient.get<User>("/auth/me");
@@ -53,13 +55,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const value: AuthContextType = {
-    user,
-    isLoading,
-    isAuthenticated: !!user,
-    loginWithGoogle,
-    logout,
-  };
+  // Memoize the context value to prevent unnecessary re-renders of consuming components
+  // Explanation: By using useMemo, we ensure that the context value is only recalculated when
+  // the dependencies (user and isLoading) change.
+  const value: AuthContextType = useMemo(
+    () => ({
+      user,
+      isLoading,
+      isAuthenticated: !!user,
+      loginWithGoogle,
+      logout,
+    }),
+    [user, isLoading],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
