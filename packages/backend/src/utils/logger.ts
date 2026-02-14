@@ -4,6 +4,11 @@ export interface LogEntry {
   level: string;
 }
 
+/**
+ * A simple in-memory logger that supports different log levels (INFO, WARNING, ERROR).
+ * Logs are stored in memory and can be retrieved or flushed to a file.
+ */
+// NOTE: To be replaced with Morgan or Winston in the future for more advanced logging capabilities.
 export class Logger {
   private inMemoryLogs: LogEntry[] = [];
   constructor() {}
