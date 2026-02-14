@@ -9,7 +9,7 @@
   "scripts": {
     "setup:all": "cd packages/shared && npm install && cd ../backend && npm install && cd ../frontend && npm install",
     "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\"",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build -w shared && npm run build -w backend && npm run build -w frontend",
     "test": "npm run test --workspaces --if-present",
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
     "backend": "npm run dev -w backend",
