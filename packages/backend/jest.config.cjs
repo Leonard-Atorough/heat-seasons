@@ -6,7 +6,6 @@ module.exports = {
   testMatch: ["**/__tests__/**/*.test.ts"],
   moduleNameMapper: {
     "^@src/(.*)$": "<rootDir>/src/$1",
-    "^@shared/(.*)$": "<rootDir>/../shared/src/$1",
   },
   collectCoverageFrom: [
     "src/**/*.ts",
