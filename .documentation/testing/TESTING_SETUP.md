@@ -88,7 +88,6 @@ module.exports = {
   roots: ["<rootDir>/src", "<rootDir>/__tests__"],
   testMatch: ["**/__tests__/**/*.test.ts"],
   moduleNameMapper: {
-    "^@shared/(.*)$": "<rootDir>/../shared/src/$1",
     "^src/(.*)$": "<rootDir>/src/$1",
   },
   collectCoverageFrom: [
@@ -152,7 +151,7 @@ global.console = {
 **packages/backend/**tests**/fixtures/testData.ts:**
 
 ```typescript
-import { User, Racer, Season, Race } from "@shared/index";
+import { User, Racer, Season, Race } from "shared";
 
 export const testUsers = {
   admin: {
@@ -560,7 +559,7 @@ export { render };
 
 ```typescript
 import { JwtService } from "src/utils/jwt";
-import { User } from "@shared/index";
+import { User } from "shared";
 import { testUsers } from "../../fixtures/testData";
 
 describe("JwtService", () => {

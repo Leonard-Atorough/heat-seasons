@@ -146,7 +146,7 @@ App Mount → AuthProvider (quick check) → Render page → Load page data on d
 **Status:** Currently minimal  
 **Note:** The shared package needs audit. Check if:
 
-- `@shared/index` imports are tree-shakeable
+- `shared` imports are tree-shakeable
 - Shared models include unused types
 - Any accidental dependencies snuck in
 

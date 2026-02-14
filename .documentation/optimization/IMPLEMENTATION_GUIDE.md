@@ -248,7 +248,7 @@ Create data loading hooks that fetch on-demand:
 
 ```typescript
 import { useState, useEffect } from "react";
-import { RacerWithStats } from "@shared/index";
+import { RacerWithStats } from "shared";
 import { getAllRacers } from "../../services/api/racer";
 
 interface UseRacersReturn {
@@ -287,7 +287,7 @@ export function useRacers(): UseRacersReturn {
 
 ```typescript
 import { useState, useEffect } from "react";
-import { Leaderboard } from "@shared/models";
+import { Leaderboard } from "shared";
 import { getCurrentLeaderboard } from "../../services/api/leaderboard";
 
 interface UseLeaderboardReturn {
@@ -326,7 +326,7 @@ export function useLeaderboard(): UseLeaderboardReturn {
 
 ```typescript
 import { useState, useEffect } from "react";
-import { Season } from "@shared/models";
+import { Season } from "shared";
 import { getSeasons } from "../../services/api/season";
 
 interface UseSeasonsReturn {
@@ -378,7 +378,7 @@ If you want to keep DataProvider but make it non-blocking:
 ```typescript
 import { ReactNode, useEffect, useState, useCallback } from "react";
 import { DataContext, DataContextType } from "../contexts/DataContext";
-import { Leaderboard, RacerWithStats, Season } from "@shared/models";
+import { Leaderboard, RacerWithStats, Season } from "shared";
 import { getAllRacers } from "../services/api/racer";
 import { getCurrentLeaderboard } from "../services/api/leaderboard";
 import { getSeasons } from "../services/api/season";
@@ -459,7 +459,7 @@ export function DataProvider({ children }: DataProviderProps) {
 
 ```typescript
 import { createContext } from "react";
-import { Leaderboard, RacerWithStats, Season } from "@shared/models";
+import { Leaderboard, RacerWithStats, Season } from "shared";
 
 export interface DataContextType {
   racers: RacerWithStats[];
@@ -540,7 +540,7 @@ export { useSeasons } from "./useSeasons";
 import { ReactNode, useEffect, useState, useCallback, useMemo } from "react";
 import { DataContext, DataContextType } from "../contexts/DataContext";
 import { useLocation } from "react-router-dom";
-import { Leaderboard, RacerWithStats, Season } from "@shared/models";
+import { Leaderboard, RacerWithStats, Season } from "shared";
 import { getAllRacers } from "../services/api/racer";
 import { getCurrentLeaderboard } from "../services/api/leaderboard";
 import { getSeasons } from "../services/api/season";
