@@ -1,4 +1,4 @@
-import {User, Racer, Season, Race} from "../../../shared/src/index";
+import { User, Racer, Season, Race } from "../../../shared/src/index";
 
 export const testUsers = {
   admin: {
@@ -53,6 +53,9 @@ export const testSeasons = {
     status: "active",
     startDate: new Date("2026-01-01"),
     endDate: new Date("2026-06-30"),
+    totalRaces: 10,
+    racesCompleted: 5,
+    totalParticipants: 20,
     createdAt: new Date("2026-01-01"),
     updatedAt: new Date("2026-01-01"),
   } as Season,
@@ -71,4 +74,3 @@ export const testRaces = {
     ],
   } as Race,
 };
-
