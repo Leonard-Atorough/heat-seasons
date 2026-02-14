@@ -13,6 +13,7 @@
     "test": "npm run test --workspaces --if-present",
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
     "lint": "npm run lint --workspaces --if-present",
+    "type-check": "npm run type-check --workspaces --if-present",
     "backend": "npm run dev -w backend",
     "frontend": "npm run dev -w frontend"
   },
