@@ -66,16 +66,16 @@ export class ApiClient {
     try {
       const response = await fetch(url, requestInit);
 
-      if (!response.ok) {
+      const apiResponse: ApiResponse<T> = await response.json();
+
+      if (!apiResponse.success) {
         throw new ApiError(
-          `HTTP ${response.status}: ${response.statusText}`,
-          response.status,
-          response.statusText,
+          apiResponse.message || "API request failed",
+          apiResponse.status,
+          apiResponse.statusText,
         );
       }
-
-      const data: ApiResponse<T> = await response.json();
-      return data;
+      return apiResponse;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;

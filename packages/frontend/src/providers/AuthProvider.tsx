@@ -3,7 +3,6 @@ import { AuthContext, AuthContextType } from "../contexts/AuthContext";
 import { User } from "../../types/domain/models";
 import { config } from "../config";
 import apiClient from "../services/apiClient";
-import { ApiResponse } from "shared";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -13,6 +12,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Q. How can i prevent this from 429'ing if the user refreshes the page multiple times?
+  // A. Implement a debounce mechanism or use a library like lodash.debounce to limit the frequency
+  // of API calls. You can also implement caching to store the authentication status for a short period,
+  // reducing the need for repeated API calls on page refresh.
   useEffect(() => {
     setIsLoading(true);
     checkAuth();
@@ -24,7 +27,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(response);
     } catch (error) {
       console.error("Auth check failed:", error);
-      await logout();
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -38,14 +41,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // TODO: Handle loading suspense transitions better
     setIsLoading(true);
     try {
-      const response: ApiResponse<null> = await apiClient.post("/auth/logout", {});
-      if (!response.success) {
-        // What to do here that isn't logging to console
-        // Maybe we can show a toast notification that logout failed and the user should try again?
-        console.error("Logout failed:", response);
-      }
+      await apiClient.post("/auth/logout", {});
       setUser(null);
       window.location.href = "/";
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error("Logout failed:", error);
+      }
     } finally {
       setIsLoading(false);
     }

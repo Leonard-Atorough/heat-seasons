@@ -8,21 +8,40 @@ export class AuthController {
   constructor(private authService: IAuthService) {}
 
   async getMe(req: Request, res: Response): Promise<void> {
+    let response: ApiResponse<UserResponse | null>;
     try {
       const token = req.cookies.token;
       if (!token) {
-        res.status(401).json({ error: "Not authenticated" });
+        response = {
+          success: false,
+          status: 401,
+          statusText: "Unauthorized",
+          timestamp: new Date(),
+          error: "No token provided",
+          message: "Authentication token is missing. Please log in.",
+          data: null,
+        };
+        res.status(401).json(response);
         return;
       }
 
       const payload = JwtService.verifyToken(token);
       if (!payload) {
-        res.status(401).json({ error: "Invalid token" });
+        response = {
+          success: false,
+          status: 401,
+          statusText: "Unauthorized",
+          timestamp: new Date(),
+          error: "Invalid token",
+          message: "Authentication token is invalid. Please log in again.",
+          data: null,
+        };
+        res.status(401).json(response);
         return;
       }
 
       const user = await this.authService.getMe(payload.id);
-      const response: ApiResponse<UserResponse> = {
+      response = {
         success: true,
         status: 200,
         statusText: "OK",
@@ -32,9 +51,27 @@ export class AuthController {
       res.status(200).json(response);
     } catch (error) {
       if (error instanceof Error && error.message === "User not found") {
-        res.status(404).json({ error: "User not found" });
+        const response: ApiResponse<null> = {
+          success: false,
+          status: 404,
+          statusText: "Not Found",
+          timestamp: new Date(),
+          error: "User not found",
+          message: "The requested user could not be found.",
+          data: null,
+        };
+        res.status(404).json(response);
       } else {
-        res.status(500).json({ error: "Internal server error" });
+        const response: ApiResponse<null> = {
+          success: false,
+          status: 500,
+          statusText: "Internal Server Error",
+          timestamp: new Date(),
+          error: "Internal server error",
+          message: "An unexpected error occurred. Please try again later.",
+          data: null,
+        };
+        res.status(500).json(response);
       }
     }
   }
