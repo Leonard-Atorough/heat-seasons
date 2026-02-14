@@ -12,6 +12,10 @@ dist/
 build/
 *.log
 
+# Compiled JavaScript (TypeScript output)
+**/*.js
+**/*.d.ts
+
 # IDE
 .vscode/
 .idea/
