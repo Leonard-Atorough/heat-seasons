@@ -1,4 +1,4 @@
-import { JsonStorageAdapter } from "../storage";
+import { JsonStorageAdapter, StorageAdapter } from "../storage";
 import { ServiceLocator } from "./serviceLocator";
 
 import { AuthRepository } from "../api/auth";
@@ -33,7 +33,7 @@ import { ILeaderboardService } from "../api/leaderboard/leaderboard.service.inte
 
 class Container {
   private static instance: Container | null = null;
-  private storageAdapter: JsonStorageAdapter;
+  private storageAdapter: StorageAdapter;
   private repositories: Map<string, any> = new Map();
 
   serviceLocator: ServiceLocator = new ServiceLocator();
@@ -72,7 +72,7 @@ class Container {
     return Container.instance;
   }
 
-  public async initializeStorageAdapter(): Promise<void> {
+  public async initializeStorageAdapter<T extends StorageAdapter>(): Promise<void> {
     await this.storageAdapter.initialize();
   }
 
@@ -86,7 +86,7 @@ class Container {
     this.serviceLocator.register(name, service);
   }
 
-  public getStorageAdapter(): JsonStorageAdapter {
+  public getStorageAdapter(): StorageAdapter {
     return this.storageAdapter;
   }
 
