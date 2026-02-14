@@ -1,7 +1,7 @@
 import { Card } from "../../common/Card";
 import styles from "./RacerCard.module.css";
 import { useNavigate } from "react-router-dom";
-import { RacerWithStats } from "@shared/index";
+import { RacerWithStats } from "shared";
 
 export interface RacerCardProps {
   racer: RacerWithStats;

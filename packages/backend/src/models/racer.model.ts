@@ -1,4 +1,4 @@
-import { Racer } from "@shared/index";
+import { Racer } from "shared";
 
 // Input types for racer operations
 export type RacerCreateInput = Omit<Racer, "id" | "joinDate">;

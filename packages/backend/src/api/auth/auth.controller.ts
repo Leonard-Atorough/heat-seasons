@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { IAuthService } from "./auth.service.interface";
 import { JwtService } from "../../utils/jwt";
 import { UserResponse } from "src/models/user.model";
-import { ApiResponse } from "@shared/index";
+import { ApiResponse } from "shared";
 
 export class AuthController {
   constructor(private authService: IAuthService) {}

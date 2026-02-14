@@ -1,4 +1,4 @@
-import { Season } from "@shared/index";
+import { Season } from "shared";
 import apiClient from "../apiClient";
 
 export const getCurrentSeason = async () => {

@@ -1,6 +1,6 @@
 import { StorageAdapter } from "../../storage/";
 import { UserCreateInput } from "../../models/";
-import { User } from "@shared/index";
+import { User } from "shared";
 import { IAuthRepository } from "./auth.repository.interface";
 
 export class AuthRepository implements IAuthRepository {

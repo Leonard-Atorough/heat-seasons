@@ -1,4 +1,4 @@
-import { Race, RaceResult } from "@shared/index";
+import { Race, RaceResult } from "shared";
 import { IRaceRepository } from "./race.repository.interface.js";
 import { IRaceService } from "./race.service.interface.js";
 

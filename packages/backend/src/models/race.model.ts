@@ -1,4 +1,4 @@
-import { Race } from "@shared/index";
+import { Race } from "shared";
 
 export interface RaceCreateInput extends Omit<Race, "id" | "createdAt" | "updatedAt"> {}
 

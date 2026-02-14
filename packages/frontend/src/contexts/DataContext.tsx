@@ -1,4 +1,4 @@
-import { Leaderboard, RacerWithStats, Season } from "@shared/index";
+import { Leaderboard, RacerWithStats, Season } from "shared";
 import { createContext } from "react";
 
 export interface DataContextType {

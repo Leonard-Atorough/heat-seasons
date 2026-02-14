@@ -1,4 +1,4 @@
-import { Season } from "@shared/index";
+import { Season } from "shared";
 
 export interface SeasonCreateInput extends Omit<Season, "id"> {}
 

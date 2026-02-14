@@ -1,4 +1,4 @@
-import { Racer, RacerWithStats } from "@shared/index";
+import { Racer, RacerWithStats } from "shared";
 import { RacerCreateInput, RacerUpdateInput } from "../../models/";
 import { IRacerRepository } from "./racer.repository.interface.js";
 import { IRacerService } from "./racer.service.interface.js";

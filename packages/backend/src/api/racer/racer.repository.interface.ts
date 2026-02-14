@@ -1,4 +1,4 @@
-import { Racer } from "@shared/index";
+import { Racer } from "shared";
 
 export interface IRacerRepository {
   findAll(filters?: { active?: boolean }): Promise<Racer[]>;

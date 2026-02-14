@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ISeasonService } from "./season.service.interface.js";
-import { ApiResponse, SeasonStatus, Season } from "@shared/index";
+import { ApiResponse, SeasonStatus, Season } from "shared";
 import { SeasonResponse } from "../../models/season.model.js";
 import { NextFunction } from "express-serve-static-core";
 
@@ -35,7 +35,6 @@ export class SeasonController {
   async getCurrent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const season = await this.seasonService.getActiveSeason();
-      console.log("Here", season);
       const response: ApiResponse<Season> = {
         success: true,
         status: 200,

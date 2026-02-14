@@ -1,4 +1,4 @@
-import { Leaderboard } from "@shared/index";
+import { Leaderboard } from "shared";
 import apiClient from "../apiClient";
 
 export const getCurrentLeaderboard = async (): Promise<Leaderboard> => {

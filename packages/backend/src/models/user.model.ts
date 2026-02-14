@@ -1,4 +1,4 @@
-import { UserRole, User } from "@shared/index";
+import { User } from "shared";
 
 export interface UserCreateInput extends Omit<User, "id" | "createdAt" | "updatedAt"> {}
 

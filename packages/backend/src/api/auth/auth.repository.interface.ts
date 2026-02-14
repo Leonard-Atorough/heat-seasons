@@ -1,5 +1,5 @@
 import { UserCreateInput } from "../../models/";
-import { User } from "@shared/index";
+import { User } from "shared";
 
 export interface IAuthRepository {
   findAll(): Promise<User[]>;

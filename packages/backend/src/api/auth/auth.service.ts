@@ -1,7 +1,7 @@
 import { IAuthRepository } from "./auth.repository.interface";
 import { IAuthService } from "./auth.service.interface";
 import { UserResponse, UserCreateInput } from "../../models/user.model";
-import { User } from "@shared/index";
+import { User } from "shared";
 import { JwtService } from "../../utils/jwt";
 
 export class AuthService implements IAuthService {

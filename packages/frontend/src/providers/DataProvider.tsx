@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState, useCallback } from "react";
 import { DataContext, DataContextType } from "../contexts/DataContext";
-import { Leaderboard, RacerWithStats, Season } from "@shared/models";
+import { Leaderboard, RacerWithStats, Season } from "shared";
 import { getAllRacers } from "../services/api/racer";
 import { getCurrentLeaderboard } from "../services/api/leaderboard";
 import { getSeasons } from "../services/api/season";

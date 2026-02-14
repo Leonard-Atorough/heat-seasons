@@ -3,7 +3,7 @@ import { AuthContext, AuthContextType } from "../contexts/AuthContext";
 import { User } from "../../types/domain/models";
 import { config } from "../config";
 import apiClient from "../services/apiClient";
-import { ApiResponse } from "@shared/index";
+import { ApiResponse } from "shared";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -40,7 +40,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const response: ApiResponse<null> = await apiClient.post("/auth/logout", {});
       if (!response.success) {
-        // fail silently, we still want to clear the user and redirect to login page even if the logout request fails
+        // What to do here that isn't logging to console
+        // Maybe we can show a toast notification that logout failed and the user should try again?
         console.error("Logout failed:", response);
       }
       setUser(null);

@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.css";
 import { Card } from "../components/common/Card";
 import { useLeaderboard } from "../hooks/data/useLeaderboard";
+import { useSeasons } from "../hooks/data/useSeason";
 import { useEffect } from "react";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { data: leaderboard, refresh } = useLeaderboard();
+  const { data: seasons } = useSeasons();
 
   const handleRefresh = async () => {
     await refresh();
@@ -43,7 +45,7 @@ export default function Dashboard() {
       {/* Hero Section */}
       <PageHeader
         title={leaderboard?.seasonName.toUpperCase() ?? "SEASON ONE WINTER 2026"}
-        subtitle="Races: 2 / 8 Completed"
+        subtitle={`Races Completed: ${seasons?.[0]?.racesCompleted ?? 0} / ${seasons?.[0]?.totalRaces ?? "?"}`}
         variant="hero"
         backgroundImage="/images/dashboard-hero.webp"
         action={
@@ -59,12 +61,12 @@ export default function Dashboard() {
           <StatCard title="Current Leader" value={topRacers[0].name} />
           <StatCard
             title="Recent Race"
-            value="Race 2: French Grand Prix"
+            value="Race 2: Mexican Grand Prix"
             backgroundImage="/images/previous-race-bg.jpg"
           />
           <StatCard
             title="Next Race"
-            value="Coming Soon"
+            value="Japanese Grand Prix"
             backgroundImage="/images/next-race-bg.jpg"
           />
         </div>

@@ -1,4 +1,4 @@
-import { LeaderboardEntry } from "@shared/index";
+import { LeaderboardEntry } from "shared";
 import { Card } from "../../common/Card";
 import styles from "./LeaderboardRow.module.css";
 

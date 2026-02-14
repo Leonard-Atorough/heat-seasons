@@ -2,7 +2,7 @@ import { ISeasonRepository } from "../season/season.repository.interface.js";
 import { IRaceRepository } from "../race/race.repository.interface.js";
 import { ILeaderboardService } from "./leaderboard.service.interface.js";
 import { IRacerRepository } from "../racer/racer.repository.interface.js";
-import { Leaderboard, LeaderboardEntry } from "@shared/index";
+import { Leaderboard, LeaderboardEntry } from "shared";
 import { NotFoundError } from "src/errors/appError.js";
 
 export class LeaderboardService implements ILeaderboardService {

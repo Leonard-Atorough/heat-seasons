@@ -1,4 +1,4 @@
-import { Race, RaceResult } from "@shared/index";
+import { Race, RaceResult } from "shared";
 
 export interface IRaceService {
   getBySeasonId(seasonId: string): Promise<Race[]>;

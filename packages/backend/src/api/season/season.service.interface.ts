@@ -1,4 +1,4 @@
-import { Season, SeasonStatus } from "@shared/index";
+import { Season, SeasonStatus } from "shared";
 import { SeasonCreateInput, SeasonUpdateInput } from "src/models";
 
 export interface ISeasonService {

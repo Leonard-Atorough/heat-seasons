@@ -1,4 +1,4 @@
-import { Race } from "@shared/index";
+import { Race } from "shared";
 import { StorageAdapter } from "../../storage/";
 import { IRaceRepository } from "./race.repository.interface.js";
 

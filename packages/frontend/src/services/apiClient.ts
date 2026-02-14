@@ -2,7 +2,7 @@
  * Core API Client - Handles all HTTP requests
  * No React dependencies, no business logic
  */
-import { ApiResponse } from "@shared/index";
+import { ApiResponse } from "shared";
 
 export interface RequestConfig {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -39,7 +39,12 @@ export class ApiClient {
   }
 
   /**
-   * Perform a fetch request
+   * Core request method that all other HTTP methods use. Handles error checking and response parsing.
+   *
+   * @param endpoint - API endpoint (e.g. "/auth/me")
+   * @param config - Request configuration (method, headers, body, signal)
+   * @returns Parsed API response
+   * @throws ApiError for HTTP errors, network errors, and other exceptions
    */
   private async request<T>(endpoint: string, config: RequestConfig = {}): Promise<ApiResponse<T>> {
     const { method = "GET", headers = {}, body, signal } = config;
@@ -47,7 +52,6 @@ export class ApiClient {
     const url = `${this.baseUrl}${endpoint}`;
     const finalHeaders = { ...this.defaultHeaders, ...headers };
 
-    console.log(`Making ${method} request to ${url}`);
     const requestInit: RequestInit = {
       method,
       headers: finalHeaders,

@@ -1,4 +1,4 @@
-import { Racer } from "@shared/index";
+import { Racer } from "shared";
 import { StorageAdapter } from "../../storage/";
 import { IRacerRepository } from "./racer.repository.interface.js";
 

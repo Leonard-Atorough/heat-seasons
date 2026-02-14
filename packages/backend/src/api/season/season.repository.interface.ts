@@ -1,4 +1,4 @@
-import { SeasonStatus, Season } from "@shared/index";
+import { SeasonStatus, Season } from "shared";
 
 export interface ISeasonRepository {
   findAll(filters?: { status?: SeasonStatus }): Promise<Season[]>;

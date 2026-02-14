@@ -4,14 +4,13 @@ import { SeasonStatus } from "../constants";
 export interface Season {
   id: string;
   name: string;
+  status: SeasonStatus;
   startDate: Date;
   endDate?: Date;
-  status: SeasonStatus;
-}
-
-export interface SeasonWithStats extends Season {
-  raceCount: number;
-  participantCount: number;
+  totalRaces: number;
+  racesCompleted: number;
+  totalParticipants: number;
+  createdAt: Date;
 }
 
 // Re-export for convenience
