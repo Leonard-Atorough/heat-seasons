@@ -1,6 +1,6 @@
 import { useAuth } from "../../../hooks/useAuth";
-import { Button } from "../../common/Button";
 import styles from "./AuthForm.module.css";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 export interface AuthFormProps {}
 
@@ -11,9 +11,7 @@ export default function AuthForm(_: AuthFormProps) {
     <div className={styles.authForm}>
       <h1 className={styles.authForm__title}>Sign In</h1>
       <div className={styles.authForm__form}>
-        <Button type="button" variant="primary" onClick={auth.loginWithGoogle}>
-          Sign in with Google
-        </Button>
+        <GoogleLoginButton onClick={auth.loginWithGoogle} />
       </div>
     </div>
   );
