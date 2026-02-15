@@ -2,12 +2,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 
 import Header from "./components/layout/Header.tsx";
+import Footer from "./components/layout/Footer.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Leaderboard from "./pages/Leaderboard.tsx";
 import LoginRegister from "./pages/LoginRegister.tsx";
 import AuthCallback from "./pages/AuthCallback.tsx";
 import Racers from "./pages/Racers.tsx";
-import Footer from "./components/layout/Footer.tsx";
 import Seasons from "./pages/Seasons.tsx";
 import { Teams } from "./pages/Teams.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
