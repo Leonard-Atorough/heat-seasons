@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "./config/passport";
 
-import { authRouter } from "./api/auth/auth.route.js";
+import { authRouter, authProtectedRouter } from "./api/auth/auth.route.js";
 import { racerRouter } from "./api/racer/racer.route.js";
 import { seasonRouter } from "./api/season/season.route.js";
 import { raceRouter } from "./api/race/race.route.js";
@@ -65,6 +65,7 @@ app.use("/api/racers", racerRouter);
 app.use("/api/seasons", seasonRouter);
 app.use("/api/races", raceRouter);
 app.use("/api/leaderboard", leaderboardRouter);
+app.use("/api/auth", authProtectedRouter);
 
 app.use((err: AppError, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err.stack);

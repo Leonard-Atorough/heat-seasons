@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IAuthService } from "./auth.service.interface";
-import { JwtService } from "../../utils/jwt";
+import { JwtService, TokenPayload } from "../../utils/jwt";
 import { UserResponse } from "src/models/user.model";
 import { ApiResponse } from "shared";
 
@@ -10,35 +10,7 @@ export class AuthController {
   async getMe(req: Request, res: Response): Promise<void> {
     let response: ApiResponse<UserResponse | null>;
     try {
-      const token = req.cookies.token;
-      if (!token) {
-        response = {
-          success: false,
-          status: 401,
-          statusText: "Unauthorized",
-          timestamp: new Date(),
-          error: "No token provided",
-          message: "Authentication token is missing. Please log in.",
-          data: null,
-        };
-        res.status(401).json(response);
-        return;
-      }
-
-      const payload = JwtService.verifyToken(token);
-      if (!payload) {
-        response = {
-          success: false,
-          status: 401,
-          statusText: "Unauthorized",
-          timestamp: new Date(),
-          error: "Invalid token",
-          message: "Authentication token is invalid. Please log in again.",
-          data: null,
-        };
-        res.status(401).json(response);
-        return;
-      }
+      const payload = req.user as TokenPayload;
 
       const user = await this.authService.getMe(payload.id);
       response = {

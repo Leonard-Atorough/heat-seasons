@@ -2,8 +2,12 @@ import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import passport from "passport";
 import { Container } from "../../containers/container";
+import { authMiddleware } from "@src/middleware/authMiddleware";
 
 const router = Router();
+const protectedRouter = Router();
+protectedRouter.use(authMiddleware);
+
 const authController = Container.getInstance().createAuthController();
 
 const authLimiter = rateLimit({
@@ -18,7 +22,7 @@ const loginLimiter = rateLimit({
   message: "Too many login attempts from this IP, please try again later.",
 });
 
-router.get("/me", authLimiter, (req, res) => {
+protectedRouter.get("/me", authLimiter, (req, res) => {
   authController.getMe(req, res);
 });
 
@@ -37,8 +41,8 @@ router.get(
   },
 );
 
-router.post("/logout", authLimiter, (req, res) => {
+protectedRouter.post("/logout", authLimiter, (req, res) => {
   authController.logout(req, res);
 });
 
-export { router as authRouter };
+export { router as authRouter, protectedRouter as authProtectedRouter };

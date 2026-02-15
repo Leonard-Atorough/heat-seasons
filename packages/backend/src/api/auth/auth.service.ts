@@ -51,4 +51,10 @@ export class AuthService implements IAuthService {
     // For this example, we'll just simulate logout by doing nothing.
     return;
   }
+
+  // async include<T>(data: T): Promise<T> {
+  //   // This method can be used to include related data if needed.
+  //   // For now, it simply returns the data as is.
+  //   return data;
+  // }
 }
