@@ -22,7 +22,7 @@
 .hero__title {
   font-size: var(--font-size-hero);
   font-weight: var(--fw-bold);
-  border-bottom: 4px solid var(--primary-red);
+  border-bottom: var(--border-width-thick) solid var(--primary-red);
 }
 
 .hero__subtitle {

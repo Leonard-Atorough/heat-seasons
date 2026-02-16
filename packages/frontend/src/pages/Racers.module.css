@@ -1,12 +1,12 @@
 .racersPage {
   width: 100%;
-  padding: 20px;
+  padding: var(--spacing-xl);
 }
 
 .racersGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--spacing-lg);
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;

@@ -1,7 +1,7 @@
 import { useAuth } from "../hooks/useAuth";
 import { Card } from "../../src/components/common/Card";
 import { Button } from "../../src/components/common/Button";
-import { LoadingSkeletonCard } from "../components/common";
+import { FormGroup, LoadingSkeletonCard } from "../components/common";
 import { useState } from "react";
 import { useProtectedPage } from "../../src/hooks/useProtectedPage";
 import styles from "./ProfilePage.module.css";
@@ -48,15 +48,17 @@ export default function ProfilePage() {
               <div className={styles.profileFormGroup__input}>{user?.role}</div>
             </div>
           </div>
-          <Button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsModalOpen(true);
-            }}
-          >
-            Create Racer
-          </Button>
+          <div className={styles.profileActions}>
+            <Button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsModalOpen(true);
+              }}
+            >
+              Create Racer
+            </Button>
+          </div>
         </Card>
       )}
       <Button type="button" onClick={logout}>
@@ -66,15 +68,12 @@ export default function ProfilePage() {
         <div className={styles.backdrop} onClick={() => setIsModalOpen(false)}>
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <h2>Create Racer</h2>
-            <form>
-              <div>
-                <label htmlFor="name">Name</label>
-                <input type="text" id="name" name="name" />
-              </div>
-              <div>
-                <label htmlFor="email">Email</label>
-                <input type="email" id="email" name="email" />
-              </div>
+            <form className={styles.racerForm}>
+              <FormGroup element="input" label="Racer Name" type="text" id="racerName" />
+              <FormGroup element="input" label="Team" type="text" id="team" />
+              <FormGroup element="input" label="Nationality" type="text" id="nationality" />
+              <FormGroup element="input" label="Date of Birth" type="date" id="dob" />
+              <Button type="submit">Create</Button>
             </form>
           </div>
         </div>

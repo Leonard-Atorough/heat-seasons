@@ -47,17 +47,6 @@ export default function Dashboard() {
         }`}
         backgroundImage="/images/dashboard-hero.webp"
       />
-      {/* <PageHeader
-        title={leaderboard?.seasonName.toUpperCase() ?? "SEASON ONE WINTER 2026"}
-        subtitle={`Races Completed: ${seasons?.[0]?.racesCompleted ?? 0} / ${seasons?.[0]?.totalRaces ?? "?"}`}
-        variant="hero"
-        backgroundImage="/images/dashboard-hero.webp"
-        action={
-          <Button type="button" variant="primary" onClick={() => navigate("/leaderboard")}>
-            View Standings
-          </Button>
-        }
-      /> */}
 
       {/* Quick Stats Section */}
       <section className={styles.dashboard__content}>

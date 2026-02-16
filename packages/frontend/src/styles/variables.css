@@ -16,7 +16,7 @@
   --error-red: #ef476f;
 
   /* Semantic Colors */
-  --background: #0a0e27;
+  --background: #000;
   --card-white: #1a1f3a;
   --text-primary: #e8eaf6;
   --text-secondary: #b0bec5;
@@ -73,13 +73,18 @@
   --line-height: 1.5;
 
   /* Border Radius */
-  --border-base: 8px;
+  --border-base: 16px;
   --border-radius-xs: calc(var(--border-base) * 0.25);
   --border-radius-sm: calc(var(--border-base) * 0.5);
   --border-radius-md: var(--border-base);
   --border-radius-lg: calc(var(--border-base) * 1.5);
   --border-radius-xl: calc(var(--border-base) * 2);
   --border-radius-full: 9999px;
+
+  /* Border width */
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 4px;
 
   /* spacing */
   --spacing-base: 16px;
@@ -89,4 +94,6 @@
   --spacing-lg: calc(var(--spacing-base) * 1.5);
   --spacing-xl: calc(var(--spacing-base) * 2);
   --spacing-xxl: calc(var(--spacing-base) * 3);
+  --spacing-3xl: calc(var(--spacing-base) * 4);
+  --spacing-4xl: calc(var(--spacing-base) * 5);
 }

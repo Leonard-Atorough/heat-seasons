@@ -1,15 +1,15 @@
 .card {
   background-color: var(--card-white);
-  border-radius: 8px;
+  border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-elevation-medium);
   transition:
     transform 0.2s,
     box-shadow 0.2s;
   color: var(--text-primary);
-  border: 1px solid var(--border-color);
+  border: var(--border-width-medium) solid var(--border-color);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-md);
   text-align: left;
 }
 
@@ -19,9 +19,9 @@
 }
 
 .card__default {
-  padding: 1.5rem;
+  padding: var(--spacing-md);
 }
 
 .card__compact {
-  padding: 1rem;
+  padding: var(--spacing-sm);
 }

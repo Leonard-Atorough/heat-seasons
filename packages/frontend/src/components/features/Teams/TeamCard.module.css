@@ -7,19 +7,19 @@
 }
 
 .teamCard__info {
-  padding: 0 1rem;
+  padding: 0 var(--spacing-md);
   width: 100%;
 }
 
 .teamCard__name {
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 .teamCard__racers {
   display: flex;
   width: 100%;
-  gap: 3rem;
+  gap: var(--spacing-xl);
 }
 
 .teamCard__racer {

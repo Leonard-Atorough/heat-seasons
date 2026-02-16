@@ -1,15 +1,15 @@
 .dashboard {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
-  padding: 1rem;
+  gap: var(--spacing-3xl);
+  padding: var(--spacing-md);
   width: 100%;
 }
 
 .dashboard__content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--spacing-3xl);
   margin: 0 auto;
   width: 100%;
 }
@@ -18,7 +18,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--spacing-lg);
 }
 
 .dashboard__stats > * {
@@ -30,30 +30,28 @@
 }
 
 .dashboard__sectionTitle {
-  font-size: 1.5rem;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 .dashboard__leaderboardCards {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--spacing-md);
 }
 
 .dashboard__leaderboardRow {
   display: flex;
   background-color: var(--card-white);
-  border-radius: 8px;
   box-shadow: var(--shadow-elevation-medium);
-  border: 1px solid var(--border-color);
-  padding: 1rem;
+  border: var(--border-width-thin) solid var(--border-color);
   justify-content: space-between;
   align-items: center;
 }
 
 .dashboard__leaderboardPosition {
-  font-size: 1.5rem;
+  font-size: var(--font-size-1);
   min-width: 2rem;
   flex-shrink: 0;
 }
@@ -92,11 +90,11 @@
 }
 
 .dashboard__colorBadge {
-  width: 12px;
+  width: 24px;
   height: 12px;
-  border-radius: 50%;
+  border-radius: var(--border-radius-full);
   display: inline-block;
-  margin-left: 0.5rem;
+  margin-left: var(--spacing-sm);
 }
 
 .dashboard__colorBadge--gold {

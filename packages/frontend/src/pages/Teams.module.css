@@ -1,5 +1,6 @@
 .teamsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: var(--spacing-lg);
+  width: 100%;
 }

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../common/Button";
 import styles from "./Header.module.css";
 import { useEffect, useState } from "react";
@@ -28,7 +28,9 @@ export default function Header() {
   }, []);
   return (
     <header className={styles.header + (headerScrolled ? ` ${styles["header--scrolled"]}` : "")}>
-      <h1 className={styles.title}>🏁 HEAT</h1>
+      <h1 className={styles.title}>
+        <Link to="/">🏁 HEAT</Link>
+      </h1>
       <Button
         type="button"
         className={styles.hamburger}
@@ -40,24 +42,24 @@ export default function Header() {
         <span className={styles.hamburger__line}></span>
       </Button>
       <nav className={styles.nav + (hamburgerOpen ? ` ${styles["nav--open"]}` : "")}>
-        <a className={styles["nav__link"]} href="/">
+        <Link className={styles["nav__link"]} to="/">
           Dashboard
-        </a>
-        <a className={styles["nav__link"]} href="/racers">
+        </Link>
+        <Link className={styles["nav__link"]} to="/racers">
           Racers
-        </a>
-        <a className={styles["nav__link"]} href="/teams">
+        </Link>
+        <Link className={styles["nav__link"]} to="/teams">
           Teams
-        </a>
-        <a className={styles["nav__link"]} href="/leaderboard">
+        </Link>
+        <Link className={styles["nav__link"]} to="/leaderboard">
           Leaderboard
-        </a>
-        <a className={styles["nav__link"]} href="/races">
+        </Link>
+        <Link className={styles["nav__link"]} to="/races">
           Races
-        </a>
-        <a className={styles["nav__link"]} href="/seasons">
+        </Link>
+        <Link className={styles["nav__link"]} to="/seasons">
           Seasons
-        </a>
+        </Link>
         {!auth.user ? (
           <Button
             type="button"

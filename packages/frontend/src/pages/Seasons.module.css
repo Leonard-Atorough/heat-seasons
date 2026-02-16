@@ -1,12 +1,12 @@
 .seasonCard {
-  margin: 1rem 0;
-  padding: 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-md);
+  border: var(--border-width-medium) solid var(--border-color);
+  border-radius: var(--border-radius-md);
   background-color: var(--card-white);
   box-shadow: var(--shadow-light);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-md);
   color: var(--text-primary);
 }

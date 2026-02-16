@@ -322,7 +322,7 @@ export function useLeaderboard(): UseLeaderboardReturn {
 }
 ```
 
-**File:** `src/hooks/data/useSeasons.ts`
+**File:** `src/hooks/data/useSeason.ts`
 
 ```typescript
 import { useState, useEffect } from "react";
@@ -366,7 +366,7 @@ export function useSeasons(): UseSeasonsReturn {
 ```typescript
 export { useRacers } from "./useRacers";
 export { useLeaderboard } from "./useLeaderboard";
-export { useSeasons } from "./useSeasons";
+export { useSeasons } from "./useSeason";
 ```
 
 #### Option B: Simplified DataProvider (Keep global state)
@@ -500,7 +500,7 @@ export default function Leaderboard() {
 ```typescript
 export { useRacers } from "./useRacers";
 export { useLeaderboard } from "./useLeaderboard";
-export { useSeasons } from "./useSeasons";
+export { useSeasons } from "./useSeason";
 ```
 
 #### Expected Outcomes After Part 2

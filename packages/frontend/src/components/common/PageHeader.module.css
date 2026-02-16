@@ -3,22 +3,22 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .pageHeader--hero {
   text-align: center;
   background-size: cover;
   background-position: center;
-  padding-bottom: 2rem;
+  padding-bottom: var(--spacing-xl);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  border-radius: var(--border-radius-lg);
 }
 
 .pageHeader--default {
   text-align: center;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+  border-bottom: var(--border-width-medium) solid var(--border-color);
 }
 
 .pageHeader--minimal {
@@ -52,5 +52,5 @@
 }
 
 .pageHeader__action {
-  margin-top: 1rem;
+  margin-top: var(--spacing-md);
 }

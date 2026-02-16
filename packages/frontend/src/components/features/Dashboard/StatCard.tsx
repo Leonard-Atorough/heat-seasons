@@ -35,11 +35,7 @@ export default function StatCard({
       {icon && <div className={styles.statCard__icon}>{icon}</div>}
       <div
         className={styles.statCard__content}
-        style={
-          backgroundImage
-            ? { backgroundColor: "rgba(0, 0, 0, 0.6)", padding: "1rem", borderRadius: "8px" }
-            : undefined
-        }
+        style={backgroundImage ? { backgroundColor: "rgba(0, 0, 0, 0.6)" } : undefined}
       >
         <h4 className={styles.statCard__title}>{title}</h4>
         {value && <p className={styles.statCard__value}>{value}</p>}

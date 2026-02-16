@@ -7,7 +7,7 @@ export interface LeaderboardHeaderProps {
 }
 
 export default function LeaderboardHeader({
-  compact = true,
+  compact = false,
   variant = "default",
 }: LeaderboardHeaderProps) {
   return (
@@ -17,7 +17,9 @@ export default function LeaderboardHeader({
       <span className={styles.leaderboardHeader__team}>Team</span>
       <span className={styles.leaderboardHeader__races}>Races</span>
       <span className={styles.leaderboardHeader__points}>Points</span>
-      <span className={styles.leaderboardHeader__wins}>{variant === "default" ? "Wins" : "Position"}</span>
+      <span className={styles.leaderboardHeader__wins}>
+        {variant === "default" ? "Wins" : "Position"}
+      </span>
       {variant === "default" && <span className={styles.leaderboardHeader__podiums}>Podiums</span>}
     </Card>
   );

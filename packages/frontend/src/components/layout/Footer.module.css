@@ -1,6 +1,11 @@
 .footer {
-  background-color: var(--dark-surface);
+  background: repeating-linear-gradient(
+    135deg,
+    var(--track-black) 0,
+    var(--track-black) 120px,
+    var(--dark-surface) 480px
+  );
   color: var(--gold);
   text-align: center;
-  padding: 2rem 0;
+  padding: var(--spacing-xxl) 0;
 }
