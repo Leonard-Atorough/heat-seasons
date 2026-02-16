@@ -6,10 +6,11 @@ import { useLeaderboard } from "../hooks/data/useLeaderboard";
 import { useSeasons } from "../hooks/data/useSeason";
 import { useEffect } from "react";
 import { Hero } from "../components/features/Dashboard";
+import LoadingSkeletonCard from "../components/common/LoadingSkeletonCard";
 
 export default function Dashboard() {
-  const { data: leaderboard, refresh } = useLeaderboard();
-  const { data: seasons } = useSeasons();
+  const { data: leaderboard, refresh, isLoading: isLeaderboardLoading } = useLeaderboard();
+  const { data: seasons, isLoading: isSeasonsLoading } = useSeasons();
 
   const handleRefresh = async () => {
     await refresh();
@@ -39,7 +40,6 @@ export default function Dashboard() {
 
   return (
     <div className={styles.dashboard}>
-      {/* Hero Section */}
       <Hero
         title={leaderboard?.seasonName.toUpperCase() ?? "SEASON ONE WINTER 2026"}
         subtitle={`Races Completed: ${seasons?.[0]?.racesCompleted ?? 0} / ${
@@ -48,7 +48,6 @@ export default function Dashboard() {
         backgroundImage="/images/dashboard-hero.webp"
       />
 
-      {/* Quick Stats Section */}
       <section className={styles.dashboard__content}>
         <div className={styles.dashboard__stats}>
           <StatCard title="Current Leader" value={topRacers[0].name} />
@@ -69,20 +68,29 @@ export default function Dashboard() {
           <h3 className={styles.dashboard__sectionTitle}>Top 3 Leaderboard</h3>
           <div className={styles.dashboard__leaderboardCards}>
             <LeaderboardHeader variant="dashboard" />
-            {topRacers.map((racer) => (
-              <Card key={racer.position} className={styles.dashboard__leaderboardRow}>
-                <span className={styles.dashboard__leaderboardPosition}>{racer.medal}</span>
-                <span className={styles.dashboard__leaderboardName}>{racer.name}</span>
-                <span className={styles.dashboard__leaderboardTeam}>{racer.team}</span>
-                <span className={styles.dashboard__leaderboardRaces}>{racer.races} races</span>
-                <span className={styles.dashboard__leaderboardPoints}>{racer.points} pts</span>
-                <span
-                  className={`${styles.dashboard__colorBadge} ${
-                    styles[`dashboard__colorBadge--${racer.badgeColor}`]
-                  }`}
-                ></span>
-              </Card>
-            ))}
+            {topRacers.map((racer) =>
+              isLeaderboardLoading ? (
+                <LoadingSkeletonCard
+                  key={racer.position}
+                  includeTitle={false}
+                  lines={1}
+                  height="32px"
+                />
+              ) : (
+                <Card key={racer.position} className={styles.dashboard__leaderboardRow}>
+                  <span className={styles.dashboard__leaderboardPosition}>{racer.medal}</span>
+                  <span className={styles.dashboard__leaderboardName}>{racer.name}</span>
+                  <span className={styles.dashboard__leaderboardTeam}>{racer.team}</span>
+                  <span className={styles.dashboard__leaderboardRaces}>{racer.races} races</span>
+                  <span className={styles.dashboard__leaderboardPoints}>{racer.points} pts</span>
+                  <span
+                    className={`${styles.dashboard__colorBadge} ${
+                      styles[`dashboard__colorBadge--${racer.badgeColor}`]
+                    }`}
+                  ></span>
+                </Card>
+              ),
+            )}
           </div>
         </div>
       </section>
