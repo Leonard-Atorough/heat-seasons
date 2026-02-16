@@ -5,9 +5,10 @@ import styles from "./Leaderboard.module.css";
 import { useLeaderboard } from "../hooks/data/useLeaderboard";
 import { useSeason } from "../hooks/data/useSeason";
 import { useEffect } from "react";
+import { LoadingSkeletonCard } from "../components/common";
 
 export default function Leaderboard() {
-  const { data: leaderboard, refresh } = useLeaderboard();
+  const { data: leaderboard, refresh, isLoading: isLeaderboardLoading } = useLeaderboard();
   const { data: seasons, refresh: refreshSeason } = useSeason();
 
   const handleRefresh = async () => {
@@ -33,9 +34,18 @@ export default function Leaderboard() {
       <div className={styles.leaderboard__content}>
         <div className={styles.leaderboard__cards}>
           <LeaderboardHeader />
-          {leaderboard?.standings.map((racer, index) => (
-            <LeaderboardRow key={racer.racerId} racer={racer} position={index + 1} />
-          ))}
+          {leaderboard?.standings.map((racer, index) =>
+            isLeaderboardLoading ? (
+              <LoadingSkeletonCard key={index} lines={1} height="80px" includeTitle={false} />
+            ) : (
+              <LeaderboardRow
+                className={styles.leaderboard__card}
+                key={racer.racerId}
+                racer={racer}
+                position={index + 1}
+              />
+            ),
+          )}
         </div>
       </div>
     </div>

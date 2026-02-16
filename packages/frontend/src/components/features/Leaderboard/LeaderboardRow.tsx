@@ -6,11 +6,12 @@ export interface LeaderboardRowProps {
   racer: LeaderboardEntry;
   compact?: boolean;
   position: number;
+  className?: string;
 }
 
-export default function LeaderboardRow({ racer, position, compact = true }: LeaderboardRowProps) {
+export default function LeaderboardRow({ racer, position, compact = true, className }: LeaderboardRowProps) {
   return (
-    <Card variant={compact ? "compact" : "default"}>
+    <Card variant={compact ? "compact" : "default"} className={className}>
       <span className={styles.leaderboardRow__position}>{position}</span>
       <span className={styles.leaderboardRow__name}>{racer.racerName}</span>
       <span className={styles.leaderboardRow__team}>{racer.team}</span>
