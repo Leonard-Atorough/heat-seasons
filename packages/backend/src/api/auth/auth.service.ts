@@ -3,6 +3,7 @@ import { IAuthService } from "./auth.service.interface";
 import { UserResponse, UserCreateInput } from "../../models/user.model";
 import { User } from "shared";
 import { JwtService } from "../../utils/jwt";
+import { UserMapper } from "src/application/mappers/userMapper";
 
 export class AuthService implements IAuthService {
   constructor(private authRepository: IAuthRepository) {}
@@ -12,33 +13,29 @@ export class AuthService implements IAuthService {
     if (!user) {
       throw new Error("User not found");
     }
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      profilePicture: user.profilePicture,
-      role: user.role,
-      createdAt: user.createdAt,
-    };
+    return UserMapper.toResponse(user);
   }
 
   async upsertUser(profile: UserCreateInput): Promise<UserResponse> {
     let user = await this.authRepository.findByGoogleId(profile.googleId);
 
     if (!user) {
-      user = await this.authRepository.create({
-        googleId: profile.googleId,
+      // Create NEW entity (no ID yet) - mapper converts DTO to domain entity
+      const newUserEntity = UserMapper.toDomain(profile);
+      user = await this.authRepository.create(newUserEntity);
+    } else {
+      // Update EXISTING entity (already has ID)
+      user.update({
         email: profile.email,
         name: profile.name,
+        role: profile.role,
         profilePicture: profile.profilePicture,
-        role: "user",
+        racerId: profile.racerId,
       });
-    } else {
-      console.log("Existing user found:", user);
-      user = await this.authRepository.update(user.id, { ...user, ...profile });
+      user = await this.authRepository.update(user.id!, user);
     }
 
-    return user;
+    return UserMapper.toResponse(user);
   }
 
   generateToken(user: User): string {

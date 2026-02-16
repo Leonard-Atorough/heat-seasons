@@ -1,13 +1,13 @@
 [
   {
     "id": "4cb98ae3-8383-4b04-948c-85fda8bd65f1",
-    "googleId": "104652342034137429275",
-    "email": "leotorough@gmail.com",
-    "name": "Leonard",
+    "googleId": "leotorough@gmail.com",
+    "email": "Leonard",
+    "name": "user",
     "profilePicture": "https://lh3.googleusercontent.com/a/ACg8ocIpcS4az68DnbSozGpqgzFbu2M6T-z8bPNx9GkXT85pWnzFKVyh=s96-c",
-    "role": "user",
+    "role": "https://lh3.googleusercontent.com/a/ACg8ocIpcS4az68DnbSozGpqgzFbu2M6T-z8bPNx9GkXT85pWnzFKVyh=s96-c",
     "createdAt": "2026-02-09T01:42:40.561Z",
-    "updatedAt": "2026-02-15T00:35:06.863Z"
+    "updatedAt": "2026-02-15T01:08:57.352Z"
   },
   {
     "id": "045c1530-6235-4026-89f6-86922b5b71b8",
@@ -18,5 +18,15 @@
     "role": "user",
     "createdAt": "2026-02-12T00:44:58.164Z",
     "updatedAt": "2026-02-14T23:45:42.373Z"
+  },
+  {
+    "id": "c1156d98-37e9-45c1-966f-e7a145357b1d",
+    "googleId": "104652342034137429275",
+    "email": "leotorough@gmail.com",
+    "name": "Leonard",
+    "role": "user",
+    "profilePicture": "https://lh3.googleusercontent.com/a/ACg8ocIpcS4az68DnbSozGpqgzFbu2M6T-z8bPNx9GkXT85pWnzFKVyh=s96-c",
+    "createdAt": "2026-02-16T01:34:42.339Z",
+    "updatedAt": "2026-02-16T01:34:42.339Z"
   }
 ]

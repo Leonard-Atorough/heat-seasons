@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { Container } from "../../containers/container";
+import { authMiddleware } from "@src/middleware/authMiddleware";
 
 const router = Router();
+const protectedRouter = Router();
+protectedRouter.use(authMiddleware);
+
 const racerController = Container.getInstance().createRacerController();
 
 router.get("/", (req, res) => {
@@ -12,16 +16,16 @@ router.get("/:id", (req, res) => {
   racerController.getById(req, res);
 });
 
-router.post("/", (req, res) => {
+protectedRouter.post("/", (req, res) => {
   racerController.create(req, res);
 });
 
-router.put("/:id", (req, res) => {
+protectedRouter.put("/:id", (req, res) => {
   racerController.update(req, res);
 });
 
-router.delete("/:id", (req, res) => {
+protectedRouter.delete("/:id", (req, res) => {
   racerController.delete(req, res);
 });
 
-export { router as racerRouter };
+export { router as racerRouter, protectedRouter as racerProtectedRouter };

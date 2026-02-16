@@ -17,14 +17,12 @@ export class LeaderboardService implements ILeaderboardService {
 
     const season = await this.seasonRepository.findActive();
     if (!season) {
-      console.log("No active season found");
       throw new NotFoundError("No active season found");
     }
     const seasonId = season.id;
 
     const races = await this.raceRepository.findBySeasonId(seasonId);
     if (!races || races.length === 0) {
-      console.log("No races found for current season");
       throw new NotFoundError("No races found for current season");
     }
 
@@ -43,12 +41,11 @@ export class LeaderboardService implements ILeaderboardService {
 
     const racers = await this.racerRepository.findByIds(Array.from(resultsMap.keys()));
     if (!racers || racers.length === 0) {
-      console.log("No racers found for leaderboard");
       throw new NotFoundError("No racers found for leaderboard");
     }
 
     for (const racer of racers) {
-      const entry = resultsMap.get(racer.id);
+      const entry = resultsMap.get(racer.id!);
       if (entry) {
         entry.racerName = racer.name;
         entry.team = racer.team;

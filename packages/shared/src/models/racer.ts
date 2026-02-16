@@ -1,6 +1,7 @@
 // Racer domain models
 export interface Racer {
   id: string;
+  userId?: string; // Optional userId to link to a User, but not required for all racers
   name: string;
   active: boolean;
   joinDate: Date;

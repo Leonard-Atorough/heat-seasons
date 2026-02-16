@@ -29,7 +29,6 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
       } as ApiResponse<null>);
       return;
     }
-    console.log("Authenticated user:", payload);
     req.user = payload;
     next();
   } catch (error) {

@@ -6,7 +6,7 @@ import session from "express-session";
 import passport from "./config/passport";
 
 import { authRouter, authProtectedRouter } from "./api/auth/auth.route.js";
-import { racerRouter } from "./api/racer/racer.route.js";
+import { racerProtectedRouter, racerRouter } from "./api/racer/racer.route.js";
 import { seasonRouter } from "./api/season/season.route.js";
 import { raceRouter } from "./api/race/race.route.js";
 import { leaderboardRouter } from "./api/leaderboard/leaderboard.route.js";
@@ -17,15 +17,10 @@ const app: Application = express();
 const PORT = process.env.PORT || 3001;
 
 const container = Container.getInstance();
-container
-  .initializeStorageAdapter()
-  .then(() => {
-    console.log("Storage adapter initialized");
-  })
-  .catch((error) => {
-    console.error("Failed to initialize storage adapter:", error);
-    process.exit(1);
-  });
+container.initializeStorageAdapter().catch((error) => {
+  console.error("Failed to initialize storage adapter:", error);
+  process.exit(1);
+});
 app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -66,6 +61,7 @@ app.use("/api/seasons", seasonRouter);
 app.use("/api/races", raceRouter);
 app.use("/api/leaderboard", leaderboardRouter);
 app.use("/api/auth", authProtectedRouter);
+app.use("/api/racers", racerProtectedRouter);
 
 app.use((err: AppError, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err.stack);

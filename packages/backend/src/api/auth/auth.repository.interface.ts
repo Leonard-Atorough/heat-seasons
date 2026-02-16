@@ -1,11 +1,10 @@
-import { UserCreateInput } from "../../models/";
-import { User } from "shared";
+import { UserEntity } from "@src/domain/entities/UserEntity";
 
 export interface IAuthRepository {
-  findAll(): Promise<User[]>;
-  findById(id: string): Promise<User | null>;
-  findByGoogleId(googleId: string): Promise<User | null>;
-  findByEmail(email: string): Promise<User | null>;
-  create(data: UserCreateInput): Promise<User>;
-  update(id: string, data: Partial<User>): Promise<User>;
+  findAll(): Promise<UserEntity[]>;
+  findById(id: string): Promise<UserEntity | null>;
+  findByGoogleId(googleId: string): Promise<UserEntity | null>;
+  findByEmail(email: string): Promise<UserEntity | null>;
+  create(data: Partial<UserEntity>): Promise<UserEntity>;
+  update(id: string, data: Partial<UserEntity>): Promise<UserEntity>;
 }

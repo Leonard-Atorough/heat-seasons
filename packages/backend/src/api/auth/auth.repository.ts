@@ -1,53 +1,54 @@
 import { StorageAdapter } from "../../storage/";
-import { UserCreateInput } from "../../models/";
-import { User } from "shared";
 import { IAuthRepository } from "./auth.repository.interface";
+import { UserEntity } from "@src/domain/entities/UserEntity";
+import { UserMapper } from "@src/application/mappers/userMapper";
+import { randomUUID } from "crypto";
 
 export class AuthRepository implements IAuthRepository {
   constructor(private storageAdapter: StorageAdapter) {}
 
-  async findAll(): Promise<User[]> {
-    const users = await this.storageAdapter.findAll<User>("users");
-    return users || [];
+  async findAll(): Promise<UserEntity[]> {
+    const users = await this.storageAdapter.findAll<any>("users");
+    return (users || []).map((user) => UserMapper.toDomainFromPersistence(user));
   }
 
-  async findById(id: string): Promise<User | null> {
-    const users = await this.storageAdapter.findAll<User>("users");
-    return users.find((user) => user.id === id) || null;
+  async findById(id: string): Promise<UserEntity | null> {
+    const user = await this.storageAdapter.findById<any>("users", id);
+    return user ? UserMapper.toDomainFromPersistence(user) : null;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    const users = await this.storageAdapter.findAll<User>("users");
-    return users.find((user) => user.email === email) || null;
+  async findByEmail(email: string): Promise<UserEntity | null> {
+    const users = await this.storageAdapter.findAll<any>("users");
+    const user = users.find((user) => user.email === email);
+    return user ? UserMapper.toDomainFromPersistence(user) : null;
   }
 
-  async findByGoogleId(googleId: string): Promise<User | null> {
-    const users = await this.storageAdapter.findAll<User>("users");
-    return users.find((user) => user.googleId === googleId) || null;
+  async findByGoogleId(googleId: string): Promise<UserEntity | null> {
+    const users = await this.storageAdapter.findAll<any>("users");
+    const user = users.find((user) => user.googleId === googleId);
+    return user ? UserMapper.toDomainFromPersistence(user) : null;
   }
 
-  async create(data: UserCreateInput): Promise<User> {
-    const newUser: User = {
-      id: crypto.randomUUID(),
-      googleId: data.googleId,
-      email: data.email,
-      name: data.name,
-      profilePicture: data.profilePicture,
-      role: data.role || "user",
+  async create(entity: UserEntity): Promise<UserEntity> {
+    // Repository assigns ID and timestamps (infrastructure concern)
+    const dataToSave = {
+      ...UserMapper.toPersistence(entity),
+      id: randomUUID(),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    await this.storageAdapter.create("users", newUser);
-    return newUser;
+    
+    const saved = await this.storageAdapter.create("users", dataToSave);
+    return UserMapper.toDomainFromPersistence(saved);
   }
 
-  async update(id: string, data: Partial<User>): Promise<User> {
-    const user = await this.findById(id);
-    if (!user) {
-      throw new Error(`User with id ${id} not found`);
-    }
-    const updatedUser = { ...user, ...data, updatedAt: new Date() };
-    await this.storageAdapter.update("users", id, updatedUser);
-    return updatedUser;
+  async update(id: string, entity: UserEntity): Promise<UserEntity> {
+    const dataToUpdate = {
+      ...UserMapper.toPersistence(entity),
+      updatedAt: new Date(),
+    };
+    
+    const updated = await this.storageAdapter.update("users", id, dataToUpdate);
+    return UserMapper.toDomainFromPersistence(updated);
   }
 }

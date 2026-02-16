@@ -45,7 +45,10 @@ class Container {
     const authService = new AuthService(this.getRepository<IAuthRepository>("AuthRepository"));
     this.serviceLocator.register("AuthService", authService);
 
-    const racerService = new RacerService(this.getRepository<IRacerRepository>("RacerRepository"));
+    const racerService = new RacerService(
+      this.getRepository<IRacerRepository>("RacerRepository"),
+      this.getRepository<IAuthRepository>("AuthRepository"),
+    );
     this.serviceLocator.register("RacerService", racerService);
 
     const raceService = new RaceService(this.getRepository<IRaceRepository>("RaceRepository"));
@@ -134,7 +137,6 @@ class Container {
   }
 
   private getRepository<T>(name: string): T {
-    // Might be better to initialize each repo lazily when its requested for the first time.
     if (!this.repositories.has(name)) {
       this.repositories.set(name, this.createRepository<T>(name));
     }

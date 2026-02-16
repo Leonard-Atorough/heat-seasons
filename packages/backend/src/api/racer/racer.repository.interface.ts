@@ -1,10 +1,10 @@
-import { Racer } from "shared";
+import { RacerEntity } from "src/domain/entities/RacerEntity";
 
 export interface IRacerRepository {
-  findAll(filters?: { active?: boolean }): Promise<Racer[]>;
-  findById(id: string): Promise<Racer | null>;
-  findByIds(ids: string[]): Promise<Racer[]>;
-  create(data: Omit<Racer, "id" | "joinDate">): Promise<Racer>;
-  update(id: string, data: Partial<Racer>): Promise<Racer>;
+  findAll(filters?: { active?: boolean }): Promise<RacerEntity[]>;
+  findById(id: string): Promise<RacerEntity | null>;
+  findByIds(ids: string[]): Promise<RacerEntity[]>;
+  create(data: Omit<RacerEntity, "id" | "joinDate">): Promise<RacerEntity>;
+  update(id: string, data: Partial<RacerEntity>): Promise<RacerEntity>;
   delete(id: string): Promise<void>;
 }
