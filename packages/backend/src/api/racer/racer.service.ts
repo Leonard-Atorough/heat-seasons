@@ -41,11 +41,23 @@ export class RacerService implements IRacerService {
   }
 
   async update(id: string, data: RacerUpdateInput): Promise<Racer> {
-    throw new Error("Not implemented");
+    const racerToUpdate = await this.racerRepository.findById(id);
+    if (!racerToUpdate) {
+      throw new NotFoundError(`Racer with ID ${id} not found`);
+    }
+
+    racerToUpdate.update({ ...data });
+
+    const updatedRacer = await this.racerRepository.update(id, racerToUpdate);
+    return RacerMapper.toResponse(updatedRacer);
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error("Not implemented");
+    const racerToDelete = await this.racerRepository.findById(id);
+    if (!racerToDelete) {
+      throw new NotFoundError(`Racer with ID ${id} not found`);
+    }
+    await this.racerRepository.delete(id);
   }
 
   async getStats(id: string): Promise<any> {
