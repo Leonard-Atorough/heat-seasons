@@ -43,10 +43,13 @@ export class AuthService implements IAuthService {
   }
 
   async logout(token: string): Promise<void> {
-    // For JWT, we can't truly "logout" on the server side without a token blacklist.
-    // In a real implementation, you might store the token in a blacklist with an expiration time.
-    // For this example, we'll just simulate logout by doing nothing.
-    return;
+    await this.authRepository.logout(token);
+  }
+
+  async isTokenValid(token: string): Promise<boolean> {
+    // Business logic: A token is valid if it's not blacklisted
+    const isBlacklisted = await this.authRepository.isTokenBlacklisted(token);
+    return !isBlacklisted;
   }
 
   // async include<T>(data: T): Promise<T> {

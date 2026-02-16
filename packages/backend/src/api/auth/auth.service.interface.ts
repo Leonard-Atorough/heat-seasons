@@ -5,4 +5,5 @@ export interface IAuthService {
   generateToken(user: UserResponse): string;
   upsertUser(profile: UserCreateInput): Promise<UserResponse>;
   logout(token: string): Promise<void>;
+  isTokenValid(token: string): Promise<boolean>;
 }

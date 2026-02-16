@@ -37,7 +37,7 @@ export class AuthRepository implements IAuthRepository {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    
+
     const saved = await this.storageAdapter.create("users", dataToSave);
     return UserMapper.toDomainFromPersistence(saved);
   }
@@ -47,8 +47,20 @@ export class AuthRepository implements IAuthRepository {
       ...UserMapper.toPersistence(entity),
       updatedAt: new Date(),
     };
-    
+
     const updated = await this.storageAdapter.update("users", id, dataToUpdate);
     return UserMapper.toDomainFromPersistence(updated);
+  }
+
+  async logout(token: string): Promise<void> {
+    await this.storageAdapter.create("blacklistedTokens", {
+      token,
+      expiresAt: new Date(Date.now() + 60 * 60 * 1000 * 24), // 1 day
+    });
+  }
+
+  async isTokenBlacklisted(token: string): Promise<boolean> {
+    const blacklistedTokens = await this.storageAdapter.findAll<any>("blacklistedTokens");
+    return blacklistedTokens.some((t) => t.token === token);
   }
 }

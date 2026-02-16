@@ -70,6 +70,10 @@ export class AuthController {
   }
 
   async logout(req: Request, res: Response): Promise<void> {
+    const token = req.cookies["token"];
+    if (token) {
+      await this.authService.logout(token);
+    }
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

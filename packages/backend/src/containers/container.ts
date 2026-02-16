@@ -142,6 +142,11 @@ class Container {
     }
     return this.repositories.get(name) as T;
   }
+
+  // Public method to access repositories from outside
+  public getRepositoryInstance<T>(name: string): T {
+    return this.getRepository<T>(name);
+  }
 }
 
 export { Container };
