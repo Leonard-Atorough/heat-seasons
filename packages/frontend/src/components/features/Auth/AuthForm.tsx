@@ -10,7 +10,7 @@ export default function AuthForm(_: AuthFormProps) {
 
   return (
     <div className={styles.authForm}>
-      <h1 className={styles.authForm__title}>Sign-in to your account</h1>
+      <h3 className={styles.authForm__title}>Sign-in to your account</h3>
       <Card className={styles.authForm__form}>
         <GoogleLoginButton onClick={auth.loginWithGoogle} />
       </Card>

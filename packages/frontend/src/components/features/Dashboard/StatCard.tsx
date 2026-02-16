@@ -41,7 +41,7 @@ export default function StatCard({
             : undefined
         }
       >
-        <h3 className={styles.statCard__title}>{title}</h3>
+        <h4 className={styles.statCard__title}>{title}</h4>
         {value && <p className={styles.statCard__value}>{value}</p>}
       </div>
     </Card>

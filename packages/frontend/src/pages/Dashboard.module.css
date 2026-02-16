@@ -66,15 +66,16 @@
 }
 
 .dashboard__leaderboardTeam {
-  font-size: var(--fs-small);
   color: var(--text-secondary);
   flex: 0 0 200px;
   min-width: 80px;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dashboard__leaderboardRaces {
-  font-size: var(--fs-small);
   color: var(--text-secondary);
   flex: 0 0 auto;
   min-width: 3.5rem;

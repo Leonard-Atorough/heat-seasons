@@ -4,14 +4,12 @@
 }
 
 .formGroup__label {
-  font-size: var(--fs-body);
   margin-bottom: 0.5rem;
   font-weight: var(--fw-semibold);
 }
 
 .formGroup__input {
   padding: 1rem;
-  font-size: var(--fs-body);
   border: 1px solid var(--asphalt-gray);
   border-radius: 4px;
 }

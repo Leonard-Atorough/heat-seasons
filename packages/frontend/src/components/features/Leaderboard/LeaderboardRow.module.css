@@ -14,15 +14,16 @@
 }
 
 .leaderboardRow__team {
-  font-size: var(--fs-small);
   color: var(--text-secondary);
   flex: 0 0 200px;
   min-width: 80px;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .leaderboardRow__races {
-  font-size: var(--fs-small);
   color: var(--text-secondary);
   flex: 0 0 auto;
   min-width: 3.5rem;
@@ -39,7 +40,6 @@
 }
 
 .leaderboardRow__wins {
-  font-size: var(--fs-small);
   color: var(--text-secondary);
   flex: 0 0 auto;
   min-width: 3.5rem;
@@ -47,7 +47,6 @@
 }
 
 .leaderboardRow__podiums {
-  font-size: var(--fs-small);
   color: var(--text-secondary);
   flex: 0 0 auto;
   min-width: 4rem;

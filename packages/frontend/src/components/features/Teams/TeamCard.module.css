@@ -12,8 +12,6 @@
 }
 
 .teamCard__name {
-  font-size: var(--fs-h2);
-  font-weight: var(--fw-bold);
   color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
@@ -25,6 +23,6 @@
 }
 
 .teamCard__racer {
-  font-size: var(--fs-body-large);
+  font-size: var(--font-size-2);
   font-weight: var(--fw-semibold);
 }

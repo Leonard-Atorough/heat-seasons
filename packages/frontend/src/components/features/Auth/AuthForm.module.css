@@ -7,7 +7,6 @@
 }
 
 .authForm__title {
-  font-size: var(--fs-h2);
   color: var(--text-primary);
   margin: 0;
   text-align: center;

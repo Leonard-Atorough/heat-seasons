@@ -1,16 +1,13 @@
-import { Button } from "../components/common/Button";
-import { PageHeader } from "../components/common/PageHeader";
 import { StatCard } from "../components/features/Dashboard";
 import { LeaderboardHeader } from "../components/features/Leaderboard";
-import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.css";
 import { Card } from "../components/common/Card";
 import { useLeaderboard } from "../hooks/data/useLeaderboard";
 import { useSeasons } from "../hooks/data/useSeason";
 import { useEffect } from "react";
+import { Hero } from "../components/features/Dashboard";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
   const { data: leaderboard, refresh } = useLeaderboard();
   const { data: seasons } = useSeasons();
 
@@ -43,7 +40,14 @@ export default function Dashboard() {
   return (
     <div className={styles.dashboard}>
       {/* Hero Section */}
-      <PageHeader
+      <Hero
+        title={leaderboard?.seasonName.toUpperCase() ?? "SEASON ONE WINTER 2026"}
+        subtitle={`Races Completed: ${seasons?.[0]?.racesCompleted ?? 0} / ${
+          seasons?.[0]?.totalRaces ?? "?"
+        }`}
+        backgroundImage="/images/dashboard-hero.webp"
+      />
+      {/* <PageHeader
         title={leaderboard?.seasonName.toUpperCase() ?? "SEASON ONE WINTER 2026"}
         subtitle={`Races Completed: ${seasons?.[0]?.racesCompleted ?? 0} / ${seasons?.[0]?.totalRaces ?? "?"}`}
         variant="hero"
@@ -53,7 +57,7 @@ export default function Dashboard() {
             View Standings
           </Button>
         }
-      />
+      /> */}
 
       {/* Quick Stats Section */}
       <section className={styles.dashboard__content}>
