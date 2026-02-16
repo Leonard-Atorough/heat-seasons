@@ -1,10 +1,11 @@
+import { SeasonEntity } from "@src/domain/entities/SeasonEntity";
 import { SeasonStatus, Season } from "shared";
 
 export interface ISeasonRepository {
-  findAll(filters?: { status?: SeasonStatus }): Promise<Season[]>;
-  findById(id: string): Promise<Season>;
-  findActive(): Promise<Season | null>;
-  create(data: Omit<Season, "id">): Promise<Season>;
-  update(id: string, data: Partial<Season>): Promise<Season>;
+  findAll(filters?: { status?: SeasonStatus }): Promise<SeasonEntity[]>;
+  findById(id: string): Promise<SeasonEntity | null>;
+  findActive(): Promise<SeasonEntity | null>;
+  create(data: SeasonEntity): Promise<SeasonEntity>;
+  update(id: string, data: SeasonEntity): Promise<SeasonEntity>;
   delete(id: string): Promise<void>;
 }

@@ -10,7 +10,6 @@ export interface Season {
   totalRaces: number;
   racesCompleted: number;
   totalParticipants: number;
-  createdAt: Date;
 }
 
 // Re-export for convenience
