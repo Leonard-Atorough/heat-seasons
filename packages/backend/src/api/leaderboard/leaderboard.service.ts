@@ -19,9 +19,7 @@ export class LeaderboardService implements ILeaderboardService {
     if (!season) {
       throw new NotFoundError("No active season found");
     }
-    const seasonId = season.id;
-
-    const races = await this.raceRepository.findBySeasonId(seasonId);
+    const races = await this.raceRepository.findBySeasonId(season.id!);
     if (!races || races.length === 0) {
       throw new NotFoundError("No races found for current season");
     }
@@ -71,7 +69,7 @@ export class LeaderboardService implements ILeaderboardService {
     });
 
     const leaderboard: Leaderboard = {
-      seasonId: season.id,
+      seasonId: season.id!,
       seasonName: season.name,
       asOfDate: new Date(),
       standings: leaderboardEntries,

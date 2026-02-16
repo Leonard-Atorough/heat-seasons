@@ -3,7 +3,7 @@ import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "../../mode
 import { ISeasonRepository } from "./season.repository.interface.js";
 import { ISeasonService } from "./season.service.interface.js";
 import { SeasonStatus } from "shared";
-import { SeasonMapper } from "@src/application/mappers/SeasonMapper";
+import { SeasonMapper } from "src/application/mappers/seasonMapper";
 
 export class SeasonService implements ISeasonService {
   constructor(private seasonRepository: ISeasonRepository) {}
@@ -11,7 +11,7 @@ export class SeasonService implements ISeasonService {
   async getAll(filters?: { status?: SeasonStatus }): Promise<SeasonResponse[]> {
     const seasons = await this.seasonRepository.findAll(filters);
 
-    if (!seasons) {
+    if (!seasons || seasons.length === 0) {
       throw new NotFoundError("No seasons found");
     }
     return seasons.map((season) => SeasonMapper.toResponse(season));

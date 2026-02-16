@@ -1,8 +1,8 @@
-import { SeasonEntity } from "@src/domain/entities/SeasonEntity";
+import { SeasonEntity } from "src/domain/entities/SeasonEntity";
 import { StorageAdapter } from "../../storage/";
 import { ISeasonRepository } from "./season.repository.interface.js";
-import { Season, SeasonStatus } from "shared";
-import { SeasonMapper } from "@src/application/mappers/SeasonMapper";
+import { SeasonStatus } from "shared";
+import { SeasonMapper } from "src/application/mappers/seasonMapper";
 
 export class SeasonRepository implements ISeasonRepository {
   constructor(private storageAdapter: StorageAdapter) {}
