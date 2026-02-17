@@ -7,9 +7,9 @@ import { useProtectedPage } from "../../src/hooks/useProtectedPage";
 import styles from "./ProfilePage.module.css";
 
 export default function ProfilePage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user, logout } = useAuth();
   const isProtectedPageLoading = useProtectedPage();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState(user?.profilePicture);
 
   const handleImageError = () => {
