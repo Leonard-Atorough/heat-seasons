@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Container } from "src/Infrastructure/dependency-injection/container";
-import { authMiddleware } from "@src/middleware/authMiddleware";
+import { authMiddleware } from "@src/Infrastructure/http/middleware";
 
 const router = Router();
 const protectedRouter = Router();

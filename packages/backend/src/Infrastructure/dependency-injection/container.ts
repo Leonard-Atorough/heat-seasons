@@ -25,8 +25,6 @@ import { SeasonController } from "../../api/season";
 import { SeasonService } from "../../api/season";
 import { ISeasonService } from "../../api/season/season.service.interface.js";
 
-import { LeaderboardRepository } from "../../api/leaderboard";
-import { ILeaderboardRepository } from "../../domain/repositories/leaderboard.repository.interface";
 import { LeaderboardController } from "../../api/leaderboard";
 import { LeaderboardService } from "../../api/leaderboard";
 import { ILeaderboardService } from "../../api/leaderboard/leaderboard.service.interface.js";
@@ -132,8 +130,6 @@ class Container {
         return new RaceRepository(this.storageAdapter) as unknown as T;
       case "SeasonRepository":
         return new SeasonRepository(this.storageAdapter) as unknown as T;
-      case "LeaderboardRepository":
-        return new LeaderboardRepository(this.storageAdapter) as unknown as T;
       default:
         throw new Error(`Repository ${name} not found`);
     }
