@@ -1,8 +1,8 @@
 import { Racer, RacerWithStats } from "shared";
 import { RacerCreateInput, RacerUpdateInput } from "../../models/";
-import { IRacerRepository } from "./racer.repository.interface.js";
+import { IRacerRepository } from "src/domain/repositories/racer.repository.interface";
 import { IRacerService } from "./racer.service.interface.js";
-import { IAuthRepository } from "../auth/auth.repository.interface.js";
+import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
 import { UserAggregate } from "src/domain/aggregates/userAggregate";
 import { BadRequestError, NotFoundError } from "src/Infrastructure/errors/appError";
 import { RacerMapper } from "src/application/mappers/racerMapper";

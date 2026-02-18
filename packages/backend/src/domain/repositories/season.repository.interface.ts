@@ -1,4 +1,4 @@
-import { SeasonEntity } from "@src/domain/entities/SeasonEntity";
+import { SeasonEntity } from "../entities/SeasonEntity";
 import { SeasonStatus, Season } from "shared";
 
 export interface ISeasonRepository {

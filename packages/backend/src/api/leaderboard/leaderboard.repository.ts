@@ -1,6 +1,6 @@
 import { StorageAdapter } from "src/Infrastructure/persistence/";
 import { LeaderboardEntry } from "shared";
-import { ILeaderboardRepository } from "./leaderboard.repository.interface.js";
+import { ILeaderboardRepository } from "src/domain/repositories/leaderboard.repository.interface";
 
 export class LeaderboardRepository implements ILeaderboardRepository {
   constructor(private storageAdapter: StorageAdapter) {}

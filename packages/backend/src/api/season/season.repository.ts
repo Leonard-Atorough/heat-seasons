@@ -1,6 +1,6 @@
 import { SeasonEntity } from "src/domain/entities/SeasonEntity";
 import { StorageAdapter } from "src/Infrastructure/persistence/";
-import { ISeasonRepository } from "./season.repository.interface.js";
+import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
 import { SeasonStatus } from "shared";
 import { SeasonMapper } from "src/application/mappers/seasonMapper";
 

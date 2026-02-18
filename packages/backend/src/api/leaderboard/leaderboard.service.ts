@@ -1,7 +1,7 @@
-import { ISeasonRepository } from "../season/season.repository.interface.js";
-import { IRaceRepository } from "../race/race.repository.interface.js";
+import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
+import { IRaceRepository } from "src/domain/repositories/race.repository.interface";
 import { ILeaderboardService } from "./leaderboard.service.interface.js";
-import { IRacerRepository } from "../racer/racer.repository.interface.js";
+import { IRacerRepository } from "src/domain/repositories/racer.repository.interface";
 import { Leaderboard, LeaderboardEntry } from "shared";
 import { NotFoundError } from "src/Infrastructure/errors/appError.js";
 

@@ -1,4 +1,4 @@
-import { IAuthRepository } from "./auth.repository.interface";
+import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
 import { IAuthService } from "./auth.service.interface";
 import { UserResponse, UserCreateInput } from "../../models/user.model";
 import { User } from "shared";

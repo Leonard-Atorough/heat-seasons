@@ -1,4 +1,4 @@
-import { UserEntity } from "@src/domain/entities/UserEntity";
+import { UserEntity } from "../entities/UserEntity";
 
 export interface IAuthRepository {
   findAll(): Promise<UserEntity[]>;

@@ -1,7 +1,7 @@
-import { IRaceRepository } from "./race.repository.interface.js";
+import { IRaceRepository } from "src/domain/repositories/race.repository.interface";
 import { IRaceService } from "./race.service.interface.js";
 import { RaceCreateInput, RaceResponse, RaceUpdateInput } from "src/models/race.model.js";
-import { ISeasonRepository } from "../season/season.repository.interface.js";
+import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
 import { RaceMapper } from "src/application/mappers/raceMapper.js";
 import { NotFoundError } from "src/Infrastructure/errors/appError.js";
 import { RaceEntity } from "src/domain/entities/RaceEntity.js";

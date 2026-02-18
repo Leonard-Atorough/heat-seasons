@@ -1,6 +1,6 @@
 import { RacerEntity } from "src/domain/entities/RacerEntity";
 import { StorageAdapter } from "src/Infrastructure/persistence/";
-import { IRacerRepository } from "./racer.repository.interface.js";
+import { IRacerRepository } from "src/domain/repositories/racer.repository.interface";
 import { RacerMapper } from "@src/application/mappers/racerMapper";
 import { randomUUID } from "crypto";
 

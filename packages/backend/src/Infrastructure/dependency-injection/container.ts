@@ -2,31 +2,31 @@ import { JsonStorageAdapter, StorageAdapter } from "../persistence";
 import { ServiceLocator } from "./serviceLocator";
 
 import { AuthRepository } from "../../api/auth";
-import { IAuthRepository } from "../../api/auth/auth.repository.interface";
+import { IAuthRepository } from "../../domain/repositories/auth.repository.interface";
 import { AuthController } from "../../api/auth";
 import { AuthService } from "../../api/auth/";
 import { IAuthService } from "../../api/auth/auth.service.interface";
 
 import { RacerRepository } from "../../api/racer";
-import { IRacerRepository } from "../../api/racer/racer.repository.interface.js";
+import { IRacerRepository } from "../../domain/repositories/racer.repository.interface";
 import { RacerController } from "../../api/racer";
 import { RacerService } from "../../api/racer";
 import { IRacerService } from "../../api/racer/racer.service.interface.js";
 
 import { RaceRepository } from "../../api/race";
-import { IRaceRepository } from "../../api/race/race.repository.interface.js";
+import { IRaceRepository } from "../../domain/repositories/race.repository.interface";
 import { RaceController } from "../../api/race";
 import { RaceService } from "../../api/race";
 import { IRaceService } from "../../api/race/race.service.interface.js";
 
 import { SeasonRepository } from "../../api/season";
-import { ISeasonRepository } from "../../api/season/season.repository.interface.js";
+import { ISeasonRepository } from "../../domain/repositories/season.repository.interface";
 import { SeasonController } from "../../api/season";
 import { SeasonService } from "../../api/season";
 import { ISeasonService } from "../../api/season/season.service.interface.js";
 
 import { LeaderboardRepository } from "../../api/leaderboard";
-import { ILeaderboardRepository } from "../../api/leaderboard/leaderboard.repository.interface.js";
+import { ILeaderboardRepository } from "../../domain/repositories/leaderboard.repository.interface";
 import { LeaderboardController } from "../../api/leaderboard";
 import { LeaderboardService } from "../../api/leaderboard";
 import { ILeaderboardService } from "../../api/leaderboard/leaderboard.service.interface.js";
