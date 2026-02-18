@@ -103,7 +103,7 @@ export class JsonStorageAdapter implements StorageAdapter {
     const index = records.findIndex((record) => (record as Record<string, unknown>).id === id);
 
     if (index === -1) {
-      throw new Error(`Record with id ${id} not found in collection ${collection}`);
+      throw new Error(`Record with id ${id} not found in ${collection}`);
     }
 
     const updatedRecord = { ...records[index], ...data } as T;
@@ -113,11 +113,11 @@ export class JsonStorageAdapter implements StorageAdapter {
   }
 
   async delete(collection: string, id: string): Promise<void> {
-    const records = await this.loadCollection<Record<string, unknown>>(collection);
-    const filtered = records.filter((record) => record.id !== id);
+    const records = await this.loadCollection(collection);
+    const filtered = records.filter((record) => (record as Record<string, unknown>).id !== id);
 
     if (filtered.length === records.length) {
-      throw new Error(`Record with id ${id} not found in collection ${collection}`);
+      throw new Error(`Record with id ${id} not found in ${collection}`);
     }
 
     await this.saveCollection(collection, filtered);

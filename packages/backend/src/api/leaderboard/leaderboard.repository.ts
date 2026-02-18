@@ -1,4 +1,4 @@
-import { StorageAdapter } from "../../storage/";
+import { StorageAdapter } from "src/Infrastructure/persistence/";
 import { LeaderboardEntry } from "shared";
 import { ILeaderboardRepository } from "./leaderboard.repository.interface.js";
 

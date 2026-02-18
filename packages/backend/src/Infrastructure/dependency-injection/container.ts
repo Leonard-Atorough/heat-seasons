@@ -1,4 +1,4 @@
-import { JsonStorageAdapter, StorageAdapter } from "../../storage";
+import { JsonStorageAdapter, StorageAdapter } from "../persistence";
 import { ServiceLocator } from "./serviceLocator";
 
 import { AuthRepository } from "../../api/auth";

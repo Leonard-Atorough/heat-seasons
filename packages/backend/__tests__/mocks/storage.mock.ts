@@ -1,4 +1,4 @@
-import { StorageAdapter } from "../../src/storage/StorageAdapter";
+import { StorageAdapter } from "../../src/Infrastructure/persistence/StorageAdapter";
 
 export function CreateMockStorageAdapter(
   overrides?: Partial<StorageAdapter>,

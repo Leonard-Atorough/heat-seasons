@@ -1,4 +1,4 @@
-import { StorageAdapter } from "../../storage/";
+import { StorageAdapter } from "src/Infrastructure/persistence/";
 import { IRaceRepository } from "./race.repository.interface.js";
 import { RaceEntity } from "src/domain/entities/RaceEntity";
 import { RaceMapper } from "src/application/mappers/raceMapper";
