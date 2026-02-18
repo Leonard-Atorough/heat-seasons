@@ -1,10 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { JwtService } from "../../src/utils/jwt";
 import { ApiResponse } from "shared";
-import { Container } from "../containers/container";
+import { Container } from "src/Infrastructure/dependency-injection/container";
 import { IAuthService } from "../api/auth/auth.service.interface";
 
-export async function authMiddleware(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function authMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
   const token = req.cookies.token;
   if (!token) {
     res.status(401).json({

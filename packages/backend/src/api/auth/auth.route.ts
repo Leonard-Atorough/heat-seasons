@@ -1,7 +1,7 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import passport from "passport";
-import { Container } from "../../containers/container";
+import { Container } from "src/Infrastructure/dependency-injection/container";
 import { authMiddleware } from "@src/middleware/authMiddleware";
 
 const router = Router();

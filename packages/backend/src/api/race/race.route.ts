@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Container } from "../../containers/container";
+import { Container } from "src/Infrastructure/dependency-injection/container";
 
 const router = Router();
 const raceController = Container.getInstance().createRaceController();

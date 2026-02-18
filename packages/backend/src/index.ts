@@ -11,7 +11,7 @@ import { seasonRouter } from "./api/season/season.route.js";
 import { raceRouter } from "./api/race/race.route.js";
 import { leaderboardRouter } from "./api/leaderboard/leaderboard.route.js";
 import { AppError } from "./errors/appError.js";
-import { Container } from "./containers/container";
+import { Container } from "./Infrastructure/dependency-injection/container.js";
 
 const app: Application = express();
 const PORT = process.env.PORT || 3001;

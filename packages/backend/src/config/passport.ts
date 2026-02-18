@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Container } from "../containers/container";
+import { Container } from "src/Infrastructure/dependency-injection/container";
 import { IAuthService } from "src/api/auth/auth.service.interface";
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
