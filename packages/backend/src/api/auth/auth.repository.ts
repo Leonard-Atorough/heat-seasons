@@ -30,10 +30,9 @@ export class AuthRepository implements IAuthRepository {
   }
 
   async create(entity: UserEntity): Promise<UserEntity> {
-    // Repository assigns ID and timestamps (infrastructure concern)
     const dataToSave = {
       ...UserMapper.toPersistence(entity),
-      id: randomUUID(),
+      // Storage adapter will generate an ID.
       createdAt: new Date(),
       updatedAt: new Date(),
     };

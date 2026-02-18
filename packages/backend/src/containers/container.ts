@@ -51,7 +51,10 @@ class Container {
     );
     this.serviceLocator.register("RacerService", racerService);
 
-    const raceService = new RaceService(this.getRepository<IRaceRepository>("RaceRepository"));
+    const raceService = new RaceService(
+      this.getRepository<IRaceRepository>("RaceRepository"),
+      this.getRepository<ISeasonRepository>("SeasonRepository"),
+    );
     this.serviceLocator.register("RaceService", raceService);
 
     const seasonService = new SeasonService(

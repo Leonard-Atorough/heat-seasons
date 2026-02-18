@@ -1,32 +1,52 @@
-import { Race } from "shared";
 import { StorageAdapter } from "../../storage/";
 import { IRaceRepository } from "./race.repository.interface.js";
+import { RaceEntity } from "src/domain/entities/RaceEntity";
+import { RaceMapper } from "src/application/mappers/raceMapper";
 
 export class RaceRepository implements IRaceRepository {
   constructor(private storageAdapter: StorageAdapter) {}
 
-  async findAll(): Promise<Race[]> {
-    throw new Error("Not implemented");
+  async findAll(): Promise<RaceEntity[]> {
+    const response = await this.storageAdapter.findAll<any>("races");
+    return (response || []).map((response) => RaceMapper.toDomainFromPersistence(response));
   }
 
-  async findBySeasonId(seasonId: string): Promise<Race[]> {
-    const response = await this.storageAdapter.findAll<Race>("races", { seasonId });
-    return response.filter((race) => race.results.length > 0 && race.results !== null);
+  async findBySeasonId(seasonId: string): Promise<RaceEntity[]> {
+    const response = await this.storageAdapter.findAll<any>("races", { seasonId });
+    return (response || [])
+      .map((response) => RaceMapper.toDomainFromPersistence(response))
+      .filter((race) => race.results.length > 0 && race.results !== null);
   }
 
-  async findById(id: string): Promise<Race | null> {
-    throw new Error("Not implemented");
+  async findById(id: string): Promise<RaceEntity | null> {
+    const response = await this.storageAdapter.findById<any>("races", id);
+    return response ? RaceMapper.toDomainFromPersistence(response) : null;
   }
 
-  async create(data: Omit<Race, "id">): Promise<Race> {
-    throw new Error("Not implemented");
+  async create(data: RaceEntity): Promise<RaceEntity> {
+    const dataToSave = {
+      ...RaceMapper.toPersistence(data),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const response = await this.storageAdapter.create("races", dataToSave);
+    return RaceMapper.toDomainFromPersistence(response);
   }
 
-  async update(id: string, data: Partial<Race>): Promise<Race> {
-    throw new Error("Not implemented");
+  async update(id: string, data: RaceEntity): Promise<RaceEntity> {
+    const dataToUpdate = {
+      ...RaceMapper.toPersistence(data),
+      updatedAt: new Date(),
+    };
+    const response = await this.storageAdapter.update("races", id, dataToUpdate);
+    return RaceMapper.toDomainFromPersistence(response);
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error("Not implemented");
+    const existing = await this.findById(id);
+    if (!existing) {
+      return;
+    }
+    await this.storageAdapter.delete("races", id);
   }
 }

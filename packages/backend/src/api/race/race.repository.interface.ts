@@ -1,10 +1,10 @@
-import { Race } from "shared";
+import { RaceEntity } from "src/domain/entities/RaceEntity";
 
 export interface IRaceRepository {
-  findAll(): Promise<Race[]>;
-  findBySeasonId(seasonId: string): Promise<Race[]>;
-  findById(id: string): Promise<Race | null>;
-  create(data: Omit<Race, "id">): Promise<Race>;
-  update(id: string, data: Partial<Race>): Promise<Race>;
+  findAll(): Promise<RaceEntity[]>;
+  findBySeasonId(seasonId: string): Promise<RaceEntity[]>;
+  findById(id: string): Promise<RaceEntity | null>;
+  create(data: RaceEntity): Promise<RaceEntity>;
+  update(id: string, data: RaceEntity): Promise<RaceEntity>;
   delete(id: string): Promise<void>;
 }
