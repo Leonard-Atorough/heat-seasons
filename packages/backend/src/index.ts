@@ -3,14 +3,14 @@ import express, { Request, Response, NextFunction, Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import passport from "./config/passport";
+import passport from "./Infrastructure/security/passport";
 
 import { authRouter, authProtectedRouter } from "./api/auth/auth.route.js";
 import { racerProtectedRouter, racerRouter } from "./api/racer/racer.route.js";
 import { seasonRouter } from "./api/season/season.route.js";
 import { raceRouter } from "./api/race/race.route.js";
 import { leaderboardRouter } from "./api/leaderboard/leaderboard.route.js";
-import { AppError } from "./errors/appError.js";
+import { AppError } from "./Infrastructure/errors/appError.js";
 import { Container } from "./Infrastructure/dependency-injection/container.js";
 
 const app: Application = express();

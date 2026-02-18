@@ -4,7 +4,7 @@ import { IRacerRepository } from "./racer.repository.interface.js";
 import { IRacerService } from "./racer.service.interface.js";
 import { IAuthRepository } from "../auth/auth.repository.interface.js";
 import { UserAggregate } from "src/domain/aggregates/userAggregate";
-import { BadRequestError, NotFoundError } from "src/errors/appError";
+import { BadRequestError, NotFoundError } from "src/Infrastructure/errors/appError";
 import { RacerMapper } from "src/application/mappers/racerMapper";
 
 export class RacerService implements IRacerService {

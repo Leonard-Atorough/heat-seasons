@@ -4,6 +4,7 @@ export function CreateMockStorageAdapter(
   overrides?: Partial<StorageAdapter>,
 ): jest.Mocked<StorageAdapter> {
   return {
+    initialize: jest.fn(),
     findAll: jest.fn(),
     findById: jest.fn(),
     create: jest.fn(),
@@ -17,6 +18,7 @@ export function CreateInMemoryStorageAdapter(): jest.Mocked<StorageAdapter> {
   const dataStore: Record<string, any[]> = {};
 
   return {
+    initialize: jest.fn(() => Promise.resolve()),
     findAll: jest.fn((collection: string, filters?: Record<string, unknown>) => {
       const items = dataStore[collection] || [];
 

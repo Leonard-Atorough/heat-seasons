@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IRaceService } from "./race.service.interface.js";
-import { AppError } from "src/errors/appError.js";
+import { AppError } from "src/Infrastructure/errors/appError.js";
 import { RaceResponse } from "src/models/index.js";
 import { ApiResponse } from "shared/dist/api/index.js";
 

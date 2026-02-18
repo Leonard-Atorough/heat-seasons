@@ -3,7 +3,7 @@ import { IRaceService } from "./race.service.interface.js";
 import { RaceCreateInput, RaceResponse, RaceUpdateInput } from "src/models/race.model.js";
 import { ISeasonRepository } from "../season/season.repository.interface.js";
 import { RaceMapper } from "src/application/mappers/raceMapper.js";
-import { NotFoundError } from "src/errors/appError.js";
+import { NotFoundError } from "src/Infrastructure/errors/appError.js";
 import { RaceEntity } from "src/domain/entities/RaceEntity.js";
 
 export class RaceService implements IRaceService {

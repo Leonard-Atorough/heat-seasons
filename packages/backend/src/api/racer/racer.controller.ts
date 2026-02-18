@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IRacerService } from "./racer.service.interface.js";
 import { ApiResponse, Racer, RacerWithStats } from "shared";
-import { AppError } from "@src/errors/appError.js";
+import { AppError } from "src/Infrastructure/errors/appError.js";
 
 export class RacerController {
   constructor(private racerService: IRacerService) {}
