@@ -1,33 +1,26 @@
 import { JsonStorageAdapter, StorageAdapter } from "../persistence";
 import { ServiceLocator } from "./serviceLocator";
-
-import { AuthRepository } from "../../api/auth";
-import { IAuthRepository } from "../../domain/repositories/auth.repository.interface";
-import { AuthController } from "../../api/auth";
-import { AuthService } from "../../api/auth/";
-import { IAuthService } from "../../api/auth/auth.service.interface";
-
-import { RacerRepository } from "../../api/racer";
-import { IRacerRepository } from "../../domain/repositories/racer.repository.interface";
-import { RacerController } from "../../api/racer";
-import { RacerService } from "../../api/racer";
-import { IRacerService } from "../../api/racer/racer.service.interface.js";
-
-import { RaceRepository } from "../../api/race";
-import { IRaceRepository } from "../../domain/repositories/race.repository.interface";
-import { RaceController } from "../../api/race";
-import { RaceService } from "../../api/race";
-import { IRaceService } from "../../api/race/race.service.interface.js";
-
-import { SeasonRepository } from "../../api/season";
-import { ISeasonRepository } from "../../domain/repositories/season.repository.interface";
-import { SeasonController } from "../../api/season";
-import { SeasonService } from "../../api/season";
-import { ISeasonService } from "../../api/season/season.service.interface.js";
-
-import { LeaderboardController } from "../../api/leaderboard";
-import { LeaderboardService } from "../../api/leaderboard";
-import { ILeaderboardService } from "../../api/leaderboard/leaderboard.service.interface.js";
+import {
+  AuthRepository,
+  RacerRepository,
+  RaceRepository,
+  SeasonRepository,
+} from "../persistence/repositories";
+import {
+  IAuthRepository,
+  IRaceRepository,
+  IRacerRepository,
+  ISeasonRepository,
+} from "../../domain/repositories";
+import { AuthController, AuthService, IAuthService } from "../../api/auth";
+import { RacerController, RacerService, IRacerService } from "../../api/racer";
+import { RaceController, RaceService, IRaceService } from "../../api/race";
+import { SeasonController, SeasonService, ISeasonService } from "../../api/season";
+import {
+  LeaderboardController,
+  LeaderboardService,
+  ILeaderboardService,
+} from "../../api/leaderboard";
 
 class Container {
   private static instance: Container | null = null;
