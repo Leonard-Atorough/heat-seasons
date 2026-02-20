@@ -3,6 +3,7 @@ import { useEffect, useMemo } from "react";
 import { TeamCard } from "../components/features";
 import styles from "./Teams.module.css";
 import { useRacers } from "../hooks/data/useRacer";
+import { LoadingSkeletonCard } from "../components/common";
 
 interface Team {
   name: string;
@@ -11,7 +12,7 @@ interface Team {
 }
 
 export function Teams() {
-  const { data: racers, refresh } = useRacers();
+  const { data: racers, refresh, isLoading } = useRacers();
 
   const handleRefresh = async () => {
     await refresh();
@@ -41,14 +42,18 @@ export function Teams() {
       <h1>Heat Teams: Winter 2026</h1>
       <p>Explore the teams competing in the current winter season.</p>
       <div className={styles.teamsGrid}>
-        {teams.map((team: Team) => (
-          <TeamCard
-            key={team.name}
-            teamName={team.name}
-            teamColor={team.color}
-            racers={team.racers.map((racer: Racer) => racer.name)}
-          />
-        ))}
+        {teams.map((team: Team) =>
+          isLoading ? (
+            <LoadingSkeletonCard key={team.name} lines={1} height="300px" includeTitle={true} />
+          ) : (
+            <TeamCard
+              key={team.name}
+              teamName={team.name}
+              teamColor={team.color}
+              racers={team.racers.map((racer: Racer) => racer.name)}
+            />
+          ),
+        )}
       </div>
     </div>
   );

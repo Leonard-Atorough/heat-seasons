@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { useAuth } from "./useAuth";
+import { useNavigate } from "react-router";
 
 export function useProtectedPage() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user && !isAuthenticated) {
-      window.location.href = "/login";
+    if (!user && !isLoading) {
+      navigate("/login");
     }
-  }, [user, isAuthenticated]);
+  }, [user, isLoading, navigate]);
 
   return isLoading;
 }

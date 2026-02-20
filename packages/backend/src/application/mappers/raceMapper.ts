@@ -5,6 +5,7 @@ export class RaceMapper {
   static toDomain(dto: RaceCreateInput): RaceEntity {
     return RaceEntity.create({
       seasonId: dto.seasonId,
+      raceNumber: dto.raceNumber,
       name: dto.name,
       date: dto.date,
       results: dto.results,
@@ -15,6 +16,7 @@ export class RaceMapper {
     return RaceEntity.reconstitute({
       id: data.id,
       seasonId: data.seasonId,
+      raceNumber: data.raceNumber,
       name: data.name,
       date: data.date,
       results: data.results,
@@ -30,6 +32,7 @@ export class RaceMapper {
     return {
       id: entity.id,
       seasonId: entity.seasonId,
+      raceNumber: entity.raceNumber,
       name: entity.name,
       date: entity.date,
       results: entity.results,
@@ -40,6 +43,7 @@ export class RaceMapper {
     return {
       id: entity.id,
       seasonId: entity.seasonId,
+      raceNumber: entity.raceNumber,
       name: entity.name,
       date: entity.date,
       results: entity.results,

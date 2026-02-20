@@ -8,8 +8,20 @@ export class RaceController {
   constructor(private raceService: IRaceService) {}
 
   async getBySeasonId(req: Request, res: Response): Promise<void> {
+    console.log("Received request to get races by season ID with query params:", req.query);
     try {
-      const { seasonId } = req.params;
+      const seasonId = req.query.seasonId as string;
+      if (!seasonId) {
+        res
+          .status(400)
+          .json({
+            success: false,
+            status: 400,
+            statusText: "Bad Request",
+            message: "seasonId query parameter is required",
+          });
+        return;
+      }
       const races = await this.raceService.getBySeasonId(seasonId);
 
       const response: ApiResponse<RaceResponse[]> = {

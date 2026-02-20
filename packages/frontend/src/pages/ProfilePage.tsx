@@ -1,7 +1,5 @@
 import { useAuth } from "../hooks/useAuth";
-import { Card } from "../../src/components/common/Card";
-import { Button } from "../../src/components/common/Button";
-import { FormGroup, LoadingSkeletonCard } from "../components/common";
+import { FormGroup, LoadingSkeletonCard, Card, Button } from "../components/common";
 import { useState } from "react";
 import { useProtectedPage } from "../../src/hooks/useProtectedPage";
 import styles from "./ProfilePage.module.css";

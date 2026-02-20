@@ -13,9 +13,7 @@ export class RaceRepository implements IRaceRepository {
 
   async findBySeasonId(seasonId: string): Promise<RaceEntity[]> {
     const response = await this.storageAdapter.findAll<any>("races", { seasonId });
-    return (response || [])
-      .map((response) => RaceMapper.toDomainFromPersistence(response))
-      .filter((race) => race.results.length > 0 && race.results !== null);
+    return (response || []).map((response) => RaceMapper.toDomainFromPersistence(response));
   }
 
   async findById(id: string): Promise<RaceEntity | null> {

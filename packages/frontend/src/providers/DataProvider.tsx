@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState, useCallback } from "react";
+import { ReactNode, useEffect, useState, useCallback, useMemo } from "react";
 import { DataContext, DataContextType } from "../contexts/DataContext";
 import { Leaderboard, RacerWithStats, Season } from "shared";
 import { getAllRacers } from "../services/api/racer";
@@ -75,17 +75,30 @@ export function DataProvider({ children }: DataProviderProps) {
     if (data) setSeasons(data);
   }, [executeWithLoading]);
 
-  const value: DataContextType = {
-    racers,
-    leaderboard,
-    seasons,
-    isLoading,
-    error,
-    refresh: fetchAllData,
-    refreshRacers,
-    refreshLeaderboard,
-    refreshSeasons,
-  };
+  const value: DataContextType = useMemo(
+    () => ({
+      racers,
+      leaderboard,
+      seasons,
+      isLoading,
+      error,
+      refresh: fetchAllData,
+      refreshRacers,
+      refreshLeaderboard,
+      refreshSeasons,
+    }),
+    [
+      racers,
+      leaderboard,
+      seasons,
+      isLoading,
+      error,
+      fetchAllData,
+      refreshRacers,
+      refreshLeaderboard,
+      refreshSeasons,
+    ],
+  );
 
   // Fetch all data on mount
   useEffect(() => {

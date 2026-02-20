@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { AuthForm } from "../components/features/Auth";
 import styles from "./LoginRegister.module.css";
 import { LoadingSkeletonCard } from "../components/common";
@@ -9,9 +9,11 @@ export default function LoginRegister() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  if (isAuthenticated) {
-    navigate("/profile");
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/profile");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <Suspense fallback={<LoadingSkeletonCard />}>

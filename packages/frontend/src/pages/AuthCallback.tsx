@@ -19,17 +19,14 @@ export default function AuthCallback() {
 
     const authenticateUser = async () => {
       try {
-        //TODO: This is a bit of a hack, we should ideally have a dedicated endpoint to verify the token
-        // and get the user info instead of relying on the /auth/me endpoint which is used for fetching
-        // user info in general. This is because if the token is invalid or expired, we want to redirect
-        // the user to the login page instead of showing an error message on the dashboard page.
-        const user: User = auth.isAuthenticated
-          ? auth.user!
-          : await apiClient.get<User>("/auth/me");
-        if (user) {
-          navigate("/");
-        } else {
-          navigate("/login?error=auth_failed");
+        if (!auth.isLoading) {
+          if (auth.isAuthenticated) {
+            navigate("/");
+            return;
+          } else {
+            navigate("/login?error=auth_failed");
+            return;
+          }
         }
       } catch (err) {
         navigate("/login?error=auth_failed_catch");

@@ -11,6 +11,7 @@ import Racers from "./pages/Racers.tsx";
 import Seasons from "./pages/Seasons.tsx";
 import { Teams } from "./pages/Teams.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
+import Results from "./pages/Results.tsx";
 
 function App() {
   return (
@@ -20,7 +21,6 @@ function App() {
 
         <main className="main">
           <Routes>
-            // TODO: Add auth callback route and page
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
@@ -28,6 +28,7 @@ function App() {
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/racers" element={<Racers />} />
             <Route path="/teams" element={<Teams />} />
+            <Route path="/results" element={<Results />} />
             <Route path="/seasons" element={<Seasons />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="*" element={<div>404 Not Found</div>} />

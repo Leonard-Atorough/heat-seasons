@@ -27,10 +27,6 @@ export default function Racers() {
       .sort((a, b) => a.team.localeCompare(b.team));
   }, [racers]);
 
-  if (!racersWithProfile) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className={styles.racersPage}>
       <h1>Racers</h1>

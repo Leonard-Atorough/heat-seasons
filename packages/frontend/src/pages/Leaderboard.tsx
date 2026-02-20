@@ -36,7 +36,7 @@ export default function Leaderboard() {
           <LeaderboardHeader />
           {leaderboard?.standings.map((racer, index) =>
             isLeaderboardLoading ? (
-              <LoadingSkeletonCard key={index} lines={1} height="80px" includeTitle={false} />
+              <LoadingSkeletonCard key={index} lines={1} height="34px" includeTitle={false} />
             ) : (
               <LeaderboardRow
                 className={styles.leaderboard__card}

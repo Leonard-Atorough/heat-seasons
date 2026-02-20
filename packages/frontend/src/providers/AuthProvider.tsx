@@ -66,7 +66,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       loginWithGoogle,
       logout,
     }),
-    [user, isLoading],
+    [user, isLoading, loginWithGoogle, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

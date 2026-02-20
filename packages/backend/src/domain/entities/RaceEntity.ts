@@ -4,6 +4,7 @@ export class RaceEntity extends EntityRoot {
   private constructor(
     public id: string | undefined,
     public seasonId: string,
+    public raceNumber: number,
     public name: string,
     public date: Date,
     public results: {
@@ -19,6 +20,7 @@ export class RaceEntity extends EntityRoot {
 
   static create(data: {
     seasonId: string;
+    raceNumber: number;
     name: string;
     date: Date;
     results: {
@@ -30,6 +32,7 @@ export class RaceEntity extends EntityRoot {
     return new RaceEntity(
       undefined,
       data.seasonId,
+      data.raceNumber,
       data.name,
       data.date,
       data.results,
@@ -41,6 +44,7 @@ export class RaceEntity extends EntityRoot {
   static reconstitute(data: {
     id: string;
     seasonId: string;
+    raceNumber: number;
     name: string;
     date: Date;
     results: {
@@ -54,6 +58,7 @@ export class RaceEntity extends EntityRoot {
     return new RaceEntity(
       data.id,
       data.seasonId,
+      data.raceNumber,
       data.name,
       data.date,
       data.results,

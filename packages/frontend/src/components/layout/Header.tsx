@@ -54,8 +54,8 @@ export default function Header() {
         <Link className={styles["nav__link"]} to="/leaderboard">
           Leaderboard
         </Link>
-        <Link className={styles["nav__link"]} to="/races">
-          Races
+        <Link className={styles["nav__link"]} to="/results">
+          Results
         </Link>
         <Link className={styles["nav__link"]} to="/seasons">
           Seasons

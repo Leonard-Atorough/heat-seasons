@@ -5,6 +5,7 @@ const router = Router();
 const raceController = Container.getInstance().createRaceController();
 
 router.get("/", (req, res) => {
+  console.log("Received request to get races by season ID with query params:", req.query);
   raceController.getBySeasonId(req, res);
 });
 

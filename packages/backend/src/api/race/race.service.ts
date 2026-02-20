@@ -13,7 +13,8 @@ export class RaceService implements IRaceService {
   ) {}
 
   async getBySeasonId(seasonId: string): Promise<RaceResponse[]> {
-    throw new Error("Not implemented");
+    const racesData = await this.raceRepository.findBySeasonId(seasonId);
+    return racesData.map((race) => RaceMapper.toResponse(race));
   }
 
   async getById(id: string): Promise<RaceResponse> {
