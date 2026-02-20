@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { JwtService } from "../../../utils/jwt";
+import { JwtService } from "../../security/jwt";
 import { ApiResponse } from "shared";
-import { Container } from "src/Infrastructure/dependency-injection/container";
+import { Container } from "../../dependency-injection/container";
 import { IAuthService } from "../../../api/auth/auth.service.interface";
 
 export async function authMiddleware(

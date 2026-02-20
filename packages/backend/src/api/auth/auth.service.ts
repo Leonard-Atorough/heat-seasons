@@ -2,7 +2,7 @@ import { IAuthRepository } from "src/domain/repositories/auth.repository.interfa
 import { IAuthService } from "./auth.service.interface";
 import { UserResponse, UserCreateInput } from "src/application/dtos/user.dto";
 import { User } from "shared";
-import { JwtService } from "../../utils/jwt";
+import { JwtService } from "src/Infrastructure/security/jwt";
 import { UserMapper } from "src/application/mappers/userMapper";
 
 export class AuthService implements IAuthService {

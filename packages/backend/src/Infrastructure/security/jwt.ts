@@ -10,7 +10,7 @@ if (!process.env.JWT_SECRET) {
 }
 const JWT_EXPIRES_IN: string = process.env.JWT_EXPIRES_IN || "24h";
 
-export interface TokenPayload extends JwtPayload{
+export interface TokenPayload extends JwtPayload {
   id: string;
   email: string;
   role: string;
