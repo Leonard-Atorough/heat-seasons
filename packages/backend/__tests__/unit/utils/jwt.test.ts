@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
-import { JwtService } from "../../../src/utils/jwt";
+import { JwtService } from "../../../src/Infrastructure/security/jwt";
 import { User } from "../../../../shared/src/models";
 
 describe("JWT utils", () => {
