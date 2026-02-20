@@ -11,8 +11,6 @@ describe("JWT utils", () => {
       name: "Test User",
       profilePicture: undefined,
       role: "user",
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
     const token = JwtService.generateToken(user);
     const decoded = JwtService.verifyToken(token);
