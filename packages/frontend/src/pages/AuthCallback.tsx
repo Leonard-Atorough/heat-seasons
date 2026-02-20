@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import apiClient from "../services/apiClient";
-import { User } from "../../types/domain/models";
 import { useAuth } from "../hooks/useAuth";
 
 export default function AuthCallback() {
