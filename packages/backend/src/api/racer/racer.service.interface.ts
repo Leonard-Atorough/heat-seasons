@@ -1,5 +1,5 @@
 import { Racer, RacerWithStats } from "shared";
-import { RacerCreateInput, RacerUpdateInput } from "../../models";
+import { RacerCreateInput, RacerUpdateInput } from "src/application/dtos";
 
 export interface IRacerService {
   getAll(filters?: { active?: boolean }): Promise<RacerWithStats[]>;

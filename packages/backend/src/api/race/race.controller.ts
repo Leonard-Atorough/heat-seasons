@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IRaceService } from "./race.service.interface.js";
 import { AppError } from "src/Infrastructure/errors/appError.js";
-import { RaceResponse } from "src/models/index.js";
+import { RaceResponse } from "src/application/dtos";
 import { ApiResponse } from "shared/dist/api/index.js";
 
 export class RaceController {
@@ -12,14 +12,12 @@ export class RaceController {
     try {
       const seasonId = req.query.seasonId as string;
       if (!seasonId) {
-        res
-          .status(400)
-          .json({
-            success: false,
-            status: 400,
-            statusText: "Bad Request",
-            message: "seasonId query parameter is required",
-          });
+        res.status(400).json({
+          success: false,
+          status: 400,
+          statusText: "Bad Request",
+          message: "seasonId query parameter is required",
+        });
         return;
       }
       const races = await this.raceService.getBySeasonId(seasonId);

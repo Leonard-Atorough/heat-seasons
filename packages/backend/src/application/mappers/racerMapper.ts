@@ -1,6 +1,6 @@
 import { Racer } from "shared";
 import { RacerEntity } from "../../../src/domain/entities/RacerEntity";
-import { RacerCreateInput, RacerUpdateInput } from "@src/models";
+import { RacerCreateInput } from "src/application/dtos";
 
 export class RacerMapper {
   /**

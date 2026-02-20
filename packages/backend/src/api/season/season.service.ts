@@ -1,5 +1,5 @@
 import { NotFoundError } from "src/Infrastructure/errors/appError.js";
-import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "../../models";
+import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "src/application/dtos";
 import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
 import { ISeasonService } from "./season.service.interface.js";
 import { SeasonStatus } from "shared";

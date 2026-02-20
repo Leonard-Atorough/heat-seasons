@@ -1,5 +1,5 @@
-import { SeasonEntity } from "@src/domain/entities/SeasonEntity";
-import { SeasonCreateInput } from "@src/models";
+import { SeasonEntity } from "src/domain/entities/SeasonEntity";
+import { SeasonCreateInput } from "src/application/dtos";
 import { Season } from "shared";
 
 export class SeasonMapper {

@@ -1,4 +1,4 @@
-import { RaceCreateInput, RaceResponse, RaceUpdateInput } from "src/models";
+import { RaceCreateInput, RaceResponse, RaceUpdateInput } from "src/application/dtos";
 import { Race } from "shared";
 
 export interface IRaceService {

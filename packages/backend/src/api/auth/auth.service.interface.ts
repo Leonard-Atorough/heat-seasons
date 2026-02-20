@@ -1,4 +1,4 @@
-import { UserCreateInput, UserResponse } from "../../models/user.model";
+import { UserCreateInput, UserResponse } from "src/application/dtos/user.dto";
 
 export interface IAuthService {
   getMe(userId: string): Promise<UserResponse>;

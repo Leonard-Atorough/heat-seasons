@@ -1,6 +1,6 @@
 import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
 import { IAuthService } from "./auth.service.interface";
-import { UserResponse, UserCreateInput } from "../../models/user.model";
+import { UserResponse, UserCreateInput } from "src/application/dtos/user.dto";
 import { User } from "shared";
 import { JwtService } from "../../utils/jwt";
 import { UserMapper } from "src/application/mappers/userMapper";

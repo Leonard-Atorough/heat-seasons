@@ -1,5 +1,5 @@
 import { Racer, RacerWithStats } from "shared";
-import { RacerCreateInput, RacerUpdateInput } from "../../models/";
+import { RacerCreateInput, RacerUpdateInput } from "src/application/dtos";
 import { IRacerRepository } from "src/domain/repositories/racer.repository.interface";
 import { IRacerService } from "./racer.service.interface.js";
 import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";

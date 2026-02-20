@@ -1,5 +1,5 @@
 import { SeasonStatus } from "shared";
-import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "src/models";
+import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "src/application/dtos";
 
 export interface ISeasonService {
   getAll(filters?: { status?: SeasonStatus }): Promise<SeasonResponse[]>;

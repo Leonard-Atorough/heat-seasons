@@ -1,5 +1,5 @@
 import { RaceEntity } from "src/domain/entities/RaceEntity";
-import { RaceCreateInput, RaceResponse } from "src/models";
+import { RaceCreateInput, RaceResponse } from "src/application/dtos";
 
 export class RaceMapper {
   static toDomain(dto: RaceCreateInput): RaceEntity {

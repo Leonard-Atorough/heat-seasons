@@ -1,6 +1,6 @@
 import { UserRole } from "shared";
 import { UserEntity } from "src/domain/entities/UserEntity";
-import { UserCreateInput, UserResponse, UserUpdateInput } from "src/models/user.model";
+import { UserCreateInput, UserResponse } from "src/application/dtos";
 
 export class UserMapper {
   /**

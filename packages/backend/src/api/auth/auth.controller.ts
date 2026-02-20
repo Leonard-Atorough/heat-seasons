@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IAuthService } from "./auth.service.interface";
 import { JwtService, TokenPayload } from "../../utils/jwt";
-import { UserResponse } from "src/models/user.model";
+import { UserResponse } from "src/application/dtos/user.dto";
 import { ApiResponse } from "shared";
 
 export class AuthController {
