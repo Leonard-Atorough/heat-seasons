@@ -1,5 +1,5 @@
 import { useAuth } from "../hooks/useAuth";
-import { FormGroup, LoadingSkeletonCard, Card, Button } from "../components/common";
+import { FormGroup, LoadingSkeletonCard, Card, Button, Modal } from "../components/common";
 import { useState } from "react";
 import { useProtectedPage } from "../../src/hooks/useProtectedPage";
 import styles from "./ProfilePage.module.css";
@@ -63,18 +63,15 @@ export default function ProfilePage() {
         Logout
       </Button>
       {isModalOpen && (
-        <div className={styles.backdrop} onClick={() => setIsModalOpen(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <h2>Create Racer</h2>
-            <form className={styles.racerForm}>
-              <FormGroup element="input" label="Racer Name" type="text" id="racerName" />
-              <FormGroup element="input" label="Team" type="text" id="team" />
-              <FormGroup element="input" label="Nationality" type="text" id="nationality" />
-              <FormGroup element="input" label="Date of Birth" type="date" id="dob" />
-              <Button type="submit">Create</Button>
-            </form>
-          </div>
-        </div>
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create Racer">
+          <form className={styles.racerForm}>
+            <FormGroup element="input" label="Racer Name" type="text" id="racerName" />
+            <FormGroup element="input" label="Team" type="text" id="team" />
+            <FormGroup element="input" label="Nationality" type="text" id="nationality" />
+            <FormGroup element="input" label="Date of Birth" type="date" id="dob" />
+            <Button type="submit">Create</Button>
+          </form>
+        </Modal>
       )}
     </div>
   );

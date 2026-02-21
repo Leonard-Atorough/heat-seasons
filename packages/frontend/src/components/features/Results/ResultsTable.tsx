@@ -1,0 +1,41 @@
+import { RaceResult } from "shared";
+import { LoadingSkeletonCard } from "../../common";
+import styles from "./ResultsTable.module.css";
+
+export interface ResultsTableProps {
+  results: RaceResult[];
+  racersMap: Map<string, { name: string; team: string }>;
+  isLoading: boolean;
+  error: string | null;
+}
+
+export default function ResultsTable({ results, racersMap, isLoading, error }: ResultsTableProps) {
+  if (isLoading) return <LoadingSkeletonCard />;
+  if (error) return <div className={styles.error}>{error}</div>;
+
+  return (
+    <table className={styles.resultsTable}>
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Racer</th>
+          <th>Team</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        {results.map((result) => {
+          const racer = racersMap.get(result.racerId);
+          return (
+            <tr key={result.racerId}>
+              <td>{result.position}</td>
+              <td>{racer ? racer.name : "Unknown Racer"}</td>
+              <td>{racer ? racer.team : "Unknown Team"}</td>
+              <td>{result.points}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+}

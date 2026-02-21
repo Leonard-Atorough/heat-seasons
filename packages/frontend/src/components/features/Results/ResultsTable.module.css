@@ -1,0 +1,27 @@
+.resultsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.resultsTable th,
+.resultsTable td {
+  padding: var(--spacing-md);
+  text-align: left;
+  border-bottom: var(--border-width-thin) solid var(--asphalt-gray);
+}
+
+.resultsTable th {
+  color: var(--white);
+  font-size: var(--font-size-2);
+}
+
+.resultsTable td {
+  color: var(--white);
+  font-size: var(--font-size-1);
+  font-weight: var(--fw-semibold);
+}
+
+.error {
+  color: var(--error, red);
+  padding: var(--spacing-md);
+}

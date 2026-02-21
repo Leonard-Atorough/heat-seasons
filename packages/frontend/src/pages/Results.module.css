@@ -46,3 +46,33 @@
   font-size: var(--font-size-1);
   font-weight: var(--fw-semibold);
 }
+
+.raceResultForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.raceResultForm__group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.raceResultForm__select {
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-1);
+  border-radius: var(--border-radius-lg);
+  min-width: 0;
+}
+
+.raceResultForm__input {
+  width: 80px;
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-1);
+  border-radius: var(--border-radius-lg);
+  min-width: 0;
+}
