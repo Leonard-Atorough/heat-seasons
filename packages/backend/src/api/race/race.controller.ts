@@ -8,7 +8,6 @@ export class RaceController {
   constructor(private raceService: IRaceService) {}
 
   async getBySeasonId(req: Request, res: Response): Promise<void> {
-    console.log("Received request to get races by season ID with query params:", req.query);
     try {
       const seasonId = req.query.seasonId as string;
       if (!seasonId) {
@@ -65,7 +64,7 @@ export class RaceController {
 
   async create(req: Request, res: Response): Promise<void> {
     try {
-      const { seasonId } = req.params;
+      const { seasonId } = req.query as { seasonId: string };
       const raceData = req.body;
       const newRace = await this.raceService.create(seasonId, raceData);
       const response: ApiResponse<RaceResponse> = {

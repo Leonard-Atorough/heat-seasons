@@ -5,9 +5,12 @@ type FormGroupProps = {
   type?: string;
   label: string;
   id?: string;
+  name?: string;
   children?: React.ReactNode;
   className?: string;
   placeholder?: string;
+  value?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
 
 export default function FormGroup({
@@ -15,9 +18,12 @@ export default function FormGroup({
   type,
   label,
   id,
+  name,
   children,
   className,
   placeholder,
+  value,
+  onChange,
 }: FormGroupProps) {
   switch (element) {
     case "input":
@@ -32,6 +38,8 @@ export default function FormGroup({
             name={id}
             className={`${styles.formGroup__input} ${className || ""}`}
             placeholder={placeholder}
+            value={value}
+            onChange={onChange}
           />
         </div>
       );
@@ -46,6 +54,8 @@ export default function FormGroup({
             name={id}
             className={`${styles.formGroup__textarea} ${className || ""}`}
             placeholder={placeholder}
+            value={value}
+            onChange={onChange}
           />
         </div>
       );

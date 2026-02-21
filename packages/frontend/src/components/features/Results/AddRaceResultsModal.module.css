@@ -44,3 +44,12 @@
   border-radius: var(--border-radius-sm);
   min-width: 0;
 }
+
+.raceResultForm__input:disabled {
+  background-color: var(--asphalt-gray);
+  cursor: not-allowed;
+}
+
+.raceResultForm__nameInput {
+  width: 100%;
+}

@@ -58,8 +58,10 @@ export default function Results() {
         <AddRaceResultsModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          seasonId={selectedSeasonId ?? ""}
           racers={racers}
           selectedRacerIds={selectedRacerIds}
+          onSubmit={() => setSelectedRacerIds([])}
           onRacerSelect={handleRacerSelect}
         />
       )}
