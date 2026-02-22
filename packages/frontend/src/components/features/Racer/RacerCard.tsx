@@ -16,20 +16,16 @@ export default function RacerCard({ racer }: RacerCardProps) {
       className={styles.racerCard}
       onClick={() => navigate(`/racers/${racer.id}`, { state: { racer } })}
       style={{
-        backgroundImage: `linear-gradient(to right, ${racer.teamColor || "var(--card-white)"} 30%, white 100%)`,
+        backgroundImage: `linear-gradient(150deg, ${racer.teamColor || "var(--card-white)"} 50%, white 100%)`,
       }}
     >
       <div className={styles.racerCard__info}>
-        <h3 className={styles.racerCard__name}>{racer.name}</h3>
-        <p className={styles.racerCard__team}>{racer.team}</p>
-        <p className={styles.racerCard__points}>{racer.stats?.totalPoints ?? 0} pts</p>
-        {racer.badgeUrl && (
-          <img
-            src={racer.badgeUrl}
-            alt={`${racer.name} badge`}
-            className={styles.racerCard__badge}
-          />
-        )}
+        <div className={styles.racerCard__details}>
+          <h3 className={styles.racerCard__name}>{racer.name}</h3>
+          <p className={styles.racerCard__team}>{racer.team}</p>
+          <p className={styles.racerCard__points}>{racer.stats?.totalPoints ?? 0} pts</p>
+        </div>
+        <div className={styles.racerCard__nationality}>{racer.nationality}</div>
       </div>
       <div className={styles.racerCard__picture}>
         <img

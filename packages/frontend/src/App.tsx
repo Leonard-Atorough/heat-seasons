@@ -4,7 +4,6 @@ import "./App.css";
 import Header from "./components/layout/Header.tsx";
 import Footer from "./components/layout/Footer.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
-import Leaderboard from "./pages/Leaderboard.tsx";
 import LoginRegister from "./pages/LoginRegister.tsx";
 import AuthCallback from "./pages/AuthCallback.tsx";
 import Racers from "./pages/Racers.tsx";
@@ -23,7 +22,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/login" element={<LoginRegister />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/racers" element={<Racers />} />

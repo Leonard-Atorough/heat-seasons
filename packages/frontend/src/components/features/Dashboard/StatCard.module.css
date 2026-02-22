@@ -2,7 +2,6 @@
   display: flex;
   align-items: flex-end;
   gap: var(--spacing-md);
-  cursor: pointer;
   transition:
     transform 0.2s,
     box-shadow 0.2s;

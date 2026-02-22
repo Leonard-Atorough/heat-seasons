@@ -1,19 +1,20 @@
 import { StatCard } from "../components/features/Dashboard";
-import { LeaderboardHeader } from "../components/features/Leaderboard";
 import styles from "./Dashboard.module.css";
-import { Card } from "../components/common/Card";
 import { useSeason, useSeasons } from "../hooks/data/useSeason";
 import { useRacers } from "../hooks/data/useRacer";
 import { useRaceResult } from "../hooks/data/useRaceResult";
 import { useMemo } from "react";
 import { Hero } from "../components/features/Dashboard";
-import { LoadingSkeletonCard } from "../components/common";
+import { Button, LoadingSkeletonCard } from "../components/common";
+import PodiumCard from "../components/features/Dashboard/PodiumCard";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { data: activeSeason, isLoading: isSeasonLoading } = useSeason();
   const { data: seasons, isLoading: isSeasonsLoading } = useSeasons();
   const { data: racers, isLoading: isRacersLoading } = useRacers();
-  const { results, isLoading: isResultsLoading } = useRaceResult(activeSeason?.id || "", "");
+  const { races, results, isLoading: isResultsLoading } = useRaceResult(activeSeason?.id || "", "");
+  const navigate = useNavigate();
 
   const MEDALS = ["🥇", "🥈", "🥉"];
   const BADGE_COLORS = ["gold", "silver", "bronze"];
@@ -30,6 +31,8 @@ export default function Dashboard() {
           name: racer?.name ?? "N/A",
           team: racer?.team ?? "N/A",
           points: result.points,
+          nationality: racer?.nationality ?? "N/A",
+          teamColor: racer?.teamColor ?? "#888", // Default color if team color is not available
         };
       })
       .sort((a, b) => b.points - a.points)
@@ -39,6 +42,8 @@ export default function Dashboard() {
       position: i + 1,
       name: standingsWithDetails?.[i]?.name ?? "N/A",
       team: standingsWithDetails?.[i]?.team ?? "N/A",
+      nationality: standingsWithDetails?.[i]?.nationality ?? "N/A",
+      teamColor: standingsWithDetails?.[i]?.teamColor ?? "#888", // Default color if team color is not available
       races: 0, // Not computed from results, can be calculated if needed
       points: standingsWithDetails?.[i]?.points ?? 0,
       medal: MEDALS[i],
@@ -75,12 +80,12 @@ export default function Dashboard() {
               <StatCard title="Current Leader" value={topRacers[0].name} />
               <StatCard
                 title="Recent Race"
-                value="Race 2: Mexican Grand Prix"
+                value={races && races.length > 1 ? races[races.length - 2].name : "N/A"}
                 backgroundImage="/images/previous-race-bg.jpg"
               />
               <StatCard
                 title="Next Race"
-                value="Japanese Grand Prix"
+                value={races && races.length > 0 ? races[races.length - 1].name : "N/A"}
                 backgroundImage="/images/next-race-bg.jpg"
               />
             </>
@@ -91,31 +96,73 @@ export default function Dashboard() {
         <div className={styles.dashboard__leaderboardPreview}>
           <h3 className={styles.dashboard__sectionTitle}>Top 3 Leaderboard</h3>
           <div className={styles.dashboard__leaderboardCards}>
-            <LeaderboardHeader variant="dashboard" />
-            {topRacers.map((racer) =>
-              isLoading ? (
+            {isLoading ? (
+              <>
                 <LoadingSkeletonCard
-                  key={racer.position}
+                  key={topRacers[0].position}
                   includeTitle={false}
                   lines={1}
                   height="32px"
                 />
-              ) : (
-                <Card key={racer.position} className={styles.dashboard__leaderboardRow}>
-                  <span className={styles.dashboard__leaderboardPosition}>{racer.medal}</span>
-                  <span className={styles.dashboard__leaderboardName}>{racer.name}</span>
-                  <span className={styles.dashboard__leaderboardTeam}>{racer.team}</span>
-                  <span className={styles.dashboard__leaderboardRaces}>{racer.races} races</span>
-                  <span className={styles.dashboard__leaderboardPoints}>{racer.points} pts</span>
-                  <span
-                    className={`${styles.dashboard__colorBadge} ${
-                      styles[`dashboard__colorBadge--${racer.badgeColor}`]
-                    }`}
-                  ></span>
-                </Card>
-              ),
+                <LoadingSkeletonCard
+                  key={topRacers[1].position}
+                  includeTitle={false}
+                  lines={1}
+                  height="32px"
+                />
+                <LoadingSkeletonCard
+                  key={topRacers[2].position}
+                  includeTitle={false}
+                  lines={1}
+                  height="32px"
+                />
+              </>
+            ) : (
+              <>
+                <PodiumCard
+                  key={topRacers[1].position}
+                  medal={topRacers[1].badgeColor as "gold" | "silver" | "bronze"}
+                  medalImageEmoji={topRacers[1].medal}
+                  racerName={topRacers[1].name}
+                  racerTeam={topRacers[1].team}
+                  teamColor={topRacers[1].teamColor}
+                  racerNationality={topRacers[1].nationality}
+                  points={topRacers[1].points}
+                  imageUrl={null}
+                />
+                <PodiumCard
+                  key={topRacers[0].position}
+                  medal={topRacers[0].badgeColor as "gold" | "silver" | "bronze"}
+                  medalImageEmoji={topRacers[0].medal}
+                  racerName={topRacers[0].name}
+                  racerTeam={topRacers[0].team}
+                  teamColor={topRacers[0].teamColor}
+                  racerNationality={topRacers[0].nationality}
+                  points={topRacers[0].points}
+                  imageUrl={null}
+                />
+                <PodiumCard
+                  key={topRacers[2].position}
+                  medal={topRacers[2].badgeColor as "gold" | "silver" | "bronze"}
+                  medalImageEmoji={topRacers[2].medal}
+                  racerName={topRacers[2].name}
+                  racerTeam={topRacers[2].team}
+                  teamColor={topRacers[2].teamColor}
+                  racerNationality={topRacers[2].nationality}
+                  points={topRacers[2].points}
+                  imageUrl={null}
+                />
+              </>
             )}
           </div>
+          <Button
+            variant="primary"
+            type="button"
+            className={styles.dashboard__viewFullLeaderboardButton}
+            onClick={() => navigate("/results")}
+          >
+            View Full Standings
+          </Button>
         </div>
       </section>
     </div>
