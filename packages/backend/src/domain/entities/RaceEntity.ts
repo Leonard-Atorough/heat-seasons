@@ -11,6 +11,8 @@ export class RaceEntity extends EntityRoot {
       racerId: string;
       position: number;
       points: number;
+      constructorPoints: number;
+      isGhostRacer?: boolean;
     }[],
     public createdAt?: Date,
     public updatedAt?: Date,
@@ -27,6 +29,8 @@ export class RaceEntity extends EntityRoot {
       racerId: string;
       position: number;
       points: number;
+      constructorPoints: number;
+      isGhostRacer?: boolean;
     }[];
   }): RaceEntity {
     return new RaceEntity(
@@ -51,6 +55,8 @@ export class RaceEntity extends EntityRoot {
       racerId: string;
       position: number;
       points: number;
+      constructorPoints: number;
+      isGhostRacer?: boolean;
     }[];
     createdAt: Date;
     updatedAt: Date;
@@ -75,6 +81,8 @@ export class RaceEntity extends EntityRoot {
         racerId: string;
         position: number;
         points: number;
+        constructorPoints: number;
+        isGhostRacer?: boolean;
       }[];
     }>,
   ): void {

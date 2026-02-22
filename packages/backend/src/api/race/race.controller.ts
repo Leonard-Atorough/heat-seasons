@@ -41,15 +41,15 @@ export class RaceController {
 
   async getById(req: Request, res: Response): Promise<void> {
     try {
-      const { raceId } = req.params;
-      const race = await this.raceService.getById(raceId);
+      const { id } = req.params;
+      const race = await this.raceService.getById(id);
 
       const response: ApiResponse<RaceResponse> = {
         success: true,
         status: 200,
         statusText: "OK",
         timestamp: new Date(),
-        message: `Successfully retrieved race with ID ${raceId}`,
+        message: `Successfully retrieved race with ID ${id}`,
         data: race,
       };
       res.status(200).json(response);
@@ -87,16 +87,16 @@ export class RaceController {
 
   async update(req: Request, res: Response): Promise<void> {
     try {
-      const { raceId } = req.params;
+      const { id } = req.params;
       const raceData = req.body;
-      const updatedRace = await this.raceService.update(raceId, raceData);
+      const updatedRace = await this.raceService.update(id, raceData);
 
       const response: ApiResponse<RaceResponse> = {
         success: true,
         status: 200,
         statusText: "OK",
         timestamp: new Date(),
-        message: `Successfully updated race with ID ${raceId}`,
+        message: `Successfully updated race with ID ${id}`,
         data: updatedRace,
       };
       res.status(200).json(response);
@@ -111,15 +111,15 @@ export class RaceController {
 
   async delete(req: Request, res: Response): Promise<void> {
     try {
-      const { raceId } = req.params;
-      await this.raceService.delete(raceId);
+      const { id } = req.params;
+      await this.raceService.delete(id);
 
       const response: ApiResponse<null> = {
         success: true,
         status: 200,
         statusText: "OK",
         timestamp: new Date(),
-        message: `Successfully deleted race with ID ${raceId}`,
+        message: `Successfully deleted race with ID ${id}`,
         data: null,
       };
       res.status(200).json(response);

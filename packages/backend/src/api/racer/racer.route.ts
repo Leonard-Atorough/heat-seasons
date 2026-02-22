@@ -1,10 +1,8 @@
 import { Router } from "express";
 import { Container } from "src/Infrastructure/dependency-injection/container";
-import { authMiddleware } from "@src/Infrastructure/http/middleware";
+import { authMiddleware, requireRole } from "src/Infrastructure/http/middleware";
 
 const router = Router();
-const protectedRouter = Router();
-protectedRouter.use(authMiddleware);
 
 const racerController = Container.getInstance().createRacerController();
 
@@ -16,16 +14,16 @@ router.get("/:id", (req, res) => {
   racerController.getById(req, res);
 });
 
-protectedRouter.post("/", (req, res) => {
+router.post("/", authMiddleware, requireRole("user", "contributor", "admin"), (req, res) => {
   racerController.create(req, res);
 });
 
-protectedRouter.put("/:id", (req, res) => {
+router.put("/:id", authMiddleware, requireRole("user", "contributor", "admin"), (req, res) => {
   racerController.update(req, res);
 });
 
-protectedRouter.delete("/:id", (req, res) => {
+router.delete("/:id", authMiddleware, requireRole("user", "contributor", "admin"), (req, res) => {
   racerController.delete(req, res);
 });
 
-export { router as racerRouter, protectedRouter as racerProtectedRouter };
+export { router as racerRouter };

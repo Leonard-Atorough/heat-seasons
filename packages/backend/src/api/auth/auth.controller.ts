@@ -28,8 +28,8 @@ export class AuthController {
           status: 404,
           statusText: "Not Found",
           timestamp: new Date(),
-          error: "User not found",
-          message: "The requested user could not be found.",
+          error: "Invalid credentials",
+          message: "Invalid credentials: Unable to process request.",
           data: null,
         };
         res.status(404).json(response);

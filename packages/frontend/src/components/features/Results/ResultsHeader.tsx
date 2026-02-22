@@ -1,6 +1,8 @@
 import { Race, Season } from "shared";
 import { Button, FormGroup } from "../../common";
 import styles from "./ResultsHeader.module.css";
+import { useAuth } from "../../../hooks/useAuth";
+import { useCallback } from "react";
 
 export interface ResultsHeaderProps {
   seasons: Season[];
@@ -9,6 +11,7 @@ export interface ResultsHeaderProps {
   onSeasonChange: (seasonId: string) => void;
   onRaceChange: (raceId: string) => void;
   onAddResults: () => void;
+  onUpdateResults?: () => void;
 }
 
 export default function ResultsHeader({
@@ -18,7 +21,18 @@ export default function ResultsHeader({
   onSeasonChange,
   onRaceChange,
   onAddResults,
+  onUpdateResults,
 }: ResultsHeaderProps) {
+  const { user } = useAuth();
+  console.log("Selected racer IDs:", selectedRaceId);
+
+  const showUpdateButton = useCallback(() => {
+    if (!user || user.role !== "admin") return false;
+    if (!onUpdateResults) return false;
+    if (!selectedRaceId) return false;
+    return true;
+  }, [user, onUpdateResults, selectedRaceId]);
+
   return (
     <div className={styles.resultsHeader}>
       <div className={styles.resultsHeader__selectors}>
@@ -54,9 +68,16 @@ export default function ResultsHeader({
         </FormGroup>
       </div>
       <div className={styles.resultsHeader__actions}>
-        <Button variant="primary" onClick={onAddResults} type="button">
-          Add RaceResults
-        </Button>
+        {user && user.role === "admin" && (
+          <Button variant="primary" onClick={onAddResults} type="button">
+            Add RaceResults
+          </Button>
+        )}
+        {showUpdateButton() && (
+          <Button variant="secondary" onClick={onUpdateResults} type="button">
+            Update RaceResults
+          </Button>
+        )}
       </div>
     </div>
   );

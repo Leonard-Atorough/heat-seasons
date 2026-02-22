@@ -13,6 +13,7 @@ import {
   ISeasonRepository,
 } from "../../domain/repositories";
 import { AuthController, AuthService, IAuthService } from "../../api/auth";
+import { AdminController } from "../../api/admin";
 import { RacerController, RacerService, IRacerService } from "../../api/racer";
 import { RaceController, RaceService, IRaceService } from "../../api/race";
 import { SeasonController, SeasonService, ISeasonService } from "../../api/season";
@@ -111,6 +112,11 @@ class Container {
   createLeaderboardController(): LeaderboardController {
     const service = this.serviceLocator.get<ILeaderboardService>("LeaderboardService");
     return new LeaderboardController(service);
+  }
+
+  createAdminController(): AdminController {
+    const service = this.serviceLocator.get<IAuthService>("AuthService");
+    return new AdminController(service);
   }
 
   private createRepository<T>(name: string): T {

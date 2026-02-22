@@ -3,6 +3,7 @@ export interface RaceResult {
   racerId: string;
   position: number;
   points: number;
+  constructorPoints: number;
 }
 
 export interface Race {

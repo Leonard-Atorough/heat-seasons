@@ -5,7 +5,6 @@ type FormGroupProps = {
   type?: string;
   label: string;
   id?: string;
-  name?: string;
   children?: React.ReactNode;
   className?: string;
   placeholder?: string;
@@ -18,7 +17,6 @@ export default function FormGroup({
   type,
   label,
   id,
-  name,
   children,
   className,
   placeholder,

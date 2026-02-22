@@ -5,8 +5,9 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "./Infrastructure/security/passport";
 
-import { authRouter, authProtectedRouter } from "./api/auth/auth.route.js";
-import { racerProtectedRouter, racerRouter } from "./api/racer/racer.route.js";
+import { authRouter } from "./api/auth/auth.route.js";
+import { adminRouter } from "./api/admin/admin.route.js";
+import { racerRouter } from "./api/racer/racer.route.js";
 import { seasonRouter } from "./api/season/season.route.js";
 import { raceRouter } from "./api/race/race.route.js";
 import { leaderboardRouter } from "./api/leaderboard/leaderboard.route.js";
@@ -56,12 +57,11 @@ app.get("/api/health", (_req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
 app.use("/api/racers", racerRouter);
 app.use("/api/seasons", seasonRouter);
 app.use("/api/races", raceRouter);
 app.use("/api/leaderboard", leaderboardRouter);
-app.use("/api/auth", authProtectedRouter);
-app.use("/api/racers", racerProtectedRouter);
 
 app.use((err: AppError, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err.stack);

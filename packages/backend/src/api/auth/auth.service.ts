@@ -1,7 +1,7 @@
 import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
 import { IAuthService } from "./auth.service.interface";
 import { UserResponse, UserCreateInput } from "src/application/dtos/user.dto";
-import { User } from "shared";
+import { User, UserRole } from "shared";
 import { JwtService } from "src/Infrastructure/security/jwt";
 import { UserMapper } from "src/application/mappers/userMapper";
 
@@ -28,7 +28,7 @@ export class AuthService implements IAuthService {
       user.update({
         email: profile.email,
         name: profile.name,
-        role: profile.role,
+        role: user.role || "user", // Preserve existing role or default to "user"
         profilePicture: profile.profilePicture,
         racerId: profile.racerId,
       });
@@ -52,9 +52,19 @@ export class AuthService implements IAuthService {
     return !isBlacklisted;
   }
 
-  // async include<T>(data: T): Promise<T> {
-  //   // This method can be used to include related data if needed.
-  //   // For now, it simply returns the data as is.
-  //   return data;
-  // }
+  async updateUserRole(userId: string, role: UserRole): Promise<UserResponse> {
+    const user = await this.authRepository.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    user.update({ role });
+    const updated = await this.authRepository.update(userId, user);
+    return UserMapper.toResponse(updated);
+  }
+
+  async getAllUsers(): Promise<UserResponse[]> {
+    const users = await this.authRepository.findAll();
+    return users.map((user) => UserMapper.toResponse(user));
+  }
 }

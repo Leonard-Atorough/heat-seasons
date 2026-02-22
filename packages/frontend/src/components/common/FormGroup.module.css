@@ -1,6 +1,7 @@
 .formGroup {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .formGroup__label {
