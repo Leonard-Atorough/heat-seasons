@@ -4,6 +4,7 @@ export interface RaceResult {
   position: number;
   points: number;
   constructorPoints: number;
+  ghostRacer?: boolean; // Optional flag to indicate if this is a ghost racer
 }
 
 export interface Race {

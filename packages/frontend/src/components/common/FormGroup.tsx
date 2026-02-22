@@ -9,6 +9,7 @@ type FormGroupProps = {
   className?: string;
   placeholder?: string;
   value?: string | number;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
 
@@ -21,6 +22,7 @@ export default function FormGroup({
   className,
   placeholder,
   value,
+  disabled,
   onChange,
 }: FormGroupProps) {
   switch (element) {
@@ -38,6 +40,7 @@ export default function FormGroup({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
+            disabled={disabled}
           />
         </div>
       );
@@ -54,6 +57,7 @@ export default function FormGroup({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
+            disabled={disabled}
           />
         </div>
       );

@@ -7,9 +7,16 @@ export interface ResultsTableProps {
   racersMap: Map<string, { name: string; team: string }>;
   isLoading: boolean;
   error: string | null;
+  onSortBy?: (field: "position" | "racerId" | "points" | "constructorPoints") => void;
 }
 
-export default function ResultsTable({ results, racersMap, isLoading, error }: ResultsTableProps) {
+export default function ResultsTable({
+  results,
+  racersMap,
+  isLoading,
+  error,
+  onSortBy,
+}: ResultsTableProps) {
   if (isLoading) return <LoadingSkeletonCard />;
   if (error) return <div className={styles.error}>{error}</div>;
 
@@ -17,10 +24,11 @@ export default function ResultsTable({ results, racersMap, isLoading, error }: R
     <table className={styles.resultsTable}>
       <thead>
         <tr>
-          <th>Position</th>
-          <th>Racer</th>
+          <th onClick={() => onSortBy?.("position")}>Position</th>
+          <th onClick={() => onSortBy?.("racerId")}>Racer</th>
           <th>Team</th>
-          <th>Points</th>
+          <th onClick={() => onSortBy?.("points")}>Points</th>
+          <th onClick={() => onSortBy?.("constructorPoints")}>Constructor Points</th>
         </tr>
       </thead>
       <tbody>
@@ -32,6 +40,7 @@ export default function ResultsTable({ results, racersMap, isLoading, error }: R
               <td>{racer ? racer.name : "Unknown Racer"}</td>
               <td>{racer ? racer.team : "Unknown Team"}</td>
               <td>{result.points}</td>
+              <td>{result.constructorPoints}</td>
             </tr>
           );
         })}

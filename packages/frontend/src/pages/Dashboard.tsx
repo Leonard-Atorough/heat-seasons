@@ -2,49 +2,59 @@ import { StatCard } from "../components/features/Dashboard";
 import { LeaderboardHeader } from "../components/features/Leaderboard";
 import styles from "./Dashboard.module.css";
 import { Card } from "../components/common/Card";
-import { useLeaderboard } from "../hooks/data/useLeaderboard";
-import { useSeasons } from "../hooks/data/useSeason";
-import { useEffect } from "react";
+import { useSeason, useSeasons } from "../hooks/data/useSeason";
+import { useRacers } from "../hooks/data/useRacer";
+import { useRaceResult } from "../hooks/data/useRaceResult";
+import { useMemo } from "react";
 import { Hero } from "../components/features/Dashboard";
 import { LoadingSkeletonCard } from "../components/common";
 
 export default function Dashboard() {
-  const { data: leaderboard, refresh, isLoading: isLeaderboardLoading } = useLeaderboard();
+  const { data: activeSeason, isLoading: isSeasonLoading } = useSeason();
   const { data: seasons, isLoading: isSeasonsLoading } = useSeasons();
-
-  const handleRefresh = async () => {
-    await refresh();
-  };
-
-  // we could periodically refresh the leaderboard data every 1 hour to ensure it's up to date
-  useEffect(() => {
-    handleRefresh();
-    const intervalId = setInterval(handleRefresh, 60 * 60 * 1000); // refresh every 1 hour
-    return () => clearInterval(intervalId); // cleanup on unmount
-  }, []);
-  // This is a bit hacky, but it allows us to show the most up to date leaderboard data on the dashboard without having to wait for the user to navigate to the leaderboard page. We can look into a more elegant solution later, but for now this should work fine.
+  const { data: racers, isLoading: isRacersLoading } = useRacers();
+  const { results, isLoading: isResultsLoading } = useRaceResult(activeSeason?.id || "", "");
 
   const MEDALS = ["🥇", "🥈", "🥉"];
   const BADGE_COLORS = ["gold", "silver", "bronze"];
-  const topThreeRacers = leaderboard?.standings.slice(0, 3) || [];
 
-  const topRacers = Array.from({ length: 3 }, (_, i) => ({
-    position: i + 1,
-    name: topThreeRacers?.[i]?.racerName ?? "N/A",
-    team: topThreeRacers?.[i]?.team ?? "N/A",
-    races: topThreeRacers?.[i]?.racesParticipated ?? 0,
-    points: topThreeRacers?.[i]?.totalPoints ?? 0,
-    medal: MEDALS[i],
-    badgeColor: BADGE_COLORS[i],
-  }));
+  const topRacers = useMemo(() => {
+    if (!results || !racers) return [];
+
+    const racerMap = new Map(racers.map((r) => [r.id, r]));
+    const standingsWithDetails = results
+      .map((result) => {
+        const racer = racerMap.get(result.racerId);
+        return {
+          racerId: result.racerId,
+          name: racer?.name ?? "N/A",
+          team: racer?.team ?? "N/A",
+          points: result.points,
+        };
+      })
+      .sort((a, b) => b.points - a.points)
+      .slice(0, 3);
+
+    return Array.from({ length: 3 }, (_, i) => ({
+      position: i + 1,
+      name: standingsWithDetails?.[i]?.name ?? "N/A",
+      team: standingsWithDetails?.[i]?.team ?? "N/A",
+      races: 0, // Not computed from results, can be calculated if needed
+      points: standingsWithDetails?.[i]?.points ?? 0,
+      medal: MEDALS[i],
+      badgeColor: BADGE_COLORS[i],
+    }));
+  }, [results, racers]);
+
+  const isLoading = isSeasonLoading || isSeasonsLoading || isResultsLoading || isRacersLoading;
 
   return (
     <div className={styles.dashboard}>
-      {isLeaderboardLoading || isSeasonsLoading ? (
+      {isLoading ? (
         <LoadingSkeletonCard lines={2} height="300px" includeTitle={true} />
       ) : (
         <Hero
-          title={leaderboard?.seasonName.toUpperCase() ?? "SEASON ONE WINTER 2026"}
+          title={activeSeason?.name.toUpperCase() ?? "SEASON ONE WINTER 2026"}
           subtitle={`Races Completed: ${seasons?.[0]?.racesCompleted ?? 0} / ${
             seasons?.[0]?.totalRaces ?? "?"
           }`}
@@ -54,7 +64,7 @@ export default function Dashboard() {
 
       <section className={styles.dashboard__content}>
         <div className={styles.dashboard__stats}>
-          {isLeaderboardLoading ? (
+          {isLoading ? (
             <>
               <LoadingSkeletonCard lines={1} height="120px" includeTitle={true} />
               <LoadingSkeletonCard lines={1} height="120px" includeTitle={true} />
@@ -83,7 +93,7 @@ export default function Dashboard() {
           <div className={styles.dashboard__leaderboardCards}>
             <LeaderboardHeader variant="dashboard" />
             {topRacers.map((racer) =>
-              isLeaderboardLoading ? (
+              isLoading ? (
                 <LoadingSkeletonCard
                   key={racer.position}
                   includeTitle={false}

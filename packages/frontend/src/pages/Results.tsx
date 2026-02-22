@@ -11,6 +11,8 @@ export default function Results() {
   const [selectedRacerIds, setSelectedRacerIds] = useState<string[]>([]);
   const [selectedSeasonId, setSelectedSeasonId] = useState<string | null>(null);
   const [selectedRaceId, setSelectedRaceId] = useState<string | null>(null);
+  const [sortedResults, setSortedResults] = useState<RaceResult[]>([]);
+  const [sortAscending, setSortAscending] = useState(true);
 
   const { data: seasons } = useSeasons();
   const { races, results, racers, isLoading, error } = useRaceResult(
@@ -18,6 +20,18 @@ export default function Results() {
     selectedRaceId ?? "",
   );
   const { user } = useAuth();
+
+  // Q. To make this update sorted view in real-time we'd have to keep local state, right?
+  // A. 
+  const sortBy = (key: keyof RaceResult, ascending: boolean) => {
+    console.log(`Sorting by ${key}`);
+    const sorted = [...results].sort((a, b) => {
+      if (a[key]! < b[key]!) return ascending ? -1 : 1;
+      if (a[key]! > b[key]!) return ascending ? 1 : -1;
+      return 0;
+    });
+    setSortedResults(sorted);
+  };
 
   // Build a Map so table rows can resolve racers in O(1) instead of a linear scan per row
   const racersMap = useMemo(
@@ -66,7 +80,17 @@ export default function Results() {
           setIsModalOpen(true);
         }}
       />
-      <ResultsTable results={results} racersMap={racersMap} isLoading={isLoading} error={error} />
+      <ResultsTable
+        results={sortedResults.length > 0 ? sortedResults : results}
+        racersMap={racersMap}
+        isLoading={isLoading}
+        error={error}
+        onSortBy={(key) => {
+          const ascending = sortAscending;
+          sortBy(key, ascending);
+          setSortAscending(!ascending);
+        }}
+      />
       {isModalOpen && user?.role === "admin" && (
         <AddRaceResultsModal
           isOpen={isModalOpen}

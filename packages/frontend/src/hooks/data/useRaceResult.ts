@@ -28,22 +28,22 @@ export function useRaceResult(seasonId: string, raceId: string) {
   }, [seasonId]);
 
   useEffect(() => {
-    // raceresult is part of the race object, so we need to find the selected race and get the results from there
     if (racersLoading) return;
 
     if (!raceId) {
-      const aggregatedResults: { [racerId: string]: { position: number; points: number } } = {};
+      const aggregatedResults: {
+        [racerId: string]: { position: number; points: number; constructorPoints: number };
+      } = {};
 
-      // For each race, for each result in said race, aggregate the points for each racer.
       races.forEach((race) => {
         race.results.forEach((result) => {
           if (!aggregatedResults[result.racerId]) {
-            aggregatedResults[result.racerId] = { position: 0, points: 0 };
+            aggregatedResults[result.racerId] = { position: 0, points: 0, constructorPoints: 0 };
           }
           aggregatedResults[result.racerId].points += result.points;
+          aggregatedResults[result.racerId].constructorPoints += result.constructorPoints;
         });
 
-        // Then sort racers by total points and assign position
         const sortedRacers = Object.entries(aggregatedResults)
           .sort((a, b) => b[1].points - a[1].points)
           .map(
@@ -52,6 +52,7 @@ export function useRaceResult(seasonId: string, raceId: string) {
                 racerId,
                 position: index + 1,
                 points: data.points,
+                constructorPoints: data.constructorPoints || 0,
               }) as RaceResult,
           );
         setResults(sortedRacers);
