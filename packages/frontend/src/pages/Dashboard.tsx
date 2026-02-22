@@ -1,12 +1,8 @@
-import { StatCard } from "../components/features/Dashboard";
 import styles from "./Dashboard.module.css";
-import { useSeason, useSeasons } from "../hooks/data/useSeason";
-import { useRacers } from "../hooks/data/useRacer";
-import { useRaceResult } from "../hooks/data/useRaceResult";
+import { StatCard, PodiumCard, Hero } from "../components/features/Dashboard";
+import { useSeason, useSeasons, useRacers, useRaceResult } from "../hooks/data";
 import { useMemo } from "react";
-import { Hero } from "../components/features/Dashboard";
 import { Button, LoadingSkeletonCard } from "../components/common";
-import PodiumCard from "../components/features/Dashboard/PodiumCard";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {

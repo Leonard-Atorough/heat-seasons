@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useSeasons } from "../hooks/data/useSeason";
-import { useRaceResult } from "../hooks/data/useRaceResult";
+import { useSeasons, useRaceResult } from "../hooks/data";
 import { AddRaceResultsModal, ResultsHeader, ResultsTable } from "../components/features/Results";
 import { useAuth } from "../hooks/useAuth";
 import { RaceResult } from "shared";
@@ -22,7 +21,7 @@ export default function Results() {
   const { user } = useAuth();
 
   // Q. To make this update sorted view in real-time we'd have to keep local state, right?
-  // A. 
+  // A.
   const sortBy = (key: keyof RaceResult, ascending: boolean) => {
     console.log(`Sorting by ${key}`);
     const sorted = [...results].sort((a, b) => {
