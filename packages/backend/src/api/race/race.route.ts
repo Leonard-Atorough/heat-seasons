@@ -11,7 +11,6 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-  console.log("Received request for race with ID:", req.params.id);
   raceController.getById(req, res);
 });
 

@@ -43,7 +43,12 @@ export class AuthService implements IAuthService {
   }
 
   async logout(token: string): Promise<void> {
-    await this.authRepository.logout(token);
+    const decoded = JwtService.verifyToken(token);
+    let ttl = 60 * 60; // Default to 1 hour
+    if (decoded) {
+      ttl = decoded.exp ? decoded.exp - Math.floor(Date.now() / 1000) : 60 * 60; // Default to 1 hour if no exp
+    }
+    await this.authRepository.logout(token, ttl);
   }
 
   async isTokenValid(token: string): Promise<boolean> {

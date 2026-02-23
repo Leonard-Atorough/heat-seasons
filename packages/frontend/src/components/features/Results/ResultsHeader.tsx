@@ -24,8 +24,6 @@ export default function ResultsHeader({
   onUpdateResults,
 }: ResultsHeaderProps) {
   const { user } = useAuth();
-  console.log("Selected racer IDs:", selectedRaceId);
-
   const showUpdateButton = useCallback(() => {
     if (!user || user.role !== "admin") return false;
     if (!onUpdateResults) return false;

@@ -2,6 +2,7 @@ import { StorageAdapter } from "../StorageAdapter";
 import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
 import { UserEntity } from "src/domain/entities/UserEntity";
 import { UserMapper } from "src/application/mappers/userMapper";
+import { JwtService } from "@src/Infrastructure/security/jwt";
 
 export class AuthRepository implements IAuthRepository {
   constructor(private storageAdapter: StorageAdapter) {}
@@ -50,10 +51,10 @@ export class AuthRepository implements IAuthRepository {
     return UserMapper.toDomainFromPersistence(updated);
   }
 
-  async logout(token: string): Promise<void> {
+  async logout(token: string, ttl: number): Promise<void> {
     await this.storageAdapter.create("blacklistedTokens", {
       token,
-      expiresAt: new Date(Date.now() + 60 * 60 * 1000 * 24), // 1 day
+      expiresAt: new Date(Date.now() + ttl * 1000), // Store the expiration time for cleanup
     });
   }
 

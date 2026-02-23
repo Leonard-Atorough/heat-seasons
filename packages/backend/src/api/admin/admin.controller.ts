@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { TokenPayload } from "src/Infrastructure/security/jwt";
 import { ApiResponse } from "shared";
 import { IAuthService } from "../auth/auth.service.interface";
@@ -15,7 +15,7 @@ export class AdminController {
    * Promote a user to contributor role
    * Only admins can promote users
    */
-  async promoteUser(req: Request, res: Response): Promise<void> {
+  async promoteUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { userId } = req.body;
       const requestingUser = req.user as TokenPayload;
@@ -57,16 +57,7 @@ export class AdminController {
       };
       res.status(200).json(response);
     } catch (error) {
-      const response: ApiResponse<null> = {
-        success: false,
-        status: 500,
-        statusText: "Internal Server Error",
-        timestamp: new Date(),
-        error: "Internal server error",
-        message: "Failed to promote user",
-        data: null,
-      };
-      res.status(500).json(response);
+      next(error);
     }
   }
 
@@ -74,7 +65,7 @@ export class AdminController {
    * Demote a contributor user to regular user role
    * Only admins can demote other contributors
    */
-  async demoteUser(req: Request, res: Response): Promise<void> {
+  async demoteUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { userId } = req.body;
       const requestingUser = req.user as TokenPayload;
@@ -115,23 +106,14 @@ export class AdminController {
       };
       res.status(200).json(response);
     } catch (error) {
-      const response: ApiResponse<null> = {
-        success: false,
-        status: 500,
-        statusText: "Internal Server Error",
-        timestamp: new Date(),
-        error: "Internal server error",
-        message: "Failed to demote user",
-        data: null,
-      };
-      res.status(500).json(response);
+      next(error);
     }
   }
 
   /**
    * List all users (admin only)
    */
-  async listUsers(req: Request, res: Response): Promise<void> {
+  async listUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const users = await this.authService.getAllUsers();
 
@@ -144,16 +126,7 @@ export class AdminController {
       };
       res.status(200).json(response);
     } catch (error) {
-      const response: ApiResponse<null> = {
-        success: false,
-        status: 500,
-        statusText: "Internal Server Error",
-        timestamp: new Date(),
-        error: "Internal server error",
-        message: "Failed to fetch users",
-        data: null,
-      };
-      res.status(500).json(response);
+      next(error);
     }
   }
 }

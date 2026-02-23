@@ -23,7 +23,6 @@ export class SeasonRepository implements ISeasonRepository {
 
   async findById(id: string): Promise<SeasonEntity | null> {
     const season = await this.storageAdapter.findById<any>("seasons", id);
-    console.log("SeasonRepository.findById - retrieved season:", season);
     return season ? SeasonMapper.toDomainFromPersistence(season) : null;
   }
 

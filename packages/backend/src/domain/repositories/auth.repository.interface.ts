@@ -7,6 +7,6 @@ export interface IAuthRepository {
   findByEmail(email: string): Promise<UserEntity | null>;
   create(data: Partial<UserEntity>): Promise<UserEntity>;
   update(id: string, data: Partial<UserEntity>): Promise<UserEntity>;
-  logout(token: string): Promise<void>;
+  logout(token: string, ttl: number): Promise<void>;
   isTokenBlacklisted(token: string): Promise<boolean>;
 }

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { IRaceService } from "./race.service.interface.js";
 import { AppError } from "src/Infrastructure/errors/appError.js";
 import { RaceResponse } from "src/application/dtos";
@@ -7,7 +7,7 @@ import { ApiResponse } from "shared/dist/api/index.js";
 export class RaceController {
   constructor(private raceService: IRaceService) {}
 
-  async getBySeasonId(req: Request, res: Response): Promise<void> {
+  async getBySeasonId(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const seasonId = req.query.seasonId as string;
       if (!seasonId) {
@@ -31,15 +31,11 @@ export class RaceController {
       };
       res.status(200).json(response);
     } catch (error) {
-      if (error instanceof AppError) {
-        res.status(error.statusCode).json(error.toJSON());
-      } else {
-        res.status(500).json({ error: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  async getById(req: Request, res: Response): Promise<void> {
+  async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
       const race = await this.raceService.getById(id);
@@ -54,15 +50,11 @@ export class RaceController {
       };
       res.status(200).json(response);
     } catch (error) {
-      if (error instanceof AppError) {
-        res.status(error.statusCode).json(error.toJSON());
-      } else {
-        res.status(500).json({ error: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  async create(req: Request, res: Response): Promise<void> {
+  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { seasonId } = req.query as { seasonId: string };
       const raceData = req.body;
@@ -77,15 +69,11 @@ export class RaceController {
       };
       res.status(201).json(response);
     } catch (error) {
-      if (error instanceof AppError) {
-        res.status(error.statusCode).json(error.toJSON());
-      } else {
-        res.status(500).json({ error: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  async update(req: Request, res: Response): Promise<void> {
+  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
       const raceData = req.body;
@@ -101,15 +89,11 @@ export class RaceController {
       };
       res.status(200).json(response);
     } catch (error) {
-      if (error instanceof AppError) {
-        res.status(error.statusCode).json(error.toJSON());
-      } else {
-        res.status(500).json({ error: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  async delete(req: Request, res: Response): Promise<void> {
+  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
       await this.raceService.delete(id);
@@ -124,11 +108,7 @@ export class RaceController {
       };
       res.status(200).json(response);
     } catch (error) {
-      if (error instanceof AppError) {
-        res.status(error.statusCode).json(error.toJSON());
-      } else {
-        res.status(500).json({ error: "Internal server error" });
-      }
+      next(error);
     }
   }
 }

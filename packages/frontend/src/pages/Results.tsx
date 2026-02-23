@@ -23,7 +23,6 @@ export default function Results() {
   // Q. To make this update sorted view in real-time we'd have to keep local state, right?
   // A.
   const sortBy = (key: keyof RaceResult, ascending: boolean) => {
-    console.log(`Sorting by ${key}`);
     const sorted = [...results].sort((a, b) => {
       if (a[key]! < b[key]!) return ascending ? -1 : 1;
       if (a[key]! > b[key]!) return ascending ? 1 : -1;

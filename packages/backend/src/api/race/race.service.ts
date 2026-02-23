@@ -26,7 +26,6 @@ export class RaceService implements IRaceService {
   }
 
   async create(seasonId: string, data: RaceCreateInput): Promise<RaceResponse> {
-    console.log("Creating race with seasonId:", seasonId, "and data:", data);
     const season = await this.seasonRepository.findById(seasonId);
     if (!season) {
       throw new NotFoundError("Season not found");
