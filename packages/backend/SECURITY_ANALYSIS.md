@@ -33,7 +33,7 @@ if (!JWT_SECRET) {
 
 ---
 
-### 2. **Sensitive Token Passed in URL Query Parameter**
+### 2. **Sensitive Token Passed in URL Query Parameter** - DONE
 
 **Location:** [src/api/auth/auth.controller.ts](src/api/auth/auth.controller.ts#L47)
 
@@ -62,7 +62,7 @@ res.redirect(`${process.env.FRONTEND_URL}/auth/callback`);
 
 ---
 
-### 3. **No Token Blacklist / Logout Implementation**
+### 3. **No Token Blacklist / Logout Implementation** - DONE
 
 **Location:** [src/api/auth/auth.service.ts](src/api/auth/auth.service.ts#L38-L42)
 
@@ -100,7 +100,7 @@ async verifyTokenNotBlacklisted(token: string): Promise<boolean> {
 
 ---
 
-### 4. **No Rate Limiting on Auth Endpoints**
+### 4. **No Rate Limiting on Auth Endpoints** - DONE
 
 **Location:** [src/api/auth/auth.route.ts](src/api/auth/auth.route.ts)
 
@@ -137,7 +137,7 @@ router.get("/google/callback", loginLimiter, ...);
 
 ## 🟠 HIGH-SEVERITY ISSUES
 
-### 5. **Insufficient Session Cookie Security**
+### 5. **Insufficient Session Cookie Security** - DONE
 
 **Location:** [src/index.ts](src/index.ts#L30-L39)
 
@@ -293,7 +293,7 @@ if (process.env.NODE_ENV === "production") {
 
 ## 🟡 MEDIUM-SEVERITY ISSUES
 
-### 9. **Overly Permissive CORS Configuration**
+### 9. **Overly Permissive CORS Configuration** - DONE
 
 **Location:** [src/index.ts](src/index.ts#L21)
 
@@ -327,7 +327,7 @@ app.use(
 
 ---
 
-### 10. **Insufficient Error Handling (Information Disclosure)**
+### 10. **Insufficient Error Handling (Information Disclosure)** - DONE
 
 **Location:** [src/api/auth/auth.controller.ts](src/api/auth/auth.controller.ts#L30-L36)
 
@@ -338,6 +338,8 @@ res.status(200).json(response);
   if (error instanceof Error && error.message === "User not found") {
     res.status(404).json({ error: "User not found" });
   }
+  res.status(500).json({ error: "Internal server error" });
+}
 ```
 
 **Risk:**
