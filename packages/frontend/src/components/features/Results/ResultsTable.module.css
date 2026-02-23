@@ -1,3 +1,10 @@
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
 .resultsTable {
   width: 100%;
   border-collapse: collapse;
@@ -13,10 +20,6 @@
 .resultsTable th {
   color: var(--white);
   font-size: var(--font-size-2);
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE2IDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE2IDBIMFY4SDE2VjBaIiBmaWxsPSIjRkZGIi8+PC9zdmc+");
-  background-repeat: no-repeat;
-  background-position: right center;
-  padding-right: var(--spacing-lg);
 }
 
 .resultsTable th:hover {
@@ -33,4 +36,22 @@
 .error {
   color: var(--error, red);
   padding: var(--spacing-md);
+}
+
+@media (max-width: 600px) {
+  .resultsTable th,
+  .resultsTable td {
+    padding: var(--spacing-sm);
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+
+  .resultsTable th {
+    font-size: var(--font-size-1);
+  }
+
+  .resultsTable td {
+    font-size: var(--font-size-0);
+  }
 }

@@ -31,4 +31,28 @@
     align-items: flex-start;
     gap: var(--spacing-xxl);
   }
+
+  .resultsHeader__selectors {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    width: 100%;
+  }
+
+  .resultsHeader__actions {
+    gap: var(--spacing-sm);
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .resultsHeader__select {
+    font-size: var(--font-size-1);
+    padding: var(--spacing-md);
+  }
+
+  .resultsHeader__addButton,
+  .resultsHeader__updateButton {
+    width: 100%;
+    padding: var(--spacing-md);
+    font-size: var(--font-size-1);
+  }
 }

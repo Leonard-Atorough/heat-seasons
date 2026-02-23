@@ -66,3 +66,15 @@
 .dashboard__colorBadge--bronze {
   background-color: var(--bronze);
 }
+
+
+@media (max-width: 768px) {
+  .dashboard__stats {
+    flex-direction: column;
+  }
+
+  .dashboard__leaderboardCards {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -16,3 +16,9 @@
   background-color: transparent;
   color: var(--text-primary);
 }
+
+@media (max-width: 600px) {
+  .main {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+}

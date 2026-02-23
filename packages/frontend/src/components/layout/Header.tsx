@@ -29,7 +29,9 @@ export default function Header() {
   return (
     <header className={styles.header + (headerScrolled ? ` ${styles["header--scrolled"]}` : "")}>
       <h1 className={styles.title}>
-        <Link to="/">🏁 HEAT</Link>
+        <Link to="/" onClick={() => setHamburgerOpen(false)}>
+          🏁 HEAT
+        </Link>
       </h1>
       <Button
         type="button"
@@ -42,19 +44,19 @@ export default function Header() {
         <span className={styles.hamburger__line}></span>
       </Button>
       <nav className={styles.nav + (hamburgerOpen ? ` ${styles["nav--open"]}` : "")}>
-        <Link className={styles["nav__link"]} to="/">
+        <Link className={styles["nav__link"]} to="/" onClick={() => setHamburgerOpen(false)}>
           Dashboard
         </Link>
-        <Link className={styles["nav__link"]} to="/racers">
+        <Link className={styles["nav__link"]} to="/racers" onClick={() => setHamburgerOpen(false)}>
           Racers
         </Link>
-        <Link className={styles["nav__link"]} to="/teams">
+        <Link className={styles["nav__link"]} to="/teams" onClick={() => setHamburgerOpen(false)}>
           Teams
         </Link>
-        <Link className={styles["nav__link"]} to="/results">
+        <Link className={styles["nav__link"]} to="/results" onClick={() => setHamburgerOpen(false)}>
           Results
         </Link>
-        <Link className={styles["nav__link"]} to="/seasons">
+        <Link className={styles["nav__link"]} to="/seasons" onClick={() => setHamburgerOpen(false)}>
           Seasons
         </Link>
         {!auth.user ? (
@@ -62,7 +64,10 @@ export default function Header() {
             type="button"
             className={styles["nav__link-button"]}
             variant="primary"
-            onClick={() => navigate("/login")}
+            onClick={() => {
+              setHamburgerOpen(false);
+              navigate("/login");
+            }}
           >
             Login/Register
           </Button>

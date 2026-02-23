@@ -64,3 +64,27 @@
   flex-direction: column;
   gap: var(--spacing-md);
 }
+
+@media (max-width: 600px) {
+  .profile {
+    padding: var(--spacing-lg);
+  }
+
+  .profileCard {
+    padding: var(--spacing-lg);
+  }
+
+  .profileAvatar,
+  .profilePicture {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profileFormGroup__label {
+    font-size: var(--font-size-1);
+  }
+
+  .profileFormGroup__input {
+    font-size: var(--font-size-1);
+  }
+}

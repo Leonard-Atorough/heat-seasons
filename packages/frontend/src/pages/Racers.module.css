@@ -3,6 +3,12 @@
   padding: var(--spacing-xl);
 }
 
+.racersPage__title {
+  color: var(--white);
+  font-size: var(--font-size-5);
+  margin-bottom: var(--spacing-lg);
+}
+
 .racersGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -10,4 +16,15 @@
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .racersPage {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .racersGrid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
 }

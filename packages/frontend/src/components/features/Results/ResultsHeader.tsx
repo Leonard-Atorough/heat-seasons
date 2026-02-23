@@ -67,12 +67,12 @@ export default function ResultsHeader({
       </div>
       <div className={styles.resultsHeader__actions}>
         {user && user.role === "admin" && (
-          <Button variant="primary" onClick={onAddResults} type="button">
+          <Button variant="primary" onClick={onAddResults} type="button" className={styles.resultsHeader__addButton}>
             Add RaceResults
           </Button>
         )}
         {showUpdateButton() && (
-          <Button variant="secondary" onClick={onUpdateResults} type="button">
+          <Button variant="secondary" onClick={onUpdateResults} type="button" className={styles.resultsHeader__updateButton}>
             Update RaceResults
           </Button>
         )}

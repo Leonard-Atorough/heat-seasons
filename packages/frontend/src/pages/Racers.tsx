@@ -29,7 +29,7 @@ export default function Racers() {
 
   return (
     <div className={styles.racersPage}>
-      <h1>Racers</h1>
+      <h1 className={styles.racersPage__title}>Racers</h1>
       <div className={styles.racersGrid}>
         {racersWithProfile.map((racer) => (
           <RacerCard key={racer.id} racer={racer} />

@@ -4,3 +4,20 @@
   gap: var(--spacing-lg);
   width: 100%;
 }
+
+.teamsPage__title {
+  color: var(--white);
+  font-size: var(--font-size-5);
+  margin-bottom: var(--spacing-md);
+}
+
+
+@media (max-width: 600px) {
+  .teamsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .teamsPage__title {
+    font-size: var(--font-size-4);
+  }
+}

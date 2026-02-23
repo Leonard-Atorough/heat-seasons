@@ -39,7 +39,7 @@ export function Teams() {
 
   return (
     <div className="container">
-      <h1>Heat Teams: Winter 2026</h1>
+      <h1 className={styles.teamsPage__title}>Heat Teams: Winter 2026</h1>
       <p>Explore the teams competing in the current winter season.</p>
       <div className={styles.teamsGrid}>
         {teams.map((team: Team) =>
