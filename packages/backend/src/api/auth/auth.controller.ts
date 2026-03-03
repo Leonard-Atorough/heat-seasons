@@ -3,6 +3,7 @@ import { IAuthService } from "./auth.service.interface";
 import { JwtService, TokenPayload } from "src/Infrastructure/security/jwt";
 import { UserResponse } from "src/application/dtos/user.dto";
 import { ApiResponse } from "shared";
+import { FRONTEND_URL } from "../../env";
 
 export class AuthController {
   constructor(private authService: IAuthService) {}
@@ -30,7 +31,7 @@ export class AuthController {
     try {
       const user = (req as any).user;
       if (!user) {
-        res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+        res.redirect(`${FRONTEND_URL}/login?error=auth_failed`);
         return;
       }
 
@@ -41,7 +42,7 @@ export class AuthController {
         sameSite: "lax",
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       });
-      res.redirect(`${process.env.FRONTEND_URL}/auth/callback`);
+      res.redirect(`${FRONTEND_URL}/auth/callback`);
     } catch (error) {
       next(error);
     }

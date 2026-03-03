@@ -1,4 +1,4 @@
-import "./env";
+import { FRONTEND_URL, SESSION_SECRET, COOKIE_DOMAIN } from "./env";
 import express, { Request, Response, NextFunction, Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -11,7 +11,6 @@ import { racerRouter } from "./api/racer/racer.route.js";
 import { seasonRouter } from "./api/season/season.route.js";
 import { raceRouter } from "./api/race/race.route.js";
 import { leaderboardRouter } from "./api/leaderboard/leaderboard.route.js";
-import { AppError } from "./Infrastructure/errors/appError.js";
 import { Container } from "./Infrastructure/dependency-injection/container.js";
 import { handleError } from "./Infrastructure/http/middleware";
 
@@ -24,12 +23,7 @@ container.initializeStorageAdapter().catch((error) => {
   process.exit(1);
 });
 
-const FRONTEND_URL = process.env.FRONTEND_URL;
-if (!process.env.FRONTEND_URL) {
-  console.warn(
-    `Warning: FRONTEND_URL is not set. Defaulting to ${FRONTEND_URL}. This should be set in production.`,
-  );
-}
+// FRONTEND_URL is validated/loaded from `src/env.ts`.
 
 app.use(
   cors({
@@ -44,13 +38,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const SESSION_SECRET = process.env.SESSION_SECRET;
-if (!SESSION_SECRET) {
-  throw new Error(
-    //TODO: Replace with a proper logging mechanism in production
-    "Warning: SESSION_SECRET is not set. Using default secret key. This should be changed in production.",
-  );
-}
+// SESSION_SECRET is validated/loaded from `src/env.ts`.
 
 app.use(
   session({
@@ -62,7 +50,7 @@ app.use(
       httpOnly: true,
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
-      domain: process.env.COOKIE_DOMAIN || "localhost",
+      domain: COOKIE_DOMAIN,
     },
   }),
 );

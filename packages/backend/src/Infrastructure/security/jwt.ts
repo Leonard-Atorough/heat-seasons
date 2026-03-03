@@ -1,14 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "shared";
-
-const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-key-change-in-production";
-if (!process.env.JWT_SECRET) {
-  // TODO: Replace with a proper logging mechanism in production
-  console.warn(
-    "Warning: JWT_SECRET is not set. Using default secret key. This should be changed in production.",
-  );
-}
-const JWT_EXPIRES_IN: string = process.env.JWT_EXPIRES_IN || "24h";
+import { JWT_SECRET, JWT_EXPIRES_IN } from "../../env";
 
 export interface TokenPayload extends JwtPayload {
   id: string;
@@ -23,12 +15,16 @@ export class JwtService {
       email: user.email,
       role: user.role,
     };
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
+    return jwt.sign(
+      payload,
+      JWT_SECRET as string,
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions,
+    );
   }
 
   static verifyToken(token: string): TokenPayload | null {
     try {
-      const decoded = jwt.verify(token, JWT_SECRET) as TokenPayload;
+      const decoded = jwt.verify(token, JWT_SECRET as string) as TokenPayload;
       return decoded;
     } catch {
       return null;
