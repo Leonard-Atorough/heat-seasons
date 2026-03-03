@@ -1,12 +1,12 @@
 import styles from "./Dashboard.module.css";
 import { StatCard, PodiumCard, Hero } from "../components/features/Dashboard";
-import { useSeason, useSeasons, useRacers, useRaceResult } from "../hooks/data";
+import { useActiveSeason, useSeasons, useRacers, useRaceResult } from "../hooks/data";
 import { useMemo } from "react";
 import { Button, LoadingSkeletonCard } from "../components/common";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  const { data: activeSeason, isLoading: isSeasonLoading } = useSeason();
+  const { data: activeSeason, isLoading: isSeasonLoading } = useActiveSeason();
   const { data: seasons, isLoading: isSeasonsLoading } = useSeasons();
   const { data: racers, isLoading: isRacersLoading } = useRacers();
   const { races, results, isLoading: isResultsLoading } = useRaceResult(activeSeason?.id || "", "");

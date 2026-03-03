@@ -5,6 +5,8 @@ export interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  isContributor: boolean;
+  isAdmin: boolean;
   loginWithGoogle: () => void;
   logout: () => Promise<void>;
 }

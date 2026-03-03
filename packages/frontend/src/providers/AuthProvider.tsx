@@ -11,6 +11,8 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isContributor = user?.role === "contributor" || user?.role === "admin";
+  const isAdmin = user?.role === "admin";
 
   // Q. How can i prevent this from 429'ing if the user refreshes the page multiple times?
   // A. Implement a debounce mechanism or use a library like lodash.debounce to limit the frequency
@@ -63,6 +65,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       user,
       isLoading,
       isAuthenticated: !!user,
+      isContributor,
+      isAdmin,
       loginWithGoogle,
       logout,
     }),

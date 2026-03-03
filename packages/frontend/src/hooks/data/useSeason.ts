@@ -6,7 +6,7 @@ export const useSeasons = () => {
   return { data: seasons, isLoading, error, refresh: refreshSeasons };
 };
 
-export const useSeason = () => {
+export const useActiveSeason = () => {
   const { seasons, isLoading, error, refreshSeasons } = useContext(DataContext) as DataContextType;
   const activeSeason = seasons ? seasons.find((season) => season.status === "active") : null;
   return { data: activeSeason, isLoading, error, refresh: refreshSeasons };
