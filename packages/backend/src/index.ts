@@ -27,7 +27,11 @@ container.initializeStorageAdapter().catch((error) => {
 
 // FRONTEND_URL is validated/loaded from `src/env.ts`.
 logger.info(
-  { corsOrigin: FRONTEND_URL, cookieSecure: COOKIE_SECURE, cookieDomain: COOKIE_DOMAIN || "<current hostname>" },
+  {
+    corsOrigin: FRONTEND_URL,
+    cookieSecure: COOKIE_SECURE,
+    cookieDomain: COOKIE_DOMAIN || "<current hostname>",
+  },
   "CORS and cookie configuration",
 );
 
