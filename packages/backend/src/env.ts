@@ -31,9 +31,16 @@ export const SESSION_SECRET = envWithDefault(
   "dev-session-secret-change-in-production",
 );
 export const FRONTEND_URL = envWithDefault("FRONTEND_URL", "http://localhost:5173");
-export const COOKIE_DOMAIN = envWithDefault("COOKIE_DOMAIN", "localhost");
+export const COOKIE_DOMAIN = envWithDefault("COOKIE_DOMAIN", "");
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "24h";
 export const LOG_LEVEL = process.env.LOG_LEVEL || "info";
+
+// COOKIE_SECURE — true by default in production, false in dev/test.
+// Override explicitly with COOKIE_SECURE=true|false to control independently
+// of NODE_ENV (e.g. production behind a TLS-terminating proxy on HTTP).
+export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE
+  ? process.env.COOKIE_SECURE === "true"
+  : isProd;
 
 // Prisma requires DATABASE_URL to be set. For local dev, a file-based SQLite
 // database is used. On Railway, point this at the mounted volume path.

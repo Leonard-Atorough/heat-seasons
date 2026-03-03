@@ -3,7 +3,7 @@ import { IAuthService } from "./auth.service.interface";
 import { JwtService, TokenPayload } from "src/Infrastructure/security/jwt";
 import { UserResponse } from "src/application/dtos/user.dto";
 import { ApiResponse } from "shared";
-import { FRONTEND_URL } from "../../env";
+import { FRONTEND_URL, COOKIE_SECURE, COOKIE_DOMAIN } from "../../env";
 
 export class AuthController {
   constructor(private authService: IAuthService) {}
@@ -38,9 +38,14 @@ export class AuthController {
       const token = this.authService.generateToken(user);
       res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: COOKIE_SECURE,
+        // "lax" is required for the OAuth redirect flow: when Google redirects
+        // back to /api/auth/google/callback, the browser performs a top-level
+        // navigation — lax allows the cookie to be set in that context.
+        // "strict" would silently drop the cookie on the redirect.
         sameSite: "lax",
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        maxAge: 24 * 60 * 60 * 1000,
+        ...(COOKIE_DOMAIN ? { domain: COOKIE_DOMAIN } : {}),
       });
       res.redirect(`${FRONTEND_URL}/auth/callback`);
     } catch (error) {
@@ -56,8 +61,9 @@ export class AuthController {
       }
       res.clearCookie("token", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: COOKIE_SECURE,
         sameSite: "lax",
+        ...(COOKIE_DOMAIN ? { domain: COOKIE_DOMAIN } : {}),
       });
       const response: ApiResponse<null> = {
         success: true,

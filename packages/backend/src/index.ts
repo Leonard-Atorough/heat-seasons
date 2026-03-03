@@ -1,4 +1,4 @@
-import { FRONTEND_URL, SESSION_SECRET, COOKIE_DOMAIN } from "./env";
+import { FRONTEND_URL, SESSION_SECRET, COOKIE_DOMAIN, COOKIE_SECURE } from "./env";
 import express, { Request, Response, NextFunction, Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -26,12 +26,16 @@ container.initializeStorageAdapter().catch((error) => {
 });
 
 // FRONTEND_URL is validated/loaded from `src/env.ts`.
+logger.info(
+  { corsOrigin: FRONTEND_URL, cookieSecure: COOKIE_SECURE, cookieDomain: COOKIE_DOMAIN || "<current hostname>" },
+  "CORS and cookie configuration",
+);
 
 app.use(
   cors({
     origin: FRONTEND_URL,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     optionsSuccessStatus: 200,
   }),
@@ -49,11 +53,15 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      secure: COOKIE_SECURE,
       httpOnly: true,
+      // "strict" is safe for the session cookie: it is set server-side after
+      // the OAuth redirect completes, not during the redirect itself.
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
-      domain: COOKIE_DOMAIN,
+      // Omit domain attribute when empty so the browser binds the cookie to
+      // the exact hostname. Set COOKIE_DOMAIN to share across subdomains.
+      ...(COOKIE_DOMAIN ? { domain: COOKIE_DOMAIN } : {}),
     },
   }),
 );
