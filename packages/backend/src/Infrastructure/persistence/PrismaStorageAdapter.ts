@@ -129,7 +129,11 @@ export class PrismaStorageAdapter implements StorageAdapter {
           ...cleanRest,
           ...(id ? { id } : {}),
           ...(results?.length
-            ? { results: { createMany: { data: results.map((r: any) => this.cleanResultForWrite(r)) } } }
+            ? {
+                results: {
+                  createMany: { data: results.map((r: any) => this.cleanResultForWrite(r)) },
+                },
+              }
             : {}),
         } as any,
         include: { results: true },
