@@ -1,58 +1,38 @@
-export interface LogEntry {
-  message: string;
-  timestamp: string;
-  level: string;
-}
+import pino from "pino";
+
+const isTest = process.env.NODE_ENV === "test";
+const isDev = !isTest && process.env.NODE_ENV !== "production";
 
 /**
- * A simple in-memory logger that supports different log levels (INFO, WARNING, ERROR).
- * Logs are stored in memory and can be retrieved or flushed to a file.
+ * Root pino logger.
+ *
+ * - Production: JSON to stdout (structured, machine-parseable).
+ * - Development: pretty-printed via pino-pretty transport.
+ * - Test: silent (no output noise during test runs).
+ *
+ * Per-request child loggers (with reqId) are created automatically by the
+ * requestLogger middleware (pino-http).  Use `req.log` inside route handlers
+ * and middleware so every log line carries the request ID.
  */
-// NOTE: To be replaced with Morgan or Winston in the future for more advanced logging capabilities.
-export class Logger {
-  private inMemoryLogs: LogEntry[] = [];
-  constructor() {}
+export const logger = pino({
+  level: process.env.LOG_LEVEL ?? (isTest ? "silent" : "info"),
+  ...(isDev && {
+    transport: {
+      target: "pino-pretty",
+      options: {
+        colorize: true,
+        translateTime: "HH:MM:ss.l",
+        ignore: "pid,hostname",
+      },
+    },
+  }),
+  base: {
+    service: "heat-seasons-api",
+    env: process.env.NODE_ENV ?? "development",
+  },
+  serializers: {
+    err: pino.stdSerializers.err,
+  },
+});
 
-  private log(message: string, level: string): void {
-    const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] ${message}`;
-    this.inMemoryLogs.push({ message, timestamp, level });
-  }
-
-  logInfo(message: string) {
-    this.log(`${message}`, "INFO");
-    console.log(this.inMemoryLogs[this.inMemoryLogs.length - 1]);
-  }
-
-  logWarning(message: string) {
-    this.log(`${message}`, "WARNING");
-    console.warn(this.inMemoryLogs[this.inMemoryLogs.length - 1]);
-  }
-
-  logError(message: string) {
-    this.log(`${message}`, "ERROR");
-    console.error(this.inMemoryLogs[this.inMemoryLogs.length - 1]);
-  }
-
-  getLogs(levelFilter?: string): string[] {
-    if (levelFilter) {
-      return this.inMemoryLogs
-        .filter((log) => log.level === levelFilter)
-        .map((log) => `[${log.timestamp}] ${log.message}`);
-    }
-    return this.inMemoryLogs.map((log) => `[${log.timestamp}] ${log.message}`);
-  }
-
-  clearLogs(): void {
-    this.inMemoryLogs = [];
-  }
-
-  flushLogsToFile(filePath: string): void {
-    const fs = require("fs");
-    const logData = this.inMemoryLogs.map((log) => `[${log.timestamp}] ${log.message}`).join("\n");
-    fs.writeFileSync(filePath, logData, "utf-8");
-    this.clearLogs();
-  }
-}
-
-export default new Logger();
+export default logger;

@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, NextFunction, Router } from "express";
 import rateLimit from "express-rate-limit";
 import { Container } from "src/Infrastructure/dependency-injection/container";
 import { authMiddleware, requireRole } from "src/Infrastructure/http/middleware";
@@ -19,9 +19,10 @@ const adminLimiter = rateLimit({
  * GET /api/admin/users
  * List all users (admin only)
  */
-adminRouter.get("/users", adminLimiter, (req, res) => {
+adminRouter.get("/users", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+  req.log.info({ userId: (req.user as { id: string })?.id }, "Listing all users");
   const adminController = Container.getInstance().createAdminController();
-  adminController.listUsers(req, res);
+  adminController.listUsers(req, res, next);
 });
 
 /**
@@ -30,9 +31,13 @@ adminRouter.get("/users", adminLimiter, (req, res) => {
  *
  * Body: { userId: string }
  */
-adminRouter.post("/promote", adminLimiter, (req, res) => {
+adminRouter.post("/promote", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+  req.log.info(
+    { userId: (req.user as { id: string })?.id, promoteUserId: req.body.userId },
+    "Promoting user to contributor",
+  );
   const adminController = Container.getInstance().createAdminController();
-  adminController.promoteUser(req, res);
+  adminController.promoteUser(req, res, next);
 });
 
 /**
@@ -41,9 +46,13 @@ adminRouter.post("/promote", adminLimiter, (req, res) => {
  *
  * Body: { userId: string }
  */
-adminRouter.post("/demote", adminLimiter, (req, res) => {
+adminRouter.post("/demote", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+  req.log.info(
+    { userId: (req.user as { id: string })?.id, demoteUserId: req.body.userId },
+    "Demoting user to regular",
+  );
   const adminController = Container.getInstance().createAdminController();
-  adminController.demoteUser(req, res);
+  adminController.demoteUser(req, res, next);
 });
 
 export { adminRouter };

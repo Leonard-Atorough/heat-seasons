@@ -4,6 +4,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "./Infrastructure/security/passport";
+import { logger } from "./Infrastructure/logging/logger";
+import { requestLogger } from "./Infrastructure/logging/requestLogger";
 
 import { authRouter } from "./api/auth/auth.route.js";
 import { adminRouter } from "./api/admin/admin.route.js";
@@ -19,7 +21,7 @@ const PORT = process.env.PORT || 3001;
 
 const container = Container.getInstance();
 container.initializeStorageAdapter().catch((error) => {
-  console.error("Failed to initialize storage adapter:", error);
+  logger.error({ err: error }, "Failed to initialize storage adapter");
   process.exit(1);
 });
 
@@ -37,6 +39,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(requestLogger);
 
 // SESSION_SECRET is validated/loaded from `src/env.ts`.
 
@@ -83,7 +86,7 @@ app.use((_req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🏁 Heat Seasons API server running on port ${PORT}`);
+  logger.info({ port: PORT }, "Heat Seasons API server running");
 });
 
 export default app;

@@ -2,6 +2,7 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import * as crypto from "crypto";
 import { StorageAdapter } from "./StorageAdapter";
+import { logger } from "../logging/logger";
 
 /**
  * JSON File-based Storage Adapter
@@ -24,7 +25,7 @@ export class JsonStorageAdapter implements StorageAdapter {
     try {
       await fs.mkdir(this.dataDir, { recursive: true });
     } catch (error) {
-      console.error("Failed to initialize storage directory:", error);
+      logger.error({ err: error }, "Failed to initialize storage directory");
       throw error;
     }
   }

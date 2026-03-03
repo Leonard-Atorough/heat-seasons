@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, NextFunction, Router } from "express";
 import rateLimit from "express-rate-limit";
 import passport from "passport";
 import { Container } from "src/Infrastructure/dependency-injection/container";
@@ -20,9 +20,15 @@ const loginLimiter = rateLimit({
   message: "Too many login attempts from this IP, please try again later.",
 });
 
-router.get("/me", authLimiter, authMiddleware, (req, res) => {
-  authController.getMe(req, res);
-});
+router.get(
+  "/me",
+  authLimiter,
+  authMiddleware,
+  (req: Request, res: Response, next: NextFunction) => {
+    req.log.info({ userId: (req.user as { id: string })?.id }, "Fetching current user profile");
+    authController.getMe(req, res, next);
+  },
+);
 
 router.get(
   "/google",
@@ -34,13 +40,20 @@ router.get(
   "/google/callback",
   loginLimiter,
   passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
-    authController.googleCallback(req, res);
+  (req: Request, res: Response, next: NextFunction) => {
+    req.log.info({ userId: (req.user as { id: string })?.id }, "Google callback");
+    authController.googleCallback(req, res, next);
   },
 );
 
-router.post("/logout", authLimiter, authMiddleware, (req, res) => {
-  authController.logout(req, res);
-});
+router.post(
+  "/logout",
+  authLimiter,
+  authMiddleware,
+  (req: Request, res: Response, next: NextFunction) => {
+    req.log.info({ userId: (req.user as { id: string })?.id }, "Logging out");
+    authController.logout(req, res, next);
+  },
+);
 
-export { router as authRouter};
+export { router as authRouter };

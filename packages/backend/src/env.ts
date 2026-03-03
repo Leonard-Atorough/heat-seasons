@@ -33,6 +33,7 @@ export const SESSION_SECRET = envWithDefault(
 export const FRONTEND_URL = envWithDefault("FRONTEND_URL", "http://localhost:5173");
 export const COOKIE_DOMAIN = envWithDefault("COOKIE_DOMAIN", "localhost");
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "24h";
+export const LOG_LEVEL = process.env.LOG_LEVEL || "info";
 
 // Prisma requires DATABASE_URL to be set. For local dev, a file-based SQLite
 // database is used. On Railway, point this at the mounted volume path.
