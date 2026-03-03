@@ -6,24 +6,24 @@ const router = Router();
 
 const raceController = Container.getInstance().createRaceController();
 
-router.get("/", (req, res) => {
-  raceController.getBySeasonId(req, res);
+router.get("/", (req, res, next) => {
+  raceController.getBySeasonId(req, res, next);
 });
 
-router.get("/:id", (req, res) => {
-  raceController.getById(req, res);
+router.get("/:id", (req, res, next) => {
+  raceController.getById(req, res, next);
 });
 
-router.post("/", authMiddleware, requireRole("contributor", "admin"), (req, res) => {
-  raceController.create(req, res);
+router.post("/", authMiddleware, requireRole("contributor", "admin"), (req, res, next) => {
+  raceController.create(req, res, next);
 });
 
-router.put("/:id", authMiddleware, requireRole("contributor", "admin"), (req, res) => {
-  raceController.update(req, res);
+router.put("/:id", authMiddleware, requireRole("contributor", "admin"), (req, res, next) => {
+  raceController.update(req, res, next);
 });
 
-router.delete("/:id", authMiddleware, requireRole("contributor", "admin"), (req, res) => {
-  raceController.delete(req, res);
+router.delete("/:id", authMiddleware, requireRole("contributor", "admin"), (req, res, next) => {
+  raceController.delete(req, res, next);
 });
 
 export { router as raceRouter };

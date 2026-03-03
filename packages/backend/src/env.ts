@@ -34,6 +34,13 @@ export const FRONTEND_URL = envWithDefault("FRONTEND_URL", "http://localhost:517
 export const COOKIE_DOMAIN = envWithDefault("COOKIE_DOMAIN", "localhost");
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "24h";
 
+// Prisma requires DATABASE_URL to be set. For local dev, a file-based SQLite
+// database is used. On Railway, point this at the mounted volume path.
+export const DATABASE_URL = envWithDefault(
+  "DATABASE_URL",
+  "file:./dev.db",
+);
+
 // Google OAuth — empty-string defaults are intentional for local dev
 // (OAuth simply won't work without real credentials).
 export const GOOGLE_CLIENT_ID = envWithDefault("GOOGLE_CLIENT_ID", "");

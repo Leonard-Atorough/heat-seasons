@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
           cache: "npm"
 
       - name: Clean build artifacts
@@ -26,6 +26,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Generate Prisma client
+        run: npm run prisma:generate --workspace=backend
+        env:
+          DATABASE_URL: file:./dev.db
 
       - name: Build code
         run: npm run build
@@ -39,6 +44,7 @@ jobs:
       - name: Run tests
         env:
           NODE_ENV: test
+          DATABASE_URL: file:./test.db
         run: npm test
 
       - name: Upload Test coverage report

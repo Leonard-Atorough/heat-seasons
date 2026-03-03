@@ -1,4 +1,4 @@
-import { JsonStorageAdapter, StorageAdapter } from "../persistence";
+import { PrismaStorageAdapter, StorageAdapter } from "../persistence";
 import { ServiceLocator } from "./serviceLocator";
 import {
   AuthRepository,
@@ -31,7 +31,7 @@ class Container {
   serviceLocator: ServiceLocator = new ServiceLocator();
 
   private constructor() {
-    this.storageAdapter = new JsonStorageAdapter("./data");
+    this.storageAdapter = new PrismaStorageAdapter();
 
     // Register services in the service locator
     const authService = new AuthService(this.getRepository<IAuthRepository>("AuthRepository"));

@@ -1,0 +1,85 @@
+// This is your Prisma schema file.
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id             String   @id @default(uuid())
+  googleId       String   @unique
+  email          String   @unique
+  name           String
+  role           String   @default("user")
+  profilePicture String?
+  racerId        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Racer {
+  id          String       @id @default(uuid())
+  name        String
+  active      Boolean      @default(true)
+  team        String
+  teamColor   String
+  nationality String
+  age         Int
+  joinDate    DateTime?
+  userId      String?
+  badgeUrl    String?
+  profileUrl  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  results     RaceResult[]
+}
+
+model Season {
+  id                String    @id @default(uuid())
+  name              String
+  status            String
+  startDate         DateTime
+  endDate           DateTime?
+  totalRaces        Int
+  racesCompleted    Int
+  totalParticipants Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  races             Race[]
+}
+
+model Race {
+  id         String       @id @default(uuid())
+  seasonId   String
+  raceNumber Int
+  name       String
+  date       DateTime
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  season     Season       @relation(fields: [seasonId], references: [id])
+  results    RaceResult[]
+}
+
+model RaceResult {
+  id                String  @id @default(uuid())
+  raceId            String
+  racerId           String
+  position          Int
+  points            Int
+  constructorPoints Int
+  isGhostRacer      Boolean @default(false)
+  race              Race    @relation(fields: [raceId], references: [id], onDelete: Cascade)
+  racer             Racer   @relation(fields: [racerId], references: [id])
+}
+
+model BlacklistedToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
