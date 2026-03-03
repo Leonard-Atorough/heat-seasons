@@ -37,6 +37,8 @@ jobs:
         run: npm run type-check
 
       - name: Run tests
+        env:
+          NODE_ENV: test
         run: npm test
 
       - name: Upload Test coverage report

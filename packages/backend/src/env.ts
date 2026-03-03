@@ -33,3 +33,12 @@ export const SESSION_SECRET = envWithDefault(
 export const FRONTEND_URL = envWithDefault("FRONTEND_URL", "http://localhost:5173");
 export const COOKIE_DOMAIN = envWithDefault("COOKIE_DOMAIN", "localhost");
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "24h";
+
+// Google OAuth — empty-string defaults are intentional for local dev
+// (OAuth simply won't work without real credentials).
+export const GOOGLE_CLIENT_ID = envWithDefault("GOOGLE_CLIENT_ID", "");
+export const GOOGLE_CLIENT_SECRET = envWithDefault("GOOGLE_CLIENT_SECRET", "");
+export const GOOGLE_CALLBACK_URL = envWithDefault(
+  "GOOGLE_CALLBACK_URL",
+  "http://localhost:3001/api/auth/google/callback",
+);
