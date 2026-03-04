@@ -9,7 +9,7 @@ import { EntityRoot } from "./EntityRoot";
 export class BootstrapEntity extends EntityRoot {
   private constructor(
     public id: string | undefined,
-    public bootstatrapTokenHash: string,
+    public bootstrapTokenHash: string,
     public bootstrapTokenExpiresAt: Date,
     public isInitialized: boolean,
     public createdAt?: Date,
@@ -19,13 +19,13 @@ export class BootstrapEntity extends EntityRoot {
   }
 
   static create(data: {
-    bootstatrapTokenHash: string;
+    bootstrapTokenHash: string;
     bootstrapTokenExpiresAt: Date;
     isInitialized: boolean;
   }): BootstrapEntity {
     return new BootstrapEntity(
       undefined,
-      data.bootstatrapTokenHash,
+      data.bootstrapTokenHash,
       data.bootstrapTokenExpiresAt,
       data.isInitialized,
       undefined,
@@ -35,7 +35,7 @@ export class BootstrapEntity extends EntityRoot {
 
   static reconstitute(data: {
     id: string;
-    bootstatrapTokenHash: string;
+    bootstrapTokenHash: string;
     bootstrapTokenExpiresAt: Date;
     isInitialized: boolean;
     createdAt: Date;
@@ -43,7 +43,7 @@ export class BootstrapEntity extends EntityRoot {
   }): BootstrapEntity {
     return new BootstrapEntity(
       data.id,
-      data.bootstatrapTokenHash,
+      data.bootstrapTokenHash,
       data.bootstrapTokenExpiresAt,
       data.isInitialized,
       data.createdAt,
