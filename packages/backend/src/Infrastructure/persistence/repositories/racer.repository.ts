@@ -28,9 +28,6 @@ export class RacerRepository implements IRacerRepository {
     // Repository assigns ID and timestamps (infrastructure concern)
     const dataToSave = {
       ...RacerMapper.toPersistence(entity),
-      id: randomUUID(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
 
     const saved = await this.storageAdapter.create("racers", dataToSave);
@@ -40,7 +37,6 @@ export class RacerRepository implements IRacerRepository {
   async update(id: string, entity: RacerEntity): Promise<RacerEntity> {
     const dataToUpdate = {
       ...RacerMapper.toPersistence(entity),
-      updatedAt: new Date(),
     };
 
     const updated = await this.storageAdapter.update("racers", id, dataToUpdate);

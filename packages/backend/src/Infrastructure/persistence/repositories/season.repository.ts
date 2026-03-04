@@ -35,8 +35,6 @@ export class SeasonRepository implements ISeasonRepository {
   async create(data: SeasonEntity): Promise<SeasonEntity> {
     const dataToSave = {
       ...SeasonMapper.toPersistence(data),
-      createdAt: new Date(),
-      updatedAt: new Date(),
       // ID will be assigned by the storage adapter
     };
     const savedData = await this.storageAdapter.create("seasons", dataToSave);
@@ -46,7 +44,6 @@ export class SeasonRepository implements ISeasonRepository {
   async update(id: string, data: SeasonEntity): Promise<SeasonEntity> {
     const dataToUpdate = {
       ...SeasonMapper.toPersistence(data),
-      updatedAt: new Date(),
     };
     const updatedData = await this.storageAdapter.update("seasons", id, dataToUpdate);
     return SeasonMapper.toDomainFromPersistence(updatedData);

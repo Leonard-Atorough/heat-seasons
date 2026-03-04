@@ -93,6 +93,8 @@ export class JsonStorageAdapter implements StorageAdapter {
     const newRecord = {
       ...data,
       id: (data as any).id || this.generateId(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     } as T;
     records.push(newRecord);
     await this.saveCollection(collection, records);
@@ -107,7 +109,7 @@ export class JsonStorageAdapter implements StorageAdapter {
       throw new Error(`Record with id ${id} not found in ${collection}`);
     }
 
-    const updatedRecord = { ...records[index], ...data } as T;
+    const updatedRecord = { ...records[index], ...data, updatedAt: new Date().toISOString() } as T;
     records[index] = updatedRecord;
     await this.saveCollection(collection, records);
     return updatedRecord;

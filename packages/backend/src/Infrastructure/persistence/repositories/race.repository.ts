@@ -24,8 +24,6 @@ export class RaceRepository implements IRaceRepository {
   async create(data: RaceEntity): Promise<RaceEntity> {
     const dataToSave = {
       ...RaceMapper.toPersistence(data),
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
     const response = await this.storageAdapter.create("races", dataToSave);
     return RaceMapper.toDomainFromPersistence(response);
@@ -34,7 +32,6 @@ export class RaceRepository implements IRaceRepository {
   async update(id: string, data: RaceEntity): Promise<RaceEntity> {
     const dataToUpdate = {
       ...RaceMapper.toPersistence(data),
-      updatedAt: new Date(),
     };
     const response = await this.storageAdapter.update("races", id, dataToUpdate);
     return RaceMapper.toDomainFromPersistence(response);

@@ -31,9 +31,6 @@ export class AuthRepository implements IAuthRepository {
   async create(entity: UserEntity): Promise<UserEntity> {
     const dataToSave = {
       ...UserMapper.toPersistence(entity),
-      // Storage adapter will generate an ID.
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
 
     const saved = await this.storageAdapter.create("users", dataToSave);
@@ -43,7 +40,6 @@ export class AuthRepository implements IAuthRepository {
   async update(id: string, entity: UserEntity): Promise<UserEntity> {
     const dataToUpdate = {
       ...UserMapper.toPersistence(entity),
-      updatedAt: new Date(),
     };
 
     const updated = await this.storageAdapter.update("users", id, dataToUpdate);
