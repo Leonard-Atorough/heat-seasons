@@ -77,6 +77,7 @@ export class ApiClient {
       }
       return apiResponse;
     } catch (error) {
+      // TODO: We need to handle errors so they don't bubble to the console or ui.
       if (error instanceof ApiError) {
         throw error;
       }

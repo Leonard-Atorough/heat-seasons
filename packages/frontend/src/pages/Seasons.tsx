@@ -1,27 +1,32 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card } from "../components/common/Card";
 import styles from "./Seasons.module.css";
 import { useSeasons } from "../hooks/data/useSeason";
 import { Button, LoadingSkeletonCard } from "../components/common";
 import { useAuth } from "../hooks/useAuth";
+import { AddSeasonModal } from "../components/features/Season/AddSeasonModal";
 
 export default function Seasons() {
   const { data: seasons, refresh, isLoading } = useSeasons();
   const auth = useAuth();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleRefresh = async () => {
     await refresh();
   };
-  // we could periodically refresh the seasons data every 10 minutes to ensure it's up to date
-  useMemo(() => {
+  // Refresh on mount and every 10 minutes
+  useEffect(() => {
     handleRefresh();
-    const intervalId = setInterval(handleRefresh, 10 * 60 * 1000); // refresh every 10 minutes
-    return () => clearInterval(intervalId); // cleanup on unmount
+    const intervalId = setInterval(handleRefresh, 10 * 60 * 1000);
+    return () => clearInterval(intervalId);
   }, []);
 
-  useMemo(() => {
+  const sortedSeasons = useMemo(() => {
     if (!seasons) return [];
-    seasons.sort((a, b) => b.startDate.getTime() - a.startDate.getTime());
+    return [...seasons].sort(
+      (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+    );
   }, [seasons]);
 
   if (isLoading) {
@@ -37,14 +42,21 @@ export default function Seasons() {
       <h1 className={styles.seasonsPage__title}>Seasons</h1>
       {seasons && (
         <div className={styles.seasonsPage__cards}>
-          {seasons?.map((season) => (
+          {sortedSeasons.map((season) => (
             <Card key={season.id} className={styles.seasonCard}>
-              <h2>{season.name}</h2>
-              <p>Start Date: {new Date(season.startDate).toDateString()}</p>
-              <p>
-                End Date: {season.endDate ? new Date(season.endDate).toDateString() : "Ongoing"}
-              </p>
-              <p>Status: {season.status}</p>
+              <h2>{season.name.toUpperCase()}</h2>
+              <span className={styles.seasonDetails}>
+                <p>
+                  <strong>Start Date:</strong> {new Date(season.startDate).toDateString()}
+                </p>
+                <p>
+                  <strong>End Date:</strong>{" "}
+                  {season.endDate ? new Date(season.endDate).toDateString() : "Ongoing"}
+                </p>
+                <p>
+                  <strong>Status:</strong> {season.status}
+                </p>
+              </span>
             </Card>
           ))}
         </div>
@@ -62,18 +74,11 @@ export default function Seasons() {
           {auth?.isContributor && (
             <>
               <Button
-                onClick={() => alert("Create Season functionality coming soon!")}
+                onClick={() => setIsModalOpen(true)}
                 className={styles.createButton}
                 type={"button"}
               >
                 Create Season
-              </Button>
-              <Button
-                onClick={() => alert("Edit Season functionality coming soon!")}
-                className={styles.editButton}
-                type={"button"}
-              >
-                Edit Season
               </Button>
             </>
           )}
@@ -86,6 +91,16 @@ export default function Seasons() {
         </p>
         <p>For any issues or suggestions, please contact the development team.</p>
       </div>
+      {isModalOpen && auth.isContributor && (
+        <AddSeasonModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={() => {
+            setIsModalOpen(false);
+            handleRefresh();
+          }}
+        />
+      )}
     </div>
   );
 }

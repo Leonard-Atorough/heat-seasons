@@ -1,7 +1,8 @@
-.seasonPage {
+.seasonsPage {
   padding: var(--spacing-lg);
   background-color: var(--background-light);
   min-height: 100vh;
+  width: 100%;
 }
 
 .seasonsPage__title {
@@ -17,6 +18,7 @@
 }
 
 .seasonsPage__actions {
+  max-width: 300px;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -30,21 +32,29 @@
   margin-bottom: var(--spacing-lg);
 }
 
-
-
 .refreshButton:hover {
   background-color: var(--primary-dark);
 }
 
 .seasonCard {
   margin: var(--spacing-md) 0;
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   border: var(--border-width-medium) solid var(--border-color);
   border-radius: var(--border-radius-md);
   background-color: var(--card-white);
   box-shadow: var(--shadow-light);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
   gap: var(--spacing-md);
   color: var(--text-primary);
+  min-height: 300px;
+}
+
+.seasonDetails {
+  display: flex;
+  gap: var(--spacing-lg);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
 }

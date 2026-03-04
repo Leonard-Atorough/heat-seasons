@@ -18,7 +18,7 @@ export default function Results() {
     selectedSeasonId ?? "",
     selectedRaceId ?? "",
   );
-  const { user } = useAuth();
+  const { isAdmin } = useAuth();
 
   // Q. To make this update sorted view in real-time we'd have to keep local state, right?
   // A.
@@ -89,7 +89,7 @@ export default function Results() {
           setSortAscending(!ascending);
         }}
       />
-      {isModalOpen && user?.role === "admin" && (
+      {isModalOpen && isAdmin && (
         <AddRaceResultsModal
           isOpen={isModalOpen}
           onClose={() => {
