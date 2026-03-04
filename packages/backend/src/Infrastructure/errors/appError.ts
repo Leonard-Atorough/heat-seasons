@@ -53,6 +53,13 @@ export class UnauthorizedError extends AppError {
   }
 }
 
+export class ConflictError extends AppError {
+  constructor(message: string, details?: any) {
+    super(409, "CONFLICT", message, details);
+    Object.setPrototypeOf(this, ConflictError.prototype);
+  }
+}
+
 export class ForbiddenError extends AppError {
   constructor(message: string, details?: any) {
     super(403, "FORBIDDEN", message, details);

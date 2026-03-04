@@ -1,8 +1,8 @@
-import { NotFoundError } from "src/Infrastructure/errors/appError.js";
+import { ConflictError, NotFoundError } from "src/Infrastructure/errors/appError.js";
 import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "src/application/dtos";
 import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
 import { ISeasonService } from "./season.service.interface.js";
-import { SeasonStatus } from "shared";
+import { SeasonStatus, SEASON_STATUS, SeasonParticipant } from "shared";
 import { SeasonMapper } from "src/application/mappers";
 
 export class SeasonService implements ISeasonService {
@@ -41,13 +41,38 @@ export class SeasonService implements ISeasonService {
     return SeasonMapper.toResponse(createdSeason);
   }
 
+  async joinSeason(seasonId: string, racerId: string): Promise<SeasonParticipant> {
+    const season = await this.seasonRepository.findById(seasonId);
+    if (!season) {
+      throw new NotFoundError(`Season with ID ${seasonId} not found`);
+    }
+    const existing = await this.seasonRepository.findParticipants(seasonId);
+    if (existing.some((p) => p.racerId === racerId)) {
+      throw new ConflictError(`Racer ${racerId} is already registered for season ${seasonId}`);
+    }
+    return this.seasonRepository.addParticipant(seasonId, racerId);
+  }
+
+  async getParticipants(seasonId: string): Promise<SeasonParticipant[]> {
+    const season = await this.seasonRepository.findById(seasonId);
+    if (!season) {
+      throw new NotFoundError(`Season with ID ${seasonId} not found`);
+    }
+    return this.seasonRepository.findParticipants(seasonId);
+  }
+
   async update(id: string, data: SeasonUpdateInput): Promise<SeasonResponse> {
     const seasonToUpdate = await this.seasonRepository.findById(id);
     if (!seasonToUpdate) {
       throw new NotFoundError(`Season with ID ${id} not found`);
     }
 
-    seasonToUpdate.update({ ...data });
+    const updateData = { ...data };
+    if (data.status === SEASON_STATUS.COMPLETED && !seasonToUpdate.endDate && !data.endDate) {
+      updateData.endDate = new Date();
+    }
+
+    seasonToUpdate.update(updateData);
 
     const updatedSeason = await this.seasonRepository.update(id, seasonToUpdate);
     return SeasonMapper.toResponse(updatedSeason);

@@ -13,5 +13,6 @@ export interface Race {
   seasonId: string;
   raceNumber: number;
   date: Date;
+  completed: boolean;
   results: RaceResult[];
 }

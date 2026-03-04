@@ -30,6 +30,31 @@ router.post(
   },
 );
 
+router.get(
+  "/:id/participants",
+  authMiddleware,
+  (req: Request, res: Response, next: NextFunction) => {
+    req.log.info({ seasonId: req.params.id }, "Fetching season participants");
+    seasonController.getParticipants(req, res, next);
+  },
+);
+
+router.post(
+  "/:id/join/:racerId",
+  authMiddleware,
+  (req: Request, res: Response, next: NextFunction) => {
+    req.log.info(
+      {
+        userId: (req.user as { id: string })?.id,
+        seasonId: req.params.id,
+        racerId: req.params.racerId,
+      },
+      "Joining season",
+    );
+    seasonController.join(req, res, next);
+  },
+);
+
 router.put(
   "/:id",
   authMiddleware,

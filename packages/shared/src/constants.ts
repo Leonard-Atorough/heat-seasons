@@ -9,6 +9,7 @@ export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
 // Season status
 export const SEASON_STATUS = {
+  UPCOMING: "upcoming",
   ACTIVE: "active",
   COMPLETED: "completed",
   ARCHIVED: "archived",

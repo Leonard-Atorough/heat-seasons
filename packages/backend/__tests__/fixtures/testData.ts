@@ -52,10 +52,6 @@ export const testSeasons = {
     name: "Season 1 2026",
     status: "active",
     startDate: new Date("2026-01-01"),
-    endDate: new Date("2026-06-30"),
-    totalRaces: 10,
-    racesCompleted: 5,
-    totalParticipants: 20,
     createdAt: new Date("2026-01-01"),
     updatedAt: new Date("2026-01-01"),
   } as Season,
@@ -68,9 +64,10 @@ export const testRaces = {
     name: "Race 1",
     raceNumber: 1,
     date: new Date("2026-01-15"),
+    completed: false,
     results: [
-      { racerId: "racer-1", position: 1, points: 10 },
-      { racerId: "racer-2", position: 2, points: 8 },
+      { racerId: "racer-1", position: 1, points: 10, constructorPoints: 0 },
+      { racerId: "racer-2", position: 2, points: 8, constructorPoints: 0 },
     ],
   } as Race,
 };

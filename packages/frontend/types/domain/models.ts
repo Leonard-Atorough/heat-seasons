@@ -9,6 +9,4 @@ export interface User {
 export interface SeasonRequest {
   name: string;
   startDate: string; // ISO date string
-  endDate?: string; // ISO date string
-  status: "upcoming" | "active" | "completed" | "archived";
 }

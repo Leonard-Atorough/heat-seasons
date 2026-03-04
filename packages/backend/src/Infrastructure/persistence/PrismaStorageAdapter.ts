@@ -14,6 +14,8 @@ const COLLECTION_MODEL: Record<string, string> = {
   races: "race",
   blacklistedTokens: "blacklistedToken",
   bootstrapConfig: "bootstrapConfig",
+  seasonParticipants: "seasonParticipant",
+  raceResult: "raceResult",
 };
 
 /**
@@ -187,5 +189,9 @@ export class PrismaStorageAdapter implements StorageAdapter {
 
   async count(collection: string, filter?: Record<string, unknown>): Promise<number> {
     return this.model(collection).count({ where: filter ?? {} });
+  }
+
+  getClient(): PrismaClient {
+    return this.client;
   }
 }

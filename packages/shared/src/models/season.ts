@@ -7,9 +7,12 @@ export interface Season {
   status: SeasonStatus;
   startDate: Date;
   endDate?: Date;
-  totalRaces: number;
-  racesCompleted: number;
-  totalParticipants: number;
+}
+
+export interface SeasonParticipant {
+  seasonId: string;
+  racerId: string;
+  registeredAt: Date;
 }
 
 // Re-export for convenience

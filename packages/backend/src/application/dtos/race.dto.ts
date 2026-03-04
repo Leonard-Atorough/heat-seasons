@@ -1,8 +1,8 @@
 import { Race } from "shared";
 
-export interface RaceCreateInput extends Omit<Race, "id" | "createdAt" | "updatedAt"> {}
+// completed is not provided on creation — defaults to false
+export interface RaceCreateInput extends Omit<Race, "id" | "completed"> {}
 
-// Q. This should have an id, shouldn't it since its an update input?
-export interface RaceUpdateInput extends Partial<Omit<Race, "id" | "date" | "createdAt" | "updatedAt">> {}
+export interface RaceUpdateInput extends Partial<Omit<Race, "id" | "date">> {}
 
 export interface RaceResponse extends Race {}

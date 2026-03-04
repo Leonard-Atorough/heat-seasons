@@ -1,4 +1,4 @@
-import { Season, SeasonStatus } from "shared";
+import { SeasonStatus } from "shared";
 import { EntityRoot } from "./entityRoot";
 
 export class SeasonEntity extends EntityRoot {
@@ -8,9 +8,6 @@ export class SeasonEntity extends EntityRoot {
     public status: SeasonStatus,
     public startDate: Date,
     public endDate: Date | undefined,
-    public totalRaces: number,
-    public racesCompleted: number,
-    public totalParticipants: number,
     createdAt?: Date,
     updatedAt?: Date,
   ) {
@@ -19,24 +16,17 @@ export class SeasonEntity extends EntityRoot {
 
   static create(data: {
     name: string;
-    status: SeasonStatus;
     startDate: Date;
     endDate?: Date;
-    totalRaces: number;
-    racesCompleted: number;
-    totalParticipants: number;
   }): SeasonEntity {
     return new SeasonEntity(
-      undefined, // No ID yet - will be assigned by repository
+      undefined,
       data.name,
-      data.status,
+      "upcoming" as SeasonStatus,
       data.startDate,
       data.endDate,
-      data.totalRaces,
-      data.racesCompleted,
-      data.totalParticipants,
-      undefined, // No createdAt yet
-      undefined, // No updatedAt yet
+      undefined,
+      undefined,
     );
   }
 
@@ -46,9 +36,6 @@ export class SeasonEntity extends EntityRoot {
     status: SeasonStatus;
     startDate: Date;
     endDate?: Date;
-    totalRaces: number;
-    racesCompleted: number;
-    totalParticipants: number;
     createdAt?: Date;
     updatedAt?: Date;
   }): SeasonEntity {
@@ -58,9 +45,6 @@ export class SeasonEntity extends EntityRoot {
       data.status,
       data.startDate,
       data.endDate,
-      data.totalRaces,
-      data.racesCompleted,
-      data.totalParticipants,
       data.createdAt,
       data.updatedAt,
     );
@@ -72,18 +56,12 @@ export class SeasonEntity extends EntityRoot {
       status: SeasonStatus;
       startDate: Date;
       endDate: Date;
-      totalRaces: number;
-      racesCompleted: number;
-      totalParticipants: number;
     }>,
   ): void {
-    // TODO: Add validation logic here if needed (e.g., ensure status is valid, dates are consistent, etc.)
     if (data.name !== undefined) this.name = data.name;
     if (data.status !== undefined) this.status = data.status;
     if (data.startDate !== undefined) this.startDate = data.startDate;
     if (data.endDate !== undefined) this.endDate = data.endDate;
-    if (data.totalRaces !== undefined) this.totalRaces = data.totalRaces;
-    if (data.racesCompleted !== undefined) this.racesCompleted = data.racesCompleted;
-    if (data.totalParticipants !== undefined) this.totalParticipants = data.totalParticipants;
   }
 }
+

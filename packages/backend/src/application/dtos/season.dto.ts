@@ -1,7 +1,16 @@
-import { Season } from "shared";
+import { Season, SeasonStatus } from "shared";
 
-export interface SeasonCreateInput extends Omit<Season, "id"> {}
+export interface SeasonCreateInput {
+  name: string;
+  startDate: Date;
+  endDate?: Date;
+}
 
-export interface SeasonUpdateInput extends Partial<Omit<Season, "id">> {}
+export interface SeasonUpdateInput {
+  name?: string;
+  status?: SeasonStatus;
+  startDate?: Date;
+  endDate?: Date;
+}
 
 export type SeasonResponse = Season;

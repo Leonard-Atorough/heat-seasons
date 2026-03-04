@@ -7,6 +7,7 @@ export class RaceEntity extends EntityRoot {
     public raceNumber: number,
     public name: string,
     public date: Date,
+    public completed: boolean,
     public results: {
       racerId: string;
       position: number;
@@ -25,6 +26,7 @@ export class RaceEntity extends EntityRoot {
     raceNumber: number;
     name: string;
     date: Date;
+    completed?: boolean;
     results: {
       racerId: string;
       position: number;
@@ -39,6 +41,7 @@ export class RaceEntity extends EntityRoot {
       data.raceNumber,
       data.name,
       data.date,
+      data.completed ?? false,
       data.results,
       undefined,
       undefined,
@@ -51,6 +54,7 @@ export class RaceEntity extends EntityRoot {
     raceNumber: number;
     name: string;
     date: Date;
+    completed: boolean;
     results: {
       racerId: string;
       position: number;
@@ -67,6 +71,7 @@ export class RaceEntity extends EntityRoot {
       data.raceNumber,
       data.name,
       data.date,
+      data.completed,
       data.results,
       data.createdAt,
       data.updatedAt,
@@ -77,6 +82,7 @@ export class RaceEntity extends EntityRoot {
     data: Partial<{
       name: string;
       date: Date;
+      completed: boolean;
       results: {
         racerId: string;
         position: number;
@@ -88,6 +94,8 @@ export class RaceEntity extends EntityRoot {
   ): void {
     if (data.name !== undefined) this.name = data.name;
     if (data.date !== undefined) this.date = data.date;
+    if (data.completed !== undefined) this.completed = data.completed;
     if (data.results !== undefined) this.results = data.results;
   }
 }
+

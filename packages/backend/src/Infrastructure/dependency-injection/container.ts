@@ -142,7 +142,7 @@ class Container {
       case "RaceRepository":
         return new RaceRepository(this.storageAdapter) as unknown as T;
       case "SeasonRepository":
-        return new SeasonRepository(this.storageAdapter) as unknown as T;
+        return new SeasonRepository(this.storageAdapter as PrismaStorageAdapter) as unknown as T;
       case "BootstrapRepository":
         return new BootstrapRepository(this.storageAdapter) as unknown as T;
       default:

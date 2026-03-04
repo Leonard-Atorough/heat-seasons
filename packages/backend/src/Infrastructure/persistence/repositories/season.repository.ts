@@ -1,11 +1,11 @@
 import { SeasonEntity } from "@src/domain/entities/seasonEntity";
-import { StorageAdapter } from "../StorageAdapter";
+import { PrismaStorageAdapter } from "../PrismaStorageAdapter";
 import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
-import { SeasonStatus } from "shared";
+import { SeasonStatus, SeasonParticipant } from "shared";
 import { SeasonMapper } from "src/application/mappers";
 
 export class SeasonRepository implements ISeasonRepository {
-  constructor(private storageAdapter: StorageAdapter) {}
+  constructor(private storageAdapter: PrismaStorageAdapter) {}
 
   async findAll(filters?: { status?: SeasonStatus }): Promise<SeasonEntity[]> {
     try {
@@ -35,7 +35,6 @@ export class SeasonRepository implements ISeasonRepository {
   async create(data: SeasonEntity): Promise<SeasonEntity> {
     const dataToSave = {
       ...SeasonMapper.toPersistence(data),
-      // ID will be assigned by the storage adapter
     };
     const savedData = await this.storageAdapter.create("seasons", dataToSave);
     return SeasonMapper.toDomainFromPersistence(savedData);
@@ -51,5 +50,33 @@ export class SeasonRepository implements ISeasonRepository {
 
   async delete(id: string): Promise<void> {
     await this.storageAdapter.delete("seasons", id);
+  }
+
+  async addParticipant(seasonId: string, racerId: string): Promise<SeasonParticipant> {
+    const result = await this.storageAdapter.getClient().seasonParticipant.create({
+      data: { seasonId, racerId },
+    });
+    return {
+      seasonId: result.seasonId,
+      racerId: result.racerId,
+      registeredAt: result.registeredAt,
+    };
+  }
+
+  async removeParticipant(seasonId: string, racerId: string): Promise<void> {
+    await this.storageAdapter.getClient().seasonParticipant.delete({
+      where: { seasonId_racerId: { seasonId, racerId } },
+    });
+  }
+
+  async findParticipants(seasonId: string): Promise<SeasonParticipant[]> {
+    const results = await this.storageAdapter.getClient().seasonParticipant.findMany({
+      where: { seasonId },
+    });
+    return results.map((r) => ({
+      seasonId: r.seasonId,
+      racerId: r.racerId,
+      registeredAt: r.registeredAt,
+    }));
   }
 }

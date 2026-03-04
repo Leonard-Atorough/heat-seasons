@@ -1,13 +1,12 @@
 import styles from "./Dashboard.module.css";
 import { StatCard, PodiumCard, Hero } from "../components/features/Dashboard";
-import { useActiveSeason, useSeasons, useRacers, useRaceResult } from "../hooks/data";
+import { useActiveSeason, useRacers, useRaceResult } from "../hooks/data";
 import { useMemo } from "react";
 import { Button, LoadingSkeletonCard } from "../components/common";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { data: activeSeason, isLoading: isSeasonLoading } = useActiveSeason();
-  const { data: seasons, isLoading: isSeasonsLoading } = useSeasons();
   const { data: racers, isLoading: isRacersLoading } = useRacers();
   const { races, results, isLoading: isResultsLoading } = useRaceResult(activeSeason?.id || "", "");
   const navigate = useNavigate();
@@ -47,7 +46,7 @@ export default function Dashboard() {
     }));
   }, [results, racers]);
 
-  const isLoading = isSeasonLoading || isSeasonsLoading || isResultsLoading || isRacersLoading;
+  const isLoading = isSeasonLoading || isResultsLoading || isRacersLoading;
 
   return (
     <div className={styles.dashboard}>
@@ -56,9 +55,7 @@ export default function Dashboard() {
       ) : (
         <Hero
           title={activeSeason?.name.toUpperCase() ?? "SEASON ONE WINTER 2026"}
-          subtitle={`Races Completed: ${seasons?.[0]?.racesCompleted ?? 0} / ${
-            seasons?.[0]?.totalRaces ?? "?"
-          }`}
+          subtitle={`Races Completed: ${races?.filter((r) => r.completed)?.length ?? 0} / ${races?.length ?? "?"}`}
           backgroundImage="/images/dashboard-hero.webp"
         />
       )}

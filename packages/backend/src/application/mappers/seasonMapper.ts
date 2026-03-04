@@ -6,12 +6,8 @@ export class SeasonMapper {
   static toDomain(dto: SeasonCreateInput): SeasonEntity {
     return SeasonEntity.create({
       name: dto.name,
-      status: dto.status,
       startDate: dto.startDate,
       endDate: dto.endDate,
-      totalRaces: dto.totalRaces,
-      racesCompleted: dto.racesCompleted,
-      totalParticipants: dto.totalParticipants,
     });
   }
 
@@ -22,9 +18,6 @@ export class SeasonMapper {
       status: data.status,
       startDate: data.startDate,
       endDate: data.endDate,
-      totalRaces: data.totalRaces,
-      racesCompleted: data.racesCompleted,
-      totalParticipants: data.totalParticipants,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     });
@@ -40,9 +33,6 @@ export class SeasonMapper {
       status: entity.status,
       startDate: entity.startDate,
       endDate: entity.endDate,
-      totalRaces: entity.totalRaces,
-      racesCompleted: entity.racesCompleted,
-      totalParticipants: entity.totalParticipants,
     };
   }
 
@@ -53,9 +43,6 @@ export class SeasonMapper {
       status: entity.status,
       startDate: entity.startDate,
       endDate: entity.endDate,
-      totalRaces: entity.totalRaces,
-      racesCompleted: entity.racesCompleted,
-      totalParticipants: entity.totalParticipants,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     };

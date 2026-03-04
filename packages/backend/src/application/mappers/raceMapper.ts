@@ -19,6 +19,7 @@ export class RaceMapper {
       raceNumber: data.raceNumber,
       name: data.name,
       date: data.date,
+      completed: data.completed ?? false,
       results: data.results,
       createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
       updatedAt: data.updatedAt ? new Date(data.updatedAt) : new Date(),
@@ -35,6 +36,7 @@ export class RaceMapper {
       raceNumber: entity.raceNumber,
       name: entity.name,
       date: entity.date,
+      completed: entity.completed,
       results: entity.results,
     } as RaceResponse;
   }
@@ -46,6 +48,7 @@ export class RaceMapper {
       raceNumber: entity.raceNumber,
       name: entity.name,
       date: entity.date,
+      completed: entity.completed,
       results: entity.results,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,

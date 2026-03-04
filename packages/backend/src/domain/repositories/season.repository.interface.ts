@@ -1,5 +1,5 @@
 import { SeasonEntity } from "../entities/seasonEntity";
-import { SeasonStatus, Season } from "shared";
+import { SeasonStatus, SeasonParticipant } from "shared";
 
 export interface ISeasonRepository {
   findAll(filters?: { status?: SeasonStatus }): Promise<SeasonEntity[]>;
@@ -8,4 +8,7 @@ export interface ISeasonRepository {
   create(data: SeasonEntity): Promise<SeasonEntity>;
   update(id: string, data: SeasonEntity): Promise<SeasonEntity>;
   delete(id: string): Promise<void>;
+  addParticipant(seasonId: string, racerId: string): Promise<SeasonParticipant>;
+  removeParticipant(seasonId: string, racerId: string): Promise<void>;
+  findParticipants(seasonId: string): Promise<SeasonParticipant[]>;
 }
