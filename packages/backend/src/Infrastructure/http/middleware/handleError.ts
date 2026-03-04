@@ -1,11 +1,41 @@
 import { NextFunction, Response, Request } from "express";
-import { AppError } from "src/Infrastructure/errors/appError";
+import {
+  AppError,
+  ForbiddenError,
+  NotFoundError as HttpNotFoundError,
+  UnauthorizedError,
+  ValidationError,
+} from "src/Infrastructure/errors/appError";
+
 import { ApiResponse } from "shared/dist/api/ApiResponse";
 import { logger as rootLogger } from "src/Infrastructure/logging/logger";
+import {
+  ApplicationError,
+  NotFoundError as DomainNotFoundError,
+  ForbiddenError as DomainForbiddenError,
+  UnauthorisedError,
+} from "@src/domain/errors";
+
+/**
+ * Maps a domain error to the equivalent HTTP-aware AppError.
+ * Add new domain error types here as they are introduced.
+ */
+function mapDomainError(err: ApplicationError): AppError {
+  if (err instanceof DomainNotFoundError) return new HttpNotFoundError(err.message, err.details);
+  if (err instanceof DomainForbiddenError) return new ForbiddenError(err.message, err.details);
+  if (err instanceof UnauthorisedError) return new UnauthorizedError(err.message, err.details);
+  // Fallback: treat unmapped domain errors as 400 Bad Request
+  return new ValidationError(err.message, err.details);
+}
 
 export function handleError(err: Error, req: Request, res: Response, next: NextFunction): void {
   // Prefer the request-scoped child logger (carries reqId) when available.
   const log = (req as any).log ?? rootLogger;
+
+  // Translate domain errors into HTTP-aware AppErrors before handling
+  if (err instanceof ApplicationError) {
+    err = mapDomainError(err);
+  }
 
   if (err instanceof AppError) {
     if (err.statusCode >= 500) {

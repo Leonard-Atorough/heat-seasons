@@ -9,3 +9,17 @@
  * - InvalidRacerStateError
  * - SeasonNotActiveError
  */
+export {
+  ApplicationError,
+  ForbiddenError,
+  NotFoundError,
+  NotImplemented,
+  UnauthorisedError,
+} from "./application";
+
+export {
+  SeasonNotActiveError,
+  SeasonAlreadyExistsError,
+  SeasonNotFoundError,
+  InvalidSeasonStateError,
+} from "./seasonErrors";
