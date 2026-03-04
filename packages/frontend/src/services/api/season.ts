@@ -8,3 +8,4 @@ export const getCurrentSeason = async () => {
 export const getSeasons = async () => {
   return await apiClient.get<Season[]>("/seasons");
 };
+
