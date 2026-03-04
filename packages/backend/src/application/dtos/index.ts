@@ -12,3 +12,11 @@ export type { SeasonCreateInput, SeasonUpdateInput, SeasonResponse } from "./sea
 
 // Config DTOs
 export type { PointsConfig, PointsConfigUpdateInput } from "./config.dto";
+
+// Bootstrap DTOs
+export type {
+  CreateBootstrapConfig,
+  BootstrapConfigResponse,
+  CreateBootstrapAdminUserInput,
+  CreateBootstrapAdminUserResponse,
+} from "./bootstrap.dto";
