@@ -1,8 +1,7 @@
 import { StorageAdapter } from "../StorageAdapter";
 import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
 import { UserEntity } from "src/domain/entities/UserEntity";
-import { UserMapper } from "src/application/mappers/userMapper";
-import { JwtService } from "@src/Infrastructure/security/jwt";
+import { UserMapper } from "src/application/mappers";
 
 export class AuthRepository implements IAuthRepository {
   constructor(private storageAdapter: StorageAdapter) {}

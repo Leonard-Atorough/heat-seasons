@@ -3,7 +3,7 @@ import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "src/applic
 import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
 import { ISeasonService } from "./season.service.interface.js";
 import { SeasonStatus } from "shared";
-import { SeasonMapper } from "src/application/mappers/seasonMapper";
+import { SeasonMapper } from "src/application/mappers";
 
 export class SeasonService implements ISeasonService {
   constructor(private seasonRepository: ISeasonRepository) {}

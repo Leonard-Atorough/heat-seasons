@@ -2,7 +2,7 @@ import { SeasonEntity } from "src/domain/entities/SeasonEntity";
 import { StorageAdapter } from "../StorageAdapter";
 import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
 import { SeasonStatus } from "shared";
-import { SeasonMapper } from "src/application/mappers/seasonMapper";
+import { SeasonMapper } from "src/application/mappers";
 
 export class SeasonRepository implements ISeasonRepository {
   constructor(private storageAdapter: StorageAdapter) {}

@@ -3,7 +3,7 @@ import { IAuthService } from "./auth.service.interface";
 import { UserResponse, UserCreateInput } from "src/application/dtos/user.dto";
 import { User, UserRole } from "shared";
 import { JwtService } from "src/Infrastructure/security/jwt";
-import { UserMapper } from "src/application/mappers/userMapper";
+import { UserMapper } from "src/application/mappers";
 
 export class AuthService implements IAuthService {
   constructor(private authRepository: IAuthRepository) {}
