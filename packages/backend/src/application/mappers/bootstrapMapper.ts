@@ -3,7 +3,7 @@ import { BootstrapEntity } from "src/domain/entities";
 export class BootstrapMapper {
   static toDomain(data: any): BootstrapEntity {
     return BootstrapEntity.create({
-      bootstatrapTokenHash: data.bootstatrapTokenHash,
+      bootstrapTokenHash: data.bootstrapTokenHash,
       bootstrapTokenExpiresAt: new Date(data.bootstrapTokenExpiresAt),
       isInitialized: data.isInitialized,
     });
@@ -12,7 +12,7 @@ export class BootstrapMapper {
   static toDomainFromPersistence(data: any): BootstrapEntity {
     return BootstrapEntity.reconstitute({
       id: data.id,
-      bootstatrapTokenHash: data.bootstatrapTokenHash,
+      bootstrapTokenHash: data.bootstrapTokenHash,
       bootstrapTokenExpiresAt: new Date(data.bootstrapTokenExpiresAt),
       isInitialized: data.isInitialized,
       createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
@@ -23,7 +23,7 @@ export class BootstrapMapper {
   static toPersistence(entity: BootstrapEntity): any {
     return {
       id: entity.id,
-      bootstatrapTokenHash: entity.bootstrapTokenHash,
+      bootstrapTokenHash: entity.bootstrapTokenHash,
       bootstrapTokenExpiresAt: entity.bootstrapTokenExpiresAt,
       isInitialized: entity.isInitialized,
       createdAt: entity.createdAt,
