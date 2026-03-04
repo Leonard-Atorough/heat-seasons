@@ -1,4 +1,4 @@
-import { EntityRoot } from "./EntityRoot";
+import { EntityRoot } from "./entityRoot";
 
 export class RaceEntity extends EntityRoot {
   private constructor(

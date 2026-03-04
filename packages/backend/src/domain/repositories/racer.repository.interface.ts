@@ -1,4 +1,4 @@
-import { RacerEntity } from "../entities/RacerEntity";
+import { RacerEntity } from "../entities/racerEntity";
 
 export interface IRacerRepository {
   findAll(filters?: { active?: boolean }): Promise<RacerEntity[]>;

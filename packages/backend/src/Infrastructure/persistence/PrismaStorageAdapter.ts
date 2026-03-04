@@ -13,6 +13,7 @@ const COLLECTION_MODEL: Record<string, string> = {
   seasons: "season",
   races: "race",
   blacklistedTokens: "blacklistedToken",
+  bootstrapConfig: "bootstrapConfig",
 };
 
 /**

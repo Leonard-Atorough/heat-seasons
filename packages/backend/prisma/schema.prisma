@@ -83,3 +83,12 @@ model BlacklistedToken {
   expiresAt DateTime
   createdAt DateTime @default(now())
 }
+
+model BootstrapConfig {
+  id                     String   @id @default("singleton")
+  bootstrapTokenHash     String // Store the hash of the bootstrap token for secure comparison
+  bootstrapTokenExpiresAt DateTime
+  isInitialized          Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}

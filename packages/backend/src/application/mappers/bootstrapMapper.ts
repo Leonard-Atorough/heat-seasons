@@ -22,7 +22,6 @@ export class BootstrapMapper {
 
   static toPersistence(entity: BootstrapEntity): any {
     return {
-      id: entity.id,
       bootstrapTokenHash: entity.bootstrapTokenHash,
       bootstrapTokenExpiresAt: entity.bootstrapTokenExpiresAt,
       isInitialized: entity.isInitialized,

@@ -1,4 +1,4 @@
-import { EntityRoot } from "./EntityRoot";
+import { EntityRoot } from "./entityRoot";
 
 /**
  * Represents the bootstrap configuration for the application, including the bootstrap token and its expiration.

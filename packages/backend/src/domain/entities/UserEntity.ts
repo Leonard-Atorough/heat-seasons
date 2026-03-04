@@ -1,4 +1,4 @@
-import { EntityRoot } from "./EntityRoot";
+import { EntityRoot } from "./entityRoot";
 
 export class UserEntity extends EntityRoot {
   private constructor(

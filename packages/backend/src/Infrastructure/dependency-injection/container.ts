@@ -5,23 +5,26 @@ import {
   RacerRepository,
   RaceRepository,
   SeasonRepository,
+  BootstrapRepository,
 } from "../persistence/repositories";
 import {
   IAuthRepository,
+  IBootstrapRepository,
   IRaceRepository,
   IRacerRepository,
   ISeasonRepository,
-} from "../../domain/repositories";
-import { AuthController, AuthService, IAuthService } from "../../api/auth";
-import { AdminController } from "../../api/admin";
-import { RacerController, RacerService, IRacerService } from "../../api/racer";
-import { RaceController, RaceService, IRaceService } from "../../api/race";
-import { SeasonController, SeasonService, ISeasonService } from "../../api/season";
+} from "@src/domain/repositories";
+import { AuthController, AuthService, IAuthService } from "@src/api/auth";
+import { AdminController } from "@src/api/admin";
+import { RacerController, RacerService, IRacerService } from "@src/api/racer";
+import { RaceController, RaceService, IRaceService } from "@src/api/race";
+import { SeasonController, SeasonService, ISeasonService } from "@src/api/season";
 import {
   LeaderboardController,
   LeaderboardService,
   ILeaderboardService,
-} from "../../api/leaderboard";
+} from "@src/api/leaderboard";
+import { BootstrapController, BootstrapService, IBootstrapService } from "@src/api/bootstrap";
 
 class Container {
   private static instance: Container | null = null;
@@ -60,6 +63,12 @@ class Container {
       this.getRepository<IRacerRepository>("RacerRepository"),
     );
     this.serviceLocator.register("LeaderboardService", leaderboardService);
+
+    const bootstrapService = new BootstrapService(
+      this.getRepository<IBootstrapRepository>("BootstrapRepository"),
+      this.getRepository<IAuthRepository>("AuthRepository"),
+    );
+    this.serviceLocator.register("BootstrapService", bootstrapService);
   }
 
   public static getInstance(): Container {
@@ -70,7 +79,7 @@ class Container {
     return Container.instance;
   }
 
-  public async initializeStorageAdapter<T extends StorageAdapter>(): Promise<void> {
+  public async initializeStorageAdapter(): Promise<void> {
     await this.storageAdapter.initialize();
   }
 
@@ -119,6 +128,11 @@ class Container {
     return new AdminController(service);
   }
 
+  createBootstrapController(): BootstrapController {
+    const service = this.serviceLocator.get<IBootstrapService>("BootstrapService");
+    return new BootstrapController(service);
+  }
+
   private createRepository<T>(name: string): T {
     switch (name) {
       case "AuthRepository":
@@ -129,6 +143,8 @@ class Container {
         return new RaceRepository(this.storageAdapter) as unknown as T;
       case "SeasonRepository":
         return new SeasonRepository(this.storageAdapter) as unknown as T;
+      case "BootstrapRepository":
+        return new BootstrapRepository(this.storageAdapter) as unknown as T;
       default:
         throw new Error(`Repository ${name} not found`);
     }

@@ -1,4 +1,4 @@
-import { SeasonEntity } from "src/domain/entities/SeasonEntity";
+import { SeasonEntity } from "@src/domain/entities/seasonEntity";
 import { StorageAdapter } from "../StorageAdapter";
 import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
 import { SeasonStatus } from "shared";

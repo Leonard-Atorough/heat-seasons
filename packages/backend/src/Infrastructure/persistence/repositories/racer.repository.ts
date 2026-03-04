@@ -1,4 +1,4 @@
-import { RacerEntity } from "src/domain/entities/RacerEntity";
+import { RacerEntity } from "@src/domain/entities/racerEntity";
 import { StorageAdapter } from "../StorageAdapter";
 import { IRacerRepository } from "src/domain/repositories/racer.repository.interface";
 import { RacerMapper } from "src/application/mappers";

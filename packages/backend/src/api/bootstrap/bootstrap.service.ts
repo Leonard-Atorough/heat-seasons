@@ -22,7 +22,9 @@ export class BootstrapService implements IBootstrapService {
 
     return config?.isInitialized ?? false;
   }
-  async generateBootstrapToken(config: CreateBootstrapConfig): Promise<BootstrapConfigResponse> {
+  async generateBootstrapToken(
+    config: CreateBootstrapConfig = { expirationMinutes: 60 },
+  ): Promise<BootstrapConfigResponse> {
     if (await this.isSystemBootstrapped()) {
       // TODO: Replace with a custom error class from the domain layer, will be mapped to http error in the infrastructure layer
       throw new Error("System is already bootstrapped");

@@ -6,8 +6,6 @@ import { authMiddleware } from "@src/Infrastructure/http/middleware";
 
 const router = Router();
 
-const authController = Container.getInstance().createAuthController();
-
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 10000, // limit each IP to 100 requests per windowMs TODO: Adjust this limit as needed
@@ -26,6 +24,8 @@ router.get(
   authMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
     req.log.info({ userId: (req.user as { id: string })?.id }, "Fetching current user profile");
+    const authController = Container.getInstance().createAuthController();
+
     authController.getMe(req, res, next);
   },
 );
@@ -42,6 +42,7 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req: Request, res: Response, next: NextFunction) => {
     req.log.info({ userId: (req.user as { id: string })?.id }, "Google callback");
+    const authController = Container.getInstance().createAuthController();
     authController.googleCallback(req, res, next);
   },
 );
@@ -52,6 +53,7 @@ router.post(
   authMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
     req.log.info({ userId: (req.user as { id: string })?.id }, "Logging out");
+    const authController = Container.getInstance().createAuthController();
     authController.logout(req, res, next);
   },
 );

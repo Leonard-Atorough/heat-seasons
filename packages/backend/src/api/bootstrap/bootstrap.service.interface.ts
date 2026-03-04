@@ -7,6 +7,6 @@ import {
 
 export interface IBootstrapService {
   isSystemBootstrapped(): Promise<boolean>;
-  generateBootstrapToken(config: CreateBootstrapConfig): Promise<BootstrapConfigResponse>;
+  generateBootstrapToken(config?: CreateBootstrapConfig): Promise<BootstrapConfigResponse>;
   bootstrapSystem(data: CreateBootstrapAdminUserInput): Promise<UserResponse>;
 }

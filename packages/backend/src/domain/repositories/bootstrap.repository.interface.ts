@@ -1,4 +1,4 @@
-import { BootstrapEntity } from "../entities/BootstrapEntity";
+import { BootstrapEntity } from "../entities/bootstrapEntity";
 
 export interface IBootstrapRepository {
   getBootstrapConfig(): Promise<BootstrapEntity | null>;

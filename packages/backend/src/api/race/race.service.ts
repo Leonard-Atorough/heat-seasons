@@ -4,7 +4,7 @@ import { RaceCreateInput, RaceResponse, RaceUpdateInput } from "src/application/
 import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
 import { RaceMapper } from "src/application/mappers";
 import { NotFoundError } from "src/Infrastructure/errors/appError.js";
-import { RaceEntity } from "src/domain/entities/RaceEntity.js";
+import { RaceEntity } from "@src/domain/entities/raceEntity.js";
 
 export class RaceService implements IRaceService {
   constructor(

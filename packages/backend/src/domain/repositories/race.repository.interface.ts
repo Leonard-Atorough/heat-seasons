@@ -1,4 +1,4 @@
-import { RaceEntity } from "../entities/RaceEntity";
+import { RaceEntity } from "../entities/raceEntity";
 
 export interface IRaceRepository {
   findAll(): Promise<RaceEntity[]>;

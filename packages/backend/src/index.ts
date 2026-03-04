@@ -6,14 +6,14 @@ import session from "express-session";
 import passport from "./Infrastructure/security/passport";
 import { logger } from "./Infrastructure/logging/logger";
 import { requestLogger } from "./Infrastructure/logging/requestLogger";
-
+import { Container } from "./Infrastructure/dependency-injection/container.js";
 import { authRouter } from "./api/auth/auth.route.js";
 import { adminRouter } from "./api/admin/admin.route.js";
 import { racerRouter } from "./api/racer/racer.route.js";
 import { seasonRouter } from "./api/season/season.route.js";
 import { raceRouter } from "./api/race/race.route.js";
 import { leaderboardRouter } from "./api/leaderboard/leaderboard.route.js";
-import { Container } from "./Infrastructure/dependency-injection/container.js";
+import { bootstrapRouter } from "./api/bootstrap/bootstrap.route";
 import { handleError } from "./Infrastructure/http/middleware";
 
 const app: Application = express();
@@ -24,7 +24,6 @@ container.initializeStorageAdapter().catch((error) => {
   logger.error({ err: error }, "Failed to initialize storage adapter");
   process.exit(1);
 });
-
 // FRONTEND_URL is validated/loaded from `src/env.ts`.
 logger.info(
   {
@@ -83,6 +82,7 @@ app.use("/api/racers", racerRouter);
 app.use("/api/seasons", seasonRouter);
 app.use("/api/races", raceRouter);
 app.use("/api/leaderboard", leaderboardRouter);
+app.use("/api/bootstrap", bootstrapRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   handleError(err, req, res, next);

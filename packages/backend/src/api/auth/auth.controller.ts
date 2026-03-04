@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { IAuthService } from "./auth.service.interface";
-import { JwtService, TokenPayload } from "src/Infrastructure/security/jwt";
+import { TokenPayload } from "src/Infrastructure/security/jwt";
 import { UserResponse } from "src/application/dtos/user.dto";
 import { ApiResponse } from "shared";
 import { FRONTEND_URL, COOKIE_SECURE, COOKIE_DOMAIN } from "../../env";
