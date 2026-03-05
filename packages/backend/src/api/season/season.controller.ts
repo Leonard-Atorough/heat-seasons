@@ -32,23 +32,6 @@ export class SeasonController {
     res.status(501).json({ error: "Not implemented" });
   }
 
-  async getCurrent(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      const season = await this.seasonService.getActiveSeason();
-      const response: ApiResponse<Season> = {
-        success: true,
-        status: 200,
-        statusText: "OK",
-        timestamp: new Date(),
-        message: "Successfully retrieved active season",
-        data: season,
-      };
-      res.status(200).json(response);
-    } catch (error) {
-      next(error);
-    }
-  }
-
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const seasonData = req.body;

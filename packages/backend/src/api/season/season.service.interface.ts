@@ -9,5 +9,4 @@ export interface ISeasonService {
   getParticipants(seasonId: string): Promise<SeasonParticipant[]>;
   update(id: string, data: SeasonUpdateInput): Promise<SeasonResponse>;
   delete(id: string): Promise<void>;
-  getActiveSeason(): Promise<SeasonResponse>;
 }

@@ -26,15 +26,6 @@ export class SeasonService implements ISeasonService {
     return SeasonMapper.toResponse(season);
   }
 
-  async getActiveSeason(): Promise<SeasonResponse> {
-    const season = await this.seasonRepository.findActive();
-
-    if (!season) {
-      throw new NotFoundError("No active season found");
-    }
-    return SeasonMapper.toResponse(season);
-  }
-
   async create(data: SeasonCreateInput): Promise<SeasonResponse> {
     const newSeason = SeasonMapper.toDomain(data);
     const createdSeason = await this.seasonRepository.create(newSeason);

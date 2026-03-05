@@ -1,0 +1,10 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.button {
+  align-self: flex-end;
+    margin-top: var(--spacing-md);
+}

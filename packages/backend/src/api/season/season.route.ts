@@ -10,11 +10,6 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
   seasonController.getAll(req, res, next);
 });
 
-router.get("/active", (req: Request, res: Response, next: NextFunction) => {
-  req.log.info("Fetching active season");
-  seasonController.getCurrent(req, res, next);
-});
-
 router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
   req.log.info({ seasonId: req.params.id }, "Fetching season by ID");
   seasonController.getById(req, res, next);

@@ -1,5 +1,6 @@
 import { createSeason } from "../../../services/api/season";
 import { FormGroup, Modal, Button } from "../../../components/common";
+import styles from "./AddSeasonModal.module.css";
 
 export interface AddSeasonModalProps {
   isOpen: boolean;
@@ -29,7 +30,7 @@ export function AddSeasonModal({ isOpen, onClose, onSubmit }: AddSeasonModalProp
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Add New Season">
-      <form onSubmit={validateAndSubmit}>
+      <form onSubmit={validateAndSubmit} className={styles.form}>
         <FormGroup
           element="input"
           type="text"
@@ -44,7 +45,7 @@ export function AddSeasonModal({ isOpen, onClose, onSubmit }: AddSeasonModalProp
           id="startDate"
           placeholder="YYYY-MM-DD"
         />
-        <Button type="submit">Create Season</Button>
+        <Button type="submit" className={styles.button}>Create Season</Button>
       </form>
     </Modal>
   );
