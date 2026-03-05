@@ -19,7 +19,15 @@ export class RacerService implements IRacerService {
   }
 
   async getById(id: string): Promise<RacerWithStats | null> {
-    throw new Error("Not implemented");
+    const racer = await this.racerRepository.findById(id);
+    if (!racer) return null;
+    return { ...RacerMapper.toResponse(racer), stats: null };
+  }
+
+  async getByUserId(userId: string): Promise<RacerWithStats | null> {
+    const racer = await this.racerRepository.findByUserId(userId);
+    if (!racer) return null;
+    return { ...RacerMapper.toResponse(racer), stats: null };
   }
 
   async create(data: RacerCreateInput): Promise<Racer> {

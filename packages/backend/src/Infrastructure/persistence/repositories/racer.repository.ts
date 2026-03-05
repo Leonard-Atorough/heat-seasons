@@ -18,6 +18,11 @@ export class RacerRepository implements IRacerRepository {
     return racer ? RacerMapper.toDomainFromPersistence(racer) : null;
   }
 
+  async findByUserId(userId: string): Promise<RacerEntity | null> {
+    const racers = await this.storageAdapter.findAll<any>("racers", { userId });
+    return racers.length > 0 ? RacerMapper.toDomainFromPersistence(racers[0]) : null;
+  }
+
   async findByIds(ids: string[]): Promise<RacerEntity[]> {
     const allRacers = await this.storageAdapter.findAll<any>("racers");
     const filtered = allRacers.filter((racer) => ids.includes(racer.id)) || [];

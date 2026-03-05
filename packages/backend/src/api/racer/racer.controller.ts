@@ -56,9 +56,42 @@ export class RacerController {
     }
   }
 
+  async getByUserId(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      // Support both /me (reads from auth token) and /:userId param
+      const userId = (req.user as { id: string })?.id ?? req.params.userId;
+      const racer = await this.racerService.getByUserId(userId);
+      if (!racer) {
+        const response: ApiResponse<null> = {
+          success: false,
+          status: 404,
+          statusText: "Not Found",
+          timestamp: new Date(),
+          message: "No racer found for this user",
+          data: null,
+        };
+        res.status(404).json(response);
+        return;
+      }
+      const response: ApiResponse<RacerWithStats> = {
+        success: true,
+        status: 200,
+        statusText: "OK",
+        timestamp: new Date(),
+        message: `Successfully retrieved racer for user ${userId}`,
+        data: racer,
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const racerData = req.body;
+      // Inject authenticated user's ID so clients can't forge ownership
+      const userId = (req.user as { id: string })?.id;
+      const racerData = { ...req.body, userId };
       const newRacer = await this.racerService.create(racerData);
       const response: ApiResponse<Racer> = {
         success: true,

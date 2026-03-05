@@ -16,7 +16,7 @@ export default function RacerCard({ racer }: RacerCardProps) {
       className={styles.racerCard}
       onClick={() => navigate(`/racers/${racer.id}`, { state: { racer } })}
       style={{
-        backgroundImage: `linear-gradient(150deg, ${racer.teamColor || "var(--card-white)"} 50%, white 100%)`,
+        backgroundImage: `linear-gradient(135deg, ${racer.teamColor || "var(--card-white)"} 0%, var(--card-white, white) 60%)`,
       }}
     >
       <div className={styles.racerCard__info}>

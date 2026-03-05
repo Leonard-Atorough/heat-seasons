@@ -1,0 +1,90 @@
+.racerCard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.racerCard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md) 0;
+  border-bottom: var(--border-width-thin) solid var(--border-color);
+}
+
+.racerCard__headerRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.racerCard__name {
+  font-size: var(--font-size-4);
+  font-weight: var(--fw-bold);
+  margin: 0;
+}
+
+.racerCard__team {
+  font-size: var(--font-size-2);
+  color: var(--text-secondary);
+  margin: var(--spacing-xs) 0 0;
+}
+
+.racerCard__nationality {
+  font-size: var(--font-size-2);
+  color: var(--text-secondary);
+  font-weight: var(--fw-semibold);
+}
+
+.racerCard__meta {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.racerCard__metaItem {
+  font-size: var(--font-size-2);
+  color: var(--text-secondary);
+}
+
+.racerCard__metaItem strong {
+  color: var(--text-primary);
+}
+
+.racerCard__status--active {
+  color: var(--color-success, #22c55e);
+}
+
+.racerCard__status--inactive {
+  color: var(--text-secondary);
+}
+
+.racerCard__stats {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  border-top: var(--border-width-thin, 1px) solid var(--border-color);
+  padding-top: var(--spacing-md);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 52px;
+}
+
+.stat__value {
+  font-size: var(--font-size-4);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+.stat__label {
+  font-size: var(--font-size-1);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-xs);
+  white-space: nowrap;
+}

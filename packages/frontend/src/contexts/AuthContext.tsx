@@ -9,6 +9,7 @@ export interface AuthContextType {
   isAdmin: boolean;
   loginWithGoogle: () => void;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

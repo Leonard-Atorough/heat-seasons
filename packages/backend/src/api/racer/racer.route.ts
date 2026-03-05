@@ -11,6 +11,15 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
   racerController.getAll(req, res, next);
 });
 
+router.get(
+  "/me",
+  authMiddleware,
+  (req: Request, res: Response, next: NextFunction) => {
+    req.log.info({ userId: (req.user as { id: string })?.id }, "Fetching racer for current user");
+    racerController.getByUserId(req, res, next);
+  },
+);
+
 router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
   req.log.info({ racerId: req.params.id }, "Fetching racer by ID");
   racerController.getById(req, res, next);

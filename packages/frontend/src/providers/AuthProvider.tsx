@@ -37,6 +37,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const refreshUser = async (): Promise<void> => {
+    try {
+      const response = await apiClient.get<User>("/auth/me");
+      setUser(response);
+    } catch (error) {
+      console.error("User refresh failed:", error);
+    }
+  };
+
   const loginWithGoogle = () => {
     window.location.href = `${config.apiBaseUrl}/auth/google`;
   };
@@ -69,6 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isAdmin,
       loginWithGoogle,
       logout,
+      refreshUser,
     }),
     [user, isLoading, loginWithGoogle, logout],
   );
