@@ -8,9 +8,10 @@
 .raceResultForm__group {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-sm);
   width: 100%;
+  height: 100%;
   @media (max-width: 600px) {
     flex-direction: column;
     align-items: flex-start;
@@ -22,15 +23,17 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
-  padding: var(--spacing-sm);
   padding-right: var(--spacing-xxl);
   font-size: var(--font-size-1);
-  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: var(--border-width-thin) solid var(--asphalt-gray);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-2);
   min-width: 0;
   overflow-x: hidden;
   flex-wrap: nowrap;
   text-overflow: ellipsis;
-  width: 100%;
+  flex: 1 0 auto;
 }
 
 .raceResultForm__select::-ms-expand {
@@ -38,18 +41,20 @@
 }
 
 .raceResultForm__input {
-  width: 80px;
-  padding: var(--spacing-sm);
-  font-size: var(--font-size-1);
-  border-radius: var(--border-radius-sm);
+  max-width: 80px;
+  width: 100%;
   min-width: 0;
-}
-
-.raceResultForm__input:disabled {
-  background-color: var(--asphalt-gray);
-  cursor: not-allowed;
 }
 
 .raceResultForm__nameInput {
   width: 100%;
+}
+
+.raceResultForm__checkbox > input {
+  accent-color: var(--color-primary, #3b82f6);
+  cursor: pointer;
+  margin-top: var(--spacing-md);
+  width: 24px;
+  height: 24px;
+  margin-left: var(--spacing-md);
 }

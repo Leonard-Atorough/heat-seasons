@@ -70,6 +70,7 @@ function RaceResultFormGroup({
         onChange={(e) => onPointsChange(index, Number(e.target.value) || 0)}
         value={points}
         disabled={isLoading || !currentValue}
+        className={styles.raceResultForm__input}
       />
       <FormGroup
         element="input"
@@ -78,6 +79,7 @@ function RaceResultFormGroup({
         id={`ghostCheckbox-${index}`}
         disabled={isLoading}
         onChange={(e) => onGhostRacerChange(index, (e.target as HTMLInputElement).checked)}
+        className={styles.raceResultForm__checkbox}
       />
     </div>
   );
