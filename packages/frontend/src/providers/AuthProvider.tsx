@@ -1,5 +1,5 @@
 import { useState, useEffect, ReactNode, useMemo } from "react";
-import { AuthContext, AuthContextType } from "../contexts/AuthContext";
+import { AuthContext, AuthContextType } from "../contexts";
 import { User } from "../../types/domain/models";
 import { config } from "../config";
 import apiClient from "../services/apiClient";

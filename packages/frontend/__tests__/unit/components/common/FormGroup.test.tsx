@@ -28,7 +28,7 @@ const formGroupProps: FormGroupProps = {
 };
 
 describe("FormGroup Component", () => {
-  let onChange: ReturnType<typeof vi.fn>;
+  let onChange: any;
 
   beforeEach(() => {
     onChange = vi.fn();
@@ -68,7 +68,6 @@ describe("FormGroup Component", () => {
   });
 
   it("calls onChange handler when input value changes", async () => {
-    const onChange = vi.fn();
     render(<FormGroup {...formGroupProps} onChange={onChange} />);
     const input = screen.getByPlaceholderText("Enter text");
     input.focus();

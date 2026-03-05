@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState, useCallback, useMemo } from "react";
-import { DataContext, DataContextType } from "../contexts/DataContext";
+import { DataContext, DataContextType } from "../contexts";
 import { RacerWithStats, Season } from "shared";
 import { getAllRacers } from "../services/api/racer";
 import { getSeasons } from "../services/api/season";

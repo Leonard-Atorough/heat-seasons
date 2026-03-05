@@ -28,9 +28,9 @@ export default function Header() {
   }, []);
   return (
     <header className={styles.header + (headerScrolled ? ` ${styles["header--scrolled"]}` : "")}>
-      <h1 className={styles.title}>
+      <h1 className={styles.title} aria-label="Heat Seasons Home" role="heading" aria-level={1}>
         <Link to="/" onClick={() => setHamburgerOpen(false)}>
-          🏁 HEAT
+          🏁 HEAT SEASONS
         </Link>
       </h1>
       <Button
@@ -43,7 +43,10 @@ export default function Header() {
         <span className={styles.hamburger__line}></span>
         <span className={styles.hamburger__line}></span>
       </Button>
-      <nav className={styles.nav + (hamburgerOpen ? ` ${styles["nav--open"]}` : "")}>
+      <nav
+        className={styles.nav + (hamburgerOpen ? ` ${styles["nav--open"]}` : "")}
+        aria-label="Main Navigation"
+      >
         <Link className={styles["nav__link"]} to="/" onClick={() => setHamburgerOpen(false)}>
           Dashboard
         </Link>
@@ -69,7 +72,7 @@ export default function Header() {
               navigate("/login");
             }}
           >
-            Login/Register
+            Login
           </Button>
         ) : (
           <UserProfileBadge name={auth.user.name} profilePicture={auth.user.profilePicture || ""} />
