@@ -1,7 +1,7 @@
 import { Card } from "./Card";
 import styles from "./Modal.module.css";
 
-interface ModalProps {
+export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;

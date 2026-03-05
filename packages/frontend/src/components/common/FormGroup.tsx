@@ -1,6 +1,6 @@
 import styles from "./FormGroup.module.css";
 
-type FormGroupProps = {
+export interface FormGroupProps {
   element: string;
   type?: string;
   label: string;

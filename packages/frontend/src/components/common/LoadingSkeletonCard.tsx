@@ -1,6 +1,6 @@
 import styles from "./LoadingSkeletonCard.module.css";
 
-interface LoadingSkeletonCardProps {
+export interface LoadingSkeletonCardProps {
   lines?: number;
   height?: string;
   maxWidth?: string;
@@ -16,7 +16,7 @@ export default function LoadingSkeletonCard({
   includeText = true,
 }: LoadingSkeletonCardProps) {
   return (
-    <div className={styles.skeletonCard} style={{ height, maxWidth }}>
+    <div className={styles.skeletonCard} style={{ height, maxWidth }} role="img" aria-label="Loading content">
       <div className={styles.skeletonContent}>
         {includeTitle && <div className={styles.skeletonTitle} />}
         {includeText &&

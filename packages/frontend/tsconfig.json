@@ -20,11 +20,14 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
+    /* Test globals */
+    "types": ["vitest/globals"],
+
     /* Path aliases */
     "paths": {
       "@src/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "__tests__"],
   "references": [{ "path": "./tsconfig.node.json" }],
 }

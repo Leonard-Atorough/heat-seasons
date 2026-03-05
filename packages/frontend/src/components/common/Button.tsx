@@ -14,13 +14,21 @@ export function Button({
       className={`${styles[`btn__${variant}`]} ${className}`}
       onClick={onClick}
       disabled={disabled}
+      onKeyDown={
+        onClick
+          ? (e) => {
+            e.preventDefault();
+              if (e.key === "Enter" || e.key === " ") onClick(e as any);
+            }
+          : undefined
+      }
     >
       {children}
     </button>
   );
 }
 
-interface ButtonProps {
+export interface ButtonProps {
   type: "button" | "submit" | "reset";
   variant?: "primary" | "secondary" | "tertiary" | "danger" | "link" | "ghost";
   className?: string;
