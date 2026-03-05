@@ -1,4 +1,4 @@
-import { SeasonEntity } from "../entities/seasonEntity";
+import { SeasonEntity } from "../entities";
 import { SeasonStatus, SeasonParticipant } from "shared";
 
 export interface ISeasonRepository {
