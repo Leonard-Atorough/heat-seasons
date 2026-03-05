@@ -1,5 +1,6 @@
 export interface User {
   id: string;
+  racerId?: string;
   email: string;
   name: string;
   profilePicture?: string;

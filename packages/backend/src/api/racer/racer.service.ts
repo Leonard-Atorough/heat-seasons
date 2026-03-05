@@ -40,9 +40,11 @@ export class RacerService implements IRacerService {
 
     const newRacer = RacerMapper.toDomain(data);
 
-    userAggregate.assignRacer(newRacer);
-
+    // Create the racer first so the repository assigns its ID, then link it
+    // to the user. Previously assignRacer was called before create(), meaning
+    // user.racerId was set to undefined and the user update was a no-op.
     const savedRacer = await this.racerRepository.create(newRacer);
+    userAggregate.assignRacer(savedRacer);
     await this.userRepository.update(data.userId, userAggregate.getUser());
 
     return RacerMapper.toResponse(savedRacer);

@@ -1,4 +1,4 @@
-import { Season } from "shared";
+import { Season, SeasonParticipant } from "shared";
 import apiClient from "../apiClient";
 
 export const getCurrentSeason = async () => {
@@ -31,4 +31,12 @@ export const updateSeason = async (
 
 export const deleteSeason = async (seasonId: string) => {
   return await apiClient.delete(`/seasons/${seasonId}`);
+};
+
+export const getSeasonParticipants = async (seasonId: string) => {
+  return await apiClient.get<SeasonParticipant[]>(`/seasons/${seasonId}/participants`);
+};
+
+export const joinSeason = async (seasonId: string, racerId: string) => {
+  return await apiClient.post<SeasonParticipant>(`/seasons/${seasonId}/join/${racerId}`, {});
 };

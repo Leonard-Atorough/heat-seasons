@@ -1,26 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { Season } from "shared";
-import { Card } from "../components/common/Card";
 import styles from "./Seasons.module.css";
 import { useSeasons } from "../hooks/data/useSeason";
 import { Button, LoadingSkeletonCard } from "../components/common";
 import { useAuth } from "../hooks/useAuth";
-import { AddSeasonModal, EditSeasonModal } from "../components/features/Season";
-import { deleteSeason } from "../services/api/season";
+import { AddSeasonModal, EditSeasonModal, SeasonCard } from "../components/features/Season";
+import { deleteSeason, getSeasonParticipants, joinSeason } from "../services/api/season";
 
-const STATUS_LABELS: Record<string, string> = {
-  upcoming: "Upcoming",
-  active: "Active",
-  completed: "Completed",
-  archived: "Archived",
-};
+
+const JOINABLE_STATUSES = new Set(["upcoming", "active"]);
 
 export default function Seasons() {
   const { data: seasons, refresh, isLoading } = useSeasons();
-  const { isAdmin } = useAuth();
+  const { isAdmin, isAuthenticated, user } = useAuth();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingSeason, setEditingSeason] = useState<Season | null>(null);
+
+  // Map of seasonId → Set of racerIds who have joined
+  const [participantMap, setParticipantMap] = useState<Map<string, Set<string>>>(new Map());
+  // Tracks which seasons are mid-join request
+  const [joiningSeasonIds, setJoiningSeasonIds] = useState<Set<string>>(new Set());
 
   const handleRefresh = async () => {
     await refresh();
@@ -32,6 +32,28 @@ export default function Seasons() {
     const intervalId = setInterval(handleRefresh, 10 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
+
+  // When seasons load and the user is authenticated, fetch participants for
+  // all joinable (non-archived) seasons so we can show the correct join state.
+  useEffect(() => {
+    if (!isAuthenticated || !seasons || seasons.length === 0) return;
+
+    const fetchAll = async () => {
+      const joinable = seasons.filter((s) => s.status !== "archived");
+      const results = await Promise.allSettled(
+        joinable.map((s) => getSeasonParticipants(s.id).then((ps) => ({ id: s.id, ps }))),
+      );
+      const map = new Map<string, Set<string>>();
+      for (const r of results) {
+        if (r.status === "fulfilled") {
+          map.set(r.value.id, new Set(r.value.ps.map((p) => p.racerId)));
+        }
+      }
+      setParticipantMap(map);
+    };
+
+    fetchAll();
+  }, [isAuthenticated, seasons]);
 
   const sortedSeasons = useMemo(() => {
     if (!seasons) return [];
@@ -47,6 +69,31 @@ export default function Seasons() {
       await handleRefresh();
     } catch {
       alert("Failed to delete season. Please try again.");
+    }
+  };
+
+  const handleJoin = async (season: Season) => {
+    if (!user?.racerId) return;
+    setJoiningSeasonIds((prev) => new Set(prev).add(season.id));
+    try {
+      await joinSeason(season.id, user.racerId);
+      // Update local participant map optimistically
+      setParticipantMap((prev) => {
+        const next = new Map(prev);
+        const existing = new Set(next.get(season.id) ?? []);
+        existing.add(user.racerId!);
+        next.set(season.id, existing);
+        return next;
+      });
+    } catch (err: any) {
+      const msg = err?.data?.message ?? err?.message ?? "Failed to join season.";
+      alert(msg);
+    } finally {
+      setJoiningSeasonIds((prev) => {
+        const next = new Set(prev);
+        next.delete(season.id);
+        return next;
+      });
     }
   };
 
@@ -84,41 +131,33 @@ export default function Seasons() {
       </div>
       {seasons && (
         <div className={styles.seasonsPage__cards}>
-          {sortedSeasons.map((season) => (
-            <Card key={season.id} className={styles.seasonCard}>
-              <div className={styles.seasonCard__header}>
-                <h2 className={styles.seasonCard__name}>{season.name.toUpperCase()}</h2>
-                <span
-                  className={`${styles.seasonStatus} ${styles[`seasonStatus--${season.status}`]}`}
-                >
-                  {STATUS_LABELS[season.status] ?? season.status}
-                </span>
-              </div>
-              <span className={styles.seasonDetails}>
-                <p>
-                  <strong>Start Date:</strong> {new Date(season.startDate).toDateString()}
-                </p>
-                <p>
-                  <strong>End Date:</strong>{" "}
-                  {season.endDate ? new Date(season.endDate).toDateString() : "Ongoing"}
-                </p>
-              </span>
-              {isAdmin && (
-                <div className={styles.seasonCard__actions}>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setEditingSeason(season)}
-                  >
-                    Edit
-                  </Button>
-                  <Button type="button" variant="danger" onClick={() => handleDelete(season)}>
-                    Delete
-                  </Button>
-                </div>
-              )}
-            </Card>
-          ))}
+          {sortedSeasons.map((season) => {
+            const participants = participantMap.get(season.id);
+            const isJoined = !!(user?.racerId && participants?.has(user.racerId));
+            const canJoin =
+              isAuthenticated &&
+              !!user?.racerId &&
+              JOINABLE_STATUSES.has(season.status) &&
+              !isJoined;
+            const isJoining = joiningSeasonIds.has(season.id);
+
+            return (
+              <SeasonCard
+                key={season.id}
+                season={season}
+                isJoined={isJoined}
+                participants={participants}
+                canJoin={canJoin}
+                isJoining={isJoining}
+                isAdmin={isAdmin}
+                isAuthenticated={isAuthenticated}
+                user={user}
+                handleJoin={handleJoin}
+                setEditingSeason={setEditingSeason}
+                handleDelete={handleDelete}
+              />
+            );
+          })}
         </div>
       )}
       <div className={styles.seasonsPage__footer}>
