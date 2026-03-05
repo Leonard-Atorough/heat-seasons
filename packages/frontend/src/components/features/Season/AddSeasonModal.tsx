@@ -1,5 +1,5 @@
 import { createSeason } from "../../../services/api/season";
-import { FormGroup, Modal } from "../../../components/common";
+import { FormGroup, Modal, Button } from "../../../components/common";
 
 export interface AddSeasonModalProps {
   isOpen: boolean;
@@ -7,15 +7,12 @@ export interface AddSeasonModalProps {
   onSubmit: () => void;
 }
 
-export function AddSeasonModal(props: AddSeasonModalProps) {
-  const { isOpen, onClose, onSubmit } = props;
-
+export function AddSeasonModal({ isOpen, onClose, onSubmit }: AddSeasonModalProps) {
   const validateAndSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const seasonName = formData.get("seasonName") as string;
     const startDate = new Date(formData.get("startDate") as string).toISOString();
-    const endDate = formData.get("endDate") as string;
 
     if (!seasonName || !startDate) {
       alert("Please fill in all required fields (Season Name and Start Date).");
@@ -23,11 +20,7 @@ export function AddSeasonModal(props: AddSeasonModalProps) {
     }
 
     try {
-      await createSeason(
-        seasonName,
-        startDate,
-        endDate ? new Date(endDate).toISOString() : undefined,
-      );
+      await createSeason(seasonName, startDate);
       onSubmit();
     } catch (err) {
       alert("Failed to create season. Please try again.");
@@ -37,10 +30,21 @@ export function AddSeasonModal(props: AddSeasonModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Add New Season">
       <form onSubmit={validateAndSubmit}>
-        <FormGroup element="input" label="Season Name" id="seasonName" />
-        <FormGroup element="input" type="date" label="Start Date" id="startDate" />
-        <FormGroup element="input" type="date" label="End Date" id="endDate" />
-        <button type="submit">Create Season</button>
+        <FormGroup
+          element="input"
+          type="text"
+          label="Season Name"
+          id="seasonName"
+          placeholder="e.g. Winter 2026"
+        />
+        <FormGroup
+          element="input"
+          type="date"
+          label="Start Date"
+          id="startDate"
+          placeholder="YYYY-MM-DD"
+        />
+        <Button type="submit">Create Season</Button>
       </form>
     </Modal>
   );

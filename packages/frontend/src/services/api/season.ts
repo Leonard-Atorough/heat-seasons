@@ -23,17 +23,10 @@ export const createSeason = async (name: string, startDate: string, endDate?: st
 
 export const updateSeason = async (
   seasonId: string,
-  name?: string,
-  status?: string,
-  startDate?: string,
-  endDate?: string,
+  fields: { name?: string; status?: string; startDate?: string },
 ) => {
-  return await apiClient.put<Season>(`/seasons/${seasonId}`, {
-    name,
-    status,
-    startDate,
-    endDate,
-  });
+  const body = Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== undefined));
+  return await apiClient.put<Season>(`/seasons/${seasonId}`, body);
 };
 
 export const deleteSeason = async (seasonId: string) => {

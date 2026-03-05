@@ -5,6 +5,14 @@
   width: 100%;
 }
 
+.seasonsPage__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
 .seasonsPage__title {
   color: var(--text-primary);
   margin-bottom: var(--spacing-lg);
@@ -18,16 +26,13 @@
 }
 
 .seasonsPage__actions {
-  max-width: 300px;
   display: flex;
-  flex-direction: column;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
 }
 
 .seasonsPage__contributorActions {
   display: flex;
-  flex-direction: column;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
 }
@@ -52,9 +57,59 @@
   min-height: 300px;
 }
 
+.seasonCard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--spacing-md);
+}
+
+.seasonCard__name {
+  margin: 0;
+}
+
+.seasonCard__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: auto;
+}
+
 .seasonDetails {
   display: flex;
   gap: var(--spacing-lg);
   color: var(--text-secondary);
   margin-bottom: var(--spacing-lg);
+}
+
+/* Status badge */
+.seasonStatus {
+  display: inline-block;
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.seasonStatus--upcoming {
+  background-color: #e0f0ff;
+  color: #1a6bbf;
+}
+
+.seasonStatus--active {
+  background-color: #d4f5e2;
+  color: #1a7a44;
+}
+
+.seasonStatus--completed {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.seasonStatus--archived {
+  background-color: #e8e8e8;
+  color: #888;
 }
