@@ -12,7 +12,6 @@ import { adminRouter } from "./api/admin/admin.route.js";
 import { racerRouter } from "./api/racer/racer.route.js";
 import { seasonRouter } from "./api/season/season.route.js";
 import { raceRouter } from "./api/race/race.route.js";
-import { leaderboardRouter } from "./api/leaderboard/leaderboard.route.js";
 import { bootstrapRouter } from "./api/bootstrap/bootstrap.route";
 import { handleError } from "./Infrastructure/http/middleware";
 
@@ -81,7 +80,6 @@ app.use("/api/admin", adminRouter);
 app.use("/api/racers", racerRouter);
 app.use("/api/seasons", seasonRouter);
 app.use("/api/races", raceRouter);
-app.use("/api/leaderboard", leaderboardRouter);
 app.use("/api/bootstrap", bootstrapRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

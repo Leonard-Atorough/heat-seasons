@@ -1,8 +1,7 @@
 import { ReactNode, useEffect, useState, useCallback, useMemo } from "react";
 import { DataContext, DataContextType } from "../contexts/DataContext";
-import { Leaderboard, RacerWithStats, Season } from "shared";
+import { RacerWithStats, Season } from "shared";
 import { getAllRacers } from "../services/api/racer";
-import { getCurrentLeaderboard } from "../services/api/leaderboard";
 import { getSeasons } from "../services/api/season";
 
 interface DataProviderProps {
@@ -38,7 +37,6 @@ const createWithLoading =
 
 export function DataProvider({ children }: DataProviderProps) {
   const [racers, setRacers] = useState<RacerWithStats[]>([]);
-  const [leaderboard, setLeaderboard] = useState<Leaderboard>();
   const [seasons, setSeasons] = useState<Season[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
@@ -48,14 +46,12 @@ export function DataProvider({ children }: DataProviderProps) {
 
   // Fetch all data
   const fetchAllData = useCallback(async () => {
-    const [newRacers, newLeaderboard, newSeasons] = await Promise.all([
+    const [newRacers, newSeasons] = await Promise.all([
       executeWithLoading(() => getAllRacers()),
-      executeWithLoading(() => getCurrentLeaderboard()),
       executeWithLoading(() => getSeasons()),
     ]);
 
     if (newRacers) setRacers(newRacers);
-    if (newLeaderboard) setLeaderboard(newLeaderboard);
     if (newSeasons) setSeasons(newSeasons);
   }, [executeWithLoading]);
 
@@ -63,11 +59,6 @@ export function DataProvider({ children }: DataProviderProps) {
   const refreshRacers = useCallback(async () => {
     const data = await executeWithLoading(() => getAllRacers());
     if (data) setRacers(data);
-  }, [executeWithLoading]);
-
-  const refreshLeaderboard = useCallback(async () => {
-    const data = await executeWithLoading(() => getCurrentLeaderboard());
-    if (data) setLeaderboard(data);
   }, [executeWithLoading]);
 
   const refreshSeasons = useCallback(async () => {
@@ -78,26 +69,14 @@ export function DataProvider({ children }: DataProviderProps) {
   const value: DataContextType = useMemo(
     () => ({
       racers,
-      leaderboard,
       seasons,
       isLoading,
       error,
       refresh: fetchAllData,
       refreshRacers,
-      refreshLeaderboard,
       refreshSeasons,
     }),
-    [
-      racers,
-      leaderboard,
-      seasons,
-      isLoading,
-      error,
-      fetchAllData,
-      refreshRacers,
-      refreshLeaderboard,
-      refreshSeasons,
-    ],
+    [racers, seasons, isLoading, error, fetchAllData, refreshRacers, refreshSeasons],
   );
 
   // Fetch all data on mount

@@ -19,11 +19,6 @@ import { AdminController } from "@src/api/admin";
 import { RacerController, RacerService, IRacerService } from "@src/api/racer";
 import { RaceController, RaceService, IRaceService } from "@src/api/race";
 import { SeasonController, SeasonService, ISeasonService } from "@src/api/season";
-import {
-  LeaderboardController,
-  LeaderboardService,
-  ILeaderboardService,
-} from "@src/api/leaderboard";
 import { BootstrapController, BootstrapService, IBootstrapService } from "@src/api/bootstrap";
 
 class Container {
@@ -56,13 +51,6 @@ class Container {
       this.getRepository<ISeasonRepository>("SeasonRepository"),
     );
     this.serviceLocator.register("SeasonService", seasonService);
-
-    const leaderboardService = new LeaderboardService(
-      this.getRepository<ISeasonRepository>("SeasonRepository"),
-      this.getRepository<IRaceRepository>("RaceRepository"),
-      this.getRepository<IRacerRepository>("RacerRepository"),
-    );
-    this.serviceLocator.register("LeaderboardService", leaderboardService);
 
     const bootstrapService = new BootstrapService(
       this.getRepository<IBootstrapRepository>("BootstrapRepository"),
@@ -116,11 +104,6 @@ class Container {
   createSeasonController(): SeasonController {
     const service = this.serviceLocator.get<ISeasonService>("SeasonService");
     return new SeasonController(service);
-  }
-
-  createLeaderboardController(): LeaderboardController {
-    const service = this.serviceLocator.get<ILeaderboardService>("LeaderboardService");
-    return new LeaderboardController(service);
   }
 
   createAdminController(): AdminController {
