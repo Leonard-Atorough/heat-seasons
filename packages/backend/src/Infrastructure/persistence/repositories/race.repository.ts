@@ -1,6 +1,6 @@
 import { StorageAdapter } from "../StorageAdapter";
-import { IRaceRepository } from "src/domain/repositories/race.repository.interface";
-import { RaceEntity } from "@src/domain/entities/raceEntity";
+import { IRaceRepository } from "src/domain/repositories";
+import { RaceEntity } from "src/domain/entities";
 import { RaceMapper } from "src/application/mappers";
 
 export class RaceRepository implements IRaceRepository {

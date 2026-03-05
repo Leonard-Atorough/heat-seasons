@@ -10,7 +10,7 @@ FORM GROUP TESTS
 
 */
 
-import FormGroup, { FormGroupProps } from "@src/components/common/FormGroup";
+import FormGroup, { FormGroupProps } from "src/components/common/FormGroup";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 

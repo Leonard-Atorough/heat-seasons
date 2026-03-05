@@ -1,4 +1,4 @@
-import { SeasonEntity } from "@src/domain/entities/seasonEntity";
+import { SeasonEntity } from "src/domain/entities";
 import { SeasonCreateInput } from "src/application/dtos";
 import { Season } from "shared";
 

@@ -24,7 +24,7 @@ TEST CASES:
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import StatCard, { StatCardProps } from "@src/components/features/Dashboard/StatCard";
+import StatCard, { StatCardProps } from "src/components/features/Dashboard/StatCard";
 
 const defaultProps: StatCardProps = {
   title: "Total Races",

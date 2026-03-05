@@ -12,7 +12,7 @@ PAGE HEADER TESTS
 */
 
 import { render, screen } from "@testing-library/react";
-import { PageHeader, PageHeaderProps } from "@src/components/common";
+import { PageHeader, PageHeaderProps } from "src/components/common";
 
 const defaultProps: PageHeaderProps = {
   title: "Test Title",

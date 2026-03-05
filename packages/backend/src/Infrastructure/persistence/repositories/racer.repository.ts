@@ -1,8 +1,7 @@
-import { RacerEntity } from "@src/domain/entities/racerEntity";
+import { RacerEntity } from "src/domain/entities";
 import { StorageAdapter } from "../StorageAdapter";
-import { IRacerRepository } from "src/domain/repositories/racer.repository.interface";
+import { IRacerRepository } from "src/domain/repositories";
 import { RacerMapper } from "src/application/mappers";
-import { randomUUID } from "crypto";
 
 export class RacerRepository implements IRacerRepository {
   constructor(private storageAdapter: StorageAdapter) {}

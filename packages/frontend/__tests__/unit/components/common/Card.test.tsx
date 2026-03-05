@@ -18,7 +18,7 @@ TEST CASES:
 
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Card, CardProps } from "@src/components/common";
+import { Card, CardProps } from "src/components/common";
 
 const defaultProps: CardProps = {
   children: "Test Card",

@@ -14,7 +14,7 @@ import {
   NotFoundError as DomainNotFoundError,
   ForbiddenError as DomainForbiddenError,
   UnauthorisedError,
-} from "@src/domain/errors";
+} from "src/domain/errors";
 
 /**
  * Maps a domain error to the equivalent HTTP-aware AppError.

@@ -9,7 +9,7 @@ import { IAuthRepository, IBootstrapRepository } from "src/domain/repositories";
 import { BootstrapEntity, UserEntity } from "src/domain/entities";
 import { randomBytes } from "crypto";
 import bcrypt from "bcrypt";
-import { UserMapper } from "@src/application/mappers";
+import { UserMapper } from "src/application/mappers";
 
 export class BootstrapService implements IBootstrapService {
   constructor(

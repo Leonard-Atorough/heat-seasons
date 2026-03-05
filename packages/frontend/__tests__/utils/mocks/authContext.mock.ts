@@ -1,4 +1,4 @@
-import { AuthContextType } from "@src/contexts";
+import { AuthContextType } from "src/contexts";
 
 export const mockAuthContext: AuthContextType = {
   user: {

@@ -1,7 +1,7 @@
-import { BootstrapEntity } from "@src/domain/entities";
+import { BootstrapEntity } from "src/domain/entities";
 import { IBootstrapRepository } from "src/domain/repositories";
 import { StorageAdapter } from "../StorageAdapter";
-import { BootstrapMapper } from "@src/application/mappers";
+import { BootstrapMapper } from "src/application/mappers";
 
 export class BootstrapRepository implements IBootstrapRepository {
   constructor(private storageAdapter: StorageAdapter) {}

@@ -1,4 +1,4 @@
-import { Modal, ModalProps } from "@src/components/common";
+import { Modal, ModalProps } from "src/components/common";
 import { render, screen } from "@testing-library/react";
 
 const modalProps: ModalProps = {

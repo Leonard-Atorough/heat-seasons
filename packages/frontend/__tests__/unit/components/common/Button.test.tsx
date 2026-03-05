@@ -16,7 +16,7 @@ TEST CASES:
 */
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Button, ButtonProps } from "@src/components/common";
+import { Button, ButtonProps } from "src/components/common";
 
 const defaultProps: ButtonProps = {
   type: "button",

@@ -1,4 +1,4 @@
-import { LoadingSkeletonCard, LoadingSkeletonCardProps } from "@src/components/common";
+import { LoadingSkeletonCard, LoadingSkeletonCardProps } from "src/components/common";
 import { render, screen } from "@testing-library/react";
 
 const defaultProps: LoadingSkeletonCardProps = {

@@ -8,7 +8,7 @@ FOOTER TEST PLAN:
 */
 
 import { render, screen } from "@testing-library/react";
-import Footer from "@src/components/layout/Footer";
+import Footer from "src/components/layout/Footer";
 
 describe("Footer Component", () => {
   it("renders the footer element", () => {

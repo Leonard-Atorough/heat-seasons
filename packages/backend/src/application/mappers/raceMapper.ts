@@ -1,4 +1,4 @@
-import { RaceEntity } from "@src/domain/entities/raceEntity";
+import { RaceEntity } from "src/domain/entities";
 import { RaceCreateInput, RaceResponse } from "src/application/dtos";
 
 export class RaceMapper {

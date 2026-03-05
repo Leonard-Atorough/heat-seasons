@@ -21,7 +21,7 @@ TEST CASES:
 
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import PodiumCard, { PodiumCardProps } from "@src/components/features/Dashboard/PodiumCard";
+import PodiumCard, { PodiumCardProps } from "src/components/features/Dashboard/PodiumCard";
 
 const defaultProps: PodiumCardProps = {
   medal: "gold",

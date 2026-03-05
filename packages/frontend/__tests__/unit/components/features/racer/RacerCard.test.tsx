@@ -1,7 +1,7 @@
 import { screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import RacerCard from "@src/components/features/Racer/RacerCard";
+import RacerCard from "src/components/features/Racer/RacerCard";
 import { createMockRacer } from "../../../../utils/fixtures/racer.fixture";
 import { renderWithRouter } from "../../../../utils/renderWithRouter";
 

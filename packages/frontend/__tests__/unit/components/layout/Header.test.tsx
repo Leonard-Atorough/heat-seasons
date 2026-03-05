@@ -2,12 +2,12 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
 import { vi } from "vitest";
-import Header from "@src/components/layout/Header";
-import { useAuth } from "@src/hooks/useAuth";
+import Header from "src/components/layout/Header";
+import { useAuth } from "src/hooks/useAuth";
 import { mockAuthContext } from "../../../utils/mocks/authContext.mock";
 
 // Mock hooks at module level, before any imports that use them
-vi.mock("@src/hooks/useAuth", () => ({
+vi.mock("src/hooks/useAuth", () => ({
   useAuth: vi.fn(),
 }));
 

@@ -1,11 +1,11 @@
 import { render, screen, waitFor, cleanup, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { EditRacerModal } from "@src/components/features/Profile/EditRacerModal";
+import { EditRacerModal } from "src/components/features/Profile/EditRacerModal";
 import { createMockRacer } from "../../../../utils/fixtures/racer.fixture";
 
-vi.mock("@src/services/api/racer");
-import * as racerApi from "@src/services/api/racer";
+vi.mock("src/services/api/racer");
+import * as racerApi from "src/services/api/racer";
 const mockedUpdateRacer = vi.mocked(racerApi.updateRacer);
 
 const racer = createMockRacer();

@@ -23,7 +23,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { createUseAuthMock } from "../../../../utils/mocks/useAuth.mock";
-import Hero, { HeroProps } from "@src/components/features/Dashboard/Hero";
+import Hero, { HeroProps } from "src/components/features/Dashboard/Hero";
 
 const mockNavigate = vi.fn();
 
@@ -32,8 +32,8 @@ vi.mock("react-router-dom", async () => ({
   useNavigate: () => mockNavigate,
 }));
 
-vi.mock("@src/hooks/useAuth");
-import { useAuth } from "@src/hooks/useAuth";
+vi.mock("src/hooks/useAuth");
+import { useAuth } from "src/hooks/useAuth";
 const mockedUseAuth = vi.mocked(useAuth);
 
 const defaultProps: HeroProps = {

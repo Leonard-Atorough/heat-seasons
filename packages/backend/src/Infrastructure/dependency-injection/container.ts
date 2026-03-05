@@ -13,13 +13,13 @@ import {
   IRaceRepository,
   IRacerRepository,
   ISeasonRepository,
-} from "@src/domain/repositories";
-import { AuthController, AuthService, IAuthService } from "@src/api/auth";
-import { AdminController } from "@src/api/admin";
-import { RacerController, RacerService, IRacerService } from "@src/api/racer";
-import { RaceController, RaceService, IRaceService } from "@src/api/race";
-import { SeasonController, SeasonService, ISeasonService } from "@src/api/season";
-import { BootstrapController, BootstrapService, IBootstrapService } from "@src/api/bootstrap";
+} from "src/domain/repositories";
+import { AuthController, AuthService, IAuthService } from "src/api/auth";
+import { AdminController } from "src/api/admin";
+import { RacerController, RacerService, IRacerService } from "src/api/racer";
+import { RaceController, RaceService, IRaceService } from "src/api/race";
+import { SeasonController, SeasonService, ISeasonService } from "src/api/season";
+import { BootstrapController, BootstrapService, IBootstrapService } from "src/api/bootstrap";
 
 class Container {
   private static instance: Container | null = null;

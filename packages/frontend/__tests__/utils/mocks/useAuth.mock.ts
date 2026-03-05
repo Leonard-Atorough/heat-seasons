@@ -1,4 +1,4 @@
-import { AuthContextType } from "@src/contexts";
+import { AuthContextType } from "src/contexts";
 import { mockAuthContext } from "./authContext.mock";
 
 /**

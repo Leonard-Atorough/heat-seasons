@@ -1,10 +1,10 @@
 import { render, screen, waitFor, cleanup, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { CreateRacerModal } from "@src/components/features/Profile/CreateRacerModal";
+import { CreateRacerModal } from "src/components/features/Profile/CreateRacerModal";
 
-vi.mock("@src/services/api/racer");
-import * as racerApi from "@src/services/api/racer";
+vi.mock("src/services/api/racer");
+import * as racerApi from "src/services/api/racer";
 const mockedCreateRacer = vi.mocked(racerApi.createRacer);
 
 describe("CreateRacerModal Component", () => {

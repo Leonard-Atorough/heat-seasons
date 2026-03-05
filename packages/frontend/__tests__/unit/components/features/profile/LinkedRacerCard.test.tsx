@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { LinkedRacerCard } from "@src/components/features/Profile/LinkedRacerCard";
+import { LinkedRacerCard } from "src/components/features/Profile/LinkedRacerCard";
 import { createMockRacer } from "../../../../utils/fixtures/racer.fixture";
 
 describe("LinkedRacerCard Component", () => {

@@ -1,6 +1,6 @@
 import { StorageAdapter } from "../StorageAdapter";
-import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
-import { UserEntity } from "@src/domain/entities/userEntity";
+import { IAuthRepository } from "src/domain/repositories";
+import { UserEntity } from "src/domain/entities";
 import { UserMapper } from "src/application/mappers";
 
 export class AuthRepository implements IAuthRepository {

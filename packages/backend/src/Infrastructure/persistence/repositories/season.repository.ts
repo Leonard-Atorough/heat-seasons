@@ -1,6 +1,6 @@
-import { SeasonEntity } from "@src/domain/entities/seasonEntity";
+import { SeasonEntity } from "src/domain/entities";
 import { PrismaStorageAdapter } from "../PrismaStorageAdapter";
-import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
+import { ISeasonRepository } from "src/domain/repositories";
 import { SeasonStatus, SeasonParticipant } from "shared";
 import { SeasonMapper } from "src/application/mappers";
 
