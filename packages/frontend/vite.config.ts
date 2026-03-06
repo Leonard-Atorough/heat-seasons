@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "src": resolve(__dirname, "./src"),
+      src: resolve(__dirname, "./src"),
+      tests: resolve(__dirname, "./__tests__"),
     },
   },
   server: {

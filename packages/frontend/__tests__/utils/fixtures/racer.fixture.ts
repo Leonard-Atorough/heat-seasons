@@ -1,4 +1,4 @@
-import { RacerWithStats } from "shared";
+import { RacerWithStats, Racer } from "shared";
 
 export const mockRacer: RacerWithStats = {
   id: "racer-1",
@@ -25,3 +25,27 @@ export const mockRacer: RacerWithStats = {
 export function createMockRacer(overrides: Partial<RacerWithStats> = {}): RacerWithStats {
   return { ...mockRacer, ...overrides };
 }
+
+// Fixtures for plain Racer type (used in AddRaceResultsModal)
+export const mockRacers: Racer[] = [
+  {
+    id: "racer-1",
+    name: "Lewis Hamilton",
+    team: "Mercedes AMG",
+    teamColor: "#00d2be",
+    nationality: "British",
+    age: 39,
+    active: true,
+    joinDate: new Date("2024-01-01"),
+  },
+  {
+    id: "racer-2",
+    name: "Max Verstappen",
+    team: "Red Bull",
+    teamColor: "#0600ef",
+    nationality: "Dutch",
+    age: 27,
+    active: true,
+    joinDate: new Date("2024-01-01"),
+  },
+];

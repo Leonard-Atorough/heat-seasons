@@ -1,0 +1,40 @@
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  color: var(--text-primary);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: inherit;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.toast.success {
+  background-color: var(--background-success);
+  color: var(--text-success);
+}
+
+.toast.error {
+  background-color: var(--background-error);
+  color: var(--text-error);
+}
+
+.toast.info {
+  background-color: var(--background-info);
+  color: var(--text-info);
+}
+
+.toast.warning {
+  background-color: var(--background-warning);
+  color: var(--text-warning);
+}

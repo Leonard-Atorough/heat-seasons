@@ -1,6 +1,6 @@
 import { User, Racer, Season, Race } from "../../../shared/src/index";
 
-export const testUsers = {
+export const testUsers: Record<string, User> = {
   admin: {
     id: "admin-1",
     googleId: "google-admin-1",

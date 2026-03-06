@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Season, SeasonStatus } from "shared";
 import { updateSeason } from "../../../services/api/season";
-import { FormGroup, Modal, Button } from "../../common";
+import { FormGroup, Modal, Button, Toast } from "../../common";
 import styles from "./EditSeasonModal.module.css";
 
 const STATUS_OPTIONS: { value: SeasonStatus; label: string }[] = [
@@ -50,6 +50,7 @@ export function EditSeasonModal({ season, isOpen, onClose, onSubmit }: EditSeaso
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Season">
       <form className={styles.form} onSubmit={handleSubmit}>
+        {error && <Toast message={error} type="error" />}
         <FormGroup
           element="input"
           label="Season Name"
@@ -85,7 +86,6 @@ export function EditSeasonModal({ season, isOpen, onClose, onSubmit }: EditSeaso
             Setting status to Completed will automatically record today as the end date.
           </p>
         )}
-        {error && <p className={styles.error}>{error}</p>}
         <div className={styles.actions}>
           <Button type="button" variant="secondary" onClick={onClose}>
             Cancel

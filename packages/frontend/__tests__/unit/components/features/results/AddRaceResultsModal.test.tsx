@@ -2,49 +2,13 @@ import { render, screen, waitFor, cleanup, fireEvent } from "@testing-library/re
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import AddRaceResultsModal from "src/components/features/Results/AddRaceResultsModal";
-import { Racer, Race } from "shared";
+import { mockRaceData, mockRacers } from "../../../../utils/fixtures";
 
 vi.mock("src/services/api/races");
 import * as racesApi from "src/services/api/races";
 const mockedCreateRace = vi.mocked(racesApi.CreateRace);
 const mockedUpdateRace = vi.mocked(racesApi.UpdateRace);
 const mockedGetRaceById = vi.mocked(racesApi.GetRaceById);
-
-const mockRacers: Racer[] = [
-  {
-    id: "racer-1",
-    name: "Lewis Hamilton",
-    team: "Mercedes AMG",
-    teamColor: "#00d2be",
-    nationality: "British",
-    age: 39,
-    active: true,
-    joinDate: new Date("2024-01-01"),
-  },
-  {
-    id: "racer-2",
-    name: "Max Verstappen",
-    team: "Red Bull",
-    teamColor: "#0600ef",
-    nationality: "Dutch",
-    age: 27,
-    active: true,
-    joinDate: new Date("2024-01-01"),
-  },
-];
-
-const mockRaceData: Race = {
-  id: "race-1",
-  name: "Monaco GP",
-  seasonId: "season-1",
-  raceNumber: 1,
-  date: new Date("2025-06-15"),
-  completed: true,
-  results: [
-    { racerId: "racer-1", position: 1, points: 25, constructorPoints: 25 },
-    { racerId: "racer-2", position: 2, points: 18, constructorPoints: 18 },
-  ],
-};
 
 describe("AddRaceResultsModal Component", () => {
   let user: ReturnType<typeof userEvent.setup>;

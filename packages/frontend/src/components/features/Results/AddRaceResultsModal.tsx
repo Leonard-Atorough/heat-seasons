@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, FormGroup, Modal } from "../../common";
+import { Button, FormGroup, Modal, Toast } from "../../common";
 import styles from "./AddRaceResultsModal.module.css";
 import { Racer, RaceResult } from "shared";
 import { CreateRace, UpdateRace, GetRaceById } from "../../../services/api/races";
@@ -213,8 +213,6 @@ export default function AddRaceResultsModal({
         await CreateRace(seasonId, raceName, raceDate, finalResults);
       }
 
-      
-
       onClose();
       onSubmit();
     } catch (err) {
@@ -231,10 +229,7 @@ export default function AddRaceResultsModal({
       title={isUpdateMode ? "Update Race Results" : "Add Race Results"}
     >
       <form className={styles.raceResultForm} onSubmit={validateAndSubmit}>
-        {error && (
-          <div style={{ color: "red", marginBottom: "1rem", fontWeight: 500 }}>{error}</div>
-        )}
-
+        {error && <Toast message={error} type="error" />}
         <FormGroup
           element="input"
           label="Race Name"
