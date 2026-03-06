@@ -145,4 +145,98 @@ describe("Header Component", () => {
       expect(teamsLink).toHaveFocus();
     });
   });
+
+  describe("Scroll Behaviour", () => {
+    afterEach(() => {
+      Object.defineProperty(window, "scrollY", { value: 0, writable: true });
+    });
+
+    it("adds scrolled class when scrollY exceeds 50px", async () => {
+      const { container } = renderHeader();
+      Object.defineProperty(window, "scrollY", { value: 100, writable: true });
+      window.dispatchEvent(new Event("scroll"));
+      await screen.findByRole("banner");
+      expect(container.querySelector("header")?.className).toContain("header--scrolled");
+    });
+
+    it("removes scrolled class when scrollY drops back to 0", async () => {
+      const { container } = renderHeader();
+      Object.defineProperty(window, "scrollY", { value: 100, writable: true });
+      window.dispatchEvent(new Event("scroll"));
+      Object.defineProperty(window, "scrollY", { value: 0, writable: true });
+      window.dispatchEvent(new Event("scroll"));
+      await screen.findByRole("banner");
+      expect(container.querySelector("header")?.className).not.toContain("header--scrolled");
+    });
+
+    it("closes the hamburger menu when scrollY exceeds 50px", async () => {
+      const { container } = renderHeader();
+      const hamburger = screen.getByRole("button", { name: "" });
+      await userEvent.click(hamburger);
+      expect(container.querySelector("nav")?.className).toContain("nav--open");
+
+      Object.defineProperty(window, "scrollY", { value: 100, writable: true });
+      window.dispatchEvent(new Event("scroll"));
+      await screen.findByRole("banner");
+      expect(container.querySelector("nav")?.className).not.toContain("nav--open");
+    });
+
+    it("removes scroll listener on unmount", () => {
+      const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
+      const { unmount } = renderHeader();
+      unmount();
+      expect(removeEventListenerSpy).toHaveBeenCalledWith("scroll", expect.any(Function));
+      removeEventListenerSpy.mockRestore();
+    });
+  });
+
+  describe("UserProfileBadge", () => {
+    it("navigates to /profile when the badge is clicked", async () => {
+      renderHeader({ isAuthenticated: true });
+      await userEvent.click(screen.getByText("Test User"));
+      expect(mockNavigate).toHaveBeenCalledWith("/profile");
+    });
+
+    it("renders initials when profilePicture is empty", () => {
+      renderHeader({
+        isAuthenticated: true,
+        user: { id: "1", name: "Test User", email: "t@test.com", role: "user", profilePicture: "" },
+      });
+      expect(screen.getByText("TU")).toBeInTheDocument();
+    });
+
+    it("renders profile image when profilePicture is provided", () => {
+      renderHeader({
+        isAuthenticated: true,
+        user: {
+          id: "1",
+          name: "Test User",
+          email: "t@test.com",
+          role: "user",
+          profilePicture: "https://example.com/pic.jpg",
+        },
+      });
+      expect(screen.getByRole("img", { name: "Test User" })).toHaveAttribute(
+        "src",
+        "https://example.com/pic.jpg",
+      );
+    });
+
+    it("falls back to initials when the profile image errors", async () => {
+      renderHeader({
+        isAuthenticated: true,
+        user: {
+          id: "1",
+          name: "Test User",
+          email: "t@test.com",
+          role: "user",
+          profilePicture: "https://example.com/pic.jpg",
+        },
+      });
+      const img = screen.getByRole("img", { name: "Test User" });
+      await userEvent.unhover(img);
+      img.dispatchEvent(new Event("error"));
+      expect(await screen.findByText("TU")).toBeInTheDocument();
+    });
+  });
 });
