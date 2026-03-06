@@ -22,7 +22,7 @@ export const mockRacer: RacerWithStats = {
 };
 
 /** Factory to produce a `RacerWithStats` with optional overrides. */
-export function createMockRacer(overrides: Partial<RacerWithStats> = {}): RacerWithStats {
+export function createRacerFixture(overrides: Partial<RacerWithStats> = {}): RacerWithStats {
   return { ...mockRacer, ...overrides };
 }
 
