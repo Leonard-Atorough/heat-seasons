@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { vi } from "vitest";
 import Header from "src/components/layout/Header";
 import { useAuth } from "src/hooks/useAuth";
-import { mockAuthContext } from "../../../utils/mocks/authContext.mock";
+import { createUseAuthMock } from "../../../utils/mocks/useAuth.mock";
 
 // Mock hooks at module level, before any imports that use them
 vi.mock("src/hooks/useAuth", () => ({
@@ -21,10 +21,7 @@ vi.mock("react-router-dom", async () => {
 });
 
 const renderHeader = (authValue = {}) => {
-  (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({
-    ...mockAuthContext,
-    ...authValue,
-  });
+  (useAuth as ReturnType<typeof vi.fn>).mockReturnValue(createUseAuthMock(authValue));
 
   return render(
     <BrowserRouter>

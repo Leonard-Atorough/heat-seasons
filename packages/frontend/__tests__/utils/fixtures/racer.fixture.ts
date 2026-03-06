@@ -41,7 +41,7 @@ export const mockRacers: Racer[] = [
   {
     id: "racer-2",
     name: "Max Verstappen",
-    team: "Red Bull",
+    team: "Red Bull Racing",
     teamColor: "#0600ef",
     nationality: "Dutch",
     age: 27,
@@ -49,3 +49,13 @@ export const mockRacers: Racer[] = [
     joinDate: new Date("2024-01-01"),
   },
 ];
+
+/**
+ * Builds a Map<racerId, { name, team }> suitable for passing to ResultsTable.
+ * Defaults to mockRacers when no argument is provided.
+ */
+export function createRacersMap(
+  racers: Racer[] = mockRacers,
+): Map<string, { name: string; team: string }> {
+  return new Map(racers.map((r) => [r.id, { name: r.name, team: r.team }]));
+}

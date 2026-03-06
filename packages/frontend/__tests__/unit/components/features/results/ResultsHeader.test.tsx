@@ -3,20 +3,20 @@ import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import ResultsHeader from "src/components/features/Results/ResultsHeader";
 import { createUseAuthMock } from "../../../../utils/mocks/useAuth.mock";
-import { Season, Race } from "shared";
+import { createSeason, createMockRace } from "../../../../utils/fixtures";
 
 vi.mock("src/hooks/useAuth");
 import { useAuth } from "src/hooks/useAuth";
 const mockedUseAuth = vi.mocked(useAuth);
 
-const mockSeasons: Season[] = [
-  { id: "season-1", name: "Summer 2025", status: "active", startDate: new Date("2025-06-01") },
-  { id: "season-2", name: "Winter 2025", status: "completed", startDate: new Date("2025-11-01") },
+const mockSeasons = [
+  createSeason({ id: "season-1", name: "Summer 2025", status: "active", startDate: new Date("2025-06-01") }),
+  createSeason({ id: "season-2", name: "Winter 2025", status: "completed", startDate: new Date("2025-11-01") }),
 ];
 
-const mockRaces: Race[] = [
-  { id: "race-1", name: "Monaco GP", seasonId: "season-1", raceNumber: 1, date: new Date("2025-06-15"), completed: true, results: [] },
-  { id: "race-2", name: "Silverstone GP", seasonId: "season-1", raceNumber: 2, date: new Date("2025-07-10"), completed: true, results: [] },
+const mockRaces = [
+  createMockRace(),
+  createMockRace({ id: "race-2", name: "Silverstone GP", raceNumber: 2, date: new Date("2025-07-10") }),
 ];
 
 describe("ResultsHeader Component", () => {

@@ -2,6 +2,7 @@ import { render, screen, waitFor, cleanup, fireEvent } from "@testing-library/re
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { CreateRacerModal } from "src/components/features/Profile/CreateRacerModal";
+import { mockRacer } from "../../../../utils/fixtures";
 
 vi.mock("src/services/api/racer");
 import * as racerApi from "src/services/api/racer";
@@ -23,10 +24,10 @@ describe("CreateRacerModal Component", () => {
     cleanup();
   });
 
-  function fillForm(age = "39") {
-    fireEvent.change(screen.getByLabelText(/racer name/i), { target: { value: "Lewis Hamilton" } });
-    fireEvent.change(screen.getByLabelText(/^team$/i), { target: { value: "Mercedes AMG" } });
-    fireEvent.change(screen.getByLabelText(/nationality/i), { target: { value: "British" } });
+  function fillForm(age = String(mockRacer.age)) {
+    fireEvent.change(screen.getByLabelText(/racer name/i), { target: { value: mockRacer.name } });
+    fireEvent.change(screen.getByLabelText(/^team$/i), { target: { value: mockRacer.team } });
+    fireEvent.change(screen.getByLabelText(/nationality/i), { target: { value: mockRacer.nationality } });
     fireEvent.change(screen.getByRole("spinbutton"), { target: { value: age } });
   }
 
@@ -67,10 +68,10 @@ describe("CreateRacerModal Component", () => {
     await waitFor(() => expect(mockedCreateRacer).toHaveBeenCalledTimes(1));
     expect(mockedCreateRacer).toHaveBeenCalledWith(
       expect.objectContaining({
-        name: "Lewis Hamilton",
-        team: "Mercedes AMG",
-        nationality: "British",
-        age: 39,
+        name: mockRacer.name,
+        team: mockRacer.team,
+        nationality: mockRacer.nationality,
+        age: mockRacer.age,
         active: true,
       }),
     );

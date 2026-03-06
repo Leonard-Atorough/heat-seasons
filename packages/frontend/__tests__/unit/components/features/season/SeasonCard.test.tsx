@@ -94,38 +94,32 @@ describe("SeasonCard Component", () => {
 
   it("calls handleJoin when 'Join Season' button is clicked", async () => {
     const handleJoin = vi.fn();
-    const season = createSeason();
     const user = userEvent.setup();
-    render(<SeasonCard {...defaultProps} season={season} canJoin={true} handleJoin={handleJoin} />);
+    render(<SeasonCard {...defaultProps} canJoin={true} handleJoin={handleJoin} />);
     await user.click(screen.getByRole("button", { name: /join season/i }));
-    expect(handleJoin).toHaveBeenCalledWith(season);
+    expect(handleJoin).toHaveBeenCalledWith(defaultProps.season);
   });
 
   it("calls setEditingSeason with the season when 'Edit' button is clicked", async () => {
     const setEditingSeason = vi.fn();
-    const season = createSeason();
     const user = userEvent.setup();
     render(
       <SeasonCard
         {...defaultProps}
-        season={season}
         isAdmin={true}
         setEditingSeason={setEditingSeason}
       />,
     );
     await user.click(screen.getByRole("button", { name: /edit/i }));
-    expect(setEditingSeason).toHaveBeenCalledWith(season);
+    expect(setEditingSeason).toHaveBeenCalledWith(defaultProps.season);
   });
 
   it("calls handleDelete with the season when 'Delete' button is clicked", async () => {
     const handleDelete = vi.fn();
-    const season = createSeason();
     const user = userEvent.setup();
-    render(
-      <SeasonCard {...defaultProps} season={season} isAdmin={true} handleDelete={handleDelete} />,
-    );
+    render(<SeasonCard {...defaultProps} isAdmin={true} handleDelete={handleDelete} />);
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    expect(handleDelete).toHaveBeenCalledWith(season);
+    expect(handleDelete).toHaveBeenCalledWith(defaultProps.season);
   });
 
   it("displays participant count when participants is defined", () => {

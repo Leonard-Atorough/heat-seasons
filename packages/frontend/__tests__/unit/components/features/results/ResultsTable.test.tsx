@@ -2,17 +2,11 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, afterEach } from "vitest";
 import ResultsTable from "src/components/features/Results/ResultsTable";
+import { createMockRace, createRacersMap } from "../../../../utils/fixtures";
 import { RaceResult } from "shared";
 
-const mockResults: RaceResult[] = [
-  { racerId: "racer-1", position: 1, points: 25, constructorPoints: 25 },
-  { racerId: "racer-2", position: 2, points: 18, constructorPoints: 18 },
-];
-
-const mockRacersMap = new Map([
-  ["racer-1", { name: "Lewis Hamilton", team: "Mercedes AMG" }],
-  ["racer-2", { name: "Max Verstappen", team: "Red Bull Racing" }],
-]);
+const mockResults = createMockRace().results;
+const mockRacersMap = createRacersMap();
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -21,14 +15,7 @@ afterEach(() => {
 
 describe("ResultsTable Component", () => {
   it("renders a loading skeleton when isLoading is true", () => {
-    render(
-      <ResultsTable
-        results={[]}
-        racersMap={new Map()}
-        isLoading={true}
-        error={null}
-      />,
-    );
+    render(<ResultsTable results={[]} racersMap={new Map()} isLoading={true} error={null} />);
     expect(screen.queryByText("Position")).not.toBeInTheDocument();
   });
 
@@ -46,14 +33,7 @@ describe("ResultsTable Component", () => {
   });
 
   it("renders all table column headers", () => {
-    render(
-      <ResultsTable
-        results={[]}
-        racersMap={new Map()}
-        isLoading={false}
-        error={null}
-      />,
-    );
+    render(<ResultsTable results={[]} racersMap={new Map()} isLoading={false} error={null} />);
     expect(screen.getByText("Position")).toBeInTheDocument();
     expect(screen.getByText("Racer")).toBeInTheDocument();
     expect(screen.getByText("Team")).toBeInTheDocument();
