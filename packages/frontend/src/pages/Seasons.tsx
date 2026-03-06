@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Season } from "shared";
 import styles from "./Seasons.module.css";
 import { useSeasons } from "../hooks/data/useSeason";
-import { Button, LoadingSkeletonCard } from "../components/common";
+import { Button, LoadingSkeletonCard, Toast } from "../components/common";
 import { useAuth } from "../hooks/useAuth";
 import { AddSeasonModal, EditSeasonModal, SeasonCard } from "../components/features/Season";
 import { deleteSeason, getSeasonParticipants, joinSeason } from "../services/api/season";
@@ -16,6 +16,7 @@ export default function Seasons() {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingSeason, setEditingSeason] = useState<Season | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Map of seasonId → Set of racerIds who have joined
   const [participantMap, setParticipantMap] = useState<Map<string, Set<string>>>(new Map());
@@ -67,8 +68,9 @@ export default function Seasons() {
     try {
       await deleteSeason(season.id);
       await handleRefresh();
-    } catch {
-      alert("Failed to delete season. Please try again.");
+    } catch (err: any) {
+      const msg = err?.data?.message ?? err?.message ?? "Failed to delete season. Please try again.";
+      setError(msg);
     }
   };
 
@@ -87,7 +89,7 @@ export default function Seasons() {
       });
     } catch (err: any) {
       const msg = err?.data?.message ?? err?.message ?? "Failed to join season.";
-      alert(msg);
+      setError(msg);
     } finally {
       setJoiningSeasonIds((prev) => {
         const next = new Set(prev);
@@ -129,6 +131,7 @@ export default function Seasons() {
           </Button>
         </div>
       </div>
+      {error && <Toast message={error} type="error" />}
       {seasons && (
         <div className={styles.seasonsPage__cards}>
           {sortedSeasons.map((season) => {
