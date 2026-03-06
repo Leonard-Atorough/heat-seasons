@@ -6,10 +6,11 @@ export const createSeasonRequest = (): SeasonRequest => ({
   startDate: "2024-06-01",
 });
 
-export const createSeason = (): Season => ({
+export const createSeason = (partial?: Partial<Season>): Season => ({
   id: "season-1",
   name: "Summer 2024",
   status: "upcoming" as SeasonStatus,
   startDate: new Date("2024-06-01"),
   endDate: undefined,
+  ...partial,
 });
