@@ -70,7 +70,7 @@ export default function Seasons() {
     } catch (err: any) {
       const msg =
         err?.data?.message ?? err?.message ?? "Failed to delete season. Please try again.";
-      setError({ title: "Delete Failed", message: msg });
+      setError({ title: "Error", message: msg });
     }
   };
 
@@ -89,7 +89,7 @@ export default function Seasons() {
       });
     } catch (err: any) {
       const msg = err?.data?.message ?? err?.message ?? "Failed to join season.";
-      setError({ title: "Join Failed", message: msg });
+      setError({ title: "Error", message: msg });
     } finally {
       setJoiningSeasonIds((prev) => {
         const next = new Set(prev);
