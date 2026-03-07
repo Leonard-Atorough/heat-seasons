@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FormGroup, Modal, Button } from "../../common";
+import { FormGroup, Modal, Button, Toast } from "../../common";
 import { createRacer } from "../../../services/api/racer";
 import styles from "./CreateRacerModal.module.css";
 
@@ -28,7 +28,7 @@ export function CreateRacerModal({ isOpen, onClose, onCreated }: CreateRacerModa
   const [nationality, setNationality] = useState("");
   const [age, setAge] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ title: string; message: string } | null>(null);
 
   const reset = () => {
     setName("");
@@ -49,13 +49,13 @@ export function CreateRacerModal({ isOpen, onClose, onCreated }: CreateRacerModa
     setError(null);
 
     if (!name.trim() || !team.trim() || !nationality.trim() || !age) {
-      setError("All fields are required.");
+      setError({ title: "Error", message: "All fields are required." });
       return;
     }
 
     const parsedAge = parseInt(age, 10);
     if (isNaN(parsedAge) || parsedAge < 1 || parsedAge > 120) {
-      setError("Please enter a valid age.");
+      setError({ title: "Error", message: "Please enter a valid age." });
       return;
     }
 
@@ -75,9 +75,9 @@ export function CreateRacerModal({ isOpen, onClose, onCreated }: CreateRacerModa
       const message = err?.data?.message ?? err?.message ?? "Failed to create racer.";
       // 409 means the user already has a linked racer
       if (err?.status === 409 || message.toLowerCase().includes("already")) {
-        setError("You already have a racer linked to your account.");
+        setError({ title: "Error", message: "You already have a racer linked to your account." });
       } else {
-        setError(message);
+        setError({ title: "Error", message });
       }
     } finally {
       setIsSubmitting(false);
@@ -87,6 +87,14 @@ export function CreateRacerModal({ isOpen, onClose, onCreated }: CreateRacerModa
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Create Your Racer">
       <form className={styles.form} onSubmit={handleSubmit}>
+        {error && (
+          <Toast
+            type="error"
+            title={error.title}
+            message={error.message}
+            onClose={() => setError(null)}
+          />
+        )}
         <FormGroup
           element="input"
           label="Racer Name"
@@ -138,7 +146,6 @@ export function CreateRacerModal({ isOpen, onClose, onCreated }: CreateRacerModa
           value={age}
           onChange={(e) => setAge((e.target as HTMLInputElement).value)}
         />
-        {error && <p className={styles.error}>{error}</p>}
         <div className={styles.actions}>
           <Button type="button" variant="ghost" onClick={handleClose} disabled={isSubmitting}>
             Cancel
