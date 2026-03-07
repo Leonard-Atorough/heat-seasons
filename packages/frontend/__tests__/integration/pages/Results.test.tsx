@@ -1,4 +1,4 @@
-import { cleanup, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Results from "src/pages/Results";
 import { useAuth } from "src/hooks/useAuth";
@@ -297,6 +297,47 @@ describe("Given the Results page", () => {
 
       await user.click(screen.getByRole("button", { name: /add raceresults/i }));
       expect(await screen.findByRole("heading", { name: /add race results/i })).toBeInTheDocument();
+    });
+
+    it("submits add race results and closes modal", async () => {
+      setupHookMocks();
+      mockedCreateRace.mockResolvedValue({} as Race);
+      mockedUseAuth.mockReturnValue(
+        createUseAuthMock({
+          isAdmin: true,
+          user: createUserFixture({ role: "admin" }),
+        }),
+      );
+
+      const user = userEvent.setup();
+
+      renderPage();
+
+      // Open add modal
+      await user.click(screen.getByRole("button", { name: /add raceresults/i }));
+      expect(await screen.findByRole("heading", { name: /add race results/i })).toBeInTheDocument();
+
+      // Fill race name
+      fireEvent.change(screen.getByLabelText(/race name/i), { target: { value: "Test Race" } });
+
+      // Select racers in each select (one per racer)
+      const racerSelects = screen.getAllByLabelText(/racer/i);
+      await user.selectOptions(racerSelects[0], "racer-1");
+      await user.selectOptions(racerSelects[1], "racer-2");
+
+      // Submit the form
+      await user.click(screen.getByText("Save Results"));
+
+      await waitFor(() => {
+        expect(mockedCreateRace).toHaveBeenCalledWith(
+          "season-1",
+          "Test Race",
+          expect.any(String),
+          expect.any(Array),
+        );
+      });
+
+      expect(screen.queryByRole("heading", { name: /add race results/i })).not.toBeInTheDocument();
     });
 
     it("submits update race results and closes modal", async () => {

@@ -25,7 +25,7 @@ export function EditSeasonModal({ season, isOpen, onClose, onSubmit }: EditSeaso
   );
   const [status, setStatus] = useState<SeasonStatus>(season.status);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{title: string; message: string} | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,7 +39,7 @@ export function EditSeasonModal({ season, isOpen, onClose, onSubmit }: EditSeaso
       });
       onSubmit();
     } catch (err) {
-      setError("Failed to update season. Please try again.");
+      setError({ title: "Update Failed", message: "Failed to update season. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
@@ -50,7 +50,7 @@ export function EditSeasonModal({ season, isOpen, onClose, onSubmit }: EditSeaso
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Season">
       <form className={styles.form} onSubmit={handleSubmit}>
-        {error && <Toast message={error} type="error" />}
+        {error && <Toast title={error.title} message={error.message} type="error" />}
         <FormGroup
           element="input"
           label="Season Name"

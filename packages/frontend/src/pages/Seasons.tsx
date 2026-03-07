@@ -7,7 +7,6 @@ import { useAuth } from "../hooks/useAuth";
 import { AddSeasonModal, EditSeasonModal, SeasonCard } from "../components/features/Season";
 import { deleteSeason, getSeasonParticipants, joinSeason } from "../services/api/season";
 
-
 const JOINABLE_STATUSES = new Set(["upcoming", "active"]);
 
 export default function Seasons() {
@@ -16,7 +15,7 @@ export default function Seasons() {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingSeason, setEditingSeason] = useState<Season | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ title: string; message: string } | null>(null);
 
   // Map of seasonId → Set of racerIds who have joined
   const [participantMap, setParticipantMap] = useState<Map<string, Set<string>>>(new Map());
@@ -69,8 +68,9 @@ export default function Seasons() {
       await deleteSeason(season.id);
       await handleRefresh();
     } catch (err: any) {
-      const msg = err?.data?.message ?? err?.message ?? "Failed to delete season. Please try again.";
-      setError(msg);
+      const msg =
+        err?.data?.message ?? err?.message ?? "Failed to delete season. Please try again.";
+      setError({ title: "Delete Failed", message: msg });
     }
   };
 
@@ -89,7 +89,7 @@ export default function Seasons() {
       });
     } catch (err: any) {
       const msg = err?.data?.message ?? err?.message ?? "Failed to join season.";
-      setError(msg);
+      setError({ title: "Join Failed", message: msg });
     } finally {
       setJoiningSeasonIds((prev) => {
         const next = new Set(prev);
@@ -131,7 +131,7 @@ export default function Seasons() {
           </Button>
         </div>
       </div>
-      {error && <Toast message={error} type="error" />}
+      {error && <Toast title={error.title} message={error.message} type="error" />}
       {seasons && (
         <div className={styles.seasonsPage__cards}>
           {sortedSeasons.map((season) => {

@@ -10,7 +10,7 @@ export interface AddSeasonModalProps {
 }
 
 export function AddSeasonModal({ isOpen, onClose, onSubmit }: AddSeasonModalProps) {
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<{title: string; message: string} | null>(null);
 
   const validateAndSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,7 +19,7 @@ export function AddSeasonModal({ isOpen, onClose, onSubmit }: AddSeasonModalProp
     const startDateRaw = formData.get("startDate") as string;
 
     if (!seasonName || !startDateRaw) {
-      setErrors(["Please fill in all required fields (Season Name and Start Date)."]);
+      setErrors({ title: "Validation Error", message: "Please fill in all required fields (Season Name and Start Date)." });
       return;
     }
 
@@ -28,16 +28,16 @@ export function AddSeasonModal({ isOpen, onClose, onSubmit }: AddSeasonModalProp
     try {
       await createSeason(seasonName, startDate);
       onSubmit();
-      setErrors([]);
+      setErrors(null);
     } catch (err) {
-      setErrors(["Failed to create season. Please try again."]);
+      setErrors({ title: "Error", message: "Failed to create season. Please try again." });
     }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Add New Season">
       <form onSubmit={validateAndSubmit} className={styles.form}>
-        {errors.length > 0 && <Toast message={errors.join("\n")} type="error" />}
+        {errors && <Toast title={errors.title} message={errors.message} type="error" />}
         <FormGroup
           element="input"
           type="text"

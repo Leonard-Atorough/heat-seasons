@@ -111,7 +111,7 @@ export default function AddRaceResultsModal({
   const [points, setPoints] = useState<number[]>(Array(racers.length).fill(0));
   const [isGhostRacer, setIsGhostRacer] = useState<boolean[]>(Array(racers.length).fill(false));
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{title: string; message: string} | null>(null);
 
   const isUpdateMode = Boolean(selectedRaceId);
 
@@ -150,7 +150,7 @@ export default function AddRaceResultsModal({
       setPoints(newPoints);
       setIsGhostRacer(newIsGhostRacer);
     } catch (err) {
-      setError("Failed to load race data. Please try again.");
+      setError({ title: "Error", message: "Failed to load race data. Please try again." });
     } finally {
       setIsLoading(false);
     }
@@ -173,18 +173,18 @@ export default function AddRaceResultsModal({
     setError(null);
 
     if (selectedRacerIds.length === 0) {
-      setError("Please select at least one racer.");
+      setError({ title: "Validation Error", message: "Please select at least one racer." });
       return;
     }
 
     const allSelected = racers.every((r) => selectedRacerIds.includes(r.id));
     if (!allSelected) {
-      setError("Please select all racers.");
+      setError({ title: "Validation Error", message: "Please select all racers." });
       return;
     }
 
     if (!raceName.trim()) {
-      setError("Race name is required.");
+      setError({ title: "Validation Error", message: "Race name is required." });
       return;
     }
 
@@ -216,7 +216,7 @@ export default function AddRaceResultsModal({
       onClose();
       onSubmit();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save race results.");
+      setError(err instanceof Error ? { title: "Error", message: err.message } : { title: "Error", message: "Failed to save race results." });
     } finally {
       setIsLoading(false);
     }
@@ -229,7 +229,7 @@ export default function AddRaceResultsModal({
       title={isUpdateMode ? "Update Race Results" : "Add Race Results"}
     >
       <form className={styles.raceResultForm} onSubmit={validateAndSubmit}>
-        {error && <Toast message={error} type="error" />}
+        {error && <Toast title={error.title} message={error.message} type="error" />}
         <FormGroup
           element="input"
           label="Race Name"
