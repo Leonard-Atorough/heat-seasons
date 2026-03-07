@@ -16,7 +16,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
       <Card className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>{title}</h2>
-          <button className={styles.modalCloseButton} onClick={onClose}>
+          <button className={styles.modalCloseButton} onClick={onClose} data-testid="modal-close-button">
             &times;
           </button>
         </div>

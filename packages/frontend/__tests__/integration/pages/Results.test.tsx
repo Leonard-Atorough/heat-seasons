@@ -116,209 +116,220 @@ afterEach(() => {
   cleanup();
 });
 
-describe("Results page integration", () => {
-  // 1. Renders season/race selectors and aggregated rows from hooks
-  // 2. Toggles points sort order when the Points header is clicked repeatedly
-  // 3. Shows Add RaceResults for admins and opens add modal
-  // 4. Shows Update RaceResults after race selection and opens update modal
-  // 5. Hides Add/Update actions for non-admin users
-  // 6. Calls useRaceResult with selected season id after season selection changes
-  // 7. Passes loading and error states from hook to the table view
-  // 8. Resets update mode when closing modal and opening add mode
-  // 9. Submits add results in page flow and closes modal
+describe("Given the Results page", () => {
+  describe("When interacting with the page", () => {
+    // 1. Renders season/race selectors and aggregated rows from hooks
+    // 2. Toggles points sort order when the Points header is clicked repeatedly
+    // 3. Shows Add RaceResults for admins and opens add modal
+    // 4. Shows Update RaceResults after race selection and opens update modal
+    // 5. Hides Add/Update actions for non-admin users
+    // 6. Calls useRaceResult with selected season id after season selection changes
+    // 7. Passes loading and error states from hook to the table view
+    // 8. Resets update mode when closing modal and opening add mode
+    // 9. Submits add results in page flow and closes modal
 
-  it("renders selectors and aggregated standings rows", () => {
-    setupHookMocks();
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
+    it("renders selectors and aggregated standings rows", () => {
+      setupHookMocks();
+      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
 
-    renderPage();
+      renderPage();
 
-    expect(screen.getByRole("combobox", { name: /select season/i })).toBeInTheDocument();
-    expect(screen.getByRole("combobox", { name: /select race/i })).toBeInTheDocument();
-    expect(screen.getByText("Max Verstappen")).toBeInTheDocument();
-    expect(screen.getByText("Lewis Hamilton")).toBeInTheDocument();
-  });
-
-  it("toggles points sorting between ascending and descending", async () => {
-    setupHookMocks();
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
-    const user = userEvent.setup();
-
-    renderPage();
-
-    const pointsHeader = screen.getByRole("columnheader", { name: "Points" });
-
-    await user.click(pointsHeader);
-    let rows = screen.getAllByRole("row");
-    expect(within(rows[1]).getByText("Lewis Hamilton")).toBeInTheDocument();
-
-    await user.click(pointsHeader);
-    rows = screen.getAllByRole("row");
-    expect(within(rows[1]).getByText("Max Verstappen")).toBeInTheDocument();
-  });
-
-  it("shows add action for admins and opens add results modal", async () => {
-    setupHookMocks();
-    mockedUseAuth.mockReturnValue(
-      createUseAuthMock({
-        isAdmin: true,
-        user: createUserFixture({ role: "admin" }),
-      }),
-    );
-    const user = userEvent.setup();
-
-    renderPage();
-
-    await user.click(screen.getByRole("button", { name: /add raceresults/i }));
-
-    expect(await screen.findByRole("heading", { name: /add race results/i })).toBeInTheDocument();
-  });
-
-  it("shows update action after race selection and opens update modal", async () => {
-    setupHookMocks();
-    mockedUseAuth.mockReturnValue(
-      createUseAuthMock({
-        isAdmin: true,
-        user: createUserFixture({ role: "admin" }),
-      }),
-    );
-    const user = userEvent.setup();
-
-    renderPage();
-
-    await user.selectOptions(screen.getByRole("combobox", { name: /select race/i }), "race-1");
-
-    const updateButton = await screen.findByRole("button", { name: /update raceresults/i });
-    await user.click(updateButton);
-
-    expect(
-      await screen.findByRole("heading", { name: /update race results/i }),
-    ).toBeInTheDocument();
-  });
-
-  it("hides add and update actions for non-admin users", async () => {
-    setupHookMocks();
-    mockedUseAuth.mockReturnValue(
-      createUseAuthMock({
-        isAdmin: false,
-        user: createUserFixture({ role: "user" }),
-      }),
-    );
-    const user = userEvent.setup();
-
-    renderPage();
-
-    expect(screen.queryByRole("button", { name: /add raceresults/i })).not.toBeInTheDocument();
-
-    await user.selectOptions(screen.getByRole("combobox", { name: /select race/i }), "race-1");
-
-    expect(screen.queryByRole("button", { name: /update raceresults/i })).not.toBeInTheDocument();
-  });
-
-  it("calls useRaceResult with the selected season id after season change", async () => {
-    setupHookMocks();
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
-    const user = userEvent.setup();
-
-    renderPage();
-
-    await user.selectOptions(screen.getByRole("combobox", { name: /select season/i }), "season-2");
-
-    expect(mockedUseRaceResult).toHaveBeenCalledWith("season-2", "");
-  });
-
-  it("passes loading and error states from hook to table rendering", () => {
-    mockedUseSeasons.mockReturnValue({
-      data: seasons,
-      isLoading: false,
-      error: null,
-      refresh: vi.fn(),
+      expect(screen.getByRole("combobox", { name: /select season/i })).toBeInTheDocument();
+      expect(screen.getByRole("combobox", { name: /select race/i })).toBeInTheDocument();
+      expect(screen.getByText("Max Verstappen")).toBeInTheDocument();
+      expect(screen.getByText("Lewis Hamilton")).toBeInTheDocument();
     });
 
-    mockedUseRaceResult.mockReturnValue({
-      races: [],
-      results: [],
-      racers: mockRacers as RacerWithStats[],
-      isLoading: true,
-      error: null,
+    it("toggles points sorting between ascending and descending", async () => {
+      setupHookMocks();
+      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
+      const user = userEvent.setup();
+
+      renderPage();
+
+      const pointsHeader = screen.getByRole("columnheader", { name: "Points" });
+
+      await user.click(pointsHeader);
+      let rows = screen.getAllByRole("row");
+      expect(within(rows[1]).getByText("Lewis Hamilton")).toBeInTheDocument();
+
+      await user.click(pointsHeader);
+      rows = screen.getAllByRole("row");
+      expect(within(rows[1]).getByText("Max Verstappen")).toBeInTheDocument();
     });
 
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
+    it("shows add action for admins and opens add results modal", async () => {
+      setupHookMocks();
+      mockedUseAuth.mockReturnValue(
+        createUseAuthMock({
+          isAdmin: true,
+          user: createUserFixture({ role: "admin" }),
+        }),
+      );
+      const user = userEvent.setup();
 
-    const { rerender } = renderPage();
+      renderPage();
 
-    expect(screen.queryByRole("columnheader", { name: "Position" })).not.toBeInTheDocument();
+      await user.click(screen.getByRole("button", { name: /add raceresults/i }));
 
-    mockedUseRaceResult.mockReturnValue({
-      races: [],
-      results: [],
-      racers: mockRacers as RacerWithStats[],
-      isLoading: false,
-      error: "Failed to load race results",
+      expect(await screen.findByRole("heading", { name: /add race results/i })).toBeInTheDocument();
     });
 
-    rerender(
-      <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <Results />
-      </MemoryRouter>,
-    );
+    it("shows update action after race selection and opens update modal", async () => {
+      setupHookMocks();
+      mockedUseAuth.mockReturnValue(
+        createUseAuthMock({
+          isAdmin: true,
+          user: createUserFixture({ role: "admin" }),
+        }),
+      );
+      const user = userEvent.setup();
 
-    expect(screen.getByText("Failed to load race results")).toBeInTheDocument();
-  });
+      renderPage();
 
-  it("resets update mode when modal closes and add flow is reopened", async () => {
-    setupHookMocks();
-    mockedGetRaceById.mockResolvedValue(racesBySeason["season-1"][0]);
-    mockedUseAuth.mockReturnValue(
-      createUseAuthMock({
-        isAdmin: true,
-        user: createUserFixture({ role: "admin" }),
-      }),
-    );
-    const user = userEvent.setup();
+      await user.selectOptions(screen.getByRole("combobox", { name: /select race/i }), "race-1");
 
-    renderPage();
+      const updateButton = await screen.findByRole("button", { name: /update raceresults/i });
+      await user.click(updateButton);
 
-    await user.selectOptions(screen.getByRole("combobox", { name: /select race/i }), "race-1");
-    await user.click(await screen.findByRole("button", { name: /update raceresults/i }));
+      expect(
+        await screen.findByRole("heading", { name: /update race results/i }),
+      ).toBeInTheDocument();
+    });
 
-    expect(await screen.findByRole("heading", { name: /update race results/i })).toBeInTheDocument();
+    it("hides add and update actions for non-admin users", async () => {
+      setupHookMocks();
+      mockedUseAuth.mockReturnValue(
+        createUseAuthMock({
+          isAdmin: false,
+          user: createUserFixture({ role: "user" }),
+        }),
+      );
+      const user = userEvent.setup();
 
-    await user.click(screen.getByRole("button", { name: "×" }));
-    expect(screen.queryByRole("heading", { name: /update race results/i })).not.toBeInTheDocument();
+      renderPage();
 
-    await user.click(screen.getByRole("button", { name: /add raceresults/i }));
-    expect(await screen.findByRole("heading", { name: /add race results/i })).toBeInTheDocument();
-  });
+      expect(screen.queryByRole("button", { name: /add raceresults/i })).not.toBeInTheDocument();
 
-  it("submits update race results and closes modal", async () => {
-    setupHookMocks();
-    mockedGetRaceById.mockResolvedValue(racesBySeason["season-1"][0]);
-    mockedUpdateRace.mockResolvedValue({} as Race);
-    mockedUseAuth.mockReturnValue(
-      createUseAuthMock({
-        isAdmin: true,
-        user: createUserFixture({ role: "admin" }),
-      }),
-    );
+      await user.selectOptions(screen.getByRole("combobox", { name: /select race/i }), "race-1");
 
-    const user = userEvent.setup();
+      expect(screen.queryByRole("button", { name: /update raceresults/i })).not.toBeInTheDocument();
+    });
 
-    renderPage();
+    it("calls useRaceResult with the selected season id after season change", async () => {
+      setupHookMocks();
+      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
+      const user = userEvent.setup();
 
-    await user.selectOptions(screen.getByRole("combobox", { name: /select race/i }), "race-1");
-    await user.click(await screen.findByRole("button", { name: /update raceresults/i }));
+      renderPage();
 
-    expect(await screen.findByLabelText(/race name/i)).toHaveValue("Monaco GP");
+      await user.selectOptions(
+        screen.getByRole("combobox", { name: /select season/i }),
+        "season-2",
+      );
 
-    await user.click(screen.getByText("Save Results"));
+      expect(mockedUseRaceResult).toHaveBeenCalledWith("season-2", "");
+    });
 
-    expect(mockedUpdateRace).toHaveBeenCalledWith(
-      "race-1",
-      "Monaco GP",
-      expect.any(String),
-      expect.any(Array),
-    );
-    expect(screen.queryByRole("heading", { name: /update race results/i })).not.toBeInTheDocument();
+    it("passes loading and error states from hook to table rendering", () => {
+      mockedUseSeasons.mockReturnValue({
+        data: seasons,
+        isLoading: false,
+        error: null,
+        refresh: vi.fn(),
+      });
+
+      mockedUseRaceResult.mockReturnValue({
+        races: [],
+        results: [],
+        racers: mockRacers as RacerWithStats[],
+        isLoading: true,
+        error: null,
+      });
+
+      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
+
+      const { rerender } = renderPage();
+
+      expect(screen.queryByRole("columnheader", { name: "Position" })).not.toBeInTheDocument();
+
+      mockedUseRaceResult.mockReturnValue({
+        races: [],
+        results: [],
+        racers: mockRacers as RacerWithStats[],
+        isLoading: false,
+        error: "Failed to load race results",
+      });
+
+      rerender(
+        <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <Results />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByText("Failed to load race results")).toBeInTheDocument();
+    });
+
+    it("resets update mode when modal closes and add flow is reopened", async () => {
+      setupHookMocks();
+      mockedGetRaceById.mockResolvedValue(racesBySeason["season-1"][0]);
+      mockedUseAuth.mockReturnValue(
+        createUseAuthMock({
+          isAdmin: true,
+          user: createUserFixture({ role: "admin" }),
+        }),
+      );
+      const user = userEvent.setup();
+
+      renderPage();
+
+      await user.selectOptions(screen.getByRole("combobox", { name: /select race/i }), "race-1");
+      await user.click(await screen.findByRole("button", { name: /update raceresults/i }));
+
+      expect(
+        await screen.findByRole("heading", { name: /update race results/i }),
+      ).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "×" }));
+      expect(
+        screen.queryByRole("heading", { name: /update race results/i }),
+      ).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: /add raceresults/i }));
+      expect(await screen.findByRole("heading", { name: /add race results/i })).toBeInTheDocument();
+    });
+
+    it("submits update race results and closes modal", async () => {
+      setupHookMocks();
+      mockedGetRaceById.mockResolvedValue(racesBySeason["season-1"][0]);
+      mockedUpdateRace.mockResolvedValue({} as Race);
+      mockedUseAuth.mockReturnValue(
+        createUseAuthMock({
+          isAdmin: true,
+          user: createUserFixture({ role: "admin" }),
+        }),
+      );
+
+      const user = userEvent.setup();
+
+      renderPage();
+
+      await user.selectOptions(screen.getByRole("combobox", { name: /select race/i }), "race-1");
+      await user.click(await screen.findByRole("button", { name: /update raceresults/i }));
+
+      expect(await screen.findByLabelText(/race name/i)).toHaveValue("Monaco GP");
+
+      await user.click(screen.getByText("Save Results"));
+
+      expect(mockedUpdateRace).toHaveBeenCalledWith(
+        "race-1",
+        "Monaco GP",
+        expect.any(String),
+        expect.any(Array),
+      );
+      expect(
+        screen.queryByRole("heading", { name: /update race results/i }),
+      ).not.toBeInTheDocument();
+    });
   });
 });

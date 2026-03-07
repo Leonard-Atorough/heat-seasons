@@ -76,9 +76,9 @@ Before writing tests, list the intended cases as numbered comments at the top of
 
 1. **Read the source** — read the component/hook under test plus any types it uses from `shared/`.
 2. **Read existing tests** — check whether a test file already exists and what is already covered.
-3. **Plan** — use the todo list to enumerate test cases before writing any code, grouped by: render/display, conditional rendering, user interactions, error/loading states, edge cases.
+3. **Plan** — use the todo list to enumerate test cases before writing any code, grouped by: render/display, conditional rendering, user interactions, error/loading states, edge cases. Write test cases plan using BDD (Behavior-Driven Development) style (Given/When/Then).
 4. **Check fixtures and mocks** — reuse existing factory functions and mocks before creating new ones. If a new factory or shared mock is needed, add it to `tests/utils/fixtures` or `tests/utils/mocks`.
-5. **Write tests** — implement each planned case, one `it` block per scenario.
+5. **Write tests** — implement each planned case, one `it` block per scenario. Group related cases in nested `describe` blocks if needed for clarity. Use the props baseline pattern and test case comments to keep tests focused and maintainable. Avoid testing implementation details or writing brittle assertions. Focus on observable behavior and user interactions. Use Given/When/Then style in test names for clarity — e.g. `it("displays an error message when the API call fails")` or `it("navigates to the details page when the card is clicked")`.
 6. **Run** — execute `npm run test:run` (from `packages/frontend`) to verify no failures or type errors.
 7. **Coverage check** — run `npm run test:coverage` and confirm the target file's branch coverage is acceptable (aim ≥ 80 % lines/branches for new work).
 8. **Iterate** — fix failures, add missing cases, remove redundant assertions.

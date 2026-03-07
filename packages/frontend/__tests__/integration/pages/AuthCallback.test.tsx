@@ -16,13 +16,14 @@ afterEach(() => {
   window.history.pushState({}, "", "/");
 });
 
-describe("AuthCallback page integration", () => {
-  // 1. Redirects to login with query error when OAuth callback has an error param
-  // 2. Redirects to dashboard when auth is loaded and user is authenticated
-  // 3. Redirects to login auth_failed when auth is loaded and user is unauthenticated
-  // 4. Shows loading message while auth is still loading and does not redirect
+describe("Given the AuthCallback page", () => {
+  describe("When handling OAuth callback", () => {
+    // 1. Redirects to login with query error when OAuth callback has an error param
+    // 2. Redirects to dashboard when auth is loaded and user is authenticated
+    // 3. Redirects to login auth_failed when auth is loaded and user is unauthenticated
+    // 4. Shows loading message while auth is still loading and does not redirect
 
-  it("redirects to login with provider error when URL contains error query", async () => {
+    it("redirects to login with provider error when URL contains error query", async () => {
     mockedUseAuth.mockReturnValue(
       createUseAuthMock({
         isLoading: false,
@@ -45,9 +46,9 @@ describe("AuthCallback page integration", () => {
     );
 
     expect(await screen.findByText("Login Page")).toBeInTheDocument();
-  });
+    });
 
-  it("redirects to dashboard when auth is loaded and authenticated", async () => {
+    it("redirects to dashboard when auth is loaded and authenticated", async () => {
     mockedUseAuth.mockReturnValue(
       createUseAuthMock({
         isLoading: false,
@@ -71,9 +72,9 @@ describe("AuthCallback page integration", () => {
     );
 
     expect(await screen.findByText("Dashboard Page")).toBeInTheDocument();
-  });
+    });
 
-  it("redirects to login with auth_failed when auth is loaded and unauthenticated", async () => {
+    it("redirects to login with auth_failed when auth is loaded and unauthenticated", async () => {
     mockedUseAuth.mockReturnValue(
       createUseAuthMock({
         isLoading: false,
@@ -96,9 +97,9 @@ describe("AuthCallback page integration", () => {
     );
 
     expect(await screen.findByText("Login Page")).toBeInTheDocument();
-  });
+    });
 
-  it("shows authenticating message while auth is loading", () => {
+    it("shows authenticating message while auth is loading", () => {
     mockedUseAuth.mockReturnValue(
       createUseAuthMock({
         isLoading: true,
@@ -124,5 +125,6 @@ describe("AuthCallback page integration", () => {
     expect(screen.getByText("Authenticating...")).toBeInTheDocument();
     expect(screen.queryByText("Login Page")).not.toBeInTheDocument();
     expect(screen.queryByText("Dashboard Page")).not.toBeInTheDocument();
+    });
   });
 });
