@@ -19,19 +19,27 @@ export default function Toast({
   action,
 }: ToastProps) {
   return (
-    <div className={`${styles.toast} ${styles[type]} ${styles[variant]}`}>
+    <div
+      className={`${styles.toast} ${styles[type]}`}
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      tabIndex={0}
+    >
       <div className={styles.toast__header}>
         <strong className={styles.toast__title}>{title}</strong>
         {onClose && (
-          <button className={styles.closeButton} onClick={onClose} aria-label="Close">
+          <button className={styles.closeButton} onClick={onClose} aria-label="Close" type="button">
             &times;
           </button>
         )}
       </div>
-      <div className={styles.toast__body}>
+      <div className={styles.toast__body} aria-label={message} role="region">
         <span>{message}</span>
       </div>
-      <div className={styles.toast__actions}>{variant === "actionable" && action}</div>
+      <div className={styles.toast__actions} aria-label="Actions" role="region">
+        {variant === "actionable" && action}
+      </div>
     </div>
   );
 }
