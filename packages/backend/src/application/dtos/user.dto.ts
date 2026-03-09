@@ -6,4 +6,7 @@ export interface UserCreateInput extends Omit<User, "id" | "createdAt" | "update
 // TODO: Deprecate in favour of partials
 export interface UserUpdateInput extends Partial<Omit<User, "id" | "createdAt" | "updatedAt">> {}
 
-export interface UserResponse extends Omit<User, "googleId" | "createdAt" | "updatedAt"> {}
+export interface UserResponse extends Omit<User, "googleId" | "createdAt" | "updatedAt"> {
+  lastLoginAt?: Date;
+  loginCount: number;
+}

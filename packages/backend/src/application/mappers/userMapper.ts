@@ -33,6 +33,8 @@ export class UserMapper {
       racerId: data.racerId,
       createdAt: data.createdAt ? new Date(data.createdAt) : undefined,
       updatedAt: data.updatedAt ? new Date(data.updatedAt) : undefined,
+      lastLoginAt: data.lastLoginAt ? new Date(data.lastLoginAt) : undefined,
+      loginCount: data.loginCount ?? 0,
     });
   }
 
@@ -51,6 +53,8 @@ export class UserMapper {
       name: entity.name,
       profilePicture: entity.profilePicture,
       role: entity.role as UserRole,
+      lastLoginAt: entity.lastLoginAt,
+      loginCount: entity.loginCount,
     };
   }
 
@@ -69,6 +73,8 @@ export class UserMapper {
       racerId: entity.racerId,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
+      lastLoginAt: entity.lastLoginAt,
+      loginCount: entity.loginCount,
     };
   }
 }

@@ -11,6 +11,8 @@ export class UserEntity extends EntityRoot {
     public racerId?: string,
     createdAt?: Date,
     updatedAt?: Date,
+    public lastLoginAt?: Date,
+    public loginCount: number = 0,
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -37,6 +39,8 @@ export class UserEntity extends EntityRoot {
       data.racerId,
       undefined, // No createdAt yet
       undefined, // No updatedAt yet
+      undefined, // No lastLoginAt yet
+      0,         // loginCount starts at 0
     );
   }
 
@@ -54,6 +58,8 @@ export class UserEntity extends EntityRoot {
     racerId?: string;
     createdAt?: Date;
     updatedAt?: Date;
+    lastLoginAt?: Date;
+    loginCount?: number;
   }): UserEntity {
     return new UserEntity(
       data.id,
@@ -65,6 +71,8 @@ export class UserEntity extends EntityRoot {
       data.racerId,
       data.createdAt,
       data.updatedAt,
+      data.lastLoginAt,
+      data.loginCount ?? 0,
     );
   }
 
@@ -80,6 +88,8 @@ export class UserEntity extends EntityRoot {
       role: string;
       profilePicture?: string;
       racerId?: string;
+      lastLoginAt?: Date;
+      loginCount?: number;
     }>,
   ): void {
     if (data.googleId !== undefined) this.googleId = data.googleId;
@@ -88,5 +98,7 @@ export class UserEntity extends EntityRoot {
     if (data.role !== undefined) this.role = data.role;
     if (data.profilePicture !== undefined) this.profilePicture = data.profilePicture;
     if (data.racerId !== undefined) this.racerId = data.racerId;
+    if (data.lastLoginAt !== undefined) this.lastLoginAt = data.lastLoginAt;
+    if (data.loginCount !== undefined) this.loginCount = data.loginCount;
   }
 }
