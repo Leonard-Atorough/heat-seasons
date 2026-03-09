@@ -95,6 +95,13 @@
   transform: scale(1.02);
 }
 
+/* variant="none" — caller supplies all styling via className */
+.btn__none {
+  all: unset;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
 .btn__primary-small,
 .btn__secondary-small,
 .btn__danger-small {
