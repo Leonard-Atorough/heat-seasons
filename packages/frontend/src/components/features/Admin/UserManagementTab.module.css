@@ -1,0 +1,162 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.title {
+  font-size: var(--font-size-3);
+  font-weight: var(--fw-bold);
+  margin: 0;
+}
+
+.error {
+  color: var(--error-red);
+  font-size: var(--font-size-1);
+}
+
+/* ── Table ─────────────────────────────────────────────────────── */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--border-radius, 8px);
+  border: 1px solid var(--border-color);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-1);
+  min-width: 680px;
+}
+
+.table thead tr {
+  background-color: var(--dark-surface);
+}
+
+.table th {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+  font-size: var(--font-size-0);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* ── User name cell ─────────────────────────────────────────────── */
+.userNameCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatarInitials {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--asphalt-gray);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-0);
+  font-weight: var(--fw-bold);
+  flex-shrink: 0;
+}
+
+/* ── Role badge ─────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: var(--font-size-0);
+  font-weight: var(--fw-semibold);
+}
+
+.badge--admin {
+  background-color: var(--primary-red);
+  color: white;
+}
+
+.badge--contributor {
+  background-color: var(--gold);
+  color: #1a1a1a;
+}
+
+.badge--user {
+  background-color: var(--asphalt-gray);
+  color: white;
+}
+
+/* ── Actions ────────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.adminNote {
+  color: var(--text-secondary);
+  font-size: var(--font-size-0);
+  font-style: italic;
+}
+
+.emptyRow {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: var(--spacing-xl) !important;
+}
+
+/* ── Legend ─────────────────────────────────────────────────────── */
+.legend {
+  padding: var(--spacing-md);
+}
+
+.legend__title {
+  font-weight: var(--fw-semibold);
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-0);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.legend__list {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-1);
+  color: var(--text-secondary);
+}

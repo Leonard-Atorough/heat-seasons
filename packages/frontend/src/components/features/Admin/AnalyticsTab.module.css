@@ -1,0 +1,172 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  width: 100%;
+}
+
+.title {
+  font-size: var(--font-size-3);
+  font-weight: var(--fw-bold);
+  margin: 0;
+}
+
+.error {
+  color: var(--error-red);
+}
+
+/* ── Summary stats ────────────────────────────────────────────── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  gap: var(--spacing-xs);
+  text-align: center;
+}
+
+.statValue {
+  font-size: var(--font-size-5);
+  font-weight: var(--fw-bold);
+  color: var(--primary-red);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: var(--font-size-0);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Section ──────────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-2);
+  font-weight: var(--fw-semibold);
+  margin: 0;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: var(--font-size-0);
+}
+
+.emptyHint {
+  color: var(--text-secondary);
+  font-size: var(--font-size-1);
+  margin: 0;
+}
+
+/* ── Role breakdown ───────────────────────────────────────────── */
+.roleGrid {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.roleCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md) var(--spacing-xl);
+  min-width: 100px;
+}
+
+.roleBadge {
+  border-radius: 999px;
+  padding: 2px 12px;
+  font-size: var(--font-size-0);
+  font-weight: var(--fw-semibold);
+  text-transform: capitalize;
+}
+
+.roleBadge--admin {
+  background-color: var(--primary-red);
+  color: white;
+}
+
+.roleBadge--contributor {
+  background-color: var(--gold);
+  color: #1a1a1a;
+}
+
+.roleBadge--user {
+  background-color: var(--asphalt-gray);
+  color: white;
+}
+
+.roleCount {
+  font-size: var(--font-size-4);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+}
+
+/* ── User lists ───────────────────────────────────────────────── */
+.userList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-width: 640px;
+}
+
+.userRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.rank {
+  font-size: var(--font-size-1);
+  font-weight: var(--fw-bold);
+  color: var(--gold);
+  min-width: 28px;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.userName {
+  font-size: var(--font-size-1);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userEmail {
+  font-size: var(--font-size-0);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.loginCount {
+  font-size: var(--font-size-0);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.loginTime {
+  font-size: var(--font-size-0);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
