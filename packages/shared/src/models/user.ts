@@ -9,6 +9,8 @@ export interface User {
   name: string;
   profilePicture?: string;
   role: UserRole;
+  lastLoginAt?: Date | string;
+  loginCount?: number;
 }
 // Re-export for convenience
 export type { UserRole };
