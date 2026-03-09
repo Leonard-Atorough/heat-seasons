@@ -1,3 +1,4 @@
+import { Button } from "./Button";
 import { Card } from "./Card";
 import styles from "./Modal.module.css";
 
@@ -24,13 +25,16 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
           <h2 id="modal-title" tabIndex={-1}>
             {title}
           </h2>
-          <button
+          <Button
+            type="button"
+            variant="none"
             className={styles.modalCloseButton}
-            onClick={onClose}
+            aria-label="Close"
             data-testid="modal-close-button"
+            onClick={onClose}
           >
             &times;
-          </button>
+          </Button>
         </div>
         <div className={styles.modalBody}>{children}</div>
       </Card>

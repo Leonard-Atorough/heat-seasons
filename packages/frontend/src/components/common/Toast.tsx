@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Button } from "./Button";
 import styles from "./Toast.module.css";
 
 export interface ToastProps {
@@ -30,9 +31,15 @@ export default function Toast({
       <div className={styles.toast__header}>
         <strong className={styles.toast__title}>{title}</strong>
         {onClose && (
-          <button className={styles.closeButton} onClick={onClose} aria-label="Close" type="button">
+          <Button
+            type="button"
+            variant="none"
+            className={styles.closeButton}
+            aria-label="Close"
+            onClick={onClose}
+          >
             &times;
-          </button>
+          </Button>
         )}
       </div>
       <div className={styles.toast__body} aria-label={message} role="region">

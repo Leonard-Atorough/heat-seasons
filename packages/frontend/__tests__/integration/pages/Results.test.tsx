@@ -290,7 +290,7 @@ describe("Given the Results page", () => {
         await screen.findByRole("heading", { name: /update race results/i }),
       ).toBeInTheDocument();
 
-      await user.click(screen.getByRole("button", { name: "×" }));
+      await user.click(screen.getByRole("button", { name: /close/i }));
       expect(
         screen.queryByRole("heading", { name: /update race results/i }),
       ).not.toBeInTheDocument();
