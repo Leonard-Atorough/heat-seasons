@@ -107,8 +107,9 @@ class Container {
   }
 
   createAdminController(): AdminController {
-    const service = this.serviceLocator.get<IAuthService>("AuthService");
-    return new AdminController(service);
+    const authService = this.serviceLocator.get<IAuthService>("AuthService");
+    const racerService = this.serviceLocator.get<IRacerService>("RacerService");
+    return new AdminController(authService, racerService);
   }
 
   createBootstrapController(): BootstrapController {

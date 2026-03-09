@@ -55,4 +55,19 @@ adminRouter.post("/demote", adminLimiter, (req: Request, res: Response, next: Ne
   adminController.demoteUser(req, res, next);
 });
 
+/**
+ * POST /api/admin/racers
+ * Create a racer on behalf of any user (admin only)
+ *
+ * Body: racer fields + optional userId
+ */
+adminRouter.post("/racers", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+  req.log.info(
+    { adminId: (req.user as { id: string })?.id, assignedUserId: req.body.userId },
+    "Admin creating racer",
+  );
+  const adminController = Container.getInstance().createAdminController();
+  adminController.createRacer(req, res, next);
+});
+
 export { adminRouter };
