@@ -22,6 +22,7 @@ export class AuthService implements IAuthService {
     if (!user) {
       // Create NEW entity (no ID yet) - mapper converts DTO to domain entity
       const newUserEntity = UserMapper.toDomain(profile);
+      newUserEntity.update({ lastLoginAt: new Date(), loginCount: 1 });
       user = await this.authRepository.create(newUserEntity);
     } else {
       // Update EXISTING entity (already has ID)
@@ -31,6 +32,8 @@ export class AuthService implements IAuthService {
         role: user.role || "user", // Preserve existing role or default to "user"
         profilePicture: profile.profilePicture,
         racerId: profile.racerId,
+        lastLoginAt: new Date(),
+        loginCount: (user.loginCount ?? 0) + 1,
       });
       user = await this.authRepository.update(user.id!, user);
     }

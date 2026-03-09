@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AuthController } from "../../../../src/api/auth/auth.controller";
 import { AuthService } from "../../../../src/api/auth/auth.service";
 import { testUsers } from "../../../fixtures/testData";
-import { User } from "shared/src/models/user";
+import { UserResponse } from "../../../../src/application/dtos/user.dto";
 
 describe("AuthController", () => {
   let authController: AuthController;
@@ -30,7 +30,7 @@ describe("AuthController", () => {
   });
 
   test("should authenticate with Google and return a token", async () => {
-    const mockUser = Array.from(testUsers as unknown as User[])[0];
+    const mockUser = Array.from(testUsers as unknown as UserResponse[])[0];
     mockAuthService.upsertUser.mockResolvedValue(mockUser);
     mockAuthService.generateToken.mockReturnValue("mock-token");
   });
