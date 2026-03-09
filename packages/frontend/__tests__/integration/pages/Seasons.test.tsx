@@ -93,6 +93,21 @@ describe("Given a Seasons page", () => {
       expect(cards[1]).toHaveTextContent("OLDER");
     });
 
+    it("renders a loading skeleton while seasons are loading", () => {
+      mockedUseSeasons.mockReturnValue({
+        data: [],
+        isLoading: true,
+        error: null,
+        refresh,
+      });
+      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: false, isAuthenticated: false }));
+      mockedGetSeasonParticipants.mockResolvedValue([]);
+
+      renderPage();
+
+      expect(screen.getByTestId("seasons-page-loading-skeleton")).toBeInTheDocument();
+    });
+
     it("shows create action for admins and opens add season modal", async () => {
       const adminUser = createUserFixture({ role: "admin", racerId: "racer-1" });
       const user = userEvent.setup();

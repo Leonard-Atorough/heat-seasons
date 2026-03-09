@@ -85,7 +85,7 @@ export function CreateRacerModal({ isOpen, onClose, onCreated }: CreateRacerModa
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Create Your Racer">
+    <Modal isOpen={isOpen} onClose={handleClose} title="Create Your Racer" >
       <form className={styles.form} onSubmit={handleSubmit}>
         {error && (
           <Toast

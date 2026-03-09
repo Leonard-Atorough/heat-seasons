@@ -6,9 +6,17 @@ export interface CardProps {
   variant?: "default" | "compact";
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   style?: React.CSSProperties;
+  role?: string;
 }
 
-export function Card({ children, className = "", variant = "default", style, onClick }: CardProps) {
+export function Card({
+  children,
+  className = "",
+  variant = "default",
+  style,
+  onClick,
+  role,
+}: CardProps) {
   const cardClasses = `${styles.card} ${styles[`card__${variant}`]} ${className}`;
 
   return (
@@ -16,7 +24,7 @@ export function Card({ children, className = "", variant = "default", style, onC
       className={cardClasses}
       style={style}
       onClick={onClick}
-      role={onClick ? "button" : undefined}
+      role={role ?? (onClick ? "button" : undefined)}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={
         onClick

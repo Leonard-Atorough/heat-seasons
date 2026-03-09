@@ -9,7 +9,7 @@ export const getRacerById = async (racerId: string) => {
   return await apiClient.get<RacerWithStats>(`/racers/${racerId}`);
 };
 
-/** Fetch the racer profile linked to the currently authenticated user. */
+
 export const getMyRacer = async () => {
   return await apiClient.get<RacerWithStats>("/racers/me");
 };

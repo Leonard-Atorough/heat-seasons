@@ -11,13 +11,14 @@ export function Button({
   return (
     <button
       type={type}
+      role="button"
       className={`${styles[`btn__${variant}`]} ${className}`}
       onClick={onClick}
       disabled={disabled}
       onKeyDown={
         onClick
           ? (e) => {
-            e.preventDefault();
+              e.preventDefault();
               if (e.key === "Enter" || e.key === " ") onClick(e as any);
             }
           : undefined

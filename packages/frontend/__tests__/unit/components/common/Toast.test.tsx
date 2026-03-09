@@ -57,7 +57,7 @@ describe("Toast Component", () => {
     render(<Toast {...defaultProps} />);
     const toast = getToastRoot();
     expect(toast!.className).toContain("info");
-    expect(toast!.className).toContain("informational");
+    expect(toast!.getAttribute("data-testid")).toBe("toast-root-informational");
   });
 
   it.each(["success", "error", "info", "warning"] as ToastProps["type"][])(
@@ -66,6 +66,7 @@ describe("Toast Component", () => {
       render(<Toast title="t" message="Test message" type={type} />);
       const toast = getToastRoot();
       expect(toast!.className).toContain(type!);
+      expect(toast!.getAttribute("data-testid")).toBe(`toast-root-informational`);
     },
   );
 
@@ -92,7 +93,7 @@ describe("Toast Component", () => {
     render(<Toast {...defaultProps} variant="actionable" action={<button>Retry</button>} />);
 
     const toast = getToastRoot();
-    expect(toast!.className).toContain("actionable");
+    expect(toast?.getAttribute("data-testid")).toBe("toast-root-actionable");
     expect(screen.getByRole("button", { name: /retry/i })).toBeInTheDocument();
   });
 });

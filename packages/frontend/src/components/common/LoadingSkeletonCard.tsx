@@ -6,6 +6,7 @@ export interface LoadingSkeletonCardProps {
   maxWidth?: string;
   includeTitle?: boolean;
   includeText?: boolean;
+  testId?: string;
 }
 
 export default function LoadingSkeletonCard({
@@ -14,9 +15,16 @@ export default function LoadingSkeletonCard({
   maxWidth = "100%",
   includeTitle = true,
   includeText = true,
+  testId = "loading-skeleton",
 }: LoadingSkeletonCardProps) {
   return (
-    <div className={styles.skeletonCard} style={{ height, maxWidth }} role="img" aria-label="Loading content">
+    <div
+      className={styles.skeletonCard}
+      style={{ height, maxWidth }}
+      data-testid={testId}
+      role="img"
+      aria-label="Loading content"
+    >
       <div className={styles.skeletonContent}>
         {includeTitle && <div className={styles.skeletonTitle} />}
         {includeText &&

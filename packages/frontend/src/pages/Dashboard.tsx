@@ -51,7 +51,12 @@ export default function Dashboard() {
   return (
     <div className={styles.dashboard}>
       {isLoading ? (
-        <LoadingSkeletonCard lines={2} height="300px" includeTitle={true} />
+        <LoadingSkeletonCard
+          lines={2}
+          height="300px"
+          includeTitle={true}
+          testId="dashboard-hero-loading-skeleton"
+        />
       ) : (
         <Hero
           title={activeSeason?.name.toUpperCase() ?? "SEASON ONE WINTER 2026"}
@@ -64,9 +69,24 @@ export default function Dashboard() {
         <div className={styles.dashboard__stats}>
           {isLoading ? (
             <>
-              <LoadingSkeletonCard lines={1} height="120px" includeTitle={true} />
-              <LoadingSkeletonCard lines={1} height="120px" includeTitle={true} />
-              <LoadingSkeletonCard lines={1} height="120px" includeTitle={true} />
+              <LoadingSkeletonCard
+                lines={1}
+                height="120px"
+                includeTitle={true}
+                testId="dashboard-stat-1-loading-skeleton"
+              />
+              <LoadingSkeletonCard
+                lines={1}
+                height="120px"
+                includeTitle={true}
+                testId="dashboard-stat-2-loading-skeleton"
+              />
+              <LoadingSkeletonCard
+                lines={1}
+                height="120px"
+                includeTitle={true}
+                testId="dashboard-stat-3-loading-skeleton"
+              />
             </>
           ) : (
             <>
@@ -96,18 +116,21 @@ export default function Dashboard() {
                   includeTitle={false}
                   lines={1}
                   height="32px"
+                  testId="dashboard-leaderboard-1-loading-skeleton"
                 />
                 <LoadingSkeletonCard
                   key={topRacers[1].position}
                   includeTitle={false}
                   lines={1}
                   height="32px"
+                  testId="dashboard-leaderboard-2-loading-skeleton"
                 />
                 <LoadingSkeletonCard
                   key={topRacers[2].position}
                   includeTitle={false}
                   lines={1}
                   height="32px"
+                  testId="dashboard-leaderboard-3-loading-skeleton"
                 />
               </>
             ) : (

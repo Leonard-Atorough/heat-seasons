@@ -61,7 +61,7 @@ export default function ProfilePage() {
   if (isProtectedPageLoading) {
     return (
       <div className={styles.profile}>
-        <LoadingSkeletonCard includeTitle maxWidth="600px" />
+        <LoadingSkeletonCard includeTitle maxWidth="600px" testId="profile-page-loading-skeleton" />
       </div>
     );
   }
@@ -116,7 +116,7 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {isRacerLoading && <LoadingSkeletonCard includeTitle={false} maxWidth="600px" />}
+        {isRacerLoading && <LoadingSkeletonCard includeTitle={false} maxWidth="600px" testId="profile-page-racer-loading-skeleton" />}
 
         {!isRacerLoading && racerError && (
           <p className={styles.racerSection__error}>{racerError}</p>

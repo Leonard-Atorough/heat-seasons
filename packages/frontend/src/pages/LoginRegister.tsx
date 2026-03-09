@@ -16,7 +16,7 @@ export default function LoginRegister() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <Suspense fallback={<LoadingSkeletonCard />}>
+    <Suspense fallback={<LoadingSkeletonCard lines={2} height="300px" includeTitle={true} testId="login-register-loading-skeleton" />}>
       <div className={styles.loginRegister__card}>
         <AuthForm />
       </div>

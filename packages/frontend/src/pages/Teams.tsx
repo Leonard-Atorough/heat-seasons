@@ -44,7 +44,13 @@ export function Teams() {
       <div className={styles.teamsGrid}>
         {teams.map((team: Team) =>
           isLoading ? (
-            <LoadingSkeletonCard key={team.name} lines={1} height="300px" includeTitle={true} />
+            <LoadingSkeletonCard
+              key={team.name}
+              lines={1}
+              height="300px"
+              includeTitle={true}
+              testId={`teams-page-loading-skeleton-${team.name}`}
+            />
           ) : (
             <TeamCard
               key={team.name}

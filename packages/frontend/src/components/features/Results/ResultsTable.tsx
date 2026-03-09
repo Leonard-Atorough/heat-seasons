@@ -18,7 +18,7 @@ export default function ResultsTable({
   error,
   onSortBy,
 }: ResultsTableProps) {
-  if (isLoading) return <LoadingSkeletonCard />;
+  if (isLoading) return <LoadingSkeletonCard testId="results-loading-skeleton" />;
   if (error) return <div className={styles.error}>{error}</div>;
 
   return (

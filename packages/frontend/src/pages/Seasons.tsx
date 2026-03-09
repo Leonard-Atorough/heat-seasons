@@ -102,7 +102,7 @@ export default function Seasons() {
   if (isLoading) {
     return (
       <div>
-        <LoadingSkeletonCard />
+        <LoadingSkeletonCard includeTitle maxWidth="600px" testId="seasons-page-loading-skeleton" />
       </div>
     );
   }

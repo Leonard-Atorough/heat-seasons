@@ -7,14 +7,13 @@ const defaultProps: LoadingSkeletonCardProps = {
   maxWidth: "100%",
 };
 
-
 describe("LoadingSkeletonCard Component", () => {
   it("renders with default props", () => {
     render(<LoadingSkeletonCard {...defaultProps} />);
     expect(screen.getByRole("img")).toBeInTheDocument();
   });
 
-    it("renders with custom props", () => {
+  it("renders with custom props", () => {
     render(
       <LoadingSkeletonCard
         lines={5}
@@ -22,8 +21,12 @@ describe("LoadingSkeletonCard Component", () => {
         maxWidth="50%"
         includeTitle={false}
         includeText={false}
-      />
+      />,
     );
     expect(screen.getByRole("img")).toBeInTheDocument();
+    expect(screen.getByTestId("loading-skeleton")).toHaveStyle({
+      height: "150px",
+      maxWidth: "50%",
+    });
   });
 });

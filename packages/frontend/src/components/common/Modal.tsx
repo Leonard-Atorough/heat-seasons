@@ -13,10 +13,22 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <Card className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+      <Card
+        className={styles.modalContent}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <div className={styles.modalHeader}>
-          <h2>{title}</h2>
-          <button className={styles.modalCloseButton} onClick={onClose} data-testid="modal-close-button">
+          <h2 id="modal-title" tabIndex={-1}>
+            {title}
+          </h2>
+          <button
+            className={styles.modalCloseButton}
+            onClick={onClose}
+            data-testid="modal-close-button"
+          >
             &times;
           </button>
         </div>

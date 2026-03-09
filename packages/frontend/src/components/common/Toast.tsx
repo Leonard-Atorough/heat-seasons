@@ -25,6 +25,7 @@ export default function Toast({
       aria-live="assertive"
       aria-atomic="true"
       tabIndex={0}
+      data-testid={`toast-root-${variant}`}
     >
       <div className={styles.toast__header}>
         <strong className={styles.toast__title}>{title}</strong>
