@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { RacerWithStats } from "shared";
 import { useAuth } from "../hooks/useAuth";
 import { useProtectedPage } from "../hooks/useProtectedPage";
@@ -9,6 +10,7 @@ import styles from "./ProfilePage.module.css";
 
 export default function ProfilePage() {
   const { user, logout, refreshUser } = useAuth();
+  const navigate = useNavigate();
   const isProtectedPageLoading = useProtectedPage();
 
   const [imageSrc, setImageSrc] = useState(user?.profilePicture);
@@ -138,6 +140,15 @@ export default function ProfilePage() {
 
       {/* ── Account actions ───────────────────────────────────────── */}
       <div className={styles.profileActions}>
+        {user?.role === "admin" && (
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => navigate("/admin")}
+          >
+            Admin Panel
+          </Button>
+        )}
         <Button type="button" variant="ghost" onClick={logout}>
           Logout
         </Button>

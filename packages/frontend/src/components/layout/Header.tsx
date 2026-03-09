@@ -75,7 +75,21 @@ export default function Header() {
             Login
           </Button>
         ) : (
-          <UserProfileBadge name={auth.user.name} profilePicture={auth.user.profilePicture || ""} />
+          <>
+            {auth.user.role === "admin" && (
+              <Link
+                className={styles["nav__link"]}
+                to="/admin"
+                onClick={() => setHamburgerOpen(false)}
+              >
+                Admin
+              </Link>
+            )}
+            <UserProfileBadge
+              name={auth.user.name}
+              profilePicture={auth.user.profilePicture || ""}
+            />
+          </>
         )}
       </nav>
     </header>

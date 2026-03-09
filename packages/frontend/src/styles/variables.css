@@ -83,7 +83,7 @@
   --line-height: 1.5;
 
   /* Border Radius */
-  --border-base: 16px;
+  --border-base: 8px;
   --border-radius-xs: calc(var(--border-base) * 0.25);
   --border-radius-sm: calc(var(--border-base) * 0.5);
   --border-radius-md: var(--border-base);
