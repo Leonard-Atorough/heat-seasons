@@ -1,8 +1,10 @@
-import { describe, it, expect, vi, beforeEach, afterEach, ReactNode } from "vitest";
-import { renderHook, waitFor } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { ReactNode } from "react";
+import { renderHook } from "@testing-library/react";
 import { useSeasons, useActiveSeason } from "src/hooks/data/useSeason";
 import { DataContext, DataContextType } from "src/contexts";
 import { createSeason } from "tests/utils/fixtures";
+import { createMockDataContext } from "tests/utils/mocks/dataContextMock";
 
 const mockSeasons = [
   createSeason({ id: "s1", name: "Winter 2026", status: "active" as const }),
@@ -20,15 +22,9 @@ afterEach(() => {
 describe("useSeasons hook", () => {
   describe("When calling useSeasons", () => {
     it("returns seasons data from context", () => {
-      const mockContextValue: DataContextType = {
+      const mockContextValue: DataContextType = createMockDataContext({
         seasons: mockSeasons,
-        racers: [],
-        isLoading: false,
-        error: null,
-        refreshSeasons: vi.fn(),
-        refreshRacers: vi.fn(),
-        refreshAll: vi.fn(),
-      };
+      });
 
       const wrapper = ({ children }: { children: ReactNode }) => (
         <DataContext.Provider value={mockContextValue}>{children}</DataContext.Provider>
@@ -42,15 +38,9 @@ describe("useSeasons hook", () => {
     });
 
     it("returns loading state when fetching", () => {
-      const mockContextValue: DataContextType = {
-        seasons: [],
-        racers: [],
+      const mockContextValue: DataContextType = createMockDataContext({
         isLoading: true,
-        error: null,
-        refreshSeasons: vi.fn(),
-        refreshRacers: vi.fn(),
-        refreshAll: vi.fn(),
-      };
+      });
 
       const wrapper = ({ children }: { children: ReactNode }) => (
         <DataContext.Provider value={mockContextValue}>{children}</DataContext.Provider>
@@ -64,15 +54,9 @@ describe("useSeasons hook", () => {
 
     it("returns error state when fetch fails", () => {
       const testError = new Error("Failed to fetch seasons");
-      const mockContextValue: DataContextType = {
-        seasons: [],
-        racers: [],
-        isLoading: false,
+      const mockContextValue: DataContextType = createMockDataContext({
         error: testError,
-        refreshSeasons: vi.fn(),
-        refreshRacers: vi.fn(),
-        refreshAll: vi.fn(),
-      };
+      });
 
       const wrapper = ({ children }: { children: ReactNode }) => (
         <DataContext.Provider value={mockContextValue}>{children}</DataContext.Provider>
@@ -88,15 +72,10 @@ describe("useSeasons hook", () => {
   describe("When refreshing seasons", () => {
     it("calls refresh function", () => {
       const mockRefresh = vi.fn();
-      const mockContextValue: DataContextType = {
+      const mockContextValue: DataContextType = createMockDataContext({
         seasons: mockSeasons,
-        racers: [],
-        isLoading: false,
-        error: null,
         refreshSeasons: mockRefresh,
-        refreshRacers: vi.fn(),
-        refreshAll: vi.fn(),
-      };
+      });
 
       const wrapper = ({ children }: { children: ReactNode }) => (
         <DataContext.Provider value={mockContextValue}>{children}</DataContext.Provider>
@@ -114,15 +93,9 @@ describe("useSeasons hook", () => {
 describe("useActiveSeason hook", () => {
   describe("When calling useActiveSeason", () => {
     it("returns the active season from list", () => {
-      const mockContextValue: DataContextType = {
+      const mockContextValue: DataContextType = createMockDataContext({
         seasons: mockSeasons,
-        racers: [],
-        isLoading: false,
-        error: null,
-        refreshSeasons: vi.fn(),
-        refreshRacers: vi.fn(),
-        refreshAll: vi.fn(),
-      };
+      });
 
       const wrapper = ({ children }: { children: ReactNode }) => (
         <DataContext.Provider value={mockContextValue}>{children}</DataContext.Provider>
@@ -136,15 +109,9 @@ describe("useActiveSeason hook", () => {
     });
 
     it("returns null when no active season exists", () => {
-      const mockContextValue: DataContextType = {
+      const mockContextValue: DataContextType = createMockDataContext({
         seasons: [mockSeasons[1]], // Only completed season
-        racers: [],
-        isLoading: false,
-        error: null,
-        refreshSeasons: vi.fn(),
-        refreshRacers: vi.fn(),
-        refreshAll: vi.fn(),
-      };
+      });
 
       const wrapper = ({ children }: { children: ReactNode }) => (
         <DataContext.Provider value={mockContextValue}>{children}</DataContext.Provider>

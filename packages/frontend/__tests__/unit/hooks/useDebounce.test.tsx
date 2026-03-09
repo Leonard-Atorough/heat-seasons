@@ -134,9 +134,9 @@ describe("useDebounce hook", () => {
     });
 
     it("cleans up timer on unmount", () => {
-      const clearTimeoutSpy = vi.spyOn(global, "clearTimeout");
+      const clearTimeoutSpy = vi.spyOn(globalThis, "clearTimeout");
 
-      const { result, rerender, unmount } = renderHook(
+      const { rerender, unmount } = renderHook(
         ({ value, delay }) => useDebounce(value, delay),
         { initialProps: { value: "test", delay: 500 } },
       );

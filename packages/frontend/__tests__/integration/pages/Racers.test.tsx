@@ -1,13 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Racers from "src/pages/Racers";
-import * as racerApi from "src/services/api/racer";
 import { useAuth } from "src/hooks/useAuth";
 import { useRacers } from "src/hooks/data/useRacer";
 import { mockAuthContext } from "tests/utils/mocks/authContext.mock";
-import { mockRacers, createRacerFixture } from "tests/utils/fixtures";
+import { mockRacers } from "tests/utils/fixtures";
 
 vi.mock("src/hooks/useAuth");
 vi.mock("src/hooks/data/useRacer");
