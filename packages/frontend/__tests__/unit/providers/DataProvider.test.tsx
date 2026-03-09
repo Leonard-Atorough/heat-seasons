@@ -267,7 +267,6 @@ describe("DataProvider", () => {
       mockSeasonApi.getSeasons.mockResolvedValue(mockSeasons);
       mockRacerApi.getAllRacers.mockResolvedValue(mockRacers);
 
-      const user = userEvent.setup();
       render(
         <DataProvider>
           <TestComponent />
@@ -356,10 +355,10 @@ describe("DataProvider", () => {
       mockRacerApi.getAllRacers.mockRejectedValue(testError);
       mockSeasonApi.getSeasons.mockResolvedValue([]);
 
-      const { rerender } = render(
+      render(
         <DataProvider>
           <TestComponent />
-        </DataProvider>,
+        </DataProvider>
       );
 
       await waitFor(() => {
