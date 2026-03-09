@@ -4,10 +4,11 @@ import userEvent from "@testing-library/user-event";
 import Dashboard from "src/pages/Dashboard";
 import { useAuth } from "src/hooks/useAuth";
 import { useActiveSeason, useRacers, useRaceResult } from "src/hooks/data";
-import { mockAuthContext } from "tests/utils/mocks/authContext.mock";
+import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 import { createSeason, mockRacers, createMockRace } from "tests/utils/fixtures";
 import { renderWithRouter } from "tests/utils/renderWithRouter";
 import { RaceResult, RacerWithStats } from "shared";
+import { AuthContextType } from "src/contexts";
 
 vi.mock("src/hooks/useAuth");
 vi.mock("src/hooks/data", () => ({
@@ -54,7 +55,7 @@ const mockAggregatedResults: RaceResult[] = [
 ];
 
 beforeEach(() => {
-  mockUseAuth.mockReturnValue(mockAuthContext as any);
+  mockUseAuth.mockReturnValue(createMockAuthContext() as AuthContextType);
   mockUseActiveSeason.mockReturnValue({
     data: mockActiveSeason,
     isLoading: false,

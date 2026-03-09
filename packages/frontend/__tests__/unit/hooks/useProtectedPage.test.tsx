@@ -1,6 +1,6 @@
 import { cleanup, renderHook } from "@testing-library/react";
 import { useProtectedPage } from "src/hooks/useProtectedPage";
-import { createUseAuthMock } from "tests/utils/mocks/useAuth.mock";
+import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 
 vi.mock("src/hooks/useAuth", () => ({
   useAuth: vi.fn(),
@@ -27,7 +27,7 @@ describe("useProtectedPage hook", () => {
   // 4. Does not navigate when user is present
 
   it("returns isLoading from auth context", () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isLoading: true, user: null }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ isLoading: true, user: null }));
 
     const { result } = renderHook(() => useProtectedPage());
 
@@ -35,7 +35,7 @@ describe("useProtectedPage hook", () => {
   });
 
   it("navigates to /login when there is no user and loading is false", () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ user: null, isLoading: false }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: null, isLoading: false }));
 
     renderHook(() => useProtectedPage());
 
@@ -43,7 +43,7 @@ describe("useProtectedPage hook", () => {
   });
 
   it("does not navigate while loading", () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ user: null, isLoading: true }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: null, isLoading: true }));
 
     renderHook(() => useProtectedPage());
 
@@ -51,7 +51,7 @@ describe("useProtectedPage hook", () => {
   });
 
   it("does not navigate when a user is present", () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isLoading: false }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ isLoading: false }));
 
     renderHook(() => useProtectedPage());
 

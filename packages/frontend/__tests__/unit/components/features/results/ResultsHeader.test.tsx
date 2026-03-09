@@ -2,7 +2,7 @@ import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import ResultsHeader from "src/components/features/Results/ResultsHeader";
-import { createUseAuthMock } from "../../../../utils/mocks/useAuth.mock";
+import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 import { createSeason, createMockRace } from "../../../../utils/fixtures";
 
 vi.mock("src/hooks/useAuth");
@@ -30,7 +30,7 @@ describe("ResultsHeader Component", () => {
     onRaceChange = vi.fn();
     onAddResults = vi.fn();
     onUpdateResults = vi.fn();
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ user: { id: "1", name: "Admin", email: "admin@test.com", role: "admin" }, isAdmin: true }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: { id: "1", name: "Admin", email: "admin@test.com", role: "admin" }, isAdmin: true }));
   });
 
   afterEach(() => {
@@ -118,7 +118,7 @@ describe("ResultsHeader Component", () => {
   });
 
   it("hides the 'Add RaceResults' button when the user is not an admin", () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ user: { id: "1", name: "User", email: "user@test.com", role: "user" }, isAdmin: false }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: { id: "1", name: "User", email: "user@test.com", role: "user" }, isAdmin: false }));
     render(
       <ResultsHeader
         seasons={mockSeasons}
@@ -133,7 +133,7 @@ describe("ResultsHeader Component", () => {
   });
 
   it("hides the 'Add RaceResults' button when there is no logged-in user", () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ user: null as any, isAuthenticated: false, isAdmin: false }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: null as any, isAuthenticated: false, isAdmin: false }));
     render(
       <ResultsHeader
         seasons={mockSeasons}
@@ -207,7 +207,7 @@ describe("ResultsHeader Component", () => {
   });
 
   it("hides the 'Update RaceResults' button when the user is not an admin", () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ user: { id: "1", name: "User", email: "user@test.com", role: "user" }, isAdmin: false }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: { id: "1", name: "User", email: "user@test.com", role: "user" }, isAdmin: false }));
     render(
       <ResultsHeader
         seasons={mockSeasons}

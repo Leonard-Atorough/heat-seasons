@@ -60,7 +60,7 @@ describe("useRacers hook", () => {
 
       const { result } = renderHook(() => useRacers(), { wrapper });
 
-      expect(result.current.isLoading).toBe(true);
+      expect(result.current.error).toEqual(testError);
       expect(result.current.data).toEqual([]);
     });
 

@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import Racers from "src/pages/Racers";
 import { useAuth } from "src/hooks/useAuth";
 import { useRacers } from "src/hooks/data/useRacer";
-import { mockAuthContext } from "tests/utils/mocks/authContext.mock";
+import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 import { mockRacers } from "tests/utils/fixtures";
 
 vi.mock("src/hooks/useAuth");
@@ -15,7 +15,7 @@ const mockUseAuth = vi.mocked(useAuth);
 const mockUseRacers = vi.mocked(useRacers);
 
 beforeEach(() => {
-  mockUseAuth.mockReturnValue(mockAuthContext as any);
+  mockUseAuth.mockReturnValue(createMockAuthContext());
   mockUseRacers.mockReturnValue({ data: mockRacers, refresh: vi.fn() } as any);
 });
 

@@ -4,7 +4,7 @@ import Results from "src/pages/Results";
 import { useAuth } from "src/hooks/useAuth";
 import { useRaceResult, useSeasons } from "src/hooks/data";
 import { createSeason, createUserFixture, mockRacers } from "tests/utils/fixtures";
-import { createUseAuthMock } from "tests/utils/mocks/useAuth.mock";
+import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 import { MemoryRouter } from "react-router-dom";
 import { Race, RaceResult, RacerWithStats } from "shared";
 import { CreateRace, GetRaceById, UpdateRace } from "src/services/api/races";
@@ -130,7 +130,7 @@ describe("Given the Results page", () => {
 
     it("renders selectors and aggregated standings rows", () => {
       setupHookMocks();
-      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
+      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: true }));
 
       renderPage();
 
@@ -142,7 +142,7 @@ describe("Given the Results page", () => {
 
     it("toggles points sorting between ascending and descending", async () => {
       setupHookMocks();
-      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
+      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: true }));
       const user = userEvent.setup();
 
       renderPage();
@@ -161,7 +161,7 @@ describe("Given the Results page", () => {
     it("shows add action for admins and opens add results modal", async () => {
       setupHookMocks();
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           user: createUserFixture({ role: "admin" }),
         }),
@@ -178,7 +178,7 @@ describe("Given the Results page", () => {
     it("shows update action after race selection and opens update modal", async () => {
       setupHookMocks();
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           user: createUserFixture({ role: "admin" }),
         }),
@@ -200,7 +200,7 @@ describe("Given the Results page", () => {
     it("hides add and update actions for non-admin users", async () => {
       setupHookMocks();
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: false,
           user: createUserFixture({ role: "user" }),
         }),
@@ -218,7 +218,7 @@ describe("Given the Results page", () => {
 
     it("calls useRaceResult with the selected season id after season change", async () => {
       setupHookMocks();
-      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
+      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: true }));
       const user = userEvent.setup();
 
       renderPage();
@@ -247,7 +247,7 @@ describe("Given the Results page", () => {
         error: null,
       });
 
-      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: true }));
+      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: true }));
 
       const { rerender } = renderPage();
 
@@ -274,7 +274,7 @@ describe("Given the Results page", () => {
       setupHookMocks();
       mockedGetRaceById.mockResolvedValue(racesBySeason["season-1"][0]);
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           user: createUserFixture({ role: "admin" }),
         }),
@@ -303,7 +303,7 @@ describe("Given the Results page", () => {
       setupHookMocks();
       mockedCreateRace.mockResolvedValue({} as Race);
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           user: createUserFixture({ role: "admin" }),
         }),
@@ -345,7 +345,7 @@ describe("Given the Results page", () => {
       mockedGetRaceById.mockResolvedValue(racesBySeason["season-1"][0]);
       mockedUpdateRace.mockResolvedValue({} as Race);
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           user: createUserFixture({ role: "admin" }),
         }),

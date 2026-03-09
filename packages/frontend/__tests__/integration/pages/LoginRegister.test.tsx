@@ -2,7 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import LoginRegister from "src/pages/LoginRegister";
 import { useAuth } from "src/hooks/useAuth";
-import { createUseAuthMock } from "tests/utils/mocks/useAuth.mock";
+import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 
 vi.mock("src/hooks/useAuth", () => ({
   useAuth: vi.fn(),
@@ -22,7 +22,7 @@ describe("Given the LoginRegister page", () => {
 
     it("renders the auth form when unauthenticated", () => {
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAuthenticated: false,
           user: null,
         }),
@@ -46,7 +46,7 @@ describe("Given the LoginRegister page", () => {
 
     it("redirects to profile when authenticated", async () => {
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAuthenticated: true,
         }),
       );

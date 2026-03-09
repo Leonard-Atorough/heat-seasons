@@ -22,7 +22,7 @@ TEST CASES:
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { createUseAuthMock } from "../../../../utils/mocks/useAuth.mock";
+import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 import Hero, { HeroProps } from "src/components/features/Dashboard/Hero";
 
 const mockNavigate = vi.fn();
@@ -45,7 +45,7 @@ const defaultProps: HeroProps = {
 describe("Hero Component", () => {
   beforeEach(() => {
     mockNavigate.mockClear();
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isAuthenticated: false }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ isAuthenticated: false }));
   });
 
   afterEach(() => {
@@ -68,13 +68,13 @@ describe("Hero Component", () => {
   });
 
   it("shows Sign In button when user is not authenticated", () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isAuthenticated: false }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ isAuthenticated: false }));
     render(<Hero {...defaultProps} />);
     expect(screen.getByText("Sign In")).toBeInTheDocument();
   });
 
   it("hides Sign In button when user is authenticated", () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isAuthenticated: true }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ isAuthenticated: true }));
     render(<Hero {...defaultProps} />);
     expect(screen.queryByText("Sign In")).not.toBeInTheDocument();
   });
@@ -86,7 +86,7 @@ describe("Hero Component", () => {
   });
 
   it("navigates to /login when Sign In is clicked", async () => {
-    mockedUseAuth.mockReturnValue(createUseAuthMock({ isAuthenticated: false }));
+    mockedUseAuth.mockReturnValue(createMockAuthContext({ isAuthenticated: false }));
     render(<Hero {...defaultProps} />);
     await userEvent.click(screen.getByText("Sign In"));
     expect(mockNavigate).toHaveBeenCalledWith("/login");

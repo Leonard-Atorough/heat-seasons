@@ -5,7 +5,7 @@ import Seasons from "src/pages/Seasons";
 import { useSeasons } from "src/hooks/data/useSeason";
 import { useAuth } from "src/hooks/useAuth";
 import { createSeason, createUserFixture } from "tests/utils/fixtures";
-import { createUseAuthMock } from "tests/utils/mocks/useAuth.mock";
+import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 import {
   createSeason as createSeasonApi,
   deleteSeason,
@@ -83,7 +83,7 @@ describe("Given a Seasons page", () => {
         refresh,
       });
 
-      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: false, isAuthenticated: false }));
+      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: false, isAuthenticated: false }));
       mockedGetSeasonParticipants.mockResolvedValue([]);
 
       renderPage();
@@ -100,7 +100,7 @@ describe("Given a Seasons page", () => {
         error: null,
         refresh,
       });
-      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: false, isAuthenticated: false }));
+      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: false, isAuthenticated: false }));
       mockedGetSeasonParticipants.mockResolvedValue([]);
 
       renderPage();
@@ -120,7 +120,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           user: adminUser,
           isAdmin: true,
           isAuthenticated: true,
@@ -147,7 +147,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: false,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-1" }),
@@ -176,7 +176,7 @@ describe("Given a Seasons page", () => {
         refresh,
       });
 
-      mockedUseAuth.mockReturnValue(createUseAuthMock({ isAdmin: false, isAuthenticated: false }));
+      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: false, isAuthenticated: false }));
       mockedGetSeasonParticipants.mockResolvedValue([]);
 
       renderPage();
@@ -204,7 +204,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: false,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-42" }),
@@ -238,7 +238,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: false,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-42" }),
@@ -266,7 +266,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: false,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-42" }),
@@ -292,7 +292,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: false,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-42" }),
@@ -324,7 +324,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-1" }),
@@ -357,7 +357,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-1" }),
@@ -390,7 +390,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-1" }),
@@ -415,7 +415,7 @@ describe("Given a Seasons page", () => {
         refresh,
       });
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-1" }),
@@ -442,7 +442,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-1" }),
@@ -486,7 +486,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-1" }),
@@ -531,7 +531,7 @@ describe("Given a Seasons page", () => {
       });
 
       mockedUseAuth.mockReturnValue(
-        createUseAuthMock({
+        createMockAuthContext({
           isAdmin: true,
           isAuthenticated: true,
           user: createUserFixture({ racerId: "racer-1" }),

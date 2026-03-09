@@ -15,3 +15,10 @@ export const mockAuthContext: AuthContextType = {
   logout: vi.fn(),
   refreshUser: vi.fn(),
 };
+
+export const createMockAuthContext = (overrides?: Partial<AuthContextType>): AuthContextType => {
+  return {
+    ...mockAuthContext,
+    ...overrides,
+  };
+};

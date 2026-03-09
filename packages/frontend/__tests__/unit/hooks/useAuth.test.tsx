@@ -2,7 +2,7 @@ import { cleanup, renderHook } from "@testing-library/react";
 import { ReactNode } from "react";
 import { useAuth } from "src/hooks/useAuth";
 import { AuthContext, AuthContextType } from "src/contexts";
-import { createUseAuthMock } from "tests/utils/mocks/useAuth.mock";
+import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -27,7 +27,7 @@ describe("useAuth hook", () => {
   });
 
   it("returns auth context value from provider", () => {
-    const mockAuth = createUseAuthMock({ isAuthenticated: true, isAdmin: true });
+    const mockAuth = createMockAuthContext({ isAuthenticated: true, isAdmin: true });
 
     const wrapper = ({ children }: { children: ReactNode }) => (
       <AuthContext.Provider value={mockAuth as AuthContextType}>{children}</AuthContext.Provider>
