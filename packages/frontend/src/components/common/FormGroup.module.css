@@ -28,3 +28,57 @@
   background-color: var(--background-light);
   cursor: not-allowed;
 }
+
+/* Error state */
+.formGroup__input--error,
+.formGroup__textarea--error {
+  border-color: var(--error-red);
+}
+
+.formGroup__input--error:focus,
+.formGroup__textarea--error:focus {
+  outline-color: var(--error-red);
+}
+
+/* Textarea — mirrors .formGroup__input */
+.formGroup__textarea {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: var(--border-width-thin) solid var(--asphalt-gray);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-2);
+  width: 100%;
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.formGroup__textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.formGroup__textarea:disabled {
+  background-color: var(--background-light);
+  cursor: not-allowed;
+}
+
+/* Required asterisk */
+.formGroup__required {
+  color: var(--error-red);
+  margin-left: 2px;
+}
+
+/* Hint text */
+.formGroup__hint {
+  display: block;
+  font-size: var(--font-size-0);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Per-field error message */
+.formGroup__error {
+  display: block;
+  font-size: var(--font-size-0);
+  color: var(--error-red);
+  margin-top: var(--spacing-xs);
+}
