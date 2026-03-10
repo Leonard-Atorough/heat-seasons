@@ -3,6 +3,7 @@ import { AdminController } from "../../../src/api/admin/admin.controller";
 import { UserResponse } from "../../../src/application/dtos/user.dto";
 import { IAuthService } from "../../../src/api/auth/auth.service.interface";
 import { IRacerService } from "../../../src/api/racer/racer.service.interface";
+import { Racer, RacerWithStats } from "shared";
 import { racers, users } from "../../fixtures";
 
 function createUserResponse(overrides: Partial<UserResponse> = {}): UserResponse {
@@ -21,7 +22,19 @@ function createUserResponse(overrides: Partial<UserResponse> = {}): UserResponse
   };
 }
 
+function createRacerWithStats(overrides: Partial<RacerWithStats> = {}): RacerWithStats {
+  return {
+    ...racers.standard(),
+    stats: null,
+    ...overrides,
+  };
+}
+
 describe("AdminController", () => {
+  // 1. Given admin user-management requests, when listing, promoting, or demoting users, then the controller returns the expected status codes, validates simple bad requests, and forwards unexpected failures.
+  // 2. Given racer-management requests, when creating, listing, updating, or deleting racers, then the controller maps params and body into service calls and returns thin success envelopes.
+  // 3. Given invalid racer creation input, when required fields are missing, then the controller returns 400 without calling the service.
+
   let adminController: AdminController;
   let mockAuthService: jest.Mocked<IAuthService>;
   let mockRacerService: jest.Mocked<IRacerService>;
@@ -170,9 +183,35 @@ describe("AdminController", () => {
 
   describe("createRacer", () => {
     it("returns 201 with created racer when all required fields are provided", async () => {
-      // TODO: implement
-      mockRacerService.create.mockResolvedValue(racers.standard());
-      expect(true).toBe(true);
+      const createdRacer: Racer = racers.assignedToUser("user-7", { id: "racer-7" });
+
+      request.body = {
+        userId: "user-7",
+        name: "Max Speed",
+        team: "Falcon",
+        teamColor: "#123456",
+        nationality: "FR",
+        age: 27,
+      };
+      mockRacerService.create.mockResolvedValue(createdRacer);
+
+      await adminController.createRacer(request as Request, response as Response, next);
+
+      expect(mockRacerService.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userId: "user-7",
+          name: "Max Speed",
+          active: true,
+        }),
+      );
+      expect(response.status).toHaveBeenCalledWith(201);
+      expect(response.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          status: 201,
+          data: createdRacer,
+        }),
+      );
     });
 
     it("returns 400 when required fields are missing", async () => {
@@ -182,13 +221,45 @@ describe("AdminController", () => {
     });
 
     it("assigns racer to the provided userId when present", async () => {
-      // TODO: implement - verify racerService.create called with { userId: 'some-id', ... }
-      expect(true).toBe(true);
+      request.body = {
+        userId: "user-99",
+        name: "Assigned Racer",
+        team: "Rocket",
+        teamColor: "#999999",
+        nationality: "CA",
+        age: 24,
+      };
+      mockRacerService.create.mockResolvedValue(racers.assignedToUser("user-99"));
+
+      await adminController.createRacer(request as Request, response as Response, next);
+
+      expect(mockRacerService.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userId: "user-99",
+          name: "Assigned Racer",
+        }),
+      );
     });
 
     it("creates an unassigned racer when userId is omitted", async () => {
-      // TODO: implement - verify racerService.create called with { userId: null, ... }
-      expect(true).toBe(true);
+      request.body = {
+        name: "Unassigned Racer",
+        team: "Rocket",
+        teamColor: "#444444",
+        nationality: "US",
+        age: 22,
+      };
+      mockRacerService.create.mockResolvedValue(racers.standard({ id: "racer-unassigned-1" }));
+
+      await adminController.createRacer(request as Request, response as Response, next);
+
+      expect(mockRacerService.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userId: null,
+          name: "Unassigned Racer",
+          active: true,
+        }),
+      );
     });
   });
 
@@ -196,13 +267,28 @@ describe("AdminController", () => {
 
   describe("listRacers", () => {
     it("returns 200 with array of racers", async () => {
-      // TODO: implement - mock racerService.getAll, verify res.status(200) and res.json with racers
-      expect(true).toBe(true);
+      const listedRacer = createRacerWithStats({ id: "racer-2" });
+      mockRacerService.getAll.mockResolvedValue([listedRacer]);
+
+      await adminController.listRacers(request as Request, response as Response, next);
+
+      expect(response.status).toHaveBeenCalledWith(200);
+      expect(response.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          status: 200,
+          data: [listedRacer],
+        }),
+      );
     });
 
     it("calls next with error when service throws", async () => {
-      // TODO: implement - mock racerService.getAll.mockRejectedValue, verify next called with error
-      expect(true).toBe(true);
+      const error = new Error("list failed");
+      mockRacerService.getAll.mockRejectedValue(error);
+
+      await adminController.listRacers(request as Request, response as Response, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 
@@ -210,18 +296,44 @@ describe("AdminController", () => {
 
   describe("updateRacer", () => {
     it("returns 200 with updated racer on success", async () => {
-      // TODO: implement - set req.params.racerId, mock racerService.update, verify res.status(200)
-      expect(true).toBe(true);
+      request.params = { racerId: "racer-2" };
+      request.body = { team: "Updated Team" };
+      mockRacerService.update.mockResolvedValue(
+        racers.standard({ id: "racer-2", team: "Updated Team" }),
+      );
+
+      await adminController.updateRacer(request as Request, response as Response, next);
+
+      expect(response.status).toHaveBeenCalledWith(200);
+      expect(response.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          status: 200,
+          data: expect.objectContaining({ id: "racer-2", team: "Updated Team" }),
+        }),
+      );
     });
 
     it("calls racerService.update with the correct racerId and body", async () => {
-      // TODO: implement - verify update called with (racerId, req.body)
-      expect(true).toBe(true);
+      request.params = { racerId: "racer-2" };
+      request.body = { team: "Updated Team" };
+      mockRacerService.update.mockResolvedValue(
+        racers.standard({ id: "racer-2", team: "Updated Team" }),
+      );
+
+      await adminController.updateRacer(request as Request, response as Response, next);
+
+      expect(mockRacerService.update).toHaveBeenCalledWith("racer-2", { team: "Updated Team" });
     });
 
     it("calls next with error when service throws", async () => {
-      // TODO: implement - mock racerService.update.mockRejectedValue, verify next called
-      expect(true).toBe(true);
+      const error = new Error("update failed");
+      request.params = { racerId: "racer-2" };
+      mockRacerService.update.mockRejectedValue(error);
+
+      await adminController.updateRacer(request as Request, response as Response, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 
@@ -229,18 +341,38 @@ describe("AdminController", () => {
 
   describe("deleteRacer", () => {
     it("returns 204 on successful deletion", async () => {
-      // TODO: implement - set req.params.racerId, mock racerService.delete, verify res.status(204)
-      expect(true).toBe(true);
+      request.params = { racerId: "racer-2" };
+      mockRacerService.delete.mockResolvedValue();
+
+      await adminController.deleteRacer(request as Request, response as Response, next);
+
+      expect(response.status).toHaveBeenCalledWith(204);
+      expect(response.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          status: 204,
+          data: null,
+        }),
+      );
     });
 
     it("calls racerService.delete with the correct racerId", async () => {
-      // TODO: implement - verify delete called with the correct id
-      expect(true).toBe(true);
+      request.params = { racerId: "racer-2" };
+      mockRacerService.delete.mockResolvedValue();
+
+      await adminController.deleteRacer(request as Request, response as Response, next);
+
+      expect(mockRacerService.delete).toHaveBeenCalledWith("racer-2");
     });
 
     it("calls next with error when service throws", async () => {
-      // TODO: implement - mock racerService.delete.mockRejectedValue, verify next called
-      expect(true).toBe(true);
+      const error = new Error("delete failed");
+      request.params = { racerId: "racer-2" };
+      mockRacerService.delete.mockRejectedValue(error);
+
+      await adminController.deleteRacer(request as Request, response as Response, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 });

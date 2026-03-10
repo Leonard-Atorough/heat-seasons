@@ -19,7 +19,7 @@ module.exports = {
     "!src/containers/**",
   ],
   moduleFileExtensions: ["ts", "js", "json", "node"],
-  coveragePathIgnorePatterns: ["/node_modules/", "/dist/"],
+  coveragePathIgnorePatterns: ["/node_modules/", "/dist/", "/__tests__/", "/generated/"],
   coverageThreshold: {
     global: {
       branches: 60,
