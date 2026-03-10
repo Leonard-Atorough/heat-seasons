@@ -1,4 +1,4 @@
-import { User } from "../../../types/domain/models";
+import { User } from "shared";
 
 
 const testUserFixture: User = {

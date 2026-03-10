@@ -43,7 +43,12 @@ export default function Toast({
         )}
       </div>
       <div className={styles.toast__body} aria-label={message} role="region">
-        <span>{message}</span>
+        <span>{message.split("\n").map((line, index) => (
+          <span key={index}>
+            {line}
+            <br />
+          </span>
+        ))}</span>
       </div>
       <div className={styles.toast__actions} aria-label="Actions" role="region">
         {variant === "actionable" && action}

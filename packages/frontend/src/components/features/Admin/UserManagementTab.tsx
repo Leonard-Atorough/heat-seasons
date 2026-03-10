@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { USER_ROLES } from "shared";
 import { Button, Card, LoadingSkeletonCard } from "../../common";
-import { AdminUser, adminListUsers, adminPromoteUser, adminDemoteUser } from "../../../services/api/admin";
+import {
+  AdminUser,
+  adminListUsers,
+  adminPromoteUser,
+  adminDemoteUser,
+} from "../../../services/api/admin";
 import styles from "./UserManagementTab.module.css";
 
 const ROLE_LABELS: Record<string, string> = {
@@ -167,9 +172,15 @@ export default function UserManagementTab() {
       <Card className={styles.legend}>
         <p className={styles.legend__title}>Role descriptions</p>
         <ul className={styles.legend__list}>
-          <li><strong>User</strong> — standard account, can create their own racer.</li>
-          <li><strong>Contributor</strong> — can manage race data and seasons.</li>
-          <li><strong>Admin</strong> — full access including user management.</li>
+          <li>
+            <strong>User</strong> — standard account, can create their own racer.
+          </li>
+          <li>
+            <strong>Contributor</strong> — can manage race data and seasons.
+          </li>
+          <li>
+            <strong>Admin</strong> — full access including user management.
+          </li>
         </ul>
       </Card>
     </div>

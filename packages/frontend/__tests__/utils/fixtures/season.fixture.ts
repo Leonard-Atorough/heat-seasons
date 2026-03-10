@@ -1,4 +1,4 @@
-import { SeasonRequest } from "../../../types/domain/models";
+import { SeasonRequest } from "../../../models";
 import { Season, type SeasonStatus } from "shared";
 
 export const createSeasonRequest = (): SeasonRequest => ({
