@@ -2,12 +2,7 @@ import { Request, Response, NextFunction, Router } from "express";
 import rateLimit from "express-rate-limit";
 import { Container } from "src/Infrastructure/dependency-injection/container";
 import { authMiddleware, requireRole } from "src/Infrastructure/http/middleware";
-
-const adminRouter = Router();
-
-// All admin routes require authentication + admin role
-adminRouter.use(authMiddleware);
-adminRouter.use(requireRole("admin"));
+import { AdminController } from "./admin.controller";
 
 const adminLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -15,15 +10,27 @@ const adminLimiter = rateLimit({
   message: "Too many admin requests, please try again later.",
 });
 
+export interface CreateAdminRouterOptions {
+  adminController?: AdminController;
+}
+
+export function createAdminRouter(options: CreateAdminRouterOptions = {}): Router {
+  const adminRouter = Router();
+  const adminController =
+    options.adminController ?? Container.getInstance().createAdminController();
+
+  // All admin routes require authentication + admin role
+  adminRouter.use(authMiddleware);
+  adminRouter.use(requireRole("admin"));
+
 /**
  * GET /api/admin/users
  * List all users (admin only)
  */
-adminRouter.get("/users", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
-  req.log.info({ userId: (req.user as { id: string })?.id }, "Listing all users");
-  const adminController = Container.getInstance().createAdminController();
-  adminController.listUsers(req, res, next);
-});
+  adminRouter.get("/users", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+    req.log.info({ userId: (req.user as { id: string })?.id }, "Listing all users");
+    adminController.listUsers(req, res, next);
+  });
 
 /**
  * POST /api/admin/promote
@@ -31,14 +38,13 @@ adminRouter.get("/users", adminLimiter, (req: Request, res: Response, next: Next
  *
  * Body: { userId: string }
  */
-adminRouter.post("/promote", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
-  req.log.info(
-    { userId: (req.user as { id: string })?.id, promoteUserId: req.body.userId },
-    "Promoting user to contributor",
-  );
-  const adminController = Container.getInstance().createAdminController();
-  adminController.promoteUser(req, res, next);
-});
+  adminRouter.post("/promote", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+    req.log.info(
+      { userId: (req.user as { id: string })?.id, promoteUserId: req.body.userId },
+      "Promoting user to contributor",
+    );
+    adminController.promoteUser(req, res, next);
+  });
 
 /**
  * POST /api/admin/demote
@@ -46,14 +52,13 @@ adminRouter.post("/promote", adminLimiter, (req: Request, res: Response, next: N
  *
  * Body: { userId: string }
  */
-adminRouter.post("/demote", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
-  req.log.info(
-    { userId: (req.user as { id: string })?.id, demoteUserId: req.body.userId },
-    "Demoting user to regular",
-  );
-  const adminController = Container.getInstance().createAdminController();
-  adminController.demoteUser(req, res, next);
-});
+  adminRouter.post("/demote", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+    req.log.info(
+      { userId: (req.user as { id: string })?.id, demoteUserId: req.body.userId },
+      "Demoting user to regular",
+    );
+    adminController.demoteUser(req, res, next);
+  });
 
 /**
  * POST /api/admin/racers
@@ -61,57 +66,54 @@ adminRouter.post("/demote", adminLimiter, (req: Request, res: Response, next: Ne
  *
  * Body: racer fields + optional userId
  */
-adminRouter.post("/racers", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
-  req.log.info(
-    { adminId: (req.user as { id: string })?.id, assignedUserId: req.body.userId },
-    "Admin creating racer",
-  );
-  const adminController = Container.getInstance().createAdminController();
-  adminController.createRacer(req, res, next);
-});
+  adminRouter.post("/racers", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+    req.log.info(
+      { adminId: (req.user as { id: string })?.id, assignedUserId: req.body.userId },
+      "Admin creating racer",
+    );
+    adminController.createRacer(req, res, next);
+  });
 
 /**
  * GET /api/admin/racers
  * List all racers (admin only)
  */
-adminRouter.get("/racers", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
-  req.log.info({ userId: (req.user as { id: string })?.id }, "Admin listing all racers");
-  const adminController = Container.getInstance().createAdminController();
-  adminController.listRacers(req, res, next);
-});
+  adminRouter.get("/racers", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+    req.log.info({ userId: (req.user as { id: string })?.id }, "Admin listing all racers");
+    adminController.listRacers(req, res, next);
+  });
 
 /**
  * PUT /api/admin/racers/:racerId
  * Update a racer (admin only)
  */
-adminRouter.put(
-  "/racers/:racerId",
-  adminLimiter,
-  (req: Request, res: Response, next: NextFunction) => {
-    req.log.info(
-      { adminId: (req.user as { id: string })?.id, racerId: req.params.racerId },
-      "Admin updating racer",
-    );
-    const adminController = Container.getInstance().createAdminController();
-    adminController.updateRacer(req, res, next);
-  },
-);
+  adminRouter.put(
+    "/racers/:racerId",
+    adminLimiter,
+    (req: Request, res: Response, next: NextFunction) => {
+      req.log.info(
+        { adminId: (req.user as { id: string })?.id, racerId: req.params.racerId },
+        "Admin updating racer",
+      );
+      adminController.updateRacer(req, res, next);
+    },
+  );
 
 /**
  * DELETE /api/admin/racers/:racerId
  * Delete a racer (admin only)
  */
-adminRouter.delete(
-  "/racers/:racerId",
-  adminLimiter,
-  (req: Request, res: Response, next: NextFunction) => {
-    req.log.info(
-      { adminId: (req.user as { id: string })?.id, racerId: req.params.racerId },
-      "Admin deleting racer",
-    );
-    const adminController = Container.getInstance().createAdminController();
-    adminController.deleteRacer(req, res, next);
-  },
-);
+  adminRouter.delete(
+    "/racers/:racerId",
+    adminLimiter,
+    (req: Request, res: Response, next: NextFunction) => {
+      req.log.info(
+        { adminId: (req.user as { id: string })?.id, racerId: req.params.racerId },
+        "Admin deleting racer",
+      );
+      adminController.deleteRacer(req, res, next);
+    },
+  );
 
-export { adminRouter };
+  return adminRouter;
+}

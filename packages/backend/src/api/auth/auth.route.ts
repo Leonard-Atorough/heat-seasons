@@ -3,8 +3,7 @@ import rateLimit from "express-rate-limit";
 import passport from "passport";
 import { Container } from "src/Infrastructure/dependency-injection/container";
 import { authMiddleware } from "src/Infrastructure/http/middleware";
-
-const router = Router();
+import { AuthController } from "./auth.controller";
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -18,44 +17,49 @@ const loginLimiter = rateLimit({
   message: "Too many login attempts from this IP, please try again later.",
 });
 
-router.get(
-  "/me",
-  authLimiter,
-  authMiddleware,
-  (req: Request, res: Response, next: NextFunction) => {
-    req.log.info({ userId: (req.user as { id: string })?.id }, "Fetching current user profile");
-    const authController = Container.getInstance().createAuthController();
+export interface CreateAuthRouterOptions {
+  authController?: AuthController;
+}
 
-    authController.getMe(req, res, next);
-  },
-);
+export function createAuthRouter(options: CreateAuthRouterOptions = {}): Router {
+  const router = Router();
+  const authController = options.authController ?? Container.getInstance().createAuthController();
 
-router.get(
-  "/google",
-  loginLimiter,
-  passport.authenticate("google", { scope: ["profile", "email"] }),
-);
+  router.get(
+    "/me",
+    authLimiter,
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) => {
+      req.log.info({ userId: (req.user as { id: string })?.id }, "Fetching current user profile");
+      authController.getMe(req, res, next);
+    },
+  );
 
-router.get(
-  "/google/callback",
-  loginLimiter,
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  (req: Request, res: Response, next: NextFunction) => {
-    req.log.info({ userId: (req.user as { id: string })?.id }, "Google callback");
-    const authController = Container.getInstance().createAuthController();
-    authController.googleCallback(req, res, next);
-  },
-);
+  router.get(
+    "/google",
+    loginLimiter,
+    passport.authenticate("google", { scope: ["profile", "email"] }),
+  );
 
-router.post(
-  "/logout",
-  authLimiter,
-  authMiddleware,
-  (req: Request, res: Response, next: NextFunction) => {
-    req.log.info({ userId: (req.user as { id: string })?.id }, "Logging out");
-    const authController = Container.getInstance().createAuthController();
-    authController.logout(req, res, next);
-  },
-);
+  router.get(
+    "/google/callback",
+    loginLimiter,
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    (req: Request, res: Response, next: NextFunction) => {
+      req.log.info({ userId: (req.user as { id: string })?.id }, "Google callback");
+      authController.googleCallback(req, res, next);
+    },
+  );
 
-export { router as authRouter };
+  router.post(
+    "/logout",
+    authLimiter,
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) => {
+      req.log.info({ userId: (req.user as { id: string })?.id }, "Logging out");
+      authController.logout(req, res, next);
+    },
+  );
+
+  return router;
+}

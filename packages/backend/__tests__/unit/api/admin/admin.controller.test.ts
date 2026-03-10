@@ -1,10 +1,30 @@
 import { Request, Response } from "express";
 import { AdminController } from "../../../../src/api/admin/admin.controller";
+import { UserResponse } from "../../../../src/application/dtos/user.dto";
+import { IAuthService } from "../../../../src/api/auth/auth.service.interface";
+import { IRacerService } from "../../../../src/api/racer/racer.service.interface";
+import { racers, users } from "../../../fixtures";
+
+function createUserResponse(overrides: Partial<UserResponse> = {}): UserResponse {
+  const user = users.user();
+
+  return {
+    id: user.id,
+    racerId: user.racerId,
+    email: user.email,
+    name: user.name,
+    profilePicture: user.profilePicture,
+    role: user.role,
+    lastLoginAt: user.lastLoginAt instanceof Date ? user.lastLoginAt : undefined,
+    loginCount: user.loginCount ?? 0,
+    ...overrides,
+  };
+}
 
 describe("AdminController", () => {
   let adminController: AdminController;
-  let mockAuthService: any;
-  let mockRacerService: any;
+  let mockAuthService: jest.Mocked<IAuthService>;
+  let mockRacerService: jest.Mocked<IRacerService>;
   let request: Partial<Request>;
   let response: Partial<Response>;
   let next: jest.Mock;
@@ -13,12 +33,20 @@ describe("AdminController", () => {
     mockAuthService = {
       getAllUsers: jest.fn(),
       updateUserRole: jest.fn(),
+      getMe: jest.fn(),
+      generateToken: jest.fn(),
+      upsertUser: jest.fn(),
+      logout: jest.fn(),
+      isTokenValid: jest.fn(),
     };
     mockRacerService = {
       create: jest.fn(),
       getAll: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      getById: jest.fn(),
+      getByUserId: jest.fn(),
+      getStats: jest.fn(),
     };
     adminController = new AdminController(mockAuthService, mockRacerService);
     request = { body: {}, user: { id: "admin-1" } as any };
@@ -37,13 +65,30 @@ describe("AdminController", () => {
 
   describe("listUsers", () => {
     it("returns 200 with array of users", async () => {
-      // TODO: implement
-      expect(true).toBe(true);
+      const listedUser = createUserResponse({ id: "user-1", name: "Alice" });
+
+      mockAuthService.getAllUsers.mockResolvedValue([listedUser]);
+
+      await adminController.listUsers(request as Request, response as Response, next);
+
+      expect(response.status).toHaveBeenCalledWith(200);
+      expect(response.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          status: 200,
+          statusText: "OK",
+          data: [listedUser],
+        }),
+      );
     });
 
     it("calls next with error when service throws", async () => {
-      // TODO: implement
-      expect(true).toBe(true);
+      const error = new Error("Service error");
+      mockAuthService.getAllUsers.mockRejectedValue(error);
+
+      await adminController.listUsers(request as Request, response as Response, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 
@@ -51,8 +96,20 @@ describe("AdminController", () => {
 
   describe("promoteUser", () => {
     it("returns 200 with updated user when promotion succeeds", async () => {
-      // TODO: implement
-      expect(true).toBe(true);
+      const promotedUser = createUserResponse({ id: "user-1", role: "contributor" });
+
+      mockAuthService.updateUserRole.mockResolvedValue(promotedUser);
+      request.body = { userId: "user-1" };
+      await adminController.promoteUser(request as Request, response as Response, next);
+      expect(response.status).toHaveBeenCalledWith(200);
+      expect(response.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          status: 200,
+          statusText: "OK",
+          data: promotedUser,
+        }),
+      );
     });
 
     it("returns 400 when userId is missing from body", async () => {
@@ -68,8 +125,11 @@ describe("AdminController", () => {
     });
 
     it("calls next with error when service throws", async () => {
-      // TODO: implement
-      expect(true).toBe(true);
+      const error = new Error("Service error");
+      mockAuthService.updateUserRole.mockRejectedValue(error);
+      request.body = { userId: "user-1" };
+      await adminController.promoteUser(request as Request, response as Response, next);
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 
@@ -77,8 +137,20 @@ describe("AdminController", () => {
 
   describe("demoteUser", () => {
     it("returns 200 with updated user when demotion succeeds", async () => {
-      // TODO: implement
-      expect(true).toBe(true);
+      const demotedUser = createUserResponse({ id: "user-1", role: "user" });
+
+      mockAuthService.updateUserRole.mockResolvedValue(demotedUser);
+      request.body = { userId: "user-1" };
+      await adminController.demoteUser(request as Request, response as Response, next);
+      expect(response.status).toHaveBeenCalledWith(200);
+      expect(response.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          success: true,
+          status: 200,
+          statusText: "OK",
+          data: demotedUser,
+        }),
+      );
     });
 
     it("returns 400 when userId is missing", async () => {
@@ -99,6 +171,7 @@ describe("AdminController", () => {
   describe("createRacer", () => {
     it("returns 201 with created racer when all required fields are provided", async () => {
       // TODO: implement
+      mockRacerService.create.mockResolvedValue(racers.standard());
       expect(true).toBe(true);
     });
 

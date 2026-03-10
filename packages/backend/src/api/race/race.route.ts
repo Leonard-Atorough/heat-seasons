@@ -1,54 +1,60 @@
 import { authMiddleware, requireRole } from "src/Infrastructure/http/middleware";
 import { Request, Response, NextFunction, Router } from "express";
 import { Container } from "src/Infrastructure/dependency-injection/container";
+import { RaceController } from "./race.controller";
 
-const router = Router();
+export interface CreateRaceRouterOptions {
+  raceController?: RaceController;
+}
 
-const raceController = Container.getInstance().createRaceController();
+export function createRaceRouter(options: CreateRaceRouterOptions = {}): Router {
+  const router = Router();
+  const raceController = options.raceController ?? Container.getInstance().createRaceController();
 
-router.get("/", (req: Request, res: Response, next: NextFunction) => {
-  req.log.info("Fetching all races");
-  raceController.getBySeasonId(req, res, next);
-});
+  router.get("/", (req: Request, res: Response, next: NextFunction) => {
+    req.log.info("Fetching all races");
+    raceController.getBySeasonId(req, res, next);
+  });
 
-router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
-  raceController.getById(req, res, next);
-});
+  router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
+    raceController.getById(req, res, next);
+  });
 
-router.post(
-  "/",
-  authMiddleware,
-  requireRole("contributor", "admin"),
-  (req: Request, res: Response, next: NextFunction) => {
-    req.log.info({ userId: (req.user as { id: string })?.id }, "Creating a new race");
-    raceController.create(req, res, next);
-  },
-);
+  router.post(
+    "/",
+    authMiddleware,
+    requireRole("contributor", "admin"),
+    (req: Request, res: Response, next: NextFunction) => {
+      req.log.info({ userId: (req.user as { id: string })?.id }, "Creating a new race");
+      raceController.create(req, res, next);
+    },
+  );
 
-router.put(
-  "/:id",
-  authMiddleware,
-  requireRole("contributor", "admin"),
-  (req: Request, res: Response, next: NextFunction) => {
-    req.log.info(
-      { userId: (req.user as { id: string })?.id, raceId: req.params.id },
-      "Updating race",
-    );
-    raceController.update(req, res, next);
-  },
-);
+  router.put(
+    "/:id",
+    authMiddleware,
+    requireRole("contributor", "admin"),
+    (req: Request, res: Response, next: NextFunction) => {
+      req.log.info(
+        { userId: (req.user as { id: string })?.id, raceId: req.params.id },
+        "Updating race",
+      );
+      raceController.update(req, res, next);
+    },
+  );
 
-router.delete(
-  "/:id",
-  authMiddleware,
-  requireRole("contributor", "admin"),
-  (req: Request, res: Response, next: NextFunction) => {
-    req.log.info(
-      { userId: (req.user as { id: string })?.id, raceId: req.params.id },
-      "Deleting race",
-    );
-    raceController.delete(req, res, next);
-  },
-);
+  router.delete(
+    "/:id",
+    authMiddleware,
+    requireRole("contributor", "admin"),
+    (req: Request, res: Response, next: NextFunction) => {
+      req.log.info(
+        { userId: (req.user as { id: string })?.id, raceId: req.params.id },
+        "Deleting race",
+      );
+      raceController.delete(req, res, next);
+    },
+  );
 
-export { router as raceRouter };
+  return router;
+}

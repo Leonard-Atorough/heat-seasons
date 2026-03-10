@@ -1,73 +1,28 @@
-import { User, Racer, Season, Race } from "../../../shared/src/index";
+import { Race, Racer, Season, User } from "../../../shared/src/index";
+import { races } from "./race.fixture";
+import { racers } from "./racer.fixture";
+import { seasons } from "./season.fixture";
+import { users } from "./user.fixture";
+
+export { createUser, createUserList, users } from "./user.fixture";
+export { createRacer, createRacerList, racers } from "./racer.fixture";
+export { createSeason, createSeasonList, seasons } from "./season.fixture";
+export { createRace, createRaceList, createRaceResult, races } from "./race.fixture";
 
 export const testUsers: Record<string, User> = {
-  admin: {
-    id: "admin-1",
-    googleId: "google-admin-1",
-    email: "admin@test.com",
-    name: "Admin User",
-    role: "admin",
-    createdAt: new Date("2026-01-01"),
-    updatedAt: new Date("2026-01-01"),
-  } as User,
-
-  user: {
-    id: "user-1",
-    googleId: "google-user-1",
-    email: "user@test.com",
-    name: "Test User",
-    role: "user",
-    createdAt: new Date("2026-01-01"),
-    updatedAt: new Date("2026-01-01"),
-  } as User,
+  admin: users.admin(),
+  user: users.user(),
 };
 
-export const testRacers = {
-  john: {
-    id: "racer-1",
-    name: "John Doe",
-    active: true,
-    joinDate: new Date("2026-01-01"),
-    team: "Team A",
-    teamColor: "#FF0000",
-    nationality: "USA",
-    age: 30,
-  } as Racer,
-
-  jane: {
-    id: "racer-2",
-    name: "Jane Smith",
-    active: true,
-    joinDate: new Date("2026-01-01"),
-    team: "Team B",
-    teamColor: "#0000FF",
-    nationality: "USA",
-    age: 28,
-  } as Racer,
+export const testRacers: Record<string, Racer> = {
+  john: racers.john(),
+  jane: racers.jane(),
 };
 
-export const testSeasons = {
-  active: {
-    id: "season-1",
-    name: "Season 1 2026",
-    status: "active",
-    startDate: new Date("2026-01-01"),
-    createdAt: new Date("2026-01-01"),
-    updatedAt: new Date("2026-01-01"),
-  } as Season,
+export const testSeasons: Record<string, Season> = {
+  active: seasons.active(),
 };
 
-export const testRaces = {
-  race1: {
-    id: "race-1",
-    seasonId: "season-1",
-    name: "Race 1",
-    raceNumber: 1,
-    date: new Date("2026-01-15"),
-    completed: false,
-    results: [
-      { racerId: "racer-1", position: 1, points: 10, constructorPoints: 0 },
-      { racerId: "racer-2", position: 2, points: 8, constructorPoints: 0 },
-    ],
-  } as Race,
+export const testRaces: Record<string, Race> = {
+  race1: races.race1(),
 };
