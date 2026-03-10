@@ -3,11 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useProtectedPage } from "../hooks/useProtectedPage";
 import { Tabs, Button, LoadingSkeletonCard } from "../components/common";
-import {
-  UserManagementTab,
-  RacerManagementTab,
-  AnalyticsTab,
-} from "../components/features/Admin";
+import { UserManagementTab, RacerManagementTab, AnalyticsTab } from "../components/features/Admin";
 import styles from "./AdminPage.module.css";
 
 const TABS = [

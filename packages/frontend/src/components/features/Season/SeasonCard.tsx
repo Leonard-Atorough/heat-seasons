@@ -1,9 +1,8 @@
 import { Card } from "../../common";
-import { Season } from "shared";
+import { Season, User } from "shared";
 
 import styles from "./SeasonCard.module.css";
 import { Button } from "../../common";
-import { User } from "../../../../types/domain/models";
 
 export interface SeasonCardProps {
   season: Season;

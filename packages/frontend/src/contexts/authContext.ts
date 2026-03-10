@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { User } from "../../types/domain/models";
+import { User } from "shared";
 
 export interface AuthContextType {
   user: User | null;

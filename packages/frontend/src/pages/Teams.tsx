@@ -1,15 +1,10 @@
 import { Racer } from "shared";
 import { useEffect, useMemo } from "react";
+import { Team } from "../models";
 import { TeamCard } from "../components/features";
 import styles from "./Teams.module.css";
 import { useRacers } from "../hooks/data/useRacer";
 import { LoadingSkeletonCard } from "../components/common";
-
-interface Team {
-  name: string;
-  color?: string;
-  racers: Racer[];
-}
 
 export function Teams() {
   const { data: racers, refresh, isLoading } = useRacers();

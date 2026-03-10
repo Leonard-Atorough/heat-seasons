@@ -155,6 +155,7 @@
 .profileActions {
   display: flex;
   justify-content: flex-end;
+  gap: var(--spacing-sm);
   width: 100%;
   max-width: 600px;
 }
