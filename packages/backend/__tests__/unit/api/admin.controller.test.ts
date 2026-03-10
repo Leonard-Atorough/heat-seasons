@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { AdminController } from "../../../../src/api/admin/admin.controller";
-import { UserResponse } from "../../../../src/application/dtos/user.dto";
-import { IAuthService } from "../../../../src/api/auth/auth.service.interface";
-import { IRacerService } from "../../../../src/api/racer/racer.service.interface";
-import { racers, users } from "../../../fixtures";
+import { AdminController } from "../../../src/api/admin/admin.controller";
+import { UserResponse } from "../../../src/application/dtos/user.dto";
+import { IAuthService } from "../../../src/api/auth/auth.service.interface";
+import { IRacerService } from "../../../src/api/racer/racer.service.interface";
+import { racers, users } from "../../fixtures";
 
 function createUserResponse(overrides: Partial<UserResponse> = {}): UserResponse {
   const user = users.user();

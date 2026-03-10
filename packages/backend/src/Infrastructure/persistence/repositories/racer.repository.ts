@@ -48,6 +48,6 @@ export class RacerRepository implements IRacerRepository {
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error("Not implemented");
+    await this.storageAdapter.delete("racers", id);
   }
 }

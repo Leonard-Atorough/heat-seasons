@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { AuthController } from "../../../../src/api/auth/auth.controller";
-import { AuthService } from "../../../../src/api/auth/auth.service";
-import { users } from "../../../fixtures";
-import { UserResponse } from "../../../../src/application/dtos/user.dto";
+import { AuthController } from "../../../src/api/auth/auth.controller";
+import { AuthService } from "../../../src/api/auth/auth.service";
+import { users } from "../../fixtures";
+import { UserResponse } from "../../../src/application/dtos/user.dto";
 
 describe("AuthController", () => {
   let authController: AuthController;
