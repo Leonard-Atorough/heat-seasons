@@ -3,10 +3,10 @@ import userEvent from "@testing-library/user-event";
 import Results from "src/pages/Results";
 import { useAuth } from "src/hooks/useAuth";
 import { useRaceResult, useSeasons } from "src/hooks/data";
-import { createSeason, createUserFixture, mockRacers } from "tests/utils/fixtures";
+import { createSeason, createUser, createRacerWithStatsList } from "tests/utils/fixtures";
 import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
 import { MemoryRouter } from "react-router-dom";
-import { Race, RaceResult, RacerWithStats } from "shared";
+import { Race, RaceResult } from "shared";
 import { CreateRace, GetRaceById, UpdateRace } from "src/services/api/races";
 
 vi.mock("src/hooks/data", () => ({
@@ -96,7 +96,7 @@ function setupHookMocks() {
     return {
       races,
       results: selectedRace ? selectedRace.results : aggregate,
-      racers: mockRacers as RacerWithStats[],
+      racers: createRacerWithStatsList(2, [{ name: "Lewis Hamilton" }, { name: "Max Verstappen" }]),
       isLoading: false,
       error: null,
     };
@@ -163,7 +163,7 @@ describe("Given the Results page", () => {
       mockedUseAuth.mockReturnValue(
         createMockAuthContext({
           isAdmin: true,
-          user: createUserFixture({ role: "admin" }),
+          user: createUser({ role: "admin" }),
         }),
       );
       const user = userEvent.setup();
@@ -180,7 +180,7 @@ describe("Given the Results page", () => {
       mockedUseAuth.mockReturnValue(
         createMockAuthContext({
           isAdmin: true,
-          user: createUserFixture({ role: "admin" }),
+          user: createUser({ role: "admin" }),
         }),
       );
       const user = userEvent.setup();
@@ -202,7 +202,7 @@ describe("Given the Results page", () => {
       mockedUseAuth.mockReturnValue(
         createMockAuthContext({
           isAdmin: false,
-          user: createUserFixture({ role: "user" }),
+          user: createUser({ role: "user" }),
         }),
       );
       const user = userEvent.setup();
@@ -242,7 +242,7 @@ describe("Given the Results page", () => {
       mockedUseRaceResult.mockReturnValue({
         races: [],
         results: [],
-        racers: mockRacers as RacerWithStats[],
+        racers: createRacerWithStatsList(2),
         isLoading: true,
         error: null,
       });
@@ -256,7 +256,7 @@ describe("Given the Results page", () => {
       mockedUseRaceResult.mockReturnValue({
         races: [],
         results: [],
-        racers: mockRacers as RacerWithStats[],
+        racers: createRacerWithStatsList(2),
         isLoading: false,
         error: "Failed to load race results",
       });
@@ -276,7 +276,7 @@ describe("Given the Results page", () => {
       mockedUseAuth.mockReturnValue(
         createMockAuthContext({
           isAdmin: true,
-          user: createUserFixture({ role: "admin" }),
+          user: createUser({ role: "admin" }),
         }),
       );
       const user = userEvent.setup();
@@ -305,7 +305,7 @@ describe("Given the Results page", () => {
       mockedUseAuth.mockReturnValue(
         createMockAuthContext({
           isAdmin: true,
-          user: createUserFixture({ role: "admin" }),
+          user: createUser({ role: "admin" }),
         }),
       );
 
@@ -347,7 +347,7 @@ describe("Given the Results page", () => {
       mockedUseAuth.mockReturnValue(
         createMockAuthContext({
           isAdmin: true,
-          user: createUserFixture({ role: "admin" }),
+          user: createUser({ role: "admin" }),
         }),
       );
 

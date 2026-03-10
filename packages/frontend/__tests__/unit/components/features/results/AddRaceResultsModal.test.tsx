@@ -2,7 +2,7 @@ import { render, screen, waitFor, cleanup, fireEvent } from "@testing-library/re
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import AddRaceResultsModal from "src/components/features/Results/AddRaceResultsModal";
-import { mockRaceData, mockRacers } from "../../../../utils/fixtures";
+import { createRace, createRacerList } from "tests/utils/fixtures";
 
 vi.mock("src/services/api/races");
 import * as racesApi from "src/services/api/races";
@@ -36,7 +36,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={false}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={[]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -51,7 +51,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={[]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -61,13 +61,13 @@ describe("AddRaceResultsModal Component", () => {
   });
 
   it("renders 'Update Race Results' title in update mode", async () => {
-    mockedGetRaceById.mockResolvedValueOnce(mockRaceData);
+    mockedGetRaceById.mockResolvedValueOnce(createRace({ id: "race-1", name: "Monaco GP" }));
     render(
       <AddRaceResultsModal
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         selectedRaceId="race-1"
         onRacerSelect={onRacerSelect}
@@ -83,7 +83,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -102,7 +102,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={[]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -119,7 +119,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -136,7 +136,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -156,7 +156,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -183,7 +183,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -202,7 +202,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -220,7 +220,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -234,13 +234,13 @@ describe("AddRaceResultsModal Component", () => {
   // --- Update mode ---
 
   it("calls GetRaceById when opened in update mode", async () => {
-    mockedGetRaceById.mockResolvedValueOnce(mockRaceData);
+    mockedGetRaceById.mockResolvedValueOnce(createRace({ id: "race-1", name: "Monaco GP" }));
     render(
       <AddRaceResultsModal
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         selectedRaceId="race-1"
         onRacerSelect={onRacerSelect}
@@ -251,13 +251,13 @@ describe("AddRaceResultsModal Component", () => {
   });
 
   it("pre-fills the race name from GetRaceById in update mode", async () => {
-    mockedGetRaceById.mockResolvedValueOnce(mockRaceData);
+    mockedGetRaceById.mockResolvedValueOnce(createRace({ id: "race-1", name: "Monaco GP" }));
     render(
       <AddRaceResultsModal
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         selectedRaceId="race-1"
         onRacerSelect={onRacerSelect}
@@ -268,14 +268,14 @@ describe("AddRaceResultsModal Component", () => {
   });
 
   it("calls UpdateRace on valid submission in update mode", async () => {
-    mockedGetRaceById.mockResolvedValueOnce(mockRaceData);
+    mockedGetRaceById.mockResolvedValueOnce(createRace({ id: "race-1", name: "Monaco GP" }));
     mockedUpdateRace.mockResolvedValueOnce({} as any);
     render(
       <AddRaceResultsModal
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         selectedRaceId="race-1"
         onRacerSelect={onRacerSelect}
@@ -306,7 +306,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -332,7 +332,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         selectedRaceId="race-1"
         onRacerSelect={onRacerSelect}
@@ -351,7 +351,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -373,7 +373,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={["racer-1", "racer-2"]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}
@@ -399,7 +399,7 @@ describe("AddRaceResultsModal Component", () => {
         isOpen={true}
         onClose={onClose}
         seasonId="season-1"
-        racers={mockRacers}
+        racers={createRacerList(2)}
         selectedRacerIds={[]}
         onRacerSelect={onRacerSelect}
         onSubmit={onSubmit}

@@ -6,7 +6,7 @@ import ProfilePage from "src/pages/ProfilePage";
 import * as racerApi from "src/services/api/racer";
 import { useAuth } from "src/hooks/useAuth";
 import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
-import { createRacerFixture, createUserFixture } from "tests/utils/fixtures";
+import { createRacerWithStats, createUser } from "tests/utils/fixtures";
 import { RacerWithStats } from "shared/dist/models/racer";
 
 vi.mock("src/hooks/useAuth");
@@ -27,7 +27,7 @@ afterEach(() => {
 describe("Given the ProfilePage", () => {
   describe("Profile information display", () => {
     it("displays user role in badge", async () => {
-      const mockUserProfile = createUserFixture({ role: "admin" });
+      const mockUserProfile = createUser({ role: "admin" });
       mockUseAuth.mockReturnValue(
         createMockAuthContext({
           user: mockUserProfile,
@@ -48,7 +48,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("displays user name in welcome heading", async () => {
-      const mockUserProfile = createUserFixture({ name: "Alex Johnson" });
+      const mockUserProfile = createUser({ name: "Alex Johnson" });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(null as any);
 
@@ -64,7 +64,7 @@ describe("Given the ProfilePage", () => {
 
   describe("Protected page loading behavior", () => {
     it("does not fetch racer while protected page is loading", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
 
       // This would be overridden in component via useProtectedPage hook
@@ -85,7 +85,7 @@ describe("Given the ProfilePage", () => {
 
   describe("When loading profile", () => {
     it("displays user profile information", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       render(
         <MemoryRouter>
@@ -98,11 +98,11 @@ describe("Given the ProfilePage", () => {
     });
 
     it("shows loading skeleton while fetching profile", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(
         createMockAuthContext({ user: mockUserProfile, isLoading: true }),
       );
-      mockRacerApi.getMyRacer.mockResolvedValue(createRacerFixture() as RacerWithStats);
+      mockRacerApi.getMyRacer.mockResolvedValue(createRacerWithStats() as RacerWithStats);
 
       render(
         <MemoryRouter>
@@ -114,8 +114,8 @@ describe("Given the ProfilePage", () => {
     });
 
     it("shows linked racer card if racer exists", async () => {
-      const mockRacer = createRacerFixture();
-      const mockUserProfile = createUserFixture({ racerId: mockRacer.id });
+      const mockRacer = createRacerWithStats();
+      const mockUserProfile = createUser({ racerId: mockRacer.id });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(mockRacer as RacerWithStats);
 
@@ -133,7 +133,7 @@ describe("Given the ProfilePage", () => {
 
   describe("Profile picture and avatar display", () => {
     it("displays profile picture when user has one", async () => {
-      const mockUserProfile = createUserFixture({
+      const mockUserProfile = createUser({
         profilePicture: "https://example.com/avatar.jpg",
       });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
@@ -151,7 +151,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("shows fallback avatar with initial when no profile picture", async () => {
-      const mockUserProfile = createUserFixture({ name: "John Doe", profilePicture: undefined });
+      const mockUserProfile = createUser({ name: "John Doe", profilePicture: undefined });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(null as any);
 
@@ -167,7 +167,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("shows fallback avatar when profile picture fails to load", async () => {
-      const mockUserProfile = createUserFixture({
+      const mockUserProfile = createUser({
         name: "Jane Smith",
         profilePicture: "https://example.com/broken.jpg",
       });
@@ -193,7 +193,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("updates profile picture when user profilePicture prop changes", async () => {
-      const mockUserProfile1 = createUserFixture({
+      const mockUserProfile1 = createUser({
         profilePicture: "https://example.com/old.jpg",
       });
       const { rerender } = render(
@@ -239,7 +239,7 @@ describe("Given the ProfilePage", () => {
   describe("Racer creation callback", () => {
     it("shows create modal when no racer exists and user clicks button", async () => {
       const user = userEvent.setup();
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(null as any);
 
@@ -267,7 +267,7 @@ describe("Given the ProfilePage", () => {
   describe("When managing users racer", () => {
     // Test: Create button visibility
     it("shows create button only when no racer exists and not loading", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(null as any);
 
@@ -283,8 +283,8 @@ describe("Given the ProfilePage", () => {
     });
 
     it("hides create button when racer exists", async () => {
-      const mockRacer = createRacerFixture();
-      const mockUserProfile = createUserFixture({ racerId: mockRacer.id });
+      const mockRacer = createRacerWithStats();
+      const mockUserProfile = createUser({ racerId: mockRacer.id });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(mockRacer as RacerWithStats);
 
@@ -300,7 +300,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("hides create button while racer is loading", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
 
       // Start with loading state
@@ -328,8 +328,8 @@ describe("Given the ProfilePage", () => {
       });
     });
     it("fetches and displays linked racer information", async () => {
-      const mockRacer = createRacerFixture();
-      const mockUserProfile = createUserFixture({ racerId: mockRacer.id });
+      const mockRacer = createRacerWithStats();
+      const mockUserProfile = createUser({ racerId: mockRacer.id });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(mockRacer as RacerWithStats);
 
@@ -346,8 +346,8 @@ describe("Given the ProfilePage", () => {
 
     it("opens edit racer modal when edit button on racer card is clicked", async () => {
       const user = userEvent.setup();
-      const mockRacer = createRacerFixture();
-      const mockUserProfile = createUserFixture({ racerId: mockRacer.id });
+      const mockRacer = createRacerWithStats();
+      const mockUserProfile = createUser({ racerId: mockRacer.id });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(mockRacer as RacerWithStats);
 
@@ -372,8 +372,8 @@ describe("Given the ProfilePage", () => {
 
     it("closes edit modal when close button is clicked", async () => {
       const user = userEvent.setup();
-      const mockRacer = createRacerFixture();
-      const mockUserProfile = createUserFixture({ racerId: mockRacer.id });
+      const mockRacer = createRacerWithStats();
+      const mockUserProfile = createUser({ racerId: mockRacer.id });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(mockRacer as RacerWithStats);
 
@@ -404,8 +404,8 @@ describe("Given the ProfilePage", () => {
 
     it("open/close edit modal properly manages modal state", async () => {
       const user = userEvent.setup();
-      const mockRacer = createRacerFixture();
-      const mockUserProfile = createUserFixture({ racerId: mockRacer.id });
+      const mockRacer = createRacerWithStats();
+      const mockUserProfile = createUser({ racerId: mockRacer.id });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(mockRacer as RacerWithStats);
 
@@ -439,8 +439,8 @@ describe("Given the ProfilePage", () => {
     });
 
     it("does not render edit modal when it's not open", async () => {
-      const mockRacer = createRacerFixture();
-      const mockUserProfile = createUserFixture({ racerId: mockRacer.id });
+      const mockRacer = createRacerWithStats();
+      const mockUserProfile = createUser({ racerId: mockRacer.id });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(mockRacer as RacerWithStats);
 
@@ -459,7 +459,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("does not render create modal when it's not open", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(null as any);
 
@@ -478,7 +478,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("sets the linked racer to null if API returns no racer", async () => {
-      const mockUserProfile = createUserFixture({ racerId: "racer-123" });
+      const mockUserProfile = createUser({ racerId: "racer-123" });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(null as any);
 
@@ -494,7 +494,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("displays empty state when no racer exists", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(null as any);
 
@@ -512,7 +512,7 @@ describe("Given the ProfilePage", () => {
 
     it("opens create racer modal from profile", async () => {
       const user = userEvent.setup();
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
 
       render(
@@ -533,7 +533,7 @@ describe("Given the ProfilePage", () => {
 
     it("opens create racer modal and displays form fields", async () => {
       const user = userEvent.setup();
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
 
       render(
@@ -559,22 +559,12 @@ describe("Given the ProfilePage", () => {
       // Modal has close/cancel button
       expect(within(dialog).getByRole("button", { name: /cancel/i })).toBeInTheDocument();
     });
-
-    it.skip("handles racer creation submission", async () => {
-      // TODO: Test form validation and API call in CreateRacerModal component tests
-      // Integration test focus: modal opens/closes, page behavior after creation
-    });
-
-    // Test editing and unlinking (low priority - complex modal interactions)
-    it.skip("edits linked racer information", async () => {
-      // TODO: Implement if edit modal is refactored
-    });
   });
 
   describe("Account management", () => {
     // Test logout button presence and interaction
     it("displays logout button in profile section", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
 
       render(
@@ -588,7 +578,7 @@ describe("Given the ProfilePage", () => {
 
     it("calls logout when logout button is clicked", async () => {
       const user = userEvent.setup();
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       const mockLogout = vi.fn();
       mockUseAuth.mockReturnValue(
         createMockAuthContext({ user: mockUserProfile, logout: mockLogout }),
@@ -607,16 +597,9 @@ describe("Given the ProfilePage", () => {
     });
   });
 
-  describe("Protected page behavior", () => {
-    // Test that page respects auth protection
-    it.skip("shows loading state for protected page check", async () => {
-      // TODO: Test useProtectedPage hook loading state - low priority
-    });
-  });
-
   describe("Racer fetch lifecycle", () => {
     it("fetches racer on initial mount after protection check", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockResolvedValue(null as any);
 
@@ -632,7 +615,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("refetches racer when user ID changes", async () => {
-      const mockUserProfile1 = createUserFixture({ id: "user-1" });
+      const mockUserProfile1 = createUser({ id: "user-1" });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile1 }));
       mockRacerApi.getMyRacer.mockResolvedValue(null as any);
 
@@ -647,7 +630,7 @@ describe("Given the ProfilePage", () => {
       });
 
       // Change user ID
-      const mockUserProfile2 = createUserFixture({ id: "user-2" });
+      const mockUserProfile2 = createUser({ id: "user-2" });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile2 }));
 
       rerender(
@@ -663,7 +646,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("clears error state when retrying fetch", async () => {
-      const mockUserProfile1 = createUserFixture({ id: "user-1" });
+      const mockUserProfile1 = createUser({ id: "user-1" });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile1 }));
       mockRacerApi.getMyRacer.mockRejectedValueOnce(new Error("Network error"));
 
@@ -682,7 +665,7 @@ describe("Given the ProfilePage", () => {
       mockRacerApi.getMyRacer.mockResolvedValueOnce(null as any);
 
       // Change user ID to trigger effect refetch
-      const mockUserProfile2 = createUserFixture({ id: "user-2" });
+      const mockUserProfile2 = createUser({ id: "user-2" });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile2 }));
 
       rerender(
@@ -701,7 +684,7 @@ describe("Given the ProfilePage", () => {
 
   describe("When handling errors", () => {
     it("treats 404 error as no racer (not an error state)", async () => {
-      const mockUserProfile = createUserFixture({ racerId: "racer-123" });
+      const mockUserProfile = createUser({ racerId: "racer-123" });
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       const error404 = new Error("Not Found");
       (error404 as any).status = 404;
@@ -721,7 +704,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("shows error message for non-404 errors", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockRejectedValue(new Error("Server error"));
 
@@ -737,7 +720,7 @@ describe("Given the ProfilePage", () => {
     });
 
     it("shows error message when racer fetch fails", async () => {
-      const mockUserProfile = createUserFixture();
+      const mockUserProfile = createUser();
       mockUseAuth.mockReturnValue(createMockAuthContext({ user: mockUserProfile }));
       mockRacerApi.getMyRacer.mockRejectedValue(new Error("API Error"));
 
@@ -752,14 +735,6 @@ describe("Given the ProfilePage", () => {
       });
     });
 
-    it.skip("shows error when creating racer fails", async () => {
-      // TODO: Mock CreateRacerModal error - requires modal component testing
-    });
   });
 
-  describe("When user is not authenticated", () => {
-    it.skip("handles auth protection via useProtectedPage", async () => {
-      // TODO: useProtectedPage already handles redirect; integration test in auth hook tests
-    });
-  });
 });

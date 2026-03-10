@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createSeason as createSeasonFixture } from "tests/utils/fixtures";
+import { createSeason } from "tests/utils/fixtures";
 import { EditSeasonModal } from "src/components/features/Season";
 
 vi.mock("src/services/api/season");
@@ -10,7 +10,7 @@ const mockedUpdateSeason = vi.mocked(seasonApi.updateSeason);
 describe("EditSeasonModal Component", () => {
   let onClose: any;
   let onSubmit: any;
-  const defaultSeason = createSeasonFixture();
+  const defaultSeason = createSeason();
 
   beforeEach(() => {
     onClose = vi.fn();

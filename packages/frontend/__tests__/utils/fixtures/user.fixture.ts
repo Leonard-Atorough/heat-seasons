@@ -85,8 +85,3 @@ export function createUserList(count: number, overrides: Partial<User> = {}): Us
   );
 }
 
-/**
- * @deprecated Use createUser() instead
- */
-export const createUserFixture = createUser;
-

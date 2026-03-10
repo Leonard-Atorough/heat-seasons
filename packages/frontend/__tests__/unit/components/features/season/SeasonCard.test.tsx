@@ -16,7 +16,7 @@ Test cases to add:
 import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SeasonCard, SeasonCardProps } from "src/components/features/Season";
-import { createSeason, createUserFixture } from "tests/utils/fixtures";
+import { createSeason, createUser } from "tests/utils/fixtures";
 
 const defaultProps: SeasonCardProps = {
   season: createSeason(),
@@ -130,7 +130,7 @@ describe("SeasonCard Component", () => {
   });
 
   it("shows racer hint for authenticated users without a racer in joinable seasons", () => {
-    const user = createUserFixture();
+    const user = createUser();
     render(
       <SeasonCard
         {...defaultProps}
@@ -147,7 +147,7 @@ describe("SeasonCard Component", () => {
   });
 
   it("does not show racer hint for users with a racer linked", () => {
-    const user = createUserFixture({ racerId: "racer-1" });
+    const user = createUser({ racerId: "racer-1" });
     render(
       <SeasonCard
         {...defaultProps}
@@ -160,7 +160,7 @@ describe("SeasonCard Component", () => {
   });
 
   it("does not show racer hint for archived seasons", () => {
-    const user = createUserFixture({ racerId: undefined });
+    const user = createUser({ racerId: undefined });
     render(
       <SeasonCard
         {...defaultProps}

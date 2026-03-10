@@ -5,7 +5,7 @@ import Racers from "src/pages/Racers";
 import { useAuth } from "src/hooks/useAuth";
 import { useRacers } from "src/hooks/data/useRacer";
 import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
-import { mockRacers } from "tests/utils/fixtures";
+import { createRacerWithStatsList } from "tests/utils/fixtures";
 
 vi.mock("src/hooks/useAuth");
 vi.mock("src/hooks/data/useRacer");
@@ -16,7 +16,7 @@ const mockUseRacers = vi.mocked(useRacers);
 
 beforeEach(() => {
   mockUseAuth.mockReturnValue(createMockAuthContext());
-  mockUseRacers.mockReturnValue({ data: mockRacers, refresh: vi.fn() } as any);
+  mockUseRacers.mockReturnValue({ data: createRacerWithStatsList(2), refresh: vi.fn() } as any);
 });
 
 afterEach(() => {
@@ -32,7 +32,7 @@ describe("Given the Racers page", () => {
         </MemoryRouter>,
       );
 
-      mockRacers.forEach((racer) => {
+      createRacerWithStatsList(2).forEach((racer) => {
         expect(screen.getByText(racer.name)).toBeInTheDocument();
       });
     });
@@ -45,7 +45,7 @@ describe("Given the Racers page", () => {
       );
 
       const racerElements = screen.getAllByRole("heading", { level: 3 });
-      expect(racerElements.length).toBe(mockRacers.length);
+      expect(racerElements.length).toBe(createRacerWithStatsList(2).length);
     });
 
     it("shows empty state when no racers exist", () => {

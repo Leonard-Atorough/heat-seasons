@@ -196,25 +196,3 @@ export function createRacerMap(racers: Racer[]): Map<string, { name: string; tea
   return new Map(racers.map((r) => [r.id, { name: r.name, team: r.team }]));
 }
 
-/**
- * @deprecated Use createRacerWithStats() instead
- */
-export const mockRacer = defaultsWithStats;
-
-/**
- * @deprecated Use createRacerList() instead
- */
-export const mockRacers = createRacerList(2);
-
-/**
- * @deprecated Use createRacerFixture or createRacerWithStats instead
- */
-export const createRacerFixture = createRacerWithStats;
-
-/**
- * @deprecated Use createRacerMap() instead
- */
-export function createRacersMap(racers: Racer[] = mockRacers) {
-  return createRacerMap(racers);
-}
-

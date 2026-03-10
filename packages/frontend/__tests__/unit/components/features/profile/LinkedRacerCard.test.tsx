@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { LinkedRacerCard } from "src/components/features/Profile/LinkedRacerCard";
-import { createRacerFixture } from "../../../../utils/fixtures/racer.fixture";
+import { createRacerWithStats } from "../../../../utils/fixtures/racer.fixture";
 
 describe("LinkedRacerCard Component", () => {
   let onEdit: any;
@@ -16,29 +16,29 @@ describe("LinkedRacerCard Component", () => {
   });
 
   it("renders racer name, team, and nationality", () => {
-    render(<LinkedRacerCard racer={createRacerFixture()} />);
+    render(<LinkedRacerCard racer={createRacerWithStats()} />);
     expect(screen.getByText("Lewis Hamilton")).toBeInTheDocument();
     expect(screen.getByText("Mercedes AMG")).toBeInTheDocument();
     expect(screen.getByText("British")).toBeInTheDocument();
   });
 
   it("renders racer age", () => {
-    render(<LinkedRacerCard racer={createRacerFixture()} />);
+    render(<LinkedRacerCard racer={createRacerWithStats()} />);
     expect(screen.getByText("39")).toBeInTheDocument();
   });
 
   it("shows 'Active' when racer is active", () => {
-    render(<LinkedRacerCard racer={createRacerFixture({ active: true })} />);
+    render(<LinkedRacerCard racer={createRacerWithStats({ active: true })} />);
     expect(screen.getByText("Active")).toBeInTheDocument();
   });
 
   it("shows 'Inactive' when racer is inactive", () => {
-    render(<LinkedRacerCard racer={createRacerFixture({ active: false })} />);
+    render(<LinkedRacerCard racer={createRacerWithStats({ active: false })} />);
     expect(screen.getByText("Inactive")).toBeInTheDocument();
   });
 
   it("renders points, races, wins, and podiums stats", () => {
-    render(<LinkedRacerCard racer={createRacerFixture()} />);
+    render(<LinkedRacerCard racer={createRacerWithStats()} />);
     expect(screen.getByText("180")).toBeInTheDocument();
     expect(screen.getByText("12")).toBeInTheDocument();
     expect(screen.getByText("4")).toBeInTheDocument();
@@ -46,31 +46,31 @@ describe("LinkedRacerCard Component", () => {
   });
 
   it("renders avg position formatted to 1 decimal when greater than 0", () => {
-    render(<LinkedRacerCard racer={createRacerFixture()} />);
+    render(<LinkedRacerCard racer={createRacerWithStats()} />);
     expect(screen.getByText("2.5")).toBeInTheDocument();
   });
 
   it("renders '—' for avg position when avgPosition is 0", () => {
     render(
       <LinkedRacerCard
-        racer={createRacerFixture({ stats: { totalPoints: 0, totalRaces: 0, wins: 0, podiums: 0, avgPosition: 0 } })}
+        racer={createRacerWithStats({ stats: { totalPoints: 0, totalRaces: 0, wins: 0, podiums: 0, avgPosition: 0 } })}
       />,
     );
     expect(screen.getByText("—")).toBeInTheDocument();
   });
 
   it("shows Edit button when onEdit is provided", () => {
-    render(<LinkedRacerCard racer={createRacerFixture()} onEdit={onEdit} />);
+    render(<LinkedRacerCard racer={createRacerWithStats()} onEdit={onEdit} />);
     expect(screen.getByRole("button", { name: /edit/i })).toBeInTheDocument();
   });
 
   it("hides Edit button when onEdit is not provided", () => {
-    render(<LinkedRacerCard racer={createRacerFixture()} />);
+    render(<LinkedRacerCard racer={createRacerWithStats()} />);
     expect(screen.queryByRole("button", { name: /edit/i })).not.toBeInTheDocument();
   });
 
   it("calls onEdit when Edit button is clicked", async () => {
-    render(<LinkedRacerCard racer={createRacerFixture()} onEdit={onEdit} />);
+    render(<LinkedRacerCard racer={createRacerWithStats()} onEdit={onEdit} />);
     await userEvent.click(screen.getByRole("button", { name: /edit/i }));
     expect(onEdit).toHaveBeenCalledTimes(1);
   });

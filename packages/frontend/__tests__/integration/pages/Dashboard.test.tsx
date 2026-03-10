@@ -5,9 +5,9 @@ import Dashboard from "src/pages/Dashboard";
 import { useAuth } from "src/hooks/useAuth";
 import { useActiveSeason, useRacers, useRaceResult } from "src/hooks/data";
 import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
-import { createSeason, mockRacers, createMockRace } from "tests/utils/fixtures";
+import { createSeason, createRacerWithStatsList, createRace } from "tests/utils/fixtures";
 import { renderWithRouter } from "tests/utils/renderWithRouter";
-import { RaceResult, RacerWithStats } from "shared";
+import { RaceResult } from "shared";
 import { AuthContextType } from "src/contexts";
 
 vi.mock("src/hooks/useAuth");
@@ -29,7 +29,7 @@ const mockActiveSeason = createSeason({
 });
 
 const mockRaces = [
-  createMockRace({
+  createRace({
     id: "race-1",
     name: "Monaco GP",
     seasonId: "season-1",
@@ -37,7 +37,7 @@ const mockRaces = [
     date: new Date("2026-05-24"),
     completed: true,
   }),
-  createMockRace({
+  createRace({
     id: "race-2",
     name: "British GP",
     seasonId: "season-1",
@@ -56,6 +56,7 @@ const mockAggregatedResults: RaceResult[] = [
 
 beforeEach(() => {
   mockUseAuth.mockReturnValue(createMockAuthContext() as AuthContextType);
+  const racers = createRacerWithStatsList(2, [{name: "Lewis Hamilton"}, {name: "Max Verstappen"}]);
   mockUseActiveSeason.mockReturnValue({
     data: mockActiveSeason,
     isLoading: false,
@@ -63,7 +64,7 @@ beforeEach(() => {
     refresh: vi.fn(),
   });
   mockUseRacers.mockReturnValue({
-    data: mockRacers as RacerWithStats[],
+    data: racers,
     isLoading: false,
     error: null,
     refresh: vi.fn(),
@@ -71,7 +72,7 @@ beforeEach(() => {
   mockUseRaceResult.mockReturnValue({
     races: mockRaces,
     results: mockAggregatedResults,
-    racers: mockRacers as RacerWithStats[],
+    racers: racers,
     isLoading: false,
     error: null,
   });

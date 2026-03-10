@@ -1,26 +1,3 @@
-/*
-STAT CARD TEST PLAN:
-
-- Renders the title
-- Renders the value when provided
-- Does not render a value element when value is omitted
-- Renders the icon when provided
-- Does not render an icon element when icon is omitted
-- Calls onClick when the card is clicked
-- Applies compact variant by default
-- Applies background image style when backgroundImage is provided
-
-TEST CASES:
-1. Renders the title
-2. Renders the value when provided
-3. Does not render a value element when value is omitted
-4. Renders the icon when provided
-5. Does not render an icon element when icon is omitted
-6. Calls onClick when the card is clicked
-7. Applies compact variant by default (compact prop is true)
-8. Applies background image style when backgroundImage is provided
-*/
-
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";

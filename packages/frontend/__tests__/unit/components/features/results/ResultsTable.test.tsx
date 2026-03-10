@@ -2,11 +2,17 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, afterEach } from "vitest";
 import ResultsTable from "src/components/features/Results/ResultsTable";
-import { createMockRace, createRacersMap } from "../../../../utils/fixtures";
+import { createRace, createRacerWithStatsList } from "../../../../utils/fixtures";
 import { RaceResult } from "shared";
 
-const mockResults = createMockRace().results;
-const mockRacersMap = createRacersMap();
+const mockResults = createRace().results;
+const mockRacersMap = createRacerWithStatsList(2, [
+  { name: "Lewis Hamilton", team: "Mercedes AMG" },
+  { name: "Max Verstappen", team: "Red Bull Racing" },
+]).reduce((map, racer) => {
+  map.set(racer.id, racer);
+  return map;
+}, new Map<string, ReturnType<typeof createRacerWithStatsList>[0]>());
 
 afterEach(() => {
   vi.clearAllMocks();

@@ -1,24 +1,3 @@
-/*
-PODIUM CARD TEST PLAN:
-
-- Renders racer name, team, nationality
-- Renders medal emoji
-- Renders points with "pts" label
-- Renders image when imageUrl is provided
-- Does not render image when imageUrl is null
-- Applies the correct CSS modifier class for each medal type
-
-TEST CASES:
-1. Renders racer name, team, and nationality
-2. Renders medal emoji
-3. Renders points with "pts" label
-4. Renders racer image when imageUrl is provided
-5. Does not render an image when imageUrl is null
-6. Applies the correct CSS class for the gold medal
-7. Applies the correct CSS class for the silver medal
-8. Applies the correct CSS class for the bronze medal
-*/
-
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import PodiumCard, { PodiumCardProps } from "src/components/features/Dashboard/PodiumCard";

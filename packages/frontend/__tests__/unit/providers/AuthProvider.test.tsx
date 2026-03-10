@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { AuthProvider } from "src/providers/AuthProvider";
 import { useAuth } from "src/hooks/useAuth";
-import { createUserFixture } from "tests/utils/fixtures";
+import { createUser } from "tests/utils/fixtures";
 
 // Mock all API services being called
 vi.mock("src/services/api/season");
@@ -65,7 +65,7 @@ const TestComponent = () => {
 describe("AuthProvider", () => {
   describe("When initializing authentication", () => {
     it("initializes with loading state true on mount", async () => {
-      mockApiClient.get.mockResolvedValue(createUserFixture());
+      mockApiClient.get.mockResolvedValue(createUser());
 
       render(
         <AuthProvider>
@@ -80,7 +80,7 @@ describe("AuthProvider", () => {
     });
 
     it("calls checkAuth on mount", async () => {
-      mockApiClient.get.mockResolvedValue(createUserFixture());
+      mockApiClient.get.mockResolvedValue(createUser());
 
       render(
         <AuthProvider>
@@ -94,7 +94,7 @@ describe("AuthProvider", () => {
     });
 
     it("sets user and authenticated state when checkAuth succeeds", async () => {
-      const mockUser = createUserFixture({ email: "test@example.com" });
+      const mockUser = createUser({ email: "test@example.com" });
       mockApiClient.get.mockResolvedValue(mockUser);
 
       render(
@@ -128,7 +128,7 @@ describe("AuthProvider", () => {
 
   describe("When handling role-based permissions", () => {
     it("sets isAdmin to true when user role is admin", async () => {
-      const adminUser = createUserFixture({ role: "admin" });
+      const adminUser = createUser({ role: "admin" });
       mockApiClient.get.mockResolvedValue(adminUser);
 
       render(
@@ -143,7 +143,7 @@ describe("AuthProvider", () => {
     });
 
     it("sets isAdmin to false when user role is not admin", async () => {
-      const regularUser = createUserFixture({ role: "user" });
+      const regularUser = createUser({ role: "user" });
       mockApiClient.get.mockResolvedValue(regularUser);
 
       render(
@@ -158,7 +158,7 @@ describe("AuthProvider", () => {
     });
 
     it("sets isContributor to true when user role is contributor", async () => {
-      const contributorUser = createUserFixture({ role: "contributor" });
+      const contributorUser = createUser({ role: "contributor" });
       mockApiClient.get.mockResolvedValue(contributorUser);
 
       render(
@@ -173,7 +173,7 @@ describe("AuthProvider", () => {
     });
 
     it("sets isContributor to true when user role is admin", async () => {
-      const adminUser = createUserFixture({ role: "admin" });
+      const adminUser = createUser({ role: "admin" });
       mockApiClient.get.mockResolvedValue(adminUser);
 
       render(
@@ -188,7 +188,7 @@ describe("AuthProvider", () => {
     });
 
     it("sets isContributor to false when user role is user", async () => {
-      const regularUser = createUserFixture({ role: "user" });
+      const regularUser = createUser({ role: "user" });
       mockApiClient.get.mockResolvedValue(regularUser);
 
       render(
@@ -205,7 +205,7 @@ describe("AuthProvider", () => {
 
   describe("When user logs out", () => {
     it("calls logout endpoint when logout is clicked", async () => {
-      const mockUser = createUserFixture();
+      const mockUser = createUser();
       mockApiClient.get.mockResolvedValue(mockUser);
       mockApiClient.post.mockResolvedValue(undefined);
 
@@ -228,7 +228,7 @@ describe("AuthProvider", () => {
     });
 
     it("clears user data after logout", async () => {
-      const mockUser = createUserFixture();
+      const mockUser = createUser();
       mockApiClient.get.mockResolvedValue(mockUser);
       mockApiClient.post.mockResolvedValue(undefined);
 
@@ -251,7 +251,7 @@ describe("AuthProvider", () => {
     });
 
     it("redirects to home page after logout", async () => {
-      const mockUser = createUserFixture();
+      const mockUser = createUser();
       mockApiClient.get.mockResolvedValue(mockUser);
       mockApiClient.post.mockResolvedValue(undefined);
 
@@ -294,8 +294,8 @@ describe("AuthProvider", () => {
 
   describe("When refreshing user", () => {
     it("fetches updated user data when refreshUser is called", async () => {
-      const initialUser = createUserFixture({ email: "old@example.com" });
-      const updatedUser = createUserFixture({ email: "new@example.com" });
+      const initialUser = createUser({ email: "old@example.com" });
+      const updatedUser = createUser({ email: "new@example.com" });
 
       // First call for initialization
       mockApiClient.get.mockResolvedValueOnce(initialUser);
@@ -321,7 +321,7 @@ describe("AuthProvider", () => {
     });
 
     it("calls /auth/me endpoint when refreshUser is called", async () => {
-      const mockUser = createUserFixture();
+      const mockUser = createUser();
       mockApiClient.get.mockResolvedValue(mockUser);
 
       render(
@@ -347,7 +347,7 @@ describe("AuthProvider", () => {
 
   describe("When consuming auth context", () => {
     it("provides complete auth context to consumers", async () => {
-      const mockUser = createUserFixture();
+      const mockUser = createUser();
       mockApiClient.get.mockResolvedValue(mockUser);
 
       render(
@@ -366,7 +366,7 @@ describe("AuthProvider", () => {
     });
 
     it("updates context when authentication state changes", async () => {
-      const mockUser = createUserFixture();
+      const mockUser = createUser();
       mockApiClient.get.mockResolvedValue(mockUser);
       mockApiClient.post.mockResolvedValue(undefined);
 
@@ -406,7 +406,7 @@ describe("AuthProvider", () => {
     });
 
     it("continues to work when refresh fails", async () => {
-      const mockUser = createUserFixture();
+      const mockUser = createUser();
       mockApiClient.get.mockResolvedValueOnce(mockUser);
       mockApiClient.get.mockRejectedValueOnce(new Error("Refresh failed"));
 
@@ -430,7 +430,7 @@ describe("AuthProvider", () => {
     });
 
     it("continues to work when logout fails", async () => {
-      const mockUser = createUserFixture();
+      const mockUser = createUser();
       mockApiClient.get.mockResolvedValue(mockUser);
       mockApiClient.post.mockRejectedValue(new Error("Logout failed"));
 

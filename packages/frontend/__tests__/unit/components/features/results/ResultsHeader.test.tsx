@@ -3,20 +3,30 @@ import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import ResultsHeader from "src/components/features/Results/ResultsHeader";
 import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
-import { createSeason, createMockRace } from "../../../../utils/fixtures";
+import { createSeason, createRace } from "../../../../utils/fixtures";
 
 vi.mock("src/hooks/useAuth");
 import { useAuth } from "src/hooks/useAuth";
 const mockedUseAuth = vi.mocked(useAuth);
 
 const mockSeasons = [
-  createSeason({ id: "season-1", name: "Summer 2025", status: "active", startDate: new Date("2025-06-01") }),
-  createSeason({ id: "season-2", name: "Winter 2025", status: "completed", startDate: new Date("2025-11-01") }),
+  createSeason({
+    id: "season-1",
+    name: "Summer 2025",
+    status: "active",
+    startDate: new Date("2025-06-01"),
+  }),
+  createSeason({
+    id: "season-2",
+    name: "Winter 2025",
+    status: "completed",
+    startDate: new Date("2025-11-01"),
+  }),
 ];
 
 const mockRaces = [
-  createMockRace(),
-  createMockRace({ id: "race-2", name: "Silverstone GP", raceNumber: 2, date: new Date("2025-07-10") }),
+  createRace(),
+  createRace({ id: "race-2", name: "Silverstone GP", raceNumber: 2, date: new Date("2025-07-10") }),
 ];
 
 describe("ResultsHeader Component", () => {
@@ -30,7 +40,18 @@ describe("ResultsHeader Component", () => {
     onRaceChange = vi.fn();
     onAddResults = vi.fn();
     onUpdateResults = vi.fn();
-    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: { id: "1", name: "Admin", email: "admin@test.com", role: "admin" }, isAdmin: true }));
+    mockedUseAuth.mockReturnValue(
+      createMockAuthContext({
+        user: {
+          id: "1",
+          name: "Admin",
+          googleId: "admin-google-id",
+          email: "admin@test.com",
+          role: "admin",
+        },
+        isAdmin: true,
+      }),
+    );
   });
 
   afterEach(() => {
@@ -118,7 +139,18 @@ describe("ResultsHeader Component", () => {
   });
 
   it("hides the 'Add RaceResults' button when the user is not an admin", () => {
-    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: { id: "1", name: "User", email: "user@test.com", role: "user" }, isAdmin: false }));
+    mockedUseAuth.mockReturnValue(
+      createMockAuthContext({
+        user: {
+          id: "1",
+          name: "User",
+          googleId: "user-google-id",
+          email: "user@test.com",
+          role: "user",
+        },
+        isAdmin: false,
+      }),
+    );
     render(
       <ResultsHeader
         seasons={mockSeasons}
@@ -133,7 +165,9 @@ describe("ResultsHeader Component", () => {
   });
 
   it("hides the 'Add RaceResults' button when there is no logged-in user", () => {
-    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: null as any, isAuthenticated: false, isAdmin: false }));
+    mockedUseAuth.mockReturnValue(
+      createMockAuthContext({ user: null as any, isAuthenticated: false, isAdmin: false }),
+    );
     render(
       <ResultsHeader
         seasons={mockSeasons}
@@ -207,7 +241,18 @@ describe("ResultsHeader Component", () => {
   });
 
   it("hides the 'Update RaceResults' button when the user is not an admin", () => {
-    mockedUseAuth.mockReturnValue(createMockAuthContext({ user: { id: "1", name: "User", email: "user@test.com", role: "user" }, isAdmin: false }));
+    mockedUseAuth.mockReturnValue(
+      createMockAuthContext({
+        user: {
+          id: "1",
+          name: "User",
+          googleId: "user-google-id",
+          email: "user@test.com",
+          role: "user",
+        },
+        isAdmin: false,
+      }),
+    );
     render(
       <ResultsHeader
         seasons={mockSeasons}

@@ -1,6 +1,6 @@
 import { cleanup, renderHook, waitFor } from "@testing-library/react";
 import { useRaceResult } from "src/hooks/data/useRaceResult";
-import { createMockRace, mockRacers } from "tests/utils/fixtures";
+import { createRace, createRacerWithStatsList } from "tests/utils/fixtures";
 
 vi.mock("src/hooks/data/useRacer", () => ({
   useRacers: vi.fn(),
@@ -12,12 +12,12 @@ vi.mock("src/services/api/races", () => ({
 
 import { useRacers } from "src/hooks/data/useRacer";
 import { GetRacesBySeason } from "src/services/api/races";
-import { RacerWithStats } from "shared";
+
 
 const mockedUseRacers = vi.mocked(useRacers);
 const mockedGetRacesBySeason = vi.mocked(GetRacesBySeason);
 
-const race1 = createMockRace({
+const race1 = createRace({
   id: "race-1",
   results: [
     { racerId: "racer-1", position: 2, points: 18, constructorPoints: 18 },
@@ -25,7 +25,7 @@ const race1 = createMockRace({
   ],
 });
 
-const race2 = createMockRace({
+const race2 = createRace({
   id: "race-2",
   results: [
     { racerId: "racer-1", position: 1, points: 25, constructorPoints: 25 },
@@ -39,15 +39,9 @@ afterEach(() => {
 });
 
 describe("useRaceResult hook", () => {
-  // 1. Does not fetch races when season id is empty
-  // 2. Fetches races and aggregates results when race id is empty
-  // 3. Returns race-specific results sorted by position when race id is selected
-  // 4. Sets race-not-found error when selected race does not exist
-  // 5. Skips results computation while racers are loading
-
   it("does not fetch races when season id is empty", () => {
     mockedUseRacers.mockReturnValue({
-      data: mockRacers as RacerWithStats[],
+      data: createRacerWithStatsList(2),
       isLoading: false,
       error: null,
       refresh: vi.fn(),
@@ -62,7 +56,7 @@ describe("useRaceResult hook", () => {
 
   it("fetches races and aggregates standings when race id is empty", async () => {
     mockedUseRacers.mockReturnValue({
-      data: mockRacers as RacerWithStats[],
+      data: createRacerWithStatsList(2),
       isLoading: false,
       error: null,
       refresh: vi.fn(),
@@ -83,7 +77,7 @@ describe("useRaceResult hook", () => {
 
   it("returns selected race results sorted by position", async () => {
     mockedUseRacers.mockReturnValue({
-      data: mockRacers as RacerWithStats[],
+      data: createRacerWithStatsList(2),
       isLoading: false,
       error: null,
       refresh: vi.fn(),
@@ -102,7 +96,7 @@ describe("useRaceResult hook", () => {
 
   it("sets error when selected race is not found", async () => {
     mockedUseRacers.mockReturnValue({
-      data: mockRacers as RacerWithStats[],
+      data: createRacerWithStatsList(2),
       isLoading: false,
       error: null,
       refresh: vi.fn(),
@@ -118,7 +112,7 @@ describe("useRaceResult hook", () => {
 
   it("does not compute results while racers are loading", async () => {
     mockedUseRacers.mockReturnValue({
-      data: mockRacers as RacerWithStats[],
+      data: createRacerWithStatsList(2),
       isLoading: true,
       error: null,
       refresh: vi.fn(),

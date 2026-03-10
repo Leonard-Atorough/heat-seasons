@@ -1,12 +1,3 @@
-/*
-FOOTER TEST PLAN:
-
-- Render footer successfully
-- Display correct copyright year (current year)
-- Use semantic footer HTML element
-- Display correct company name and text
-*/
-
 import { render, screen } from "@testing-library/react";
 import Footer from "src/components/layout/Footer";
 

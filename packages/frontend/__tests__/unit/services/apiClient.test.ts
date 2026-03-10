@@ -1,20 +1,6 @@
 import { describe, it, vi } from "vitest";
 import ApiClient from "src/services/apiClient";
 
-/*
-  apiClient test stubs
-
-  Plan (implement in order):
-  - returns parsed data on success (mock `global.fetch` to return a successful ApiResponse)
-  - throws ApiError when api response has success=false (assert message/status/statusText)
-  - request stringifies body for POST/PUT/PATCH and uses credentials + headers
-  - maps network errors to ApiError with status 0
-  - maps AbortError to ApiError with message "Request cancelled"
-  - setDefaultHeader / removeDefaultHeader affect outgoing headers
-
-  These are unit tests; mock `global.fetch` or the `fetch` implementation accordingly.
-*/
-
 describe("Given an API client", () => {
   let mockFetch: ReturnType<typeof vi.spyOn>;
   beforeEach(() => {

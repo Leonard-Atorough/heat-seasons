@@ -26,7 +26,6 @@ export {
   createUser,
   createUserList,
   users,
-  createUserFixture, // @deprecated
 } from "./user.fixture";
 
 // Racer fixtures
@@ -37,10 +36,6 @@ export {
   createRacerWithStatsList,
   createRacerMap,
   racers,
-  mockRacer, // @deprecated
-  mockRacers, // @deprecated
-  createRacerFixture, // @deprecated
-  createRacersMap, // @deprecated
 } from "./racer.fixture";
 
 // Season fixtures
@@ -56,8 +51,6 @@ export {
   createRace,
   createRaceList,
   races,
-  mockRaceData, // @deprecated
-  createMockRace, // @deprecated
 } from "./race.fixture";
 
 // Admin fixtures

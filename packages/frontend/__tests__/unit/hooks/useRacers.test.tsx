@@ -3,8 +3,7 @@ import { ReactNode } from "react";
 import { renderHook } from "@testing-library/react";
 import { useRacers } from "src/hooks/data/useRacer";
 import { DataContext, DataContextType } from "src/contexts";
-import { mockRacers } from "tests/utils/fixtures";
-import { RacerWithStats } from "shared";
+import { createRacerWithStatsList } from "tests/utils/fixtures";
 import { createMockDataContext } from "tests/utils/mocks/dataContextMock";
 
 beforeEach(() => {
@@ -18,8 +17,9 @@ afterEach(() => {
 describe("useRacers hook", () => {
   describe("When calling useRacers", () => {
     it("returns racers data from context", () => {
+      const mockRacers = createRacerWithStatsList(3);
       const mockContextValue: DataContextType = createMockDataContext({
-        racers: mockRacers as RacerWithStats[],
+        racers: mockRacers,
       });
 
       const wrapper = ({ children }: { children: ReactNode }) => (
@@ -84,8 +84,9 @@ describe("useRacers hook", () => {
   describe("When refreshing racers", () => {
     it("calls refresh function", () => {
       const mockRefresh = vi.fn();
+      const mockRacers = createRacerWithStatsList(3);
       const mockContextValue: DataContextType = createMockDataContext({
-        racers: mockRacers as RacerWithStats[],
+        racers: mockRacers,
         refreshRacers: mockRefresh,
       });
 

@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import AdminPage from "src/pages/AdminPage";
 import { useAuth } from "src/hooks/useAuth";
 import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
-import { createUserFixture } from "tests/utils/fixtures";
+import { createUser } from "tests/utils/fixtures";
 import * as adminApi from "src/services/api/admin";
 
 vi.mock("src/hooks/useAuth");
@@ -24,7 +24,7 @@ afterEach(() => {
 describe("AdminPage", () => {
   it("renders the Admin Panel heading for admin users", async () => {
     mockUseAuth.mockReturnValue(
-      createMockAuthContext({ user: createUserFixture({ role: "admin" }) }),
+      createMockAuthContext({ user: createUser({ role: "admin" }) }),
     );
     render(
       <MemoryRouter>
@@ -36,7 +36,7 @@ describe("AdminPage", () => {
 
   it("renders all three tab labels", async () => {
     mockUseAuth.mockReturnValue(
-      createMockAuthContext({ user: createUserFixture({ role: "admin" }) }),
+      createMockAuthContext({ user: createUser({ role: "admin" }) }),
     );
     render(
       <MemoryRouter>
@@ -50,7 +50,7 @@ describe("AdminPage", () => {
 
   it("defaults to the User Management tab", async () => {
     mockUseAuth.mockReturnValue(
-      createMockAuthContext({ user: createUserFixture({ role: "admin" }) }),
+      createMockAuthContext({ user: createUser({ role: "admin" }) }),
     );
     render(
       <MemoryRouter>

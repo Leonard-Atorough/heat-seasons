@@ -1,24 +1,3 @@
-/*
-HERO TEST PLAN:
-
-- Renders the title with "Season" suffix
-- Renders subtitle when provided
-- Does not render subtitle when omitted
-- Shows "Sign In" button when user is not authenticated
-- Hides "Sign In" button when user is authenticated
-- "View Standings" button navigates to /results
-- "Sign In" button navigates to /login
-
-TEST CASES:
-1. Renders title with "Season" suffix
-2. Renders subtitle when provided
-3. Does not render subtitle when not provided
-4. Shows Sign In button when unauthenticated
-5. Hides Sign In button when authenticated
-6. Navigates to /results when View Standings is clicked
-7. Navigates to /login when Sign In is clicked
-*/
-
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";

@@ -2,7 +2,8 @@ import { render, screen, waitFor, cleanup, fireEvent } from "@testing-library/re
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { CreateRacerModal } from "src/components/features/Profile/CreateRacerModal";
-import { mockRacer } from "../../../../utils/fixtures";
+import { createRacer } from "tests/utils/fixtures";
+import { Racer } from "shared";
 
 vi.mock("src/services/api/racer");
 import * as racerApi from "src/services/api/racer";
@@ -24,11 +25,11 @@ describe("CreateRacerModal Component", () => {
     cleanup();
   });
 
-  function fillForm(age = String(mockRacer.age)) {
+  function fillForm(mockRacer: Racer) {
     fireEvent.change(screen.getByLabelText(/racer name/i), { target: { value: mockRacer.name } });
     fireEvent.change(screen.getByLabelText(/^team$/i), { target: { value: mockRacer.team } });
     fireEvent.change(screen.getByLabelText(/nationality/i), { target: { value: mockRacer.nationality } });
-    fireEvent.change(screen.getByRole("spinbutton"), { target: { value: age } });
+    fireEvent.change(screen.getByRole("spinbutton"), { target: { value: mockRacer.age } });
   }
 
   it("does not render when isOpen is false", () => {
@@ -54,7 +55,9 @@ describe("CreateRacerModal Component", () => {
 
   it("shows validation error when age is out of valid range", async () => {
     render(<CreateRacerModal isOpen={true} onClose={onClose} onCreated={onCreated} />);
-    await fillForm("999");
+    const mockRacer = createRacer();
+    mockRacer.age = 999;
+    await fillForm(mockRacer);
     await user.click(screen.getByRole("button", { name: /^create racer$/i }));
     expect(await screen.findByText("Please enter a valid age.")).toBeInTheDocument();
     expect(mockedCreateRacer).not.toHaveBeenCalled();
@@ -63,7 +66,8 @@ describe("CreateRacerModal Component", () => {
   it("calls createRacer with the correct payload on valid submission", async () => {
     mockedCreateRacer.mockResolvedValueOnce({} as any);
     render(<CreateRacerModal isOpen={true} onClose={onClose} onCreated={onCreated} />);
-    await fillForm();
+    const mockRacer = createRacer();
+    await fillForm(mockRacer);
     await user.click(screen.getByRole("button", { name: /^create racer$/i }));
     await waitFor(() => expect(mockedCreateRacer).toHaveBeenCalledTimes(1));
     expect(mockedCreateRacer).toHaveBeenCalledWith(
@@ -80,7 +84,8 @@ describe("CreateRacerModal Component", () => {
   it("calls onCreated after successful submission", async () => {
     mockedCreateRacer.mockResolvedValueOnce({} as any);
     render(<CreateRacerModal isOpen={true} onClose={onClose} onCreated={onCreated} />);
-    await fillForm();
+    const mockRacer = createRacer();
+    await fillForm(mockRacer);
     await user.click(screen.getByRole("button", { name: /^create racer$/i }));
     await waitFor(() => expect(onCreated).toHaveBeenCalledTimes(1));
   });
@@ -88,7 +93,8 @@ describe("CreateRacerModal Component", () => {
   it("shows 'already linked' error on a 409 API response", async () => {
     mockedCreateRacer.mockRejectedValueOnce({ status: 409, message: "Conflict" });
     render(<CreateRacerModal isOpen={true} onClose={onClose} onCreated={onCreated} />);
-    await fillForm();
+    const mockRacer = createRacer();
+    await fillForm(mockRacer);
     await user.click(screen.getByRole("button", { name: /^create racer$/i }));
     expect(
       await screen.findByText("You already have a racer linked to your account."),
@@ -98,7 +104,8 @@ describe("CreateRacerModal Component", () => {
   it("shows a generic API error message on failure", async () => {
     mockedCreateRacer.mockRejectedValueOnce({ message: "Server error" });
     render(<CreateRacerModal isOpen={true} onClose={onClose} onCreated={onCreated} />);
-    await fillForm();
+    const mockRacer = createRacer();
+    await fillForm(mockRacer);
     await user.click(screen.getByRole("button", { name: /^create racer$/i }));
     expect(await screen.findByText("Server error")).toBeInTheDocument();
   });

@@ -7,7 +7,7 @@ import { DataContext } from "src/contexts/dataContext";
 import * as seasonApi from "src/services/api/season";
 import * as racerApi from "src/services/api/racer";
 import { createSeason } from "tests/utils/fixtures";
-import { createRacerFixture } from "tests/utils/fixtures";
+import { createRacerWithStats } from "tests/utils/fixtures";
 
 vi.mock("src/services/api/season");
 vi.mock("src/services/api/racer");
@@ -97,7 +97,7 @@ describe("DataProvider", () => {
     });
 
     it("clears error state on successful mount", async () => {
-      mockRacerApi.getAllRacers.mockResolvedValue([createRacerFixture()]);
+      mockRacerApi.getAllRacers.mockResolvedValue([createRacerWithStats()]);
       mockSeasonApi.getSeasons.mockResolvedValue([createSeason()]);
 
       render(
@@ -135,8 +135,8 @@ describe("DataProvider", () => {
 
     it("provides fetched racers to context", async () => {
       const mockRacers = [
-        createRacerFixture({ name: "Lewis Hamilton" }),
-        createRacerFixture({ name: "Max Verstappen", id: "racer-2" }),
+        createRacerWithStats({ name: "Lewis Hamilton" }),
+        createRacerWithStats({ name: "Max Verstappen", id: "racer-2" }),
       ];
       mockRacerApi.getAllRacers.mockResolvedValue(mockRacers);
 
@@ -153,7 +153,7 @@ describe("DataProvider", () => {
 
     it("updates context counts after both fetches complete", async () => {
       const mockSeasons = [createSeason()];
-      const mockRacers = [createRacerFixture()];
+      const mockRacers = [createRacerWithStats()];
       mockSeasonApi.getSeasons.mockResolvedValue(mockSeasons);
       mockRacerApi.getAllRacers.mockResolvedValue(mockRacers);
 
@@ -170,7 +170,7 @@ describe("DataProvider", () => {
     });
 
     it("sets loading to false after data fetch completes", async () => {
-      mockRacerApi.getAllRacers.mockResolvedValue([createRacerFixture()]);
+      mockRacerApi.getAllRacers.mockResolvedValue([createRacerWithStats()]);
       mockSeasonApi.getSeasons.mockResolvedValue([createSeason()]);
 
       render(
@@ -193,7 +193,7 @@ describe("DataProvider", () => {
 
     it("refetches all data when refresh() is called", async () => {
       const mockSeasons = [createSeason({ name: "Initial Season" })];
-      const mockRacers = [createRacerFixture({ name: "Initial Racer" })];
+      const mockRacers = [createRacerWithStats({ name: "Initial Racer" })];
       mockSeasonApi.getSeasons.mockResolvedValue(mockSeasons);
       mockRacerApi.getAllRacers.mockResolvedValue(mockRacers);
 
@@ -214,8 +214,8 @@ describe("DataProvider", () => {
         createSeason({ name: "Season 2", id: "season-2" }),
       ];
       const updatedRacers = [
-        createRacerFixture({ name: "Racer 1" }),
-        createRacerFixture({ name: "Racer 2", id: "racer-2" }),
+        createRacerWithStats({ name: "Racer 1" }),
+        createRacerWithStats({ name: "Racer 2", id: "racer-2" }),
       ];
       mockSeasonApi.getSeasons.mockResolvedValue(updatedSeasons);
       mockRacerApi.getAllRacers.mockResolvedValue(updatedRacers);
@@ -230,7 +230,7 @@ describe("DataProvider", () => {
 
     it("refetches only racers when refreshRacers() is called", async () => {
       const mockSeasons = [createSeason()];
-      const mockRacers = [createRacerFixture()];
+      const mockRacers = [createRacerWithStats()];
       mockSeasonApi.getSeasons.mockResolvedValue(mockSeasons);
       mockRacerApi.getAllRacers.mockResolvedValue(mockRacers);
 
@@ -247,7 +247,7 @@ describe("DataProvider", () => {
       });
 
       const updatedRacers = [
-        createRacerFixture({ name: "Updated Racer" }),
+        createRacerWithStats({ name: "Updated Racer" }),
       ];
       mockRacerApi.getAllRacers.mockResolvedValue(updatedRacers);
 
@@ -263,7 +263,7 @@ describe("DataProvider", () => {
 
     it("refetches only seasons when refreshSeasons() is called", async () => {
       const mockSeasons = [createSeason()];
-      const mockRacers = [createRacerFixture()];
+      const mockRacers = [createRacerWithStats()];
       mockSeasonApi.getSeasons.mockResolvedValue(mockSeasons);
       mockRacerApi.getAllRacers.mockResolvedValue(mockRacers);
 
@@ -301,7 +301,7 @@ describe("DataProvider", () => {
     it("handles season fetch errors gracefully", async () => {
       const testError = new Error("Season fetch failed");
       mockSeasonApi.getSeasons.mockRejectedValue(testError);
-      mockRacerApi.getAllRacers.mockResolvedValue([createRacerFixture()]);
+      mockRacerApi.getAllRacers.mockResolvedValue([createRacerWithStats()]);
 
       render(
         <DataProvider>
@@ -366,7 +366,7 @@ describe("DataProvider", () => {
       });
 
       // Mock success on retry
-      mockRacerApi.getAllRacers.mockResolvedValue([createRacerFixture()]);
+      mockRacerApi.getAllRacers.mockResolvedValue([createRacerWithStats()]);
 
       const user = userEvent.setup();
       await user.click(screen.getByTestId("refresh-btn"));
@@ -400,7 +400,7 @@ describe("DataProvider", () => {
 
     it("provides complete data context with all properties", async () => {
       const mockSeasons = [createSeason()];
-      const mockRacers = [createRacerFixture()];
+      const mockRacers = [createRacerWithStats()];
       mockSeasonApi.getSeasons.mockResolvedValue(mockSeasons);
       mockRacerApi.getAllRacers.mockResolvedValue(mockRacers);
 
@@ -435,7 +435,7 @@ describe("DataProvider", () => {
     });
 
     it("updates context when data changes after refresh", async () => {
-      const initialRacers = [createRacerFixture({ name: "Initial" })];
+      const initialRacers = [createRacerWithStats({ name: "Initial" })];
       mockRacerApi.getAllRacers.mockResolvedValue(initialRacers);
       mockSeasonApi.getSeasons.mockResolvedValue([]);
 
@@ -452,8 +452,8 @@ describe("DataProvider", () => {
 
       // Update mock response
       const updatedRacers = [
-        createRacerFixture({ name: "Updated 1" }),
-        createRacerFixture({ name: "Updated 2", id: "racer-99" }),
+        createRacerWithStats({ name: "Updated 1" }),
+        createRacerWithStats({ name: "Updated 2", id: "racer-99" }),
       ];
       mockRacerApi.getAllRacers.mockResolvedValue(updatedRacers);
 

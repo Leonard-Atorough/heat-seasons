@@ -1,4 +1,4 @@
-import { Race, RaceResult } from "shared";
+import { Race } from "shared";
 
 /**
  * Default Race fixture - completed race with results
@@ -111,13 +111,4 @@ export function createRaceList(count: number, overrides: Partial<Race> = {}): Ra
   });
 }
 
-/**
- * @deprecated Use createRace() instead
- */
-export const mockRaceData = defaults;
-
-/**
- * @deprecated Use createRace() instead
- */
-export const createMockRace = createRace;
 

@@ -5,7 +5,7 @@ import { Teams } from "src/pages/Teams";
 import { useAuth } from "src/hooks/useAuth";
 import { useRacers } from "src/hooks/data/useRacer";
 import { createMockAuthContext } from "tests/utils/mocks/authContext.mock";
-import { mockRacers } from "tests/utils/fixtures";
+import { createRacerWithStatsList } from "tests/utils/fixtures";
 
 vi.mock("src/hooks/useAuth");
 vi.mock("src/hooks/data/useRacer");
@@ -16,7 +16,7 @@ const mockUseRacers = vi.mocked(useRacers);
 beforeEach(() => {
   mockUseAuth.mockReturnValue(createMockAuthContext());
   mockUseRacers.mockReturnValue({
-    data: mockRacers,
+    data: createRacerWithStatsList(2),
     refresh: vi.fn(),
     isLoading: false,
   } as any);
@@ -35,7 +35,7 @@ describe("Given the Teams page", () => {
         </MemoryRouter>,
       );
 
-      const uniqueTeams = new Set(mockRacers.map((r) => r.team));
+      const uniqueTeams = new Set(createRacerWithStatsList(2).map((r) => r.team));
       expect(screen.getByText(/Heat Teams: Winter 2026/i)).toBeInTheDocument();
       expect(uniqueTeams.size).toBeGreaterThan(0);
     });
@@ -60,7 +60,7 @@ describe("Given the Teams page", () => {
   describe("When loading data", () => {
     it("shows loading skeleton while fetching teams", () => {
       mockUseRacers.mockReturnValue({
-        data: mockRacers,
+        data: createRacerWithStatsList(2),
         refresh: vi.fn(),
         isLoading: true,
       } as any);
