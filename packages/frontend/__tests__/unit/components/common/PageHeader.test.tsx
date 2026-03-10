@@ -1,16 +1,3 @@
-/*
-PAGE HEADER TESTS
-
-- Render with default props (title only)
-- Render with subtitle
-- Render minimal variant
-- Render default variant
-- Render hero variant
-- Render hero variant with background image
-- Render hero variant with custom height
-- Render with action node
-*/
-
 import { render, screen } from "@testing-library/react";
 import { PageHeader, PageHeaderProps } from "src/components/common";
 

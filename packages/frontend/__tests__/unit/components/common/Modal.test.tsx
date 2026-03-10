@@ -9,7 +9,7 @@ const modalProps: ModalProps = {
 };
 
 describe("Modal Component", () => {
-  let onClose: any;
+  let onClose: typeof modalProps.onClose;
 
   beforeEach(() => {
     onClose = vi.fn();

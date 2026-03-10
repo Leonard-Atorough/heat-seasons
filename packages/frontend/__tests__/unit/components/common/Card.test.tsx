@@ -1,21 +1,3 @@
-/*
-CARD TEST PLAN:
-
-- Render a card successfully
-- Render a card with custom className and style
-- Render a card with the "compact" variant
-- Handle onClick events correctly
-- Handle keyboard interactions when onClick is provided
-
-TEST CASES:
-1. Renders a card with default props
-2. Renders a card with custom className and style
-3. Renders a card with the "compact" variant
-4. Calls onClick handler when card is clicked
-5. Calls onClick handler when Enter key is pressed
-6. Calls onClick handler when Space key is pressed
-*/
-
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Card, CardProps } from "src/components/common";
@@ -25,8 +7,8 @@ const defaultProps: CardProps = {
 };
 
 describe("Card Component", () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let onClick: any;
+
+  let onClick: typeof defaultProps.onClick;
 
   beforeEach(() => {
     onClick = vi.fn();

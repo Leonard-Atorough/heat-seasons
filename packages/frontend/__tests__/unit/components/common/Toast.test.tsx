@@ -1,24 +1,3 @@
-/*
-TOAST TEST PLAN:
-
-- Renders the message text
-- Always applies the base `toast` CSS module class
-- Defaults `type` to "info" when omitted
-- Applies the correct type-specific class for each variant:
-  success | error | info | warning
-- Does not render a close button when onClose is not provided
-- Renders a close button when onClose is provided
-- Calls onClose when the close button is clicked
-
-TEST CASES:
-1. Renders the message
-2. Applies base toast class regardless of type
-3. Defaults to the "info" variant class when type is not provided
-4. Applies each type-specific class (parameterised)
-5. Does not render close button when onClose is omitted
-6. Renders close button when onClose is provided
-7. Calls onClose when close button is clicked
-*/
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Toast, ToastProps } from "src/components/common";

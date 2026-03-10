@@ -28,7 +28,7 @@ const formGroupProps: FormGroupProps = {
 };
 
 describe("FormGroup Component", () => {
-  let onChange: any;
+  let onChange: typeof formGroupProps.onChange;
 
   beforeEach(() => {
     onChange = vi.fn();
