@@ -1,495 +1,401 @@
-import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { AdminCreateRacerInput } from "src/models";
+import type { Racer } from "shared";
 import RacerManagementTab from "src/components/features/Admin/RacerManagementTab";
 import * as adminApi from "src/services/api/admin";
-import { createRacerFixture } from "tests/utils/fixtures";
+import { createAdminRacerInput, createAdminUser, createRacer } from "tests/utils/fixtures";
 
 vi.mock("src/services/api/admin");
+
 const mockAdminApi = vi.mocked(adminApi);
 
-// ── Test setup ──────────────────────────────────────────────────────────
-const createMockRacer = (overrides = {}) =>
-  createRacerFixture(overrides) as unknown as adminApi.AdminCreateRacerInput & { id: string };
+const defaultCreateInput: AdminCreateRacerInput = createAdminRacerInput({
+  name: "Carlos Sainz",
+  team: "Ferrari",
+  nationality: "Spanish",
+  age: 30,
+  teamColor: "#e63946",
+  active: true,
+  badgeUrl: undefined,
+  userId: undefined,
+});
+
+function getExpectedPayload(input: AdminCreateRacerInput): AdminCreateRacerInput {
+  return {
+    name: input.name,
+    team: input.team,
+    teamColor: input.teamColor,
+    nationality: input.nationality,
+    age: input.age,
+    active: input.active,
+    badgeUrl: input.badgeUrl,
+    userId: input.userId,
+  };
+}
+
+async function renderTab() {
+  render(<RacerManagementTab />);
+
+  await waitFor(() => {
+    expect(mockAdminApi.adminListUsers).toHaveBeenCalledTimes(1);
+    expect(mockAdminApi.adminListRacers).toHaveBeenCalledTimes(1);
+  });
+}
+
+function getRacerRow(racerName: string): HTMLElement {
+  const racerCell = screen.getByText(racerName);
+  const racerRow = racerCell.closest("tr");
+
+  if (!racerRow) {
+    throw new Error(`Could not find table row for racer \"${racerName}\".`);
+  }
+
+  return racerRow;
+}
+
+async function fillCreateForm(
+  user: ReturnType<typeof userEvent.setup>,
+  input: AdminCreateRacerInput = defaultCreateInput,
+) {
+  const nameInput = screen.getByPlaceholderText("e.g. Max Verstappen");
+  const nationalityInput = screen.getByPlaceholderText("e.g. Dutch");
+  const teamInput = screen.getByPlaceholderText("e.g. Red Bull Racing");
+  const ageInput = screen.getByRole("spinbutton", { name: /age/i });
+
+  await user.clear(nameInput);
+  await user.type(nameInput, input.name);
+  await user.clear(nationalityInput);
+  await user.type(nationalityInput, input.nationality);
+  await user.clear(teamInput);
+  await user.type(teamInput, input.team);
+  await user.clear(ageInput);
+  await user.type(ageInput, String(input.age));
+
+  if (input.badgeUrl) {
+    const badgeUrlInput = screen.getByPlaceholderText("https://...");
+    await user.clear(badgeUrlInput);
+    await user.type(badgeUrlInput, input.badgeUrl);
+  }
+}
+
+async function openEditModal(user: ReturnType<typeof userEvent.setup>, racer: Racer) {
+  const racerRow = getRacerRow(racer.name);
+  await user.click(within(racerRow).getByRole("button", { name: "Edit" }));
+
+  return await screen.findByRole("dialog");
+}
+
+async function openDeleteModal(user: ReturnType<typeof userEvent.setup>, racer: Racer) {
+  const racerRow = getRacerRow(racer.name);
+  await user.click(within(racerRow).getByRole("button", { name: "Delete" }));
+
+  return await screen.findByRole("dialog");
+}
+
+function submitDialogForm(dialog: HTMLElement) {
+  const form = dialog.querySelector("form");
+
+  if (!(form instanceof HTMLFormElement)) {
+    throw new Error("Expected the dialog to contain a form.");
+  }
+
+  fireEvent.submit(form);
+}
 
 beforeEach(() => {
-  mockAdminApi.adminListUsers.mockResolvedValue([]);
+  mockAdminApi.adminListUsers.mockResolvedValue([createAdminUser()]);
   mockAdminApi.adminListRacers.mockResolvedValue([]);
-  mockAdminApi.adminCreateRacer.mockResolvedValue({
-    ...createMockRacer(),
-    joinDate: new Date(),
-    active: true,
-  });
-  mockAdminApi.adminUpdateRacer.mockResolvedValue({
-    ...createMockRacer(),
-    joinDate: new Date(),
-    active: true,
-  });
+  mockAdminApi.adminCreateRacer.mockResolvedValue(createRacer(defaultCreateInput));
+  mockAdminApi.adminUpdateRacer.mockResolvedValue(createRacer(defaultCreateInput));
   mockAdminApi.adminDeleteRacer.mockResolvedValue(undefined);
 });
 
 afterEach(() => {
   vi.clearAllMocks();
+  cleanup();
 });
 
 describe("RacerManagementTab", () => {
-  // ── Initialization & Data Fetching ─────────────────────────────────
-  describe("Initialization", () => {
-    it("fetches racers and users on mount", async () => {
-      render(<RacerManagementTab />);
-      await waitFor(() => {
-        expect(mockAdminApi.adminListRacers).toHaveBeenCalledOnce();
-        expect(mockAdminApi.adminListUsers).toHaveBeenCalledOnce();
-      });
-    });
+  // 1. Given the tab mounts when the admin page loads then it fetches users and racers and renders the two main sections.
+  // 2. Given racer loading fails when the tab mounts then it shows the racer list error state.
+  // 3. Given there are no racers when the tab loads then it shows the empty-state message.
+  // 4. Given racers exist when the tab loads then it renders each row with row-level actions.
+  // 5. Given valid create-form input when the admin submits then it sends the expected payload to adminCreateRacer.
+  // 6. Given a successful racer creation when the form submits then it shows the success toast and resets the form.
+  // 7. Given the create request fails when the form submits then it shows the submit-level error toast.
+  // 8. Given a field-level validation error when the admin edits the field then the inline error and summary clear.
+  // 9. Given an existing racer when Edit is clicked then the modal opens with the racer's current values pre-filled.
+  // 10. Given a successful edit when Save Changes is clicked then it updates the racer, closes the modal, and refetches the list.
+  // 11. Given the update request fails when Save Changes is clicked then the edit modal shows an error toast.
+  // 12. Given the admin cancels an edit when the modal is open then the modal closes without updating.
+  // 13. Given an existing racer when Delete is clicked then the confirmation modal opens with the racer's name.
+  // 14. Given deletion is confirmed when the request succeeds then it deletes the racer, closes the modal, and refetches the list.
+  // 15. Given the delete request fails when deletion is confirmed then the delete modal shows an error toast.
+  // 16. Given the admin cancels deletion when the confirm modal is open then the modal closes without deleting.
+  // 17. Given the racer list is already loaded when Refresh is clicked then it fetches racers again.
 
-    it("renders with RacerList and CreateRacerForm sections", () => {
-      render(<RacerManagementTab />);
-      expect(screen.getByRole("heading", { name: "All Racers" })).toBeInTheDocument();
-      expect(screen.getByRole("heading", { name: "Create Racer" })).toBeInTheDocument();
-    });
+  it("fetches racers and users on mount and renders the admin sections", async () => {
+    await renderTab();
 
-    it("displays racer list error when fetch fails", async () => {
-      mockAdminApi.adminListRacers.mockRejectedValue(new Error("Network error"));
-      render(<RacerManagementTab />);
-      await waitFor(() => {
-        expect(screen.getByText("Failed to load racers.")).toBeInTheDocument();
-      });
-    });
+    expect(screen.getByRole("heading", { name: "All Racers" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Create Racer" })).toBeInTheDocument();
   });
 
-  // ── Create Racer Form ──────────────────────────────────────────────
-  describe("Create Racer Form", () => {
-    it("submits racer creation with valid form data", async () => {
+  it("displays the racer list error when fetching racers fails", async () => {
+    mockAdminApi.adminListRacers.mockRejectedValueOnce(new Error("Network error"));
+
+    await renderTab();
+
+    expect(screen.getByText("Failed to load racers.")).toBeInTheDocument();
+  });
+
+  it("displays the empty state when no racers exist", async () => {
+    await renderTab();
+
+    expect(screen.getByText("No racers found. Create one below.")).toBeInTheDocument();
+  });
+
+  it("renders a row for each racer with Edit and Delete actions", async () => {
+    const firstRacer = createRacer({ id: "racer-1", name: "Lewis Hamilton" });
+    const secondRacer = createRacer({ id: "racer-2", name: "Max Verstappen" });
+    mockAdminApi.adminListRacers.mockResolvedValueOnce([firstRacer, secondRacer]);
+
+    await renderTab();
+
+    const firstRow = getRacerRow(firstRacer.name);
+    const secondRow = getRacerRow(secondRacer.name);
+
+    expect(within(firstRow).getByRole("button", { name: "Edit" })).toBeVisible();
+    expect(within(firstRow).getByRole("button", { name: "Delete" })).toBeVisible();
+    expect(within(secondRow).getByRole("button", { name: "Edit" })).toBeVisible();
+    expect(within(secondRow).getByRole("button", { name: "Delete" })).toBeVisible();
+  });
+
+  describe("Create racer", () => {
+    it("submits the expected payload when the create form is valid", async () => {
       const user = userEvent.setup();
-      const newRacer = createMockRacer({ name: "Carlos Sainz", nationality: "Spanish" });
-      mockAdminApi.adminCreateRacer.mockResolvedValue({
-        ...newRacer,
-        joinDate: new Date(),
-        active: true,
-      });
 
-      render(<RacerManagementTab />);
-
-      const nameInput = screen.getByPlaceholderText("e.g. Max Verstappen");
-      const nationalityInput = screen.getByPlaceholderText("e.g. Dutch");
-      const teamInput = screen.getByPlaceholderText("e.g. Red Bull Racing");
-
-      await user.clear(nameInput);
-      await user.type(nameInput, "Carlos Sainz");
-      await user.clear(nationalityInput);
-      await user.type(nationalityInput, "Spanish");
-      await user.clear(teamInput);
-      await user.type(teamInput, "Ferrari");
-
+      await renderTab();
+      await fillCreateForm(user, defaultCreateInput);
       await user.click(screen.getByRole("button", { name: "Create Racer" }));
 
       await waitFor(() => {
         expect(mockAdminApi.adminCreateRacer).toHaveBeenCalledWith(
-          expect.objectContaining({
-            name: "Carlos Sainz",
-            nationality: "Spanish",
-            team: "Ferrari",
-          }),
+          getExpectedPayload(defaultCreateInput),
         );
       });
     });
 
-    it("displays success message and resets form after creation", async () => {
+    it("shows a success toast and resets the form after a successful creation", async () => {
       const user = userEvent.setup();
-      mockAdminApi.adminCreateRacer.mockResolvedValue({
-        ...createMockRacer({ name: "New Racer" }),
-        joinDate: new Date(),
-        active: true,
-      });
+      const createdRacer = createRacer({ name: defaultCreateInput.name });
+      mockAdminApi.adminCreateRacer.mockResolvedValueOnce(createdRacer);
 
-      render(<RacerManagementTab />);
-
-      const nameInput = screen.getByPlaceholderText("e.g. Max Verstappen") as HTMLInputElement;
-      await user.clear(nameInput);
-      await user.type(nameInput, "New Racer");
-      await user.clear(screen.getByPlaceholderText("e.g. Dutch"));
-      await user.type(screen.getByPlaceholderText("e.g. Dutch"), "Test");
-      await user.clear(screen.getByPlaceholderText("e.g. Red Bull Racing"));
-      await user.type(screen.getByPlaceholderText("e.g. Red Bull Racing"), "Test");
-
+      await renderTab();
+      await fillCreateForm(user, defaultCreateInput);
       await user.click(screen.getByRole("button", { name: "Create Racer" }));
 
       await waitFor(() => {
-        expect(screen.getByText(/New Racer.*created successfully/)).toBeInTheDocument();
+        expect(screen.getByText("Racer created")).toBeInTheDocument();
+        expect(
+          screen.getByText(`Racer \"${createdRacer.name}\" created successfully.`),
+        ).toBeInTheDocument();
       });
 
-      expect(nameInput.value).toBe("");
+      expect(screen.getByPlaceholderText("e.g. Max Verstappen")).toHaveValue("");
     });
 
-    it("refetches racer list after successful creation", async () => {
+    it("shows a submit error toast when creation fails", async () => {
       const user = userEvent.setup();
-      mockAdminApi.adminCreateRacer.mockResolvedValue({
-        ...createMockRacer(),
-        joinDate: new Date(),
-        active: true,
-      });
+      mockAdminApi.adminCreateRacer.mockRejectedValueOnce(new Error("Racer already exists"));
 
-      render(<RacerManagementTab />);
-
-      const initialCallCount = mockAdminApi.adminListRacers.mock.calls.length;
-
-      const nameInput = screen.getByPlaceholderText("e.g. Max Verstappen");
-      await user.clear(nameInput);
-      await user.type(nameInput, "Test");
-      await user.clear(screen.getByPlaceholderText("e.g. Dutch"));
-      await user.type(screen.getByPlaceholderText("e.g. Dutch"), "Test");
-      await user.clear(screen.getByPlaceholderText("e.g. Red Bull Racing"));
-      await user.type(screen.getByPlaceholderText("e.g. Red Bull Racing"), "Test");
-
+      await renderTab();
+      await fillCreateForm(user, defaultCreateInput);
       await user.click(screen.getByRole("button", { name: "Create Racer" }));
 
       await waitFor(() => {
-        expect(mockAdminApi.adminListRacers.mock.calls.length).toBeGreaterThan(initialCallCount);
+        expect(screen.getByText("Failed to create racer")).toBeInTheDocument();
+        expect(screen.getByText("Racer already exists")).toBeInTheDocument();
       });
     });
 
-    it("displays API error message on creation failure", async () => {
+    it("clears validation errors when the user fixes the invalid field", async () => {
       const user = userEvent.setup();
-      mockAdminApi.adminCreateRacer.mockRejectedValue(
-        new Error("Racer with this name already exists"),
+
+      await renderTab();
+      await fillCreateForm(user, { ...defaultCreateInput, name: "A" });
+      await user.click(screen.getByRole("button", { name: "Create Racer" }));
+
+      await waitFor(() => {
+        expect(screen.getAllByText("Name must be at least 2 characters.")).toHaveLength(2);
+      });
+
+      await user.type(screen.getByPlaceholderText("e.g. Max Verstappen"), "b");
+
+      await waitFor(() => {
+        expect(screen.queryAllByText("Name must be at least 2 characters.")).toHaveLength(0);
+      });
+      expect(mockAdminApi.adminCreateRacer).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("Edit racer", () => {
+    it("opens the edit modal with the racer's current values", async () => {
+      const user = userEvent.setup();
+      const racer = createRacer({ id: "racer-1", name: "Lewis Hamilton" });
+      mockAdminApi.adminListRacers.mockResolvedValueOnce([racer]);
+
+      await renderTab();
+      const dialog = await openEditModal(user, racer);
+
+      expect(within(dialog).getByDisplayValue(racer.name)).toBeInTheDocument();
+      expect(within(dialog).getByDisplayValue(racer.nationality)).toBeInTheDocument();
+      expect(within(dialog).getByDisplayValue(racer.team)).toBeInTheDocument();
+    });
+
+    it("updates the racer, closes the modal, and refetches the list after a successful edit", async () => {
+      const user = userEvent.setup();
+      const racer = createRacer({ id: "racer-1", name: "Lewis Hamilton" });
+      const updatedName = "Lewis Hamilton II";
+      mockAdminApi.adminListRacers.mockResolvedValue([racer]);
+      mockAdminApi.adminUpdateRacer.mockResolvedValueOnce(
+        createRacer({ ...racer, name: updatedName }),
       );
 
-      render(<RacerManagementTab />);
+      await renderTab();
+      const initialFetchCount = mockAdminApi.adminListRacers.mock.calls.length;
+      const dialog = await openEditModal(user, racer);
+      const nameInput = within(dialog).getByPlaceholderText("e.g. Max Verstappen");
 
-      const nameInput = screen.getByPlaceholderText("e.g. Max Verstappen");
-      await user.clear(nameInput);
-      await user.type(nameInput, "Duplicate");
-      await user.clear(screen.getByPlaceholderText("e.g. Dutch"));
-      await user.type(screen.getByPlaceholderText("e.g. Dutch"), "Test");
-      await user.clear(screen.getByPlaceholderText("e.g. Red Bull Racing"));
-      await user.type(screen.getByPlaceholderText("e.g. Red Bull Racing"), "Test");
-
-      await user.click(screen.getByRole("button", { name: "Create Racer" }));
+      fireEvent.change(nameInput, { target: { value: updatedName, name: "name" } });
+      expect(within(screen.getByRole("dialog")).getByDisplayValue(updatedName)).toBeInTheDocument();
+      submitDialogForm(screen.getByRole("dialog"));
 
       await waitFor(() => {
-        expect(screen.getByText("Racer with this name already exists")).toBeInTheDocument();
+        expect(mockAdminApi.adminUpdateRacer).toHaveBeenCalledTimes(1);
+      });
+
+      const [submittedRacerId, submittedPayload] = mockAdminApi.adminUpdateRacer.mock.calls[0];
+
+      expect(submittedRacerId).toBe(racer.id);
+      expect(submittedPayload).toMatchObject({ name: updatedName });
+
+      await waitFor(() => {
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+        expect(mockAdminApi.adminListRacers.mock.calls.length).toBeGreaterThan(initialFetchCount);
       });
     });
 
-    it("clears field errors when user modifies input", async () => {
+    it("shows an error toast in the edit modal when the update fails", async () => {
       const user = userEvent.setup();
+      const racer = createRacer({ id: "racer-1", name: "Lewis Hamilton" });
+      mockAdminApi.adminListRacers.mockResolvedValueOnce([racer]);
+      mockAdminApi.adminUpdateRacer.mockRejectedValueOnce(new Error("Server error"));
 
-      render(<RacerManagementTab />);
-
-      const nameInput = screen.getByPlaceholderText("e.g. Max Verstappen") as HTMLInputElement;
-
-      await user.clear(nameInput);
-      await user.type(nameInput, "A");
-      await user.clear(screen.getByPlaceholderText("e.g. Dutch"));
-      await user.type(screen.getByPlaceholderText("e.g. Dutch"), "Test");
-      await user.clear(screen.getByPlaceholderText("e.g. Red Bull Racing"));
-      await user.type(screen.getByPlaceholderText("e.g. Red Bull Racing"), "Test");
-
-      await user.click(screen.getByRole("button", { name: "Create Racer" }));
+      await renderTab();
+      await openEditModal(user, racer);
+      submitDialogForm(screen.getByRole("dialog"));
 
       await waitFor(() => {
-        expect(screen.getByText("Name must be at least 2 characters.")).toBeInTheDocument();
-      });
-
-      await user.type(nameInput, "B");
-
-      await waitFor(() => {
-        expect(screen.queryByText("Name must be at least 2 characters.")).not.toBeInTheDocument();
+        expect(screen.getByText("Failed to update racer")).toBeInTheDocument();
+        expect(screen.getByText("Server error")).toBeInTheDocument();
       });
     });
-  });
 
-  // ── Edit Racer Modal ──────────────────────────────────────────────
-  describe("Edit Racer Modal", () => {
-    it("opens edit modal with racer data pre-filled", async () => {
+    it("closes the edit modal without updating when Cancel is clicked", async () => {
       const user = userEvent.setup();
-      const existingRacer = createRacerFixture({
-        id: "racer-1",
-        name: "Lewis Hamilton",
-        nationality: "British",
-      }) as unknown as adminApi.AdminCreateRacerInput & { id: string };
+      const racer = createRacer({ id: "racer-1", name: "Lewis Hamilton" });
+      mockAdminApi.adminListRacers.mockResolvedValueOnce([racer]);
 
-      mockAdminApi.adminListRacers.mockResolvedValue([existingRacer]);
-
-      render(<RacerManagementTab />);
-``
-      await waitFor(() => {
-        expect(screen.getByText("Lewis Hamilton")).toBeInTheDocument();
-      });
-
-      const editButton = screen.queryAllByRole("button", { name: "Edit" });
-      if (editButton.length > 0) {
-        await user.click(editButton[0]);
-        await waitFor(() => {
-          expect(
-            screen.getByRole("heading", { name: /Edit "Lewis Hamilton"/i }),
-          ).toBeInTheDocument();
-        });
-      }
-    });
-
-    it("submits racer update with modified form data", async () => {
-      const user = userEvent.setup();
-      const existingRacer = createRacerFixture({ id: "racer-1", name: "Lewis" });
-
-      mockAdminApi.adminListRacers.mockResolvedValue([existingRacer]);
-
-      render(<RacerManagementTab />);
+      await renderTab();
+      const dialog = await openEditModal(user, racer);
+      await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
 
       await waitFor(() => {
-        expect(screen.getByText("Lewis")).toBeInTheDocument();
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
       });
-
-      const editButton = screen.queryAllByRole("button", { name: "Edit" });
-      if (editButton.length > 0) {
-        await user.click(editButton[0]);
-
-        await waitFor(() => {
-          expect(screen.getByRole("heading", { name: /Edit/i })).toBeInTheDocument();
-        });
-
-        const saveButton = screen.getByRole("button", { name: "Save Changes" });
-        await user.click(saveButton);
-
-        await waitFor(() => {
-          expect(mockAdminApi.adminUpdateRacer).toHaveBeenCalledWith("racer-1", expect.any(Object));
-        });
-      }
-    });
-
-    it("refetches racer list after successful update", async () => {
-      const user = userEvent.setup();
-      const existingRacer = createRacerFixture({ id: "racer-1" });
-
-      mockAdminApi.adminListRacers.mockResolvedValue([existingRacer]);
-
-      render(<RacerManagementTab />);
-
-      await waitFor(() => {
-        expect(mockAdminApi.adminListRacers).toHaveBeenCalled();
-      });
-
-      const initialCallCount = mockAdminApi.adminListRacers.mock.calls.length;
-
-      const editButtons = screen.queryAllByRole("button", { name: "Edit" });
-      if (editButtons.length > 0) {
-        await user.click(editButtons[0]);
-
-        await waitFor(() => {
-          expect(screen.getByRole("heading", { name: /Edit/i })).toBeInTheDocument();
-        });
-
-        const saveButton = screen.getByRole("button", { name: "Save Changes" });
-        await user.click(saveButton);
-
-        await waitFor(() => {
-          expect(mockAdminApi.adminListRacers.mock.calls.length).toBeGreaterThan(initialCallCount);
-        });
-      }
-    });
-
-    it("displays error message on update failure", async () => {
-      const user = userEvent.setup();
-      const existingRacer = createRacerFixture({ id: "racer-1" });
-
-      mockAdminApi.adminListRacers.mockResolvedValue([existingRacer]);
-      mockAdminApi.adminUpdateRacer.mockRejectedValue(new Error("Update failed"));
-
-      render(<RacerManagementTab />);
-
-      await waitFor(() => {
-        expect(screen.getByText(existingRacer.name)).toBeInTheDocument();
-      });
-
-      const editButtons = screen.queryAllByRole("button", { name: "Edit" });
-      if (editButtons.length > 0) {
-        await user.click(editButtons[0]);
-
-        await waitFor(() => {
-          expect(screen.getByRole("heading", { name: /Edit/i })).toBeInTheDocument();
-        });
-
-        const saveButton = screen.getByRole("button", { name: "Save Changes" });
-        await user.click(saveButton);
-
-        await waitFor(() => {
-          expect(screen.getByText("Update failed")).toBeInTheDocument();
-        });
-      }
-    });
-
-    it("closes modal when cancelling without saving", async () => {
-      const user = userEvent.setup();
-      const existingRacer = createRacerFixture({ id: "racer-1" });
-
-      mockAdminApi.adminListRacers.mockResolvedValue([existingRacer]);
-
-      render(<RacerManagementTab />);
-
-      await waitFor(() => {
-        expect(screen.getByText(existingRacer.name)).toBeInTheDocument();
-      });
-
-      const editButtons = screen.queryAllByRole("button", { name: "Edit" });
-      if (editButtons.length > 0) {
-        await user.click(editButtons[0]);
-
-        await waitFor(() => {
-          expect(screen.getByRole("heading", { name: /Edit/i })).toBeInTheDocument();
-        });
-
-        const cancelButtons = screen.queryAllByRole("button", { name: "Cancel" });
-        const editCancelButton = cancelButtons[cancelButtons.length - 1];
-        await user.click(editCancelButton);
-
-        await waitFor(() => {
-          expect(screen.queryByRole("heading", { name: /Edit/i })).not.toBeInTheDocument();
-        });
-      }
+      expect(mockAdminApi.adminUpdateRacer).not.toHaveBeenCalled();
     });
   });
 
-  // ── Delete Racer Modal ────────────────────────────────────────────
-  describe("Delete Racer Modal", () => {
-    it("opens delete modal with confirmation message", async () => {
+  describe("Delete racer", () => {
+    it("opens the delete confirmation modal with the racer's name", async () => {
       const user = userEvent.setup();
-      const existingRacer = createRacerFixture({
-        id: "racer-1",
-        name: "Test Racer",
-      });
+      const racer = createRacer({ id: "racer-1", name: "Test Racer" });
+      mockAdminApi.adminListRacers.mockResolvedValueOnce([racer]);
 
-      mockAdminApi.adminListRacers.mockResolvedValue([existingRacer]);
+      await renderTab();
+      const dialog = await openDeleteModal(user, racer);
 
-      render(<RacerManagementTab />);
-
-      await waitFor(() => {
-        expect(screen.getByText("Test Racer")).toBeInTheDocument();
-      });
-
-      const deleteButtons = screen.queryAllByRole("button", { name: "Delete" });
-      if (deleteButtons.length > 0) {
-        await user.click(deleteButtons[0]);
-        await waitFor(() => {
-          expect(screen.getByText("Are you sure you want to delete")).toBeInTheDocument();
-        });
-      }
+      expect(within(dialog).getByText("Delete Racer")).toBeInTheDocument();
+      expect(within(dialog).getByText(/This action cannot be undone\./)).toBeInTheDocument();
+      expect(within(dialog).getByText(racer.name)).toBeInTheDocument();
     });
 
-    it("confirms deletion and refetches racer list", async () => {
+    it("deletes the racer, closes the modal, and refetches the list when deletion is confirmed", async () => {
       const user = userEvent.setup();
-      const existingRacer = createRacerFixture({ id: "racer-1", name: "Test Racer" });
+      const racer = createRacer({ id: "racer-1", name: "Test Racer" });
+      mockAdminApi.adminListRacers.mockResolvedValue([racer]);
 
-      mockAdminApi.adminListRacers.mockResolvedValue([existingRacer]);
-
-      render(<RacerManagementTab />);
+      await renderTab();
+      const initialFetchCount = mockAdminApi.adminListRacers.mock.calls.length;
+      const dialog = await openDeleteModal(user, racer);
+      await user.click(within(dialog).getByRole("button", { name: "Delete" }));
 
       await waitFor(() => {
-        expect(screen.getByText("Test Racer")).toBeInTheDocument();
+        expect(mockAdminApi.adminDeleteRacer).toHaveBeenCalledWith(racer.id);
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+        expect(mockAdminApi.adminListRacers.mock.calls.length).toBeGreaterThan(initialFetchCount);
       });
-
-      const initialCallCount = mockAdminApi.adminListRacers.mock.calls.length;
-
-      const deleteButtons = screen.queryAllByRole("button", { name: "Delete" });
-      if (deleteButtons.length > 0) {
-        await user.click(deleteButtons[0]);
-
-        await waitFor(() => {
-          expect(screen.getByText("Are you sure you want to delete")).toBeInTheDocument();
-        });
-
-        const allDeleteButtons = screen.queryAllByRole("button", { name: "Delete" });
-        const deleteConfirmButton = allDeleteButtons[allDeleteButtons.length - 1];
-        await user.click(deleteConfirmButton);
-
-        await waitFor(() => {
-          expect(mockAdminApi.adminDeleteRacer).toHaveBeenCalledWith("racer-1");
-          expect(mockAdminApi.adminListRacers.mock.calls.length).toBeGreaterThan(initialCallCount);
-        });
-      }
     });
 
-    it("displays error message on deletion failure", async () => {
+    it("shows an error toast in the delete modal when deletion fails", async () => {
       const user = userEvent.setup();
-      const existingRacer = createRacerFixture({ id: "racer-1", name: "Test Racer" });
+      const racer = createRacer({ id: "racer-1", name: "Test Racer" });
+      mockAdminApi.adminListRacers.mockResolvedValueOnce([racer]);
+      mockAdminApi.adminDeleteRacer.mockRejectedValueOnce(new Error("Conflict"));
 
-      mockAdminApi.adminListRacers.mockResolvedValue([existingRacer]);
-      mockAdminApi.adminDeleteRacer.mockRejectedValue(new Error("Cannot delete racer"));
-
-      render(<RacerManagementTab />);
+      await renderTab();
+      const dialog = await openDeleteModal(user, racer);
+      await user.click(within(dialog).getByRole("button", { name: "Delete" }));
 
       await waitFor(() => {
-        expect(screen.getByText("Test Racer")).toBeInTheDocument();
+        const visibleDialog = screen.getByRole("dialog");
+        expect(within(visibleDialog).getByText("Failed to delete racer")).toBeInTheDocument();
+        expect(within(visibleDialog).getByText("Conflict")).toBeInTheDocument();
       });
-
-      const deleteButtons = screen.queryAllByRole("button", { name: "Delete" });
-      if (deleteButtons.length > 0) {
-        await user.click(deleteButtons[0]);
-
-        await waitFor(() => {
-          expect(screen.getByText("Are you sure you want to delete")).toBeInTheDocument();
-        });
-
-        const allDeleteButtons = screen.queryAllByRole("button", { name: "Delete" });
-        const deleteConfirmButton = allDeleteButtons[allDeleteButtons.length - 1];
-        await user.click(deleteConfirmButton);
-
-        await waitFor(() => {
-          expect(screen.getByText("Cannot delete racer")).toBeInTheDocument();
-        });
-      }
     });
 
-    it("closes modal when cancelling deletion", async () => {
+    it("closes the delete modal without deleting when Cancel is clicked", async () => {
       const user = userEvent.setup();
-      const existingRacer = createRacerFixture({ id: "racer-1", name: "Test Racer" });
+      const racer = createRacer({ id: "racer-1", name: "Test Racer" });
+      mockAdminApi.adminListRacers.mockResolvedValueOnce([racer]);
 
-      mockAdminApi.adminListRacers.mockResolvedValue([existingRacer]);
-
-      render(<RacerManagementTab />);
+      await renderTab();
+      const dialog = await openDeleteModal(user, racer);
+      await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
 
       await waitFor(() => {
-        expect(screen.getByText("Test Racer")).toBeInTheDocument();
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
       });
-
-      const deleteButtons = screen.queryAllByRole("button", { name: "Delete" });
-      if (deleteButtons.length > 0) {
-        await user.click(deleteButtons[0]);
-
-        await waitFor(() => {
-          expect(screen.getByText("Are you sure you want to delete")).toBeInTheDocument();
-        });
-
-        const cancelButtons = screen.queryAllByRole("button", { name: "Cancel" });
-        await user.click(cancelButtons[cancelButtons.length - 1]);
-
-        await waitFor(() => {
-          expect(screen.queryByText("Are you sure you want to delete")).not.toBeInTheDocument();
-        });
-      }
+      expect(mockAdminApi.adminDeleteRacer).not.toHaveBeenCalled();
     });
   });
 
-  // ── Refresh Racer List ────────────────────────────────────────────
-  describe("Refresh Racer List", () => {
-    it("refetches racers when refresh button is clicked", async () => {
-      const user = userEvent.setup();
-      mockAdminApi.adminListRacers.mockResolvedValue([createRacerFixture({ id: "racer-1" })]);
+  it("refetches racers when Refresh is clicked", async () => {
+    const user = userEvent.setup();
+    const racer = createRacer({ id: "racer-1", name: "Lewis Hamilton" });
+    mockAdminApi.adminListRacers.mockResolvedValue([racer]);
 
-      render(<RacerManagementTab />);
+    await renderTab();
+    const initialFetchCount = mockAdminApi.adminListRacers.mock.calls.length;
 
-      await waitFor(() => {
-        expect(mockAdminApi.adminListRacers).toHaveBeenCalled();
-      });
+    await user.click(screen.getByRole("button", { name: "Refresh" }));
 
-      const initialCallCount = mockAdminApi.adminListRacers.mock.calls.length;
-
-      const refreshButton = screen.getByRole("button", { name: "Refresh" });
-      await user.click(refreshButton);
-
-      await waitFor(() => {
-        expect(mockAdminApi.adminListRacers.mock.calls.length).toBeGreaterThan(initialCallCount);
-      });
+    await waitFor(() => {
+      expect(mockAdminApi.adminListRacers).toHaveBeenCalledTimes(initialFetchCount + 1);
     });
   });
 });
