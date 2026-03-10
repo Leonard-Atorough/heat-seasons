@@ -130,7 +130,7 @@ export const racers = {
  */
 export function createRacerWithStatsList(
   count: number,
-  overrides: Partial<RacerWithStats> = {},
+  overrides: Partial<RacerWithStats>[] = [],
 ): RacerWithStats[] {
   const teams = [
     { name: "Mercedes AMG", color: "#00d2be" },
@@ -150,7 +150,7 @@ export function createRacerWithStatsList(
       teamColor: team.color,
       nationality: `Country${i + 1}`,
       age: 25 + (i % 15),
-      ...overrides,
+      ...overrides[i],
     });
   });
 }
@@ -162,7 +162,7 @@ export function createRacerWithStatsList(
  */
 export function createRacerList(
   count: number,
-  overrides: Partial<Racer> = {},
+  overrides: Partial<Racer>[] = [],
 ): Racer[] {
   const teams = [
     { name: "Mercedes AMG", color: "#00d2be" },
@@ -182,7 +182,7 @@ export function createRacerList(
       teamColor: team.color,
       nationality: `Country${i + 1}`,
       age: 25 + (i % 15),
-      ...overrides,
+      ...overrides[i],
     });
   });
 }

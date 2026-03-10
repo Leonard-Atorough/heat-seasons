@@ -1,19 +1,3 @@
-/*
-BUTTON TEST PLAN:
-
-- Render a button successfully
-- Render a button with custom className and style
-- Render a button with different variants
-- Handle onClick events correctly
-- Handle disabled state correctly
-
-TEST CASES:
-1. Renders a button with default props
-2. Renders a button with custom className and style
-3. Renders a button with different variants
-4. Calls onClick handler when button is clicked
-5. Does not call onClick handler when button is disabled
-*/
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Button, ButtonProps } from "src/components/common";
@@ -29,7 +13,7 @@ const defaultProps: ButtonProps = {
 
 describe("Button Component", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let onClick: any;
+  let onClick: typeof defaultProps.onClick;
 
   beforeEach(() => {
     onClick = vi.fn();
