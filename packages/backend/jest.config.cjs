@@ -5,6 +5,9 @@ module.exports = {
   roots: ["<rootDir>/src", "<rootDir>/__tests__"],
   testMatch: ["**/__tests__/**/*.test.ts"],
   moduleNameMapper: {
+    "^shared$": "<rootDir>/../shared/src/index.ts",
+    "^shared/(.*)$": "<rootDir>/../shared/src/$1",
+    "^src/(.*)\\.js$": "<rootDir>/src/$1",
     "^src/(.*)$": "<rootDir>/src/$1",
   },
   collectCoverageFrom: [

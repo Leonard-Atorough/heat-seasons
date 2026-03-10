@@ -1,11 +1,18 @@
 import { SeasonEntity } from "src/domain/entities";
-import { PrismaStorageAdapter } from "../PrismaStorageAdapter";
+import { StorageAdapter } from "../StorageAdapter";
 import { ISeasonRepository } from "src/domain/repositories";
 import { SeasonStatus, SeasonParticipant } from "shared";
 import { SeasonMapper } from "src/application/mappers";
 
+interface PersistedSeasonParticipant {
+  id: string;
+  seasonId: string;
+  racerId: string;
+  registeredAt: Date;
+}
+
 export class SeasonRepository implements ISeasonRepository {
-  constructor(private storageAdapter: PrismaStorageAdapter) {}
+  constructor(private storageAdapter: StorageAdapter) {}
 
   async findAll(filters?: { status?: SeasonStatus }): Promise<SeasonEntity[]> {
     try {
@@ -53,9 +60,11 @@ export class SeasonRepository implements ISeasonRepository {
   }
 
   async addParticipant(seasonId: string, racerId: string): Promise<SeasonParticipant> {
-    const result = await this.storageAdapter.getClient().seasonParticipant.create({
-      data: { seasonId, racerId },
-    });
+    const result = await this.storageAdapter.create<PersistedSeasonParticipant>(
+      "seasonParticipants",
+      { seasonId, racerId, registeredAt: new Date() },
+    );
+
     return {
       seasonId: result.seasonId,
       racerId: result.racerId,
@@ -64,19 +73,37 @@ export class SeasonRepository implements ISeasonRepository {
   }
 
   async removeParticipant(seasonId: string, racerId: string): Promise<void> {
-    await this.storageAdapter.getClient().seasonParticipant.delete({
-      where: { seasonId_racerId: { seasonId, racerId } },
-    });
+    const participant = await this.findParticipantRecord(seasonId, racerId);
+
+    if (!participant) {
+      throw new Error("Season participant not found");
+    }
+
+    await this.storageAdapter.delete("seasonParticipants", participant.id);
   }
 
   async findParticipants(seasonId: string): Promise<SeasonParticipant[]> {
-    const results = await this.storageAdapter.getClient().seasonParticipant.findMany({
-      where: { seasonId },
-    });
+    const results = await this.storageAdapter.findAll<PersistedSeasonParticipant>(
+      "seasonParticipants",
+      { seasonId },
+    );
+
     return results.map((r) => ({
       seasonId: r.seasonId,
       racerId: r.racerId,
       registeredAt: r.registeredAt,
     }));
+  }
+
+  private async findParticipantRecord(
+    seasonId: string,
+    racerId: string,
+  ): Promise<PersistedSeasonParticipant | null> {
+    const participants = await this.storageAdapter.findAll<PersistedSeasonParticipant>(
+      "seasonParticipants",
+      { seasonId, racerId },
+    );
+
+    return participants[0] ?? null;
   }
 }

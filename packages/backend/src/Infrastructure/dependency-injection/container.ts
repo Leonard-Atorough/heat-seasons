@@ -1,4 +1,4 @@
-import { PrismaStorageAdapter, StorageAdapter } from "../persistence";
+import type { StorageAdapter } from "../persistence/StorageAdapter";
 import { ServiceLocator } from "./serviceLocator";
 import {
   AuthRepository,
@@ -14,49 +14,110 @@ import {
   IRacerRepository,
   ISeasonRepository,
 } from "src/domain/repositories";
-import { AuthController, AuthService, IAuthService } from "src/api/auth";
-import { AdminController } from "src/api/admin";
-import { RacerController, RacerService, IRacerService } from "src/api/racer";
-import { RaceController, RaceService, IRaceService } from "src/api/race";
-import { SeasonController, SeasonService, ISeasonService } from "src/api/season";
-import { BootstrapController, BootstrapService, IBootstrapService } from "src/api/bootstrap";
+import { AuthController } from "src/api/auth/auth.controller";
+import { AuthService } from "src/api/auth/auth.service";
+import { IAuthService } from "src/api/auth/auth.service.interface";
+import { AdminController } from "src/api/admin/admin.controller";
+import { RacerController } from "src/api/racer/racer.controller";
+import { RacerService } from "src/api/racer/racer.service";
+import { IRacerService } from "src/api/racer/racer.service.interface";
+import { RaceController } from "src/api/race/race.controller";
+import { RaceService } from "src/api/race/race.service";
+import { IRaceService } from "src/api/race/race.service.interface";
+import { SeasonController } from "src/api/season/season.controller";
+import { SeasonService } from "src/api/season/season.service";
+import { ISeasonService } from "src/api/season/season.service.interface";
+import { BootstrapController } from "src/api/bootstrap/bootstrap.controller";
+import { BootstrapService } from "src/api/bootstrap/bootstrap.service";
+import { IBootstrapService } from "src/api/bootstrap/bootstrap.service.interface";
+
+type RepositoryName =
+  | "AuthRepository"
+  | "RacerRepository"
+  | "RaceRepository"
+  | "SeasonRepository"
+  | "BootstrapRepository";
+
+type ServiceName =
+  | "AuthService"
+  | "RacerService"
+  | "RaceService"
+  | "SeasonService"
+  | "BootstrapService";
+
+export interface ContainerOptions {
+  storageAdapter?: StorageAdapter;
+  serviceLocator?: ServiceLocator;
+}
 
 class Container {
   private static instance: Container | null = null;
-  private storageAdapter: StorageAdapter;
-  private repositories: Map<string, any> = new Map();
+  private static defaultStorageAdapterFactory: (() => StorageAdapter) | null = null;
+  private readonly storageAdapter: StorageAdapter;
+  private readonly repositories = new Map<RepositoryName, unknown>();
+  private readonly serviceLocator: ServiceLocator;
 
-  serviceLocator: ServiceLocator = new ServiceLocator();
+  private constructor(options: ContainerOptions = {}) {
+    this.storageAdapter = options.storageAdapter ?? Container.createDefaultStorageAdapter();
+    this.serviceLocator = options.serviceLocator ?? new ServiceLocator();
+    this.registerDefaultServices();
+  }
 
-  private constructor() {
-    this.storageAdapter = new PrismaStorageAdapter();
+  public static configureDefaultStorageAdapter(factory: () => StorageAdapter): void {
+    Container.defaultStorageAdapterFactory = factory;
+  }
 
-    // Register services in the service locator
+  public static create(options: ContainerOptions = {}): Container {
+    return new Container(options);
+  }
+
+  public static setInstance(container: Container): void {
+    Container.instance = container;
+  }
+
+  public static resetInstance(): void {
+    Container.instance = null;
+  }
+
+  private static createDefaultStorageAdapter(): StorageAdapter {
+    if (!Container.defaultStorageAdapterFactory) {
+      throw new Error(
+        "Default storage adapter is not configured. " +
+          "Call Container.configureDefaultStorageAdapter() before using Container.getInstance().",
+      );
+    }
+
+    return Container.defaultStorageAdapterFactory();
+  }
+
+  private registerDefaultServices(): void {
+    this.serviceLocator.clear();
+
     const authService = new AuthService(this.getRepository<IAuthRepository>("AuthRepository"));
-    this.serviceLocator.register("AuthService", authService);
+    this.registerService("AuthService", authService);
 
     const racerService = new RacerService(
       this.getRepository<IRacerRepository>("RacerRepository"),
       this.getRepository<IAuthRepository>("AuthRepository"),
     );
-    this.serviceLocator.register("RacerService", racerService);
+    this.registerService("RacerService", racerService);
 
     const raceService = new RaceService(
       this.getRepository<IRaceRepository>("RaceRepository"),
       this.getRepository<ISeasonRepository>("SeasonRepository"),
     );
-    this.serviceLocator.register("RaceService", raceService);
+    this.registerService("RaceService", raceService);
 
     const seasonService = new SeasonService(
       this.getRepository<ISeasonRepository>("SeasonRepository"),
     );
-    this.serviceLocator.register("SeasonService", seasonService);
+    this.registerService("SeasonService", seasonService);
 
     const bootstrapService = new BootstrapService(
       this.getRepository<IBootstrapRepository>("BootstrapRepository"),
       this.getRepository<IAuthRepository>("AuthRepository"),
     );
-    this.serviceLocator.register("BootstrapService", bootstrapService);
+    this.registerService("BootstrapService", bootstrapService);
   }
 
   public static getInstance(): Container {
@@ -77,7 +138,7 @@ class Container {
    * @param name - The name of the service
    * @param service - The class or interface of the service
    */
-  public registerService<T>(name: string, service: T): void {
+  public registerService<T>(name: ServiceName, service: T): void {
     this.serviceLocator.register(name, service);
   }
 
@@ -85,39 +146,55 @@ class Container {
     return this.storageAdapter;
   }
 
+  public getAuthService(): IAuthService {
+    return this.getService<IAuthService>("AuthService");
+  }
+
+  public getRacerService(): IRacerService {
+    return this.getService<IRacerService>("RacerService");
+  }
+
+  public getRaceService(): IRaceService {
+    return this.getService<IRaceService>("RaceService");
+  }
+
+  public getSeasonService(): ISeasonService {
+    return this.getService<ISeasonService>("SeasonService");
+  }
+
+  public getBootstrapService(): IBootstrapService {
+    return this.getService<IBootstrapService>("BootstrapService");
+  }
+
   createAuthController(): AuthController {
-    // Use the service locator to get the AuthService instance instead
-    const service = this.serviceLocator.get<IAuthService>("AuthService");
-    return new AuthController(service);
+    return new AuthController(this.getAuthService());
   }
 
   createRacerController(): RacerController {
-    const service = this.serviceLocator.get<IRacerService>("RacerService");
-    return new RacerController(service);
+    return new RacerController(this.getRacerService());
   }
 
   createRaceController(): RaceController {
-    const service = this.serviceLocator.get<IRaceService>("RaceService");
-    return new RaceController(service);
+    return new RaceController(this.getRaceService());
   }
 
   createSeasonController(): SeasonController {
-    const service = this.serviceLocator.get<ISeasonService>("SeasonService");
-    return new SeasonController(service);
+    return new SeasonController(this.getSeasonService());
   }
 
   createAdminController(): AdminController {
-    const authService = this.serviceLocator.get<IAuthService>("AuthService");
-    const racerService = this.serviceLocator.get<IRacerService>("RacerService");
-    return new AdminController(authService, racerService);
+    return new AdminController(this.getAuthService(), this.getRacerService());
   }
 
   createBootstrapController(): BootstrapController {
-    const service = this.serviceLocator.get<IBootstrapService>("BootstrapService");
-    return new BootstrapController(service);
+    return new BootstrapController(this.getBootstrapService());
   }
 
-  private createRepository<T>(name: string): T {
+  private getService<T>(name: ServiceName): T {
+    return this.serviceLocator.get<T>(name);
+  }
+
+  private createRepository<T>(name: RepositoryName): T {
     switch (name) {
       case "AuthRepository":
         return new AuthRepository(this.storageAdapter) as unknown as T;
@@ -126,7 +203,7 @@ class Container {
       case "RaceRepository":
         return new RaceRepository(this.storageAdapter) as unknown as T;
       case "SeasonRepository":
-        return new SeasonRepository(this.storageAdapter as PrismaStorageAdapter) as unknown as T;
+        return new SeasonRepository(this.storageAdapter) as unknown as T;
       case "BootstrapRepository":
         return new BootstrapRepository(this.storageAdapter) as unknown as T;
       default:
@@ -134,15 +211,14 @@ class Container {
     }
   }
 
-  private getRepository<T>(name: string): T {
+  private getRepository<T>(name: RepositoryName): T {
     if (!this.repositories.has(name)) {
       this.repositories.set(name, this.createRepository<T>(name));
     }
     return this.repositories.get(name) as T;
   }
 
-  // Public method to access repositories from outside
-  public getRepositoryInstance<T>(name: string): T {
+  public getRepositoryInstance<T>(name: RepositoryName): T {
     return this.getRepository<T>(name);
   }
 }

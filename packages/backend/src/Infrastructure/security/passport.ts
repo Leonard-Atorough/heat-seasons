@@ -1,7 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Container } from "../dependency-injection/container";
-import { IAuthService } from "src/api/auth/auth.service.interface";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } from "../../env";
 
 passport.use(
@@ -14,7 +13,7 @@ passport.use(
     async (_accessToken, _refreshToken, profile, done) => {
       try {
         const container = Container.getInstance();
-        const authService = container.serviceLocator.get("AuthService") as IAuthService;
+        const authService = container.getAuthService();
 
         const user = await authService.upsertUser({
           googleId: profile.id,
@@ -39,7 +38,7 @@ passport.serializeUser((user: any, done) => {
 passport.deserializeUser(async (id: string, done) => {
   try {
     const container = Container.getInstance();
-    const authService = container.serviceLocator.get("AuthService") as IAuthService;
+    const authService = container.getAuthService();
     const user = await authService.getMe(id);
     done(null, user);
   } catch (error) {

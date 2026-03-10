@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { JwtService } from "../../security/jwt";
 import { ApiResponse } from "shared";
 import { Container } from "../../dependency-injection/container";
-import { IAuthService } from "../../../api/auth/auth.service.interface";
 
 export async function authMiddleware(
   req: Request,
@@ -38,7 +37,7 @@ export async function authMiddleware(
 
     // Check if token is valid (application/business logic)
     const container = Container.getInstance();
-    const authService = container.serviceLocator.get<IAuthService>("AuthService");
+    const authService = container.getAuthService();
     const isValid = await authService.isTokenValid(token);
     if (!isValid) {
       res.status(401).json({

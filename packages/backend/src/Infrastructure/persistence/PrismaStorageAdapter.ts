@@ -99,6 +99,12 @@ export class PrismaStorageAdapter implements StorageAdapter {
   // --------------------------------------------------------------- StorageAdapter
 
   async findById<T>(collection: string, id: string): Promise<T | null> {
+    if (collection === "seasonParticipants") {
+      const where = this.parseSeasonParticipantId(id);
+      const participant = await this.client.seasonParticipant.findUnique({ where });
+      return participant ? ({ ...participant, id } as T) : null;
+    }
+
     if (collection === "races") {
       const race = await this.client.race.findUnique({
         where: { id },
@@ -111,6 +117,16 @@ export class PrismaStorageAdapter implements StorageAdapter {
   }
 
   async findAll<T>(collection: string, filter?: Record<string, unknown>): Promise<T[]> {
+    if (collection === "seasonParticipants") {
+      const participants = await this.client.seasonParticipant.findMany({
+        where: filter ?? {},
+      });
+      return participants.map((participant) => ({
+        ...participant,
+        id: this.buildSeasonParticipantId(participant.seasonId, participant.racerId),
+      })) as T[];
+    }
+
     if (collection === "races") {
       const races = await this.client.race.findMany({
         where: filter,
@@ -125,6 +141,16 @@ export class PrismaStorageAdapter implements StorageAdapter {
   async create<T>(collection: string, data: Omit<T, "id">): Promise<T> {
     const { id, results, ...rest } = data as any;
     const cleanRest = this.clean(rest);
+
+    if (collection === "seasonParticipants") {
+      const participant = await this.client.seasonParticipant.create({
+        data: cleanRest as any,
+      });
+      return {
+        ...participant,
+        id: this.buildSeasonParticipantId(participant.seasonId, participant.racerId),
+      } as T;
+    }
 
     if (collection === "races") {
       const race = await this.client.race.create({
@@ -176,10 +202,26 @@ export class PrismaStorageAdapter implements StorageAdapter {
   }
 
   async delete(collection: string, id: string): Promise<void> {
+    if (collection === "seasonParticipants") {
+      await this.client.seasonParticipant.delete({
+        where: this.parseSeasonParticipantId(id),
+      });
+      return;
+    }
+
     await this.model(collection).delete({ where: { id } });
   }
 
   async exists(collection: string, id: string): Promise<boolean> {
+    if (collection === "seasonParticipants") {
+      const where = this.parseSeasonParticipantId(id);
+      const participant = await this.client.seasonParticipant.findUnique({
+        where,
+        select: { seasonId: true, racerId: true },
+      });
+      return participant !== null;
+    }
+
     const record = await this.model(collection).findUnique({
       where: { id },
       select: { id: true },
@@ -193,5 +235,29 @@ export class PrismaStorageAdapter implements StorageAdapter {
 
   getClient(): PrismaClient {
     return this.client;
+  }
+
+  private buildSeasonParticipantId(seasonId: string, racerId: string): string {
+    return `${seasonId}:${racerId}`;
+  }
+
+  private parseSeasonParticipantId(id: string): {
+    seasonId_racerId: {
+      seasonId: string;
+      racerId: string;
+    };
+  } {
+    const [seasonId, racerId] = id.split(":");
+
+    if (!seasonId || !racerId) {
+      throw new Error(`Invalid season participant id: ${id}`);
+    }
+
+    return {
+      seasonId_racerId: {
+        seasonId,
+        racerId,
+      },
+    };
   }
 }
