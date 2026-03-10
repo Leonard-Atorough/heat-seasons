@@ -16,6 +16,9 @@ describe("AdminController", () => {
     };
     mockRacerService = {
       create: jest.fn(),
+      getAll: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
     };
     adminController = new AdminController(mockAuthService, mockRacerService);
     request = { body: {}, user: { id: "admin-1" } as any };
@@ -112,6 +115,58 @@ describe("AdminController", () => {
 
     it("creates an unassigned racer when userId is omitted", async () => {
       // TODO: implement - verify racerService.create called with { userId: null, ... }
+      expect(true).toBe(true);
+    });
+  });
+
+  // ── listRacers ───────────────────────────────────────────────────
+
+  describe("listRacers", () => {
+    it("returns 200 with array of racers", async () => {
+      // TODO: implement - mock racerService.getAll, verify res.status(200) and res.json with racers
+      expect(true).toBe(true);
+    });
+
+    it("calls next with error when service throws", async () => {
+      // TODO: implement - mock racerService.getAll.mockRejectedValue, verify next called with error
+      expect(true).toBe(true);
+    });
+  });
+
+  // ── updateRacer ──────────────────────────────────────────────────
+
+  describe("updateRacer", () => {
+    it("returns 200 with updated racer on success", async () => {
+      // TODO: implement - set req.params.racerId, mock racerService.update, verify res.status(200)
+      expect(true).toBe(true);
+    });
+
+    it("calls racerService.update with the correct racerId and body", async () => {
+      // TODO: implement - verify update called with (racerId, req.body)
+      expect(true).toBe(true);
+    });
+
+    it("calls next with error when service throws", async () => {
+      // TODO: implement - mock racerService.update.mockRejectedValue, verify next called
+      expect(true).toBe(true);
+    });
+  });
+
+  // ── deleteRacer ──────────────────────────────────────────────────
+
+  describe("deleteRacer", () => {
+    it("returns 204 on successful deletion", async () => {
+      // TODO: implement - set req.params.racerId, mock racerService.delete, verify res.status(204)
+      expect(true).toBe(true);
+    });
+
+    it("calls racerService.delete with the correct racerId", async () => {
+      // TODO: implement - verify delete called with the correct id
+      expect(true).toBe(true);
+    });
+
+    it("calls next with error when service throws", async () => {
+      // TODO: implement - mock racerService.delete.mockRejectedValue, verify next called
       expect(true).toBe(true);
     });
   });

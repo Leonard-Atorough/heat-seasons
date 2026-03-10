@@ -32,8 +32,11 @@ export class RacerService implements IRacerService {
 
   async create(data: RacerCreateInput): Promise<Racer> {
     if (!data.userId) {
-      throw new BadRequestError("User ID is required");
+      const savedRacer = await this.racerRepository.create(RacerMapper.toDomain(data));
+      return RacerMapper.toResponse(savedRacer);
+      // If no userId is provided, we create the racer without linking to a user.
     }
+
     // NOTE: This approach breaks invariance but for this project is fine.
     // Refactor later to use DDD unit of work pattern or repository pattern with transactions.
     const userAggregate = await this.getUserAggregate(data.userId);

@@ -70,4 +70,48 @@ adminRouter.post("/racers", adminLimiter, (req: Request, res: Response, next: Ne
   adminController.createRacer(req, res, next);
 });
 
+/**
+ * GET /api/admin/racers
+ * List all racers (admin only)
+ */
+adminRouter.get("/racers", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+  req.log.info({ userId: (req.user as { id: string })?.id }, "Admin listing all racers");
+  const adminController = Container.getInstance().createAdminController();
+  adminController.listRacers(req, res, next);
+});
+
+/**
+ * PUT /api/admin/racers/:racerId
+ * Update a racer (admin only)
+ */
+adminRouter.put(
+  "/racers/:racerId",
+  adminLimiter,
+  (req: Request, res: Response, next: NextFunction) => {
+    req.log.info(
+      { adminId: (req.user as { id: string })?.id, racerId: req.params.racerId },
+      "Admin updating racer",
+    );
+    const adminController = Container.getInstance().createAdminController();
+    adminController.updateRacer(req, res, next);
+  },
+);
+
+/**
+ * DELETE /api/admin/racers/:racerId
+ * Delete a racer (admin only)
+ */
+adminRouter.delete(
+  "/racers/:racerId",
+  adminLimiter,
+  (req: Request, res: Response, next: NextFunction) => {
+    req.log.info(
+      { adminId: (req.user as { id: string })?.id, racerId: req.params.racerId },
+      "Admin deleting racer",
+    );
+    const adminController = Container.getInstance().createAdminController();
+    adminController.deleteRacer(req, res, next);
+  },
+);
+
 export { adminRouter };

@@ -4,7 +4,7 @@ import { ApiResponse } from "shared";
 import { IAuthService } from "../auth/auth.service.interface";
 import { IRacerService } from "../racer/racer.service.interface";
 import { UserResponse } from "src/application/dtos/user.dto";
-import { Racer } from "shared";
+import { Racer, RacerWithStats } from "shared";
 
 /**
  * Admin-only controller for managing user roles and racer creation
@@ -170,6 +170,70 @@ export class AdminController {
         data: newRacer,
       };
       res.status(201).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * List all racers (admin only)
+   */
+  async listRacers(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const racers = await this.racerService.getAll();
+
+      const response: ApiResponse<RacerWithStats[]> = {
+        success: true,
+        status: 200,
+        statusText: "OK",
+        timestamp: new Date(),
+        data: racers,
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Update a racer (admin only)
+   * Params: racerId
+   */
+  async updateRacer(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { racerId } = req.params;
+      const updatedRacer = await this.racerService.update(racerId, req.body);
+
+      const response: ApiResponse<Racer> = {
+        success: true,
+        status: 200,
+        statusText: "OK",
+        timestamp: new Date(),
+        data: updatedRacer,
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Delete a racer (admin only)
+   * Params: racerId
+   */
+  async deleteRacer(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { racerId } = req.params;
+      await this.racerService.delete(racerId);
+
+      const response: ApiResponse<null> = {
+        success: true,
+        status: 204,
+        statusText: "No Content",
+        timestamp: new Date(),
+        data: null,
+      };
+      res.status(204).json(response);
     } catch (error) {
       next(error);
     }
