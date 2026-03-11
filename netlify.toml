@@ -1,8 +1,8 @@
 [build]
-  command = "npm run build"
+  command = "npm run build:frontend"
   publish = "packages/frontend/dist"
   base = "/"
-  environment = { NODE_VERSION = "22" }
+  environment = { NODE_VERSION = "22", NODE_ENV = "production", VITE_API_URL = "$VITE_API_URL" }
 
 # SPA Routing: redirect all non-file routes to index.html
 [[redirects]]
