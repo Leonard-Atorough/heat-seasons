@@ -18,4 +18,4 @@ export {
   UnauthorisedError,
   ValidationError,
   WriteError,
-} from "./application";
+} from "./application.js";

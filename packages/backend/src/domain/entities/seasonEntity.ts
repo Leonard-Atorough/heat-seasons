@@ -1,5 +1,5 @@
 import { SeasonStatus } from "shared";
-import { EntityRoot } from "./entityRoot";
+import { EntityRoot } from "./entityRoot.js";
 
 export class SeasonEntity extends EntityRoot {
   private constructor(

@@ -1,5 +1,5 @@
 import { Racer } from "shared";
-import { RacerEntity } from "../../domain/entities/racerEntity";
+import { RacerEntity } from "../../domain/entities/racerEntity.js";
 import { RacerCreateInput } from "src/application/dtos";
 
 export class RacerMapper {

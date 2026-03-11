@@ -1,5 +1,5 @@
-export { BootstrapEntity } from "./bootstrapEntity";
-export { RaceEntity } from "./raceEntity";
-export { RacerEntity } from "./racerEntity";
-export { SeasonEntity } from "./seasonEntity";
-export { UserEntity } from "./userEntity";
+export { BootstrapEntity } from "./bootstrapEntity.js";
+export { RaceEntity } from "./raceEntity.js";
+export { RacerEntity } from "./racerEntity.js";
+export { SeasonEntity } from "./seasonEntity.js";
+export { UserEntity } from "./userEntity.js";

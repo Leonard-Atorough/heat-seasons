@@ -1,8 +1,8 @@
-import { StorageAdapter } from "../StorageAdapter";
+import { StorageAdapter } from "../StorageAdapter.js";
 import { IRaceRepository } from "src/domain/repositories";
 import { RaceEntity } from "src/domain/entities";
 import { RaceMapper } from "src/application/mappers";
-import { wrapWriteFailure } from "./repositoryWriteFailure";
+import { wrapWriteFailure } from "./repositoryWriteFailure.js";
 
 export class RaceRepository implements IRaceRepository {
   constructor(private storageAdapter: StorageAdapter) {}

@@ -1,7 +1,7 @@
 import { authMiddleware, requireRole } from "src/Infrastructure/http/middleware";
 import { Request, Response, NextFunction, Router } from "express";
 import { Container } from "src/Infrastructure/dependency-injection/container";
-import { RaceController } from "./race.controller";
+import { RaceController } from "./race.controller.js";
 
 export interface CreateRaceRouterOptions {
   raceController?: RaceController;

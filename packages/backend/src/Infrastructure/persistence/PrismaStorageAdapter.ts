@@ -1,7 +1,7 @@
-import { PrismaClient } from "../../generated/prisma/client/client";
+import { PrismaClient } from "../../generated/prisma/client/client.js";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-import { DATABASE_URL } from "../../env";
-import { StorageAdapter } from "./StorageAdapter";
+import { DATABASE_URL } from "../../env.js";
+import { StorageAdapter } from "./StorageAdapter.js";
 
 /**
  * Maps the generic collection names used throughout the application to

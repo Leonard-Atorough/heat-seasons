@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Container } from "../dependency-injection/container";
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } from "../../env";
+import { Container } from "../dependency-injection/container.js";
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } from "../../env.js";
 
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
   passport.use(

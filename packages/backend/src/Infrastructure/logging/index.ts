@@ -1,2 +1,2 @@
-export { logger } from "./logger";
-export { requestLogger } from "./requestLogger";
+export { logger } from "./logger.js";
+export { requestLogger } from "./requestLogger.js";

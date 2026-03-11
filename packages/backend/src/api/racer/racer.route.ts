@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 import { Container } from "src/Infrastructure/dependency-injection/container";
 import { authMiddleware, requireRole } from "src/Infrastructure/http/middleware";
-import { RacerController } from "./racer.controller";
+import { RacerController } from "./racer.controller.js";
 
 export interface CreateRacerRouterOptions {
   racerController?: RacerController;

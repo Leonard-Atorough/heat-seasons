@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { UserRole } from "shared";
 import { ApiResponse } from "shared";
-import { TokenPayload } from "../../security/jwt";
+import { TokenPayload } from "../../security/jwt.js";
 
 /**
  * Middleware factory to require specific user roles

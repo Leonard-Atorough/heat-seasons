@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { Container } from "../../Infrastructure/dependency-injection/container";
+import { Container } from "../../Infrastructure/dependency-injection/container.js";
 import { authMiddleware, requireRole } from "src/Infrastructure/http/middleware";
-import { SeasonController } from "./season.controller";
+import { SeasonController } from "./season.controller.js";
 
 export interface CreateSeasonRouterOptions {
   seasonController?: SeasonController;

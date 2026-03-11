@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, Router } from "express";
 import rateLimit from "express-rate-limit";
 import { Container } from "src/Infrastructure/dependency-injection/container";
 import { authMiddleware, requireRole } from "src/Infrastructure/http/middleware";
-import { AdminController } from "./admin.controller";
+import { AdminController } from "./admin.controller.js";
 
 const adminLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

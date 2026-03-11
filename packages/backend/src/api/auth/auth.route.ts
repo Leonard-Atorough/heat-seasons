@@ -3,7 +3,7 @@ import rateLimit from "express-rate-limit";
 import passport from "passport";
 import { Container } from "src/Infrastructure/dependency-injection/container";
 import { authMiddleware } from "src/Infrastructure/http/middleware";
-import { AuthController } from "./auth.controller";
+import { AuthController } from "./auth.controller.js";
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

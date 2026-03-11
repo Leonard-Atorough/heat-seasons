@@ -1,3 +1,3 @@
-export type { StorageAdapter } from "./StorageAdapter";
-export { JsonStorageAdapter } from "./JsonStorageAdapter";
-export { PrismaStorageAdapter } from "./PrismaStorageAdapter";
+export type { StorageAdapter } from "./StorageAdapter.js";
+export { JsonStorageAdapter } from "./JsonStorageAdapter.js";
+export { PrismaStorageAdapter } from "./PrismaStorageAdapter.js";

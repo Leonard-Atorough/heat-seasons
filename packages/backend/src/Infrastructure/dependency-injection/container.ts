@@ -1,5 +1,5 @@
-import type { StorageAdapter } from "../persistence/StorageAdapter";
-import { ServiceLocator } from "./serviceLocator";
+import type { StorageAdapter } from "../persistence/StorageAdapter.js";
+import { ServiceLocator } from "./serviceLocator.js";
 import {
   AuthRepository,
   RacerRepository,

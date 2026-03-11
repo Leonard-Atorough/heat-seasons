@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { IAuthService } from "./auth.service.interface";
+import { IAuthService } from "./auth.service.interface.js";
 import { TokenPayload } from "src/Infrastructure/security/jwt";
 import { UserResponse } from "src/application/dtos/user.dto";
 import { ApiResponse } from "shared";
-import { FRONTEND_URL, COOKIE_SECURE, COOKIE_DOMAIN } from "../../env";
+import { FRONTEND_URL, COOKIE_SECURE, COOKIE_DOMAIN } from "../../env.js";
 
 export class AuthController {
   constructor(private authService: IAuthService) {}

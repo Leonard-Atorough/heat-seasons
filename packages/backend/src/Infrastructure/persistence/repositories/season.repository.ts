@@ -1,9 +1,9 @@
 import { SeasonEntity } from "src/domain/entities";
-import { StorageAdapter } from "../StorageAdapter";
+import { StorageAdapter } from "../StorageAdapter.js";
 import { ISeasonRepository } from "src/domain/repositories";
 import { SeasonStatus, SeasonParticipant } from "shared";
 import { SeasonMapper } from "src/application/mappers";
-import { wrapWriteFailure } from "./repositoryWriteFailure";
+import { wrapWriteFailure } from "./repositoryWriteFailure.js";
 
 interface PersistedSeasonParticipant {
   id: string;

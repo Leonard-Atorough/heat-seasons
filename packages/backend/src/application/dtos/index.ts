@@ -1,17 +1,17 @@
 // User DTOs
-export type { UserCreateInput, UserUpdateInput, UserResponse } from "./user.dto";
+export type { UserCreateInput, UserUpdateInput, UserResponse } from "./user.dto.js";
 
 // Race DTOs
-export type { RaceCreateInput, RaceUpdateInput, RaceResponse } from "./race.dto";
+export type { RaceCreateInput, RaceUpdateInput, RaceResponse } from "./race.dto.js";
 
 // Racer DTOs
-export type { RacerCreateInput, RacerUpdateInput } from "./racer.dto";
+export type { RacerCreateInput, RacerUpdateInput } from "./racer.dto.js";
 
 // Season DTOs
-export type { SeasonCreateInput, SeasonUpdateInput, SeasonResponse } from "./season.dto";
+export type { SeasonCreateInput, SeasonUpdateInput, SeasonResponse } from "./season.dto.js";
 
 // Config DTOs
-export type { PointsConfig, PointsConfigUpdateInput } from "./config.dto";
+export type { PointsConfig, PointsConfigUpdateInput } from "./config.dto.js";
 
 // Bootstrap DTOs
 export type {
@@ -19,4 +19,4 @@ export type {
   BootstrapConfigResponse,
   CreateBootstrapAdminUserInput,
   CreateBootstrapAdminUserResponse,
-} from "./bootstrap.dto";
+} from "./bootstrap.dto.js";

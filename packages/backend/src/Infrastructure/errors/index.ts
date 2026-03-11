@@ -7,7 +7,7 @@ export {
   ConflictError,
   ForbiddenError,
   BadRequestError,
-} from "./appError";
+} from "./appError.js";
 
 export {
   InfrastructureError,
@@ -15,4 +15,4 @@ export {
   RepositoryWriteError,
   UniqueConstraintViolationError,
   ForeignKeyConstraintError,
-} from "./infrastructureError";
+} from "./infrastructureError.js";

@@ -1,2 +1,2 @@
-export { AdminController } from "./admin.controller";
-export { createAdminRouter } from "./admin.route";
+export { AdminController } from "./admin.controller.js";
+export { createAdminRouter } from "./admin.route.js";

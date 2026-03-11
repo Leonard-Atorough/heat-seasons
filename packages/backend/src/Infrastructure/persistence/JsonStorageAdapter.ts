@@ -1,8 +1,8 @@
 import * as fs from "fs/promises";
 import * as path from "path";
 import * as crypto from "crypto";
-import { StorageAdapter } from "./StorageAdapter";
-import { logger } from "../logging/logger";
+import { StorageAdapter } from "./StorageAdapter.js";
+import { logger } from "../logging/logger.js";
 
 /**
  * JSON File-based Storage Adapter

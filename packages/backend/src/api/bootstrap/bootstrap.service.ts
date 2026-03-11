@@ -4,7 +4,7 @@ import {
   CreateBootstrapAdminUserInput,
   UserResponse,
 } from "src/application/dtos";
-import { IBootstrapService } from "./bootstrap.service.interface";
+import { IBootstrapService } from "./bootstrap.service.interface.js";
 import { IAuthRepository, IBootstrapRepository } from "src/domain/repositories";
 import { BootstrapEntity, UserEntity } from "src/domain/entities";
 import { randomBytes } from "crypto";

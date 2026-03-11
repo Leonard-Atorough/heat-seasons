@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "shared";
-import { JWT_SECRET, JWT_EXPIRES_IN } from "../../env";
+import { JWT_SECRET, JWT_EXPIRES_IN } from "../../env.js";
 
 export interface TokenPayload extends JwtPayload {
   id: string;

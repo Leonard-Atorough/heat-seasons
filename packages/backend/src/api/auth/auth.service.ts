@@ -1,5 +1,5 @@
 import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
-import { IAuthService } from "./auth.service.interface";
+import { IAuthService } from "./auth.service.interface.js";
 import { UserResponse, UserCreateInput } from "src/application/dtos/user.dto";
 import { User, UserRole } from "shared";
 import { JwtService } from "src/Infrastructure/security/jwt";

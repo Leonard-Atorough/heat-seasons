@@ -1,6 +1,6 @@
 import pinoHttp from "pino-http";
 import { randomUUID } from "node:crypto";
-import { logger } from "./logger";
+import { logger } from "./logger.js";
 
 /**
  * pino-http request logging middleware.

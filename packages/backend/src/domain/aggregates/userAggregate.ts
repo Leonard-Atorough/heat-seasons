@@ -1,5 +1,5 @@
-import { UserEntity } from "../entities/userEntity";
-import { RacerEntity } from "../entities/racerEntity";
+import { UserEntity } from "../entities/userEntity.js";
+import { RacerEntity } from "../entities/racerEntity.js";
 
 export class UserAggregate {
   constructor(
