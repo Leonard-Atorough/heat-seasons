@@ -41,6 +41,18 @@ export const users = {
       ...overrides,
     }),
 
+  contributor: (overrides: Partial<User> = {}) =>
+    createUser({
+      id: "contributor-1",
+      googleId: "google-contributor-1",
+      email: "contributor@test.com",
+      name: "Contributor User",
+      role: "contributor",
+      lastLoginAt: new Date("2026-01-01T00:00:00.000Z"),
+      loginCount: 5,
+      ...overrides,
+    }),
+
   withRacerId: (racerId: string = "racer-1", overrides: Partial<User> = {}) =>
     createUser({
       id: "user-with-racer-1",
