@@ -1,12 +1,11 @@
 name: CD
 run-name: ${{ github.workflow }} - Deploy to production
 
-# Triggers only after CI passes on main. This ensures we never deploy a broken build.
+# CD is disabled — Railway and statichost.eu are configured to auto-deploy
+# directly from the GitHub repo when CI passes on main.
+# Re-enable by restoring the `on:` trigger below.
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types: [completed]
-    branches: [main]
+  workflow_dispatch: # manual trigger only
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -23,22 +22,22 @@ jobs:
   #   3. Add it as a GitHub Actions secret named RAILWAY_TOKEN.
   #   4. Find your service ID in the Railway dashboard URL and set RAILWAY_SERVICE_ID.
   # ---------------------------------------------------------------------------
-  deploy-backend:
-    name: Deploy backend to Railway
-    runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
+  #   deploy-backend:
+  #     name: Deploy backend to Railway
+  #     runs-on: ubuntu-latest
+  #     if: github.event.workflow_run.conclusion == 'success'
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #     steps:
+  #       - name: Checkout code
+  #         uses: actions/checkout@v4
 
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli@latest
+  #       - name: Install Railway CLI
+  #         run: npm install -g @railway/cli@latest
 
-      - name: Deploy to Railway
-        run: railway up --detach --service ${{ vars.RAILWAY_SERVICE_ID }}
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+  #       - name: Deploy to Railway
+  #         run: railway up --detach --service ${{ vars.RAILWAY_SERVICE_ID }}
+  #         env:
+  #           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
   # ---------------------------------------------------------------------------
   # Frontend → statichost.eu
