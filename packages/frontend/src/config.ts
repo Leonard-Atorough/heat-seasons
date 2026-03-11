@@ -1,8 +1,8 @@
 // In Vite, only variables prefixed with VITE_ are exposed to the browser bundle.
-// In dev mode, use a relative path so the Vite proxy (vite.config.ts) catches /api requests
-// and forwards them to localhost:3001.
-// In production, use the full Railway backend URL.
-const apiBaseUrl = import.meta.env.DEV ? "/api" : "https://heat-seasons.up.railway.app/api";
+// Always use a relative /api path: in dev the Vite proxy (vite.config.ts) forwards requests
+// to localhost:3001; in production the Netlify proxy (netlify.toml) forwards them to Railway.
+// This keeps cookies same-site in both environments.
+const apiBaseUrl = "/api";
 export const config = {
   apiBaseUrl,
   authRoute: `${apiBaseUrl}/auth`,

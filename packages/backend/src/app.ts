@@ -61,6 +61,10 @@ export function createApp(options?: CreateAppOptions): Application {
   const controllers = buildControllers(options);
   const app: Application = express();
 
+  // Trust the proxy chain (Railway + Netlify CDN) so that express-rate-limit
+  // reads the real client IP from X-Forwarded-For rather than the CDN IP.
+  app.set("trust proxy", true);
+
   app.use(
     cors({
       origin: FRONTEND_URL,
