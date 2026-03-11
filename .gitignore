@@ -19,6 +19,9 @@ build/
 **/*.js
 **/*.d.ts
 
+# Keep hand-written JS scripts
+!packages/backend/scripts/*.js
+
 # IDE
 .vscode/
 .idea/
