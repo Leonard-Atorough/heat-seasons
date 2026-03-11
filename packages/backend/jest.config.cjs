@@ -5,6 +5,7 @@ module.exports = {
   roots: ["<rootDir>/src", "<rootDir>/__tests__"],
   testMatch: ["**/__tests__/**/*.test.ts"],
   moduleNameMapper: {
+    "^(\\.{1,2}/.*)\\.js$": "$1",
     "^shared$": "<rootDir>/../shared/src/index.ts",
     "^shared/(.*)$": "<rootDir>/../shared/src/$1",
     "^src/(.*)\\.js$": "<rootDir>/src/$1",
