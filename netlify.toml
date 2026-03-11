@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build -w shared && npm run build -w frontend"
+  command = "VITE_API_URL=http://heat-seasons.up.railway.app npm run build -w shared && npm run build -w frontend"
   publish = "packages/frontend/dist"
   base = "/"
 
