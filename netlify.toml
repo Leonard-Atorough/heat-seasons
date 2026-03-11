@@ -1,11 +1,10 @@
 [build]
-  command = "VITE_API_URL=http://heat-seasons.up.railway.app npm run build -w shared && npm run build -w frontend"
+  command = "npm run build -w shared && npm run build -w frontend"
   publish = "packages/frontend/dist"
   base = "/"
 
 [build.environment]
   NODE_ENV = ""
-  VITE_API_URL = "http://heat-seasons.up.railway.app"
 
 # SPA Routing: redirect all non-file routes to index.html
 [[redirects]]

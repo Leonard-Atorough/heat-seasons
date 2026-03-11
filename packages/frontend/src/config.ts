@@ -1,7 +1,6 @@
 // In Vite, only variables prefixed with VITE_ are exposed to the browser bundle.
-// Set VITE_API_URL in your .env file (local dev) or in the statichost.eu / CI
-// build settings (production) to point at your Railway backend.
-const apiBaseUrl = `${import.meta.env.VITE_API_URL ?? "http://localhost:3001"}/api`;
+// For local dev, use localhost. For production, use the Railway backend.
+const apiBaseUrl = `${import.meta.env.DEV ? "http://localhost:3001" : "http://heat-seasons.up.railway.app"}/api`;
 export const config = {
   apiBaseUrl,
   authRoute: `${apiBaseUrl}/auth`,
