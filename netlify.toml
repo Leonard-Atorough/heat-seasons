@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm run build -w shared && npm run build -w frontend"
   publish = "packages/frontend/dist"
   base = "/"
 
