@@ -3,6 +3,7 @@
  * No React dependencies, no business logic
  */
 import { ApiResponse } from "shared";
+import { config } from "../config";
 
 export interface RequestConfig {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -206,6 +207,6 @@ export class ApiError extends Error {
 /**
  * Create and export a singleton instance
  */
-const apiClient = new ApiClient(import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/api");
+const apiClient = new ApiClient(config.apiBaseUrl);
 
 export default apiClient;
