@@ -17,6 +17,16 @@ const loginLimiter = rateLimit({
   message: "Too many login attempts from this IP, please try again later.",
 });
 
+const sessionCheckLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 60, // limit each IP to 60 requests per minute - lenient since session check is read-only
+  message: "Too many session check requests from this IP, please try again later.",
+  skip: (req) => {
+    // Don't rate limit if user is not authenticated (session check should be allowed freely for login flow)
+    return !(req.user);
+  },
+});
+
 export interface CreateAuthRouterOptions {
   authController?: AuthController;
 }
@@ -27,7 +37,7 @@ export function createAuthRouter(options: CreateAuthRouterOptions = {}): Router 
 
   router.get(
     "/me",
-    authLimiter,
+    sessionCheckLimiter,
     authMiddleware,
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info({ userId: (req.user as { id: string })?.id }, "Fetching current user profile");
