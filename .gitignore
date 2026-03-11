@@ -51,3 +51,6 @@ packages/backend/data/*.json
 # Prisma generated client
 packages/backend/src/generated/
 packages/frontend/test-output.txt
+
+# Vitest timings
+.vitest-timings.json

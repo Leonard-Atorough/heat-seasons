@@ -67,17 +67,16 @@ export class PrismaStorageAdapter implements StorageAdapter {
   }
 
   /**
-   * Strips Prisma-internal fields (id, raceId) from a RaceResult row so that
+   * Strips Prisma-internal field (raceId) from a RaceResult row so that
    * the entity / mapper layers see only the domain fields they expect.
    */
-  private stripResultMeta({ id: _id, raceId: _raceId, ...rest }: any): any {
+  private stripResultMeta({ raceId: _raceId, ...rest }: any): any {
     return rest;
   }
 
   /**
-   * Strips Prisma-internal RaceResult fields before writing to createMany /
-   * createMany so that Prisma generates its own id and infers raceId from the
-   * nested relation.
+   * Prepares a RaceResult for writing to Prisma createMany/updateMany by removing
+   * any domain-layer-generated fields and undefined values.
    */
   private cleanResultForWrite(r: any): Record<string, unknown> {
     const { id: _id, raceId: _raceId, ...rest } = r;

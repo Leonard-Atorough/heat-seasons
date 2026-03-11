@@ -25,9 +25,9 @@ model User {
 }
 
 model Racer {
-  id          String               @id @default(uuid())
+  id          String              @id @default(uuid())
   name        String
-  active      Boolean              @default(true)
+  active      Boolean             @default(true)
   team        String
   teamColor   String
   nationality String
@@ -36,20 +36,20 @@ model Racer {
   userId      String?
   badgeUrl    String?
   profileUrl  String?
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
   results     RaceResult[]
   seasons     SeasonParticipant[]
 }
 
 model Season {
-  id           String               @id @default(uuid())
+  id           String              @id @default(uuid())
   name         String
-  status       String               @default("upcoming")
+  status       String              @default("upcoming")
   startDate    DateTime
   endDate      DateTime?
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
   races        Race[]
   participants SeasonParticipant[]
 }
@@ -78,7 +78,6 @@ model SeasonParticipant {
 }
 
 model RaceResult {
-  id                String  @id @default(uuid())
   raceId            String
   racerId           String
   position          Int
@@ -87,6 +86,8 @@ model RaceResult {
   isGhostRacer      Boolean @default(false)
   race              Race    @relation(fields: [raceId], references: [id], onDelete: Cascade)
   racer             Racer   @relation(fields: [racerId], references: [id])
+
+  @@id([raceId, racerId])
 }
 
 model BlacklistedToken {
@@ -97,10 +98,10 @@ model BlacklistedToken {
 }
 
 model BootstrapConfig {
-  id                     String   @id @default("singleton")
-  bootstrapTokenHash     String // Store the hash of the bootstrap token for secure comparison
+  id                      String   @id @default("singleton")
+  bootstrapTokenHash      String // Store the hash of the bootstrap token for secure comparison
   bootstrapTokenExpiresAt DateTime
-  isInitialized          Boolean  @default(false)
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  isInitialized           Boolean  @default(false)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }
