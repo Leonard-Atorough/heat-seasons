@@ -83,7 +83,7 @@ export function createApp(options?: CreateAppOptions): Application {
       cookie: {
         secure: COOKIE_SECURE,
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: 24 * 60 * 60 * 1000,
         ...(COOKIE_DOMAIN ? { domain: COOKIE_DOMAIN } : {}),
       },
