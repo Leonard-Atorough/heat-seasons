@@ -38,4 +38,12 @@ describe("Container", () => {
 
     expect(Container.getInstance()).toBe(container);
   });
+
+  it("allows configuring the container with a custom default storage adapter", () => {
+    const container = createTestContainer();
+    Container.configureDefaultStorageAdapter(() => new InMemoryStorageAdapter());
+
+    expect(container.getStorageAdapter()).toBeInstanceOf(InMemoryStorageAdapter);
+  });
+
 });

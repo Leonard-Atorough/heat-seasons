@@ -3,6 +3,7 @@ import { AuthContextType } from "src/contexts";
 export const mockAuthContext: AuthContextType = {
   user: {
     id: "1",
+    googleId: "google-123",
     name: "Test User",
     email: "testuser@example.com",
     role: "user",

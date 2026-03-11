@@ -12,12 +12,20 @@ describe("RacerRepository", () => {
 
     jest.spyOn(adapter, "create").mockRejectedValueOnce(rootCause);
 
-    await expect(repository.create(racer as any)).rejects.toEqual(
+    let thrownError: unknown;
+
+    try {
+      await repository.create(racer as any);
+    } catch (error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).toEqual(
       expect.objectContaining({
         name: "RepositoryWriteError",
         cause: rootCause,
       }),
     );
-    await expect(repository.create(racer as any)).rejects.toBeInstanceOf(RepositoryWriteError);
+    expect(thrownError).toBeInstanceOf(RepositoryWriteError);
   });
 });

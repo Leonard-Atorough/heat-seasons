@@ -16,14 +16,20 @@ describe("BootstrapRepository", () => {
 
     jest.spyOn(adapter, "create").mockRejectedValueOnce(rootCause);
 
-    await expect(repository.upsertBootstrapConfig(config)).rejects.toEqual(
+    let thrownError: unknown;
+
+    try {
+      await repository.upsertBootstrapConfig(config);
+    } catch (error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).toEqual(
       expect.objectContaining({
         name: "RepositoryWriteError",
         cause: rootCause,
       }),
     );
-    await expect(repository.upsertBootstrapConfig(config)).rejects.toBeInstanceOf(
-      RepositoryWriteError,
-    );
+    expect(thrownError).toBeInstanceOf(RepositoryWriteError);
   });
 });
