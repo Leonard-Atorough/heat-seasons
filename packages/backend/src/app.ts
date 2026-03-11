@@ -65,7 +65,7 @@ export function createApp(options?: CreateAppOptions): Application {
     cors({
       origin: FRONTEND_URL,
       credentials: true,
-      methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
       optionsSuccessStatus: 200,
     }),
