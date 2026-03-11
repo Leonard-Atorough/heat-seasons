@@ -1,0 +1,94 @@
+name: CD
+run-name: ${{ github.workflow }} - Deploy to production
+
+# Triggers only after CI passes on main. This ensures we never deploy a broken build.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Backend → Railway
+  # ---------------------------------------------------------------------------
+  # Railway's *native* GitHub integration (connect repo in the Railway dashboard)
+  # is the simplest option and requires no changes here — Railway will
+  # auto-deploy when CI passes. Use this job only if you prefer an explicit
+  # GitHub Actions-controlled deploy step.
+  #
+  # Prerequisites:
+  #   1. Create a Railway project and link the GitHub repo.
+  #   2. Generate a Railway token: Railway dashboard → Account Settings → Tokens.
+  #   3. Add it as a GitHub Actions secret named RAILWAY_TOKEN.
+  #   4. Find your service ID in the Railway dashboard URL and set RAILWAY_SERVICE_ID.
+  # ---------------------------------------------------------------------------
+  deploy-backend:
+    name: Deploy backend to Railway
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli@latest
+
+      - name: Deploy to Railway
+        run: railway up --detach --service ${{ vars.RAILWAY_SERVICE_ID }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+  # ---------------------------------------------------------------------------
+  # Frontend → statichost.eu
+  # ---------------------------------------------------------------------------
+  # Prerequisites:
+  #   1. Create a site on statichost.eu and note the FTP credentials.
+  #   2. Add the following GitHub Actions secrets:
+  #        STATICHOST_FTP_SERVER   — FTP hostname from statichost.eu dashboard
+  #        STATICHOST_FTP_USER     — FTP username
+  #        STATICHOST_FTP_PASSWORD — FTP password
+  #   3. Add the following GitHub Actions variable (non-secret):
+  #        VITE_API_URL            — Full Railway backend URL, e.g. https://heat-seasons.up.railway.app
+  # ---------------------------------------------------------------------------
+  deploy-frontend:
+    name: Build and deploy frontend to statichost.eu
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build shared package
+        run: npm run build -w shared
+
+      - name: Build frontend
+        run: npm run build -w frontend
+        env:
+          # Injected at build time — Vite bakes this URL into the static bundle.
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+          NODE_ENV: production
+
+      - name: Deploy to statichost.eu via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.STATICHOST_FTP_SERVER }}
+          username: ${{ secrets.STATICHOST_FTP_USER }}
+          password: ${{ secrets.STATICHOST_FTP_PASSWORD }}
+          local-dir: packages/frontend/dist/
+          # statichost.eu serves files from the root of the FTP directory.
+          server-dir: /
+          # Removes files on the server that no longer exist locally, keeping
+          # the deployment clean after asset hash changes.
+          dangerous-clean-slate: false
