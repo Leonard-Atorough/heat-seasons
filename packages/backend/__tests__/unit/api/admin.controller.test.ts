@@ -177,6 +177,14 @@ describe("AdminController", () => {
       await adminController.demoteUser(request as Request, response as Response, next);
       expect(response.status).toHaveBeenCalledWith(400);
     });
+
+    it("calls next with error when service throws", async () => {
+      const error = new Error("Service error");
+      mockAuthService.updateUserRole.mockRejectedValue(error);
+      request.body = { userId: "user-1" };
+      await adminController.demoteUser(request as Request, response as Response, next);
+      expect(next).toHaveBeenCalledWith(error);
+    });
   });
 
   // ── createRacer ──────────────────────────────────────────────────
@@ -260,6 +268,20 @@ describe("AdminController", () => {
           active: true,
         }),
       );
+    });
+
+    it("calls next with error when service throws", async () => {
+      const error = new Error("Service error");
+      mockRacerService.create.mockRejectedValue(error);
+      request.body = {
+        name: "Error Racer",
+        team: "Error Team",
+        teamColor: "#000000",
+        nationality: "XX",
+        age: 30,
+      };
+      await adminController.createRacer(request as Request, response as Response, next);
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 

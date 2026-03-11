@@ -119,7 +119,9 @@ describe("AuthController", () => {
 
     expect(mockAuthService.generateToken).not.toHaveBeenCalled();
     expect(response.cookie).not.toHaveBeenCalled();
-    expect(response.redirect).toHaveBeenCalledWith(expect.stringContaining("/login?error=auth_failed"));
+    expect(response.redirect).toHaveBeenCalledWith(
+      expect.stringContaining("/login?error=auth_failed"),
+    );
   });
 
   it("logs out a token-bearing request, clears the cookie, and returns success", async () => {
@@ -162,6 +164,17 @@ describe("AuthController", () => {
 
     await authController.logout(request as Request, response as Response, next);
 
+    expect(next).toHaveBeenCalledWith(error);
+  });
+
+  it("forwards googleCallback errors to next", async () => {
+    const error = new Error("callback failed");
+    request.user = users.admin();
+    mockAuthService.generateToken.mockImplementation(() => {
+      throw error;
+    });
+
+    await authController.googleCallback(request as Request, response as Response, next);
     expect(next).toHaveBeenCalledWith(error);
   });
 });
