@@ -9,7 +9,3 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-# Disable automatic subdomain redirects
-[build.environment]
-  NPM_FLAGS = "--legacy-peer-deps"
