@@ -1,5 +1,5 @@
-import { WriteError } from "src/domain/errors";
-import { InfrastructureError } from "src/Infrastructure/errors";
+import { WriteError } from "../domain/errors/index.js";
+import { InfrastructureError } from "../Infrastructure/errors/index.js";
 
 export function mapWriteFailure(
   message: string,

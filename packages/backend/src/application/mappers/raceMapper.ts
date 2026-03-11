@@ -1,5 +1,5 @@
-import { RaceEntity } from "src/domain/entities";
-import { RaceCreateInput, RaceResponse } from "src/application/dtos";
+import { RaceEntity } from "../../domain/entities/index.js";
+import { RaceCreateInput, RaceResponse } from "../../application/dtos/index.js";
 
 export class RaceMapper {
   static toDomain(dto: RaceCreateInput): RaceEntity {

@@ -1,7 +1,7 @@
 import { StorageAdapter } from "../StorageAdapter.js";
-import { IRaceRepository } from "src/domain/repositories";
-import { RaceEntity } from "src/domain/entities";
-import { RaceMapper } from "src/application/mappers";
+import { IRaceRepository } from "../../../domain/repositories/index.js";
+import { RaceEntity } from "../../../domain/entities/index.js";
+import { RaceMapper } from "../../../application/mappers/index.js";
 import { wrapWriteFailure } from "./repositoryWriteFailure.js";
 
 export class RaceRepository implements IRaceRepository {

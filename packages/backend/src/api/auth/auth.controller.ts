@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IAuthService } from "./auth.service.interface.js";
-import { TokenPayload } from "src/Infrastructure/security/jwt";
-import { UserResponse } from "src/application/dtos/user.dto";
+import { TokenPayload } from "../../Infrastructure/security/jwt.js";
+import { UserResponse } from "../../application/dtos/user.dto.js";
 import { ApiResponse } from "shared";
 import { FRONTEND_URL, COOKIE_SECURE, COOKIE_DOMAIN } from "../../env.js";
 

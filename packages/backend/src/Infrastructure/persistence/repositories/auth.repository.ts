@@ -1,7 +1,7 @@
 import { StorageAdapter } from "../StorageAdapter.js";
-import { IAuthRepository } from "src/domain/repositories";
-import { UserEntity } from "src/domain/entities";
-import { UserMapper } from "src/application/mappers";
+import { IAuthRepository } from "../../../domain/repositories/index.js";
+import { UserEntity } from "../../../domain/entities/index.js";
+import { UserMapper } from "../../../application/mappers/index.js";
 import { wrapWriteFailure } from "./repositoryWriteFailure.js";
 
 export class AuthRepository implements IAuthRepository {

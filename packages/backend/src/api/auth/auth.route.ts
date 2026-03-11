@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction, Router } from "express";
 import rateLimit from "express-rate-limit";
 import passport from "passport";
-import { Container } from "src/Infrastructure/dependency-injection/container";
-import { authMiddleware } from "src/Infrastructure/http/middleware";
+import { Container } from "../../Infrastructure/dependency-injection/container.js";
+import { authMiddleware } from "../../Infrastructure/http/middleware/index.js";
 import { AuthController } from "./auth.controller.js";
 
 const authLimiter = rateLimit({

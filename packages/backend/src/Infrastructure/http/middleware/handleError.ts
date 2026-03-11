@@ -7,10 +7,10 @@ import {
   NotFoundError as HttpNotFoundError,
   UnauthorizedError,
   ValidationError,
-} from "src/Infrastructure/errors/appError";
+} from "../../../Infrastructure/errors/appError.js";
 
 import { ApiResponse } from "shared/dist/api/ApiResponse";
-import { logger as rootLogger } from "src/Infrastructure/logging/logger";
+import { logger as rootLogger } from "../../../Infrastructure/logging/logger.js";
 import {
   ApplicationError,
   ConflictError as DomainConflictError,
@@ -20,7 +20,7 @@ import {
   UnauthorisedError,
   ValidationError as DomainValidationError,
   WriteError,
-} from "src/domain/errors";
+} from "../../../domain/errors/index.js";
 
 /**
  * Maps a domain error to the equivalent HTTP-aware AppError.

@@ -1,10 +1,10 @@
 import { IRaceService } from "./race.service.interface.js";
-import { RaceCreateInput, RaceResponse, RaceUpdateInput } from "src/application/dtos";
-import { ISeasonRepository, IRaceRepository } from "src/domain/repositories";
-import { RaceMapper } from "src/application/mappers";
-import { RaceEntity } from "src/domain/entities";
-import { NotFoundError, NotImplemented } from "src/domain/errors";
-import { mapWriteFailure } from "src/api/serviceWriteFailure";
+import { RaceCreateInput, RaceResponse, RaceUpdateInput } from "../../application/dtos/index.js";
+import { ISeasonRepository, IRaceRepository } from "../../domain/repositories/index.js";
+import { RaceMapper } from "../../application/mappers/index.js";
+import { RaceEntity } from "../../domain/entities/index.js";
+import { NotFoundError, NotImplemented } from "../../domain/errors/index.js";
+import { mapWriteFailure } from "../../api/serviceWriteFailure.js";
 
 export class RaceService implements IRaceService {
   constructor(

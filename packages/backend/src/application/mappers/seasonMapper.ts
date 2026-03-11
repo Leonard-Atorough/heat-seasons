@@ -1,5 +1,5 @@
-import { SeasonEntity } from "src/domain/entities";
-import { SeasonCreateInput } from "src/application/dtos";
+import { SeasonEntity } from "../../domain/entities/index.js";
+import { SeasonCreateInput } from "../../application/dtos/index.js";
 import { Season } from "shared";
 
 export class SeasonMapper {

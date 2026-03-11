@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { IBootstrapService } from "./bootstrap.service.interface.js";
 import { ApiResponse } from "shared/dist/api/ApiResponse";
-import { BootstrapConfigResponse, UserResponse } from "src/application/dtos";
+import { BootstrapConfigResponse, UserResponse } from "../../application/dtos/index.js";
 
 export class BootstrapController {
   constructor(private bootstrapService: IBootstrapService) {}

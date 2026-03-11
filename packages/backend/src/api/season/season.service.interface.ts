@@ -1,5 +1,5 @@
 import { SeasonStatus, SeasonParticipant } from "shared";
-import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "src/application/dtos";
+import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "../../application/dtos/index.js";
 
 export interface ISeasonService {
   getAll(filters?: { status?: SeasonStatus }): Promise<SeasonResponse[]>;

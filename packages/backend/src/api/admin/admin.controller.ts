@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { TokenPayload } from "src/Infrastructure/security/jwt";
+import { TokenPayload } from "../../Infrastructure/security/jwt.js";
 import { ApiResponse } from "shared";
 import { IAuthService } from "../auth/auth.service.interface.js";
 import { IRacerService } from "../racer/racer.service.interface.js";
-import { UserResponse } from "src/application/dtos/user.dto";
+import { UserResponse } from "../../application/dtos/user.dto.js";
 import { Racer, RacerWithStats } from "shared";
 
 /**

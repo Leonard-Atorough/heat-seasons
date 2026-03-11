@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 import rateLimit from "express-rate-limit";
-import { Container } from "src/Infrastructure/dependency-injection/container";
-import { authMiddleware, requireRole } from "src/Infrastructure/http/middleware";
+import { Container } from "../../Infrastructure/dependency-injection/container.js";
+import { authMiddleware, requireRole } from "../../Infrastructure/http/middleware/index.js";
 import { AdminController } from "./admin.controller.js";
 
 const adminLimiter = rateLimit({

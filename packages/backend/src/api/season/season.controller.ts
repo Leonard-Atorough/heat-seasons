@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ISeasonService } from "./season.service.interface.js";
 import { ApiResponse, SeasonStatus, Season, SeasonParticipant } from "shared";
-import { SeasonResponse } from "src/application/dtos";
+import { SeasonResponse } from "../../application/dtos/index.js";
 import { NextFunction } from "express-serve-static-core";
 
 export class SeasonController {

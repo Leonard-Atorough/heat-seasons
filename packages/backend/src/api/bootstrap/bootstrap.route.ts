@@ -1,4 +1,4 @@
-import { Container } from "src/Infrastructure/dependency-injection/container";
+import { Container } from "../../Infrastructure/dependency-injection/container.js";
 import { Request, Response, NextFunction, Router } from "express";
 import { BootstrapController } from "./bootstrap.controller.js";
 

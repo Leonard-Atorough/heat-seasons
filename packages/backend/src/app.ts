@@ -5,14 +5,14 @@ import session from "express-session";
 import passport from "./Infrastructure/security/passport.js";
 import { COOKIE_DOMAIN, COOKIE_SECURE, FRONTEND_URL, SESSION_SECRET } from "./env.js";
 import { requestLogger } from "./Infrastructure/logging/requestLogger.js";
-import { handleError } from "./Infrastructure/http/middleware";
+import { handleError } from "./Infrastructure/http/middleware/index.js";
 import { Container } from "./Infrastructure/dependency-injection/container.js";
-import { createAuthRouter, AuthController } from "./api/auth";
-import { AdminController, createAdminRouter } from "./api/admin";
-import { createRacerRouter, RacerController } from "./api/racer";
-import { createSeasonRouter, SeasonController } from "./api/season";
-import { createRaceRouter, RaceController } from "./api/race";
-import { BootstrapController, createBootstrapRouter } from "./api/bootstrap";
+import { createAuthRouter, AuthController } from "./api/auth/index.js";
+import { AdminController, createAdminRouter } from "./api/admin/index.js";
+import { createRacerRouter, RacerController } from "./api/racer/index.js";
+import { createSeasonRouter, SeasonController } from "./api/season/index.js";
+import { createRaceRouter, RaceController } from "./api/race/index.js";
+import { BootstrapController, createBootstrapRouter } from "./api/bootstrap/index.js";
 
 export interface AppControllers {
   authController: AuthController;

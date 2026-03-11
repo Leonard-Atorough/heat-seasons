@@ -6,30 +6,30 @@ import {
   RaceRepository,
   SeasonRepository,
   BootstrapRepository,
-} from "../persistence/repositories";
+} from "../persistence/repositories/index.js";
 import {
   IAuthRepository,
   IBootstrapRepository,
   IRaceRepository,
   IRacerRepository,
   ISeasonRepository,
-} from "src/domain/repositories";
-import { AuthController } from "src/api/auth/auth.controller";
-import { AuthService } from "src/api/auth/auth.service";
-import { IAuthService } from "src/api/auth/auth.service.interface";
-import { AdminController } from "src/api/admin/admin.controller";
-import { RacerController } from "src/api/racer/racer.controller";
-import { RacerService } from "src/api/racer/racer.service";
-import { IRacerService } from "src/api/racer/racer.service.interface";
-import { RaceController } from "src/api/race/race.controller";
-import { RaceService } from "src/api/race/race.service";
-import { IRaceService } from "src/api/race/race.service.interface";
-import { SeasonController } from "src/api/season/season.controller";
-import { SeasonService } from "src/api/season/season.service";
-import { ISeasonService } from "src/api/season/season.service.interface";
-import { BootstrapController } from "src/api/bootstrap/bootstrap.controller";
-import { BootstrapService } from "src/api/bootstrap/bootstrap.service";
-import { IBootstrapService } from "src/api/bootstrap/bootstrap.service.interface";
+} from "../../domain/repositories/index.js";
+import { AuthController } from "../../api/auth/auth.controller.js";
+import { AuthService } from "../../api/auth/auth.service.js";
+import { IAuthService } from "../../api/auth/auth.service.interface.js";
+import { AdminController } from "../../api/admin/admin.controller.js";
+import { RacerController } from "../../api/racer/racer.controller.js";
+import { RacerService } from "../../api/racer/racer.service.js";
+import { IRacerService } from "../../api/racer/racer.service.interface.js";
+import { RaceController } from "../../api/race/race.controller.js";
+import { RaceService } from "../../api/race/race.service.js";
+import { IRaceService } from "../../api/race/race.service.interface.js";
+import { SeasonController } from "../../api/season/season.controller.js";
+import { SeasonService } from "../../api/season/season.service.js";
+import { ISeasonService } from "../../api/season/season.service.interface.js";
+import { BootstrapController } from "../../api/bootstrap/bootstrap.controller.js";
+import { BootstrapService } from "../../api/bootstrap/bootstrap.service.js";
+import { IBootstrapService } from "../../api/bootstrap/bootstrap.service.interface.js";
 
 type RepositoryName =
   | "AuthRepository"

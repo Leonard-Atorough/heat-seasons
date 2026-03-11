@@ -1,7 +1,7 @@
-import { BootstrapEntity } from "src/domain/entities";
-import { IBootstrapRepository } from "src/domain/repositories";
+import { BootstrapEntity } from "../../../domain/entities/index.js";
+import { IBootstrapRepository } from "../../../domain/repositories/index.js";
 import { StorageAdapter } from "../StorageAdapter.js";
-import { BootstrapMapper } from "src/application/mappers";
+import { BootstrapMapper } from "../../../application/mappers/index.js";
 import { wrapWriteFailure } from "./repositoryWriteFailure.js";
 
 export class BootstrapRepository implements IBootstrapRepository {

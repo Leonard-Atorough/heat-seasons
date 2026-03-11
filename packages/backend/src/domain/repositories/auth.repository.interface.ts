@@ -1,4 +1,4 @@
-import { UserEntity } from "../entities";
+import { UserEntity } from "../entities/index.js";
 
 export interface IAuthRepository {
   findAll(): Promise<UserEntity[]>;

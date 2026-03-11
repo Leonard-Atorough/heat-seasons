@@ -3,15 +3,15 @@ import {
   BootstrapConfigResponse,
   CreateBootstrapAdminUserInput,
   UserResponse,
-} from "src/application/dtos";
+} from "../../application/dtos/index.js";
 import { IBootstrapService } from "./bootstrap.service.interface.js";
-import { IAuthRepository, IBootstrapRepository } from "src/domain/repositories";
-import { BootstrapEntity, UserEntity } from "src/domain/entities";
+import { IAuthRepository, IBootstrapRepository } from "../../domain/repositories/index.js";
+import { BootstrapEntity, UserEntity } from "../../domain/entities/index.js";
 import { randomBytes } from "crypto";
 import bcrypt from "bcrypt";
-import { UserMapper } from "src/application/mappers";
-import { ConflictError, NotFoundError, ValidationError } from "src/domain/errors";
-import { wrapWriteOperation } from "src/api/serviceWriteFailure";
+import { UserMapper } from "../../application/mappers/index.js";
+import { ConflictError, NotFoundError, ValidationError } from "../../domain/errors/index.js";
+import { wrapWriteOperation } from "../../api/serviceWriteFailure.js";
 
 export class BootstrapService implements IBootstrapService {
   constructor(

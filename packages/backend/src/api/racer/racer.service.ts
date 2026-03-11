@@ -1,12 +1,12 @@
 import { Racer, RacerWithStats } from "shared";
-import { RacerCreateInput, RacerUpdateInput } from "src/application/dtos";
-import { IRacerRepository } from "src/domain/repositories/racer.repository.interface";
+import { RacerCreateInput, RacerUpdateInput } from "../../application/dtos/index.js";
+import { IRacerRepository } from "../../domain/repositories/racer.repository.interface.js";
 import { IRacerService } from "./racer.service.interface.js";
-import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
-import { UserAggregate } from "src/domain/aggregates/userAggregate";
-import { RacerMapper } from "src/application/mappers";
-import { NotFoundError, NotImplemented } from "src/domain/errors";
-import { mapWriteFailure } from "src/api/serviceWriteFailure";
+import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { UserAggregate } from "../../domain/aggregates/userAggregate.js";
+import { RacerMapper } from "../../application/mappers/index.js";
+import { NotFoundError, NotImplemented } from "../../domain/errors/index.js";
+import { mapWriteFailure } from "../../api/serviceWriteFailure.js";
 
 export class RacerService implements IRacerService {
   constructor(

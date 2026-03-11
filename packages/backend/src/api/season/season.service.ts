@@ -1,13 +1,13 @@
-import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "src/application/dtos";
-import { ISeasonRepository } from "src/domain/repositories/season.repository.interface";
+import { SeasonCreateInput, SeasonResponse, SeasonUpdateInput } from "../../application/dtos/index.js";
+import { ISeasonRepository } from "../../domain/repositories/season.repository.interface.js";
 import { ISeasonService } from "./season.service.interface.js";
 import { SeasonStatus, SEASON_STATUS, SeasonParticipant } from "shared";
-import { SeasonMapper } from "src/application/mappers";
+import { SeasonMapper } from "../../application/mappers/index.js";
 import {
   ConflictError,
   NotFoundError,
-} from "src/domain/errors";
-import { mapWriteFailure } from "src/api/serviceWriteFailure";
+} from "../../domain/errors/index.js";
+import { mapWriteFailure } from "../../api/serviceWriteFailure.js";
 
 export class SeasonService implements ISeasonService {
   constructor(private seasonRepository: ISeasonRepository) {}

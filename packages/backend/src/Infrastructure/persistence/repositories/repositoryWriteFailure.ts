@@ -1,4 +1,4 @@
-import { RepositoryWriteError } from "src/Infrastructure/errors";
+import { RepositoryWriteError } from "../../../Infrastructure/errors/index.js";
 
 export function wrapWriteFailure(
   message: string,

@@ -1,4 +1,4 @@
-import { BootstrapEntity } from "src/domain/entities";
+import { BootstrapEntity } from "../../domain/entities/index.js";
 
 export class BootstrapMapper {
   static toDomain(data: any): BootstrapEntity {

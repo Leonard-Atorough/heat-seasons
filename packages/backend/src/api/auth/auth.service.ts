@@ -1,11 +1,11 @@
-import { IAuthRepository } from "src/domain/repositories/auth.repository.interface";
+import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
 import { IAuthService } from "./auth.service.interface.js";
-import { UserResponse, UserCreateInput } from "src/application/dtos/user.dto";
+import { UserResponse, UserCreateInput } from "../../application/dtos/user.dto.js";
 import { User, UserRole } from "shared";
-import { JwtService } from "src/Infrastructure/security/jwt";
-import { UserMapper } from "src/application/mappers";
-import { NotFoundError } from "src/domain/errors";
-import { mapWriteFailure } from "src/api/serviceWriteFailure";
+import { JwtService } from "../../Infrastructure/security/jwt.js";
+import { UserMapper } from "../../application/mappers/index.js";
+import { NotFoundError } from "../../domain/errors/index.js";
+import { mapWriteFailure } from "../../api/serviceWriteFailure.js";
 
 export class AuthService implements IAuthService {
   constructor(private authRepository: IAuthRepository) {}

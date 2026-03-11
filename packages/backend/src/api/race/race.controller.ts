@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IRaceService } from "./race.service.interface.js";
 import { AppError } from "src/Infrastructure/errors/appError.js";
-import { RaceResponse } from "src/application/dtos";
+import { RaceResponse } from "../../application/dtos/index.js";
 import { ApiResponse } from "shared/dist/api/index.js";
 
 export class RaceController {

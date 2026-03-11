@@ -3,7 +3,7 @@ import {
   CreateBootstrapAdminUserInput,
   CreateBootstrapConfig,
   UserResponse,
-} from "src/application/dtos";
+} from "../../application/dtos/index.js";
 
 export interface IBootstrapService {
   isSystemBootstrapped(): Promise<boolean>;

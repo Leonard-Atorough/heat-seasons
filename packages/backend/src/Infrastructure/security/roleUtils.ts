@@ -4,7 +4,7 @@
  */
 
 import { Request } from "express";
-import { TokenPayload } from "src/Infrastructure/security/jwt";
+import { TokenPayload } from "../../Infrastructure/security/jwt.js";
 import { UserRole, USER_ROLES } from "shared";
 
 /**

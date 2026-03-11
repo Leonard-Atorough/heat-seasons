@@ -1,4 +1,4 @@
-import { UserCreateInput, UserResponse } from "src/application/dtos/user.dto";
+import { UserCreateInput, UserResponse } from "../../application/dtos/user.dto.js";
 import { User, UserRole } from "shared";
 
 export interface IAuthService {

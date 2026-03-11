@@ -1,6 +1,6 @@
 import { UserRole } from "shared";
-import { UserEntity } from "src/domain/entities";
-import { UserCreateInput, UserResponse } from "src/application/dtos";
+import { UserEntity } from "../../domain/entities/index.js";
+import { UserCreateInput, UserResponse } from "../../application/dtos/index.js";
 
 export class UserMapper {
   /**

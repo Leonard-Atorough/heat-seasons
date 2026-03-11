@@ -1,7 +1,7 @@
-import { RacerEntity } from "src/domain/entities";
+import { RacerEntity } from "../../../domain/entities/index.js";
 import { StorageAdapter } from "../StorageAdapter.js";
-import { IRacerRepository } from "src/domain/repositories";
-import { RacerMapper } from "src/application/mappers";
+import { IRacerRepository } from "../../../domain/repositories/index.js";
+import { RacerMapper } from "../../../application/mappers/index.js";
 import { wrapWriteFailure } from "./repositoryWriteFailure.js";
 
 export class RacerRepository implements IRacerRepository {
