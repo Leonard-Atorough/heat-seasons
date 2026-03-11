@@ -1,6 +1,6 @@
 // Re-export all domain models
-export * from "./user";
-export * from "./racer";
-export * from "./season";
-export * from "./race";
-export * from "./leaderboard";
+export * from "./user.js";
+export * from "./racer.js";
+export * from "./season.js";
+export * from "./race.js";
+export * from "./leaderboard.js";

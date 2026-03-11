@@ -1,3 +1,3 @@
-export * from "./ApiResponse";
-export * from "./PaginatedResponse";
-export * from "./PaginationParams";
+export * from "./ApiResponse.js";
+export * from "./PaginatedResponse.js";
+export * from "./PaginationParams.js";

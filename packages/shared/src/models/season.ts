@@ -1,4 +1,4 @@
-import { SeasonStatus } from "../constants";
+import { SeasonStatus } from "../constants.js";
 
 // Season domain models
 export interface Season {
