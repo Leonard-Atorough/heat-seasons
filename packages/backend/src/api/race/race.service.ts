@@ -2,8 +2,9 @@ import { IRaceService } from "./race.service.interface.js";
 import { RaceCreateInput, RaceResponse, RaceUpdateInput } from "src/application/dtos";
 import { ISeasonRepository, IRaceRepository } from "src/domain/repositories";
 import { RaceMapper } from "src/application/mappers";
-import { NotFoundError } from "src/Infrastructure/errors/appError";
 import { RaceEntity } from "src/domain/entities";
+import { NotFoundError, NotImplemented } from "src/domain/errors";
+import { mapWriteFailure } from "src/api/serviceWriteFailure";
 
 export class RaceService implements IRaceService {
   constructor(
@@ -19,7 +20,7 @@ export class RaceService implements IRaceService {
   async getById(id: string): Promise<RaceResponse> {
     const raceData = await this.raceRepository.findById(id);
     if (!raceData) {
-      throw new NotFoundError(`Race with ID ${id} not found`);
+      throw new NotFoundError(`Race with ID ${id} not found`, { resource: "race", raceId: id });
     }
     return RaceMapper.toResponse(raceData as RaceEntity);
   }
@@ -27,7 +28,7 @@ export class RaceService implements IRaceService {
   async create(seasonId: string, data: RaceCreateInput): Promise<RaceResponse> {
     const season = await this.seasonRepository.findById(seasonId);
     if (!season) {
-      throw new NotFoundError("Season not found");
+      throw new NotFoundError("Season not found", { resource: "season", seasonId });
     }
 
     const existing = await this.raceRepository.findBySeasonId(seasonId);
@@ -35,29 +36,53 @@ export class RaceService implements IRaceService {
 
     const raceToCreate = RaceMapper.toDomain({ ...data, seasonId, raceNumber });
 
-    const createdRaceEntity = await this.raceRepository.create(raceToCreate);
-    return RaceMapper.toResponse(createdRaceEntity);
+    try {
+      const createdRaceEntity = await this.raceRepository.create(raceToCreate);
+      return RaceMapper.toResponse(createdRaceEntity);
+    } catch (error) {
+      throw mapWriteFailure(
+        "Failed to create race",
+        { operation: "createRace", seasonId },
+        error,
+      );
+    }
   }
 
   async update(id: string, data: RaceUpdateInput): Promise<RaceResponse> {
     const existing = await this.raceRepository.findById(id);
     if (!existing) {
-      throw new NotFoundError(`Race with ID ${id} not found`);
+      throw new NotFoundError(`Race with ID ${id} not found`, { resource: "race", raceId: id });
     }
     existing.update({ ...data });
-    const updatedEntity = await this.raceRepository.update(id, existing);
-    return RaceMapper.toResponse(updatedEntity);
+    try {
+      const updatedEntity = await this.raceRepository.update(id, existing);
+      return RaceMapper.toResponse(updatedEntity);
+    } catch (error) {
+      throw mapWriteFailure(
+        "Failed to update race",
+        { operation: "updateRace", raceId: id },
+        error,
+      );
+    }
   }
 
   async delete(id: string): Promise<void> {
     const existing = await this.raceRepository.findById(id);
     if (!existing) {
-      throw new NotFoundError(`Race with ID ${id} not found`);
+      throw new NotFoundError(`Race with ID ${id} not found`, { resource: "race", raceId: id });
     }
-    await this.raceRepository.delete(id);
+    try {
+      await this.raceRepository.delete(id);
+    } catch (error) {
+      throw mapWriteFailure(
+        "Failed to delete race",
+        { operation: "deleteRace", raceId: id },
+        error,
+      );
+    }
   }
 
   async calculatePoints(position: number): Promise<number> {
-    throw new Error("Not implemented");
+    throw new NotImplemented("Race points calculation is not implemented", { position });
   }
 }

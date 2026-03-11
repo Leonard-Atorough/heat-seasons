@@ -1,6 +1,7 @@
 import { Container } from "../../../src/Infrastructure/dependency-injection/container";
 import { RaceCreateInput } from "../../../src/application/dtos/race.dto";
-import { NotFoundError } from "../../../src/Infrastructure/errors/appError";
+import { NotFoundError, NotImplemented, WriteError } from "../../../src/domain/errors";
+import { RepositoryWriteError } from "../../../src/Infrastructure/errors";
 import { createRaceList, races, seasons } from "../../fixtures";
 import { createTestContainer, InMemoryStorageAdapter } from "../../testContainer";
 
@@ -20,7 +21,8 @@ describe("RaceService", () => {
   // 3. Given a missing season, when creating a race, then the service throws a not found error.
   // 4. Given an existing race, when updating it, then the service persists the changes; and when the race is missing, it throws.
   // 5. Given an existing race, when deleting it, then the service removes it; and when the race is missing, it throws.
-  // 6. Given the points calculator is not implemented, when it is called, then the service throws the expected error.
+  // 6. Given a repository write failure, when creating a race, then the service translates it into a write error and preserves cause.
+  // 7. Given the points calculator is not implemented, when it is called, then the service throws the expected error.
 
   let container: Container;
   let storageAdapter: InMemoryStorageAdapter;
@@ -122,6 +124,33 @@ describe("RaceService", () => {
     ).rejects.toBeInstanceOf(NotFoundError);
   });
 
+  it("wraps race write failures and preserves the original cause", async () => {
+    const persistedSeason = seasons.active({ id: "season-race-write" });
+    const rootCause = new Error("race write failed");
+
+    storageAdapter.seed("seasons", [{ ...persistedSeason }]);
+    jest.spyOn(storageAdapter, "create").mockRejectedValueOnce(rootCause);
+
+    const raceService = container.getRaceService();
+    let thrownError: unknown;
+
+    try {
+      await raceService.create(persistedSeason.id, {
+        seasonId: persistedSeason.id,
+        name: "Broken Race",
+        raceNumber: 1,
+        date: new Date("2026-04-01T00:00:00.000Z"),
+        results: [],
+      });
+    } catch (error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).toBeInstanceOf(WriteError);
+    expect((thrownError as WriteError).cause).toBeInstanceOf(RepositoryWriteError);
+    expect(((thrownError as WriteError).cause as RepositoryWriteError).cause).toBe(rootCause);
+  });
+
   it("updates an existing race and throws for a missing race", async () => {
     const persistedRace = races.pending({ id: "race-update-1", name: "Before Update" });
 
@@ -181,6 +210,6 @@ describe("RaceService", () => {
   it("throws for the unimplemented points calculator", async () => {
     const raceService = container.getRaceService();
 
-    await expect(raceService.calculatePoints(1)).rejects.toThrow("Not implemented");
+    await expect(raceService.calculatePoints(1)).rejects.toBeInstanceOf(NotImplemented);
   });
 });

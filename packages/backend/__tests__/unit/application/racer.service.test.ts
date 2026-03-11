@@ -1,6 +1,7 @@
 import { Container } from "../../../src/Infrastructure/dependency-injection/container";
-import { NotFoundError } from "../../../src/Infrastructure/errors/appError";
 import { RacerCreateInput } from "../../../src/application/dtos/racer.dto";
+import { NotFoundError, WriteError } from "../../../src/domain/errors";
+import { RepositoryWriteError } from "../../../src/Infrastructure/errors";
 import { racers, users } from "../../fixtures";
 import { createTestContainer, InMemoryStorageAdapter } from "../../testContainer";
 
@@ -35,8 +36,9 @@ describe("RacerService", () => {
   // 2. Given a create request without a user assignment, when creating a racer, then the service persists and returns an unassigned racer.
   // 3. Given a create request with a valid user assignment, when creating a racer, then the service links the new racer to that user.
   // 4. Given a create request with a missing user, when creating a racer, then the service throws a not found error.
-  // 5. Given an existing racer, when updating it, then the service persists the changes; and when the racer is missing, it throws.
-  // 6. Given an existing racer, when deleting it, then the service removes it; and when the racer is missing, it throws.
+  // 5. Given a repository write failure, when creating a racer, then the service translates it into a write error and preserves cause.
+  // 6. Given an existing racer, when updating it, then the service persists the changes; and when the racer is missing, it throws.
+  // 7. Given an existing racer, when deleting it, then the service removes it; and when the racer is missing, it throws.
 
   let container: Container;
   let storageAdapter: InMemoryStorageAdapter;
@@ -177,6 +179,35 @@ describe("RacerService", () => {
         profileUrl: undefined,
       }),
     ).rejects.toBeInstanceOf(NotFoundError);
+  });
+
+  it("wraps racer write failures and preserves the original cause", async () => {
+    const rootCause = new Error("racer write failed");
+
+    jest.spyOn(storageAdapter, "create").mockRejectedValueOnce(rootCause);
+
+    const racerService = container.getRacerService();
+    let thrownError: unknown;
+
+    try {
+      await racerService.create({
+        name: "Broken Racer",
+        active: true,
+        team: "Broken Team",
+        teamColor: "#000000",
+        nationality: "Test",
+        age: 42,
+        userId: undefined,
+        badgeUrl: undefined,
+        profileUrl: undefined,
+      });
+    } catch (error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).toBeInstanceOf(WriteError);
+    expect((thrownError as WriteError).cause).toBeInstanceOf(RepositoryWriteError);
+    expect(((thrownError as WriteError).cause as RepositoryWriteError).cause).toBe(rootCause);
   });
 
   it("updates an existing racer and throws for a missing racer", async () => {

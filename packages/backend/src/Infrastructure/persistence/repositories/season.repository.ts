@@ -3,6 +3,7 @@ import { StorageAdapter } from "../StorageAdapter";
 import { ISeasonRepository } from "src/domain/repositories";
 import { SeasonStatus, SeasonParticipant } from "shared";
 import { SeasonMapper } from "src/application/mappers";
+import { wrapWriteFailure } from "./repositoryWriteFailure";
 
 interface PersistedSeasonParticipant {
   id: string;
@@ -15,17 +16,13 @@ export class SeasonRepository implements ISeasonRepository {
   constructor(private storageAdapter: StorageAdapter) {}
 
   async findAll(filters?: { status?: SeasonStatus }): Promise<SeasonEntity[]> {
-    try {
-      const seasons = await this.storageAdapter.findAll<any>("seasons");
-      if (filters?.status) {
-        return seasons
-          .filter((season) => season.status === filters.status)
-          .map((season) => SeasonMapper.toDomainFromPersistence(season));
-      }
-      return seasons.map((season) => SeasonMapper.toDomainFromPersistence(season));
-    } catch (error) {
-      throw new Error("Failed to retrieve seasons");
+    const seasons = await this.storageAdapter.findAll<any>("seasons");
+    if (filters?.status) {
+      return seasons
+        .filter((season) => season.status === filters.status)
+        .map((season) => SeasonMapper.toDomainFromPersistence(season));
     }
+    return seasons.map((season) => SeasonMapper.toDomainFromPersistence(season));
   }
 
   async findById(id: string): Promise<SeasonEntity | null> {
@@ -43,43 +40,81 @@ export class SeasonRepository implements ISeasonRepository {
     const dataToSave = {
       ...SeasonMapper.toPersistence(data),
     };
-    const savedData = await this.storageAdapter.create("seasons", dataToSave);
-    return SeasonMapper.toDomainFromPersistence(savedData);
+
+    try {
+      const savedData = await this.storageAdapter.create("seasons", dataToSave);
+      return SeasonMapper.toDomainFromPersistence(savedData);
+    } catch (error) {
+      throw wrapWriteFailure("Failed to create season", { operation: "create" }, error);
+    }
   }
 
   async update(id: string, data: SeasonEntity): Promise<SeasonEntity> {
     const dataToUpdate = {
       ...SeasonMapper.toPersistence(data),
     };
-    const updatedData = await this.storageAdapter.update("seasons", id, dataToUpdate);
-    return SeasonMapper.toDomainFromPersistence(updatedData);
+
+    try {
+      const updatedData = await this.storageAdapter.update("seasons", id, dataToUpdate);
+      return SeasonMapper.toDomainFromPersistence(updatedData);
+    } catch (error) {
+      throw wrapWriteFailure(
+        "Failed to update season",
+        { operation: "update", seasonId: id },
+        error,
+      );
+    }
   }
 
   async delete(id: string): Promise<void> {
-    await this.storageAdapter.delete("seasons", id);
+    try {
+      await this.storageAdapter.delete("seasons", id);
+    } catch (error) {
+      throw wrapWriteFailure(
+        "Failed to delete season",
+        { operation: "delete", seasonId: id },
+        error,
+      );
+    }
   }
 
   async addParticipant(seasonId: string, racerId: string): Promise<SeasonParticipant> {
-    const result = await this.storageAdapter.create<PersistedSeasonParticipant>(
-      "seasonParticipants",
-      { seasonId, racerId, registeredAt: new Date() },
-    );
+    try {
+      const result = await this.storageAdapter.create<PersistedSeasonParticipant>(
+        "seasonParticipants",
+        { seasonId, racerId, registeredAt: new Date() },
+      );
 
-    return {
-      seasonId: result.seasonId,
-      racerId: result.racerId,
-      registeredAt: result.registeredAt,
-    };
+      return {
+        seasonId: result.seasonId,
+        racerId: result.racerId,
+        registeredAt: result.registeredAt,
+      };
+    } catch (error) {
+      throw wrapWriteFailure(
+        "Failed to add season participant",
+        { operation: "addParticipant", seasonId, racerId },
+        error,
+      );
+    }
   }
 
   async removeParticipant(seasonId: string, racerId: string): Promise<void> {
     const participant = await this.findParticipantRecord(seasonId, racerId);
 
     if (!participant) {
-      throw new Error("Season participant not found");
+      return;
     }
 
-    await this.storageAdapter.delete("seasonParticipants", participant.id);
+    try {
+      await this.storageAdapter.delete("seasonParticipants", participant.id);
+    } catch (error) {
+      throw wrapWriteFailure(
+        "Failed to remove season participant",
+        { operation: "removeParticipant", seasonId, racerId },
+        error,
+      );
+    }
   }
 
   async findParticipants(seasonId: string): Promise<SeasonParticipant[]> {

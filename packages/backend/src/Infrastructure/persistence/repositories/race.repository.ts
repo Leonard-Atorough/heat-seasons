@@ -2,6 +2,7 @@ import { StorageAdapter } from "../StorageAdapter";
 import { IRaceRepository } from "src/domain/repositories";
 import { RaceEntity } from "src/domain/entities";
 import { RaceMapper } from "src/application/mappers";
+import { wrapWriteFailure } from "./repositoryWriteFailure";
 
 export class RaceRepository implements IRaceRepository {
   constructor(private storageAdapter: StorageAdapter) {}
@@ -25,16 +26,28 @@ export class RaceRepository implements IRaceRepository {
     const dataToSave = {
       ...RaceMapper.toPersistence(data),
     };
-    const response = await this.storageAdapter.create("races", dataToSave);
-    return RaceMapper.toDomainFromPersistence(response);
+    try {
+      const response = await this.storageAdapter.create("races", dataToSave);
+      return RaceMapper.toDomainFromPersistence(response);
+    } catch (error) {
+      throw wrapWriteFailure("Failed to create race", { operation: "createRace" }, error);
+    }
   }
 
   async update(id: string, data: RaceEntity): Promise<RaceEntity> {
     const dataToUpdate = {
       ...RaceMapper.toPersistence(data),
     };
-    const response = await this.storageAdapter.update("races", id, dataToUpdate);
-    return RaceMapper.toDomainFromPersistence(response);
+    try {
+      const response = await this.storageAdapter.update("races", id, dataToUpdate);
+      return RaceMapper.toDomainFromPersistence(response);
+    } catch (error) {
+      throw wrapWriteFailure(
+        "Failed to update race",
+        { operation: "updateRace", raceId: id },
+        error,
+      );
+    }
   }
 
   async delete(id: string): Promise<void> {
@@ -42,6 +55,14 @@ export class RaceRepository implements IRaceRepository {
     if (!existing) {
       return;
     }
-    await this.storageAdapter.delete("races", id);
+    try {
+      await this.storageAdapter.delete("races", id);
+    } catch (error) {
+      throw wrapWriteFailure(
+        "Failed to delete race",
+        { operation: "deleteRace", raceId: id },
+        error,
+      );
+    }
   }
 }

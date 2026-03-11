@@ -19,7 +19,7 @@ export class SeasonController {
         status: 200,
         statusText: "OK",
         timestamp: new Date(),
-        message: "Successfully retrieved seasons",
+        message: seasons.length > 0 ? "Successfully retrieved seasons" : "No seasons found",
         data: seasons,
       };
       res.status(200).json(response);

@@ -1,7 +1,9 @@
 import { NextFunction, Response, Request } from "express";
 import {
   AppError,
+  ConflictError as HttpConflictError,
   ForbiddenError,
+  InternalServerError,
   NotFoundError as HttpNotFoundError,
   UnauthorizedError,
   ValidationError,
@@ -11,9 +13,13 @@ import { ApiResponse } from "shared/dist/api/ApiResponse";
 import { logger as rootLogger } from "src/Infrastructure/logging/logger";
 import {
   ApplicationError,
+  ConflictError as DomainConflictError,
   NotFoundError as DomainNotFoundError,
   ForbiddenError as DomainForbiddenError,
+  NotImplemented as DomainNotImplemented,
   UnauthorisedError,
+  ValidationError as DomainValidationError,
+  WriteError,
 } from "src/domain/errors";
 
 /**
@@ -21,11 +27,29 @@ import {
  * Add new domain error types here as they are introduced.
  */
 function mapDomainError(err: ApplicationError): AppError {
-  if (err instanceof DomainNotFoundError) return new HttpNotFoundError(err.message, err.details);
-  if (err instanceof DomainForbiddenError) return new ForbiddenError(err.message, err.details);
-  if (err instanceof UnauthorisedError) return new UnauthorizedError(err.message, err.details);
-  // Fallback: treat unmapped domain errors as 400 Bad Request
-  return new ValidationError(err.message, err.details);
+  if (err instanceof DomainNotFoundError) {
+    return new HttpNotFoundError(err.message, err.details, err);
+  }
+  if (err instanceof DomainConflictError) {
+    return new HttpConflictError(err.message, err.details, err);
+  }
+  if (err instanceof DomainValidationError) {
+    return new ValidationError(err.message, err.details, undefined, err);
+  }
+  if (err instanceof DomainForbiddenError) {
+    return new ForbiddenError(err.message, err.details, err);
+  }
+  if (err instanceof UnauthorisedError) {
+    return new UnauthorizedError(err.message, err.details, err);
+  }
+  if (err instanceof DomainNotImplemented) {
+    return new InternalServerError(err.message, err.details, err);
+  }
+  if (err instanceof WriteError) {
+    return new InternalServerError(err.message, err.details, err);
+  }
+
+  return new InternalServerError(err.message, err.details, err);
 }
 
 export function handleError(err: Error, req: Request, res: Response, next: NextFunction): void {

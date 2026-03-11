@@ -2,6 +2,7 @@ import { StorageAdapter } from "../StorageAdapter";
 import { IAuthRepository } from "src/domain/repositories";
 import { UserEntity } from "src/domain/entities";
 import { UserMapper } from "src/application/mappers";
+import { wrapWriteFailure } from "./repositoryWriteFailure";
 
 export class AuthRepository implements IAuthRepository {
   constructor(private storageAdapter: StorageAdapter) {}
@@ -33,8 +34,12 @@ export class AuthRepository implements IAuthRepository {
       ...UserMapper.toPersistence(entity),
     };
 
-    const saved = await this.storageAdapter.create("users", dataToSave);
-    return UserMapper.toDomainFromPersistence(saved);
+    try {
+      const saved = await this.storageAdapter.create("users", dataToSave);
+      return UserMapper.toDomainFromPersistence(saved);
+    } catch (error) {
+      throw wrapWriteFailure("Failed to create user", { operation: "createUser" }, error);
+    }
   }
 
   async update(id: string, entity: UserEntity): Promise<UserEntity> {
@@ -42,15 +47,27 @@ export class AuthRepository implements IAuthRepository {
       ...UserMapper.toPersistence(entity),
     };
 
-    const updated = await this.storageAdapter.update("users", id, dataToUpdate);
-    return UserMapper.toDomainFromPersistence(updated);
+    try {
+      const updated = await this.storageAdapter.update("users", id, dataToUpdate);
+      return UserMapper.toDomainFromPersistence(updated);
+    } catch (error) {
+      throw wrapWriteFailure(
+        "Failed to update user",
+        { operation: "updateUser", userId: id },
+        error,
+      );
+    }
   }
 
   async logout(token: string, ttl: number): Promise<void> {
-    await this.storageAdapter.create("blacklistedTokens", {
-      token,
-      expiresAt: new Date(Date.now() + ttl * 1000), // Store the expiration time for cleanup
-    });
+    try {
+      await this.storageAdapter.create("blacklistedTokens", {
+        token,
+        expiresAt: new Date(Date.now() + ttl * 1000), // Store the expiration time for cleanup
+      });
+    } catch (error) {
+      throw wrapWriteFailure("Failed to blacklist token", { operation: "logout" }, error);
+    }
   }
 
   async isTokenBlacklisted(token: string): Promise<boolean> {

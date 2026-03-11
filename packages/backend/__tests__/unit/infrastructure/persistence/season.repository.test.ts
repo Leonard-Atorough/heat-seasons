@@ -1,9 +1,12 @@
 import { InMemoryStorageAdapter } from "../../../helpers/inMemoryStorageAdapter";
+import { RepositoryWriteError } from "../../../../src/Infrastructure/errors";
 import { SeasonRepository } from "../../../../src/Infrastructure/persistence/repositories/season.repository";
+import { seasons } from "../../../fixtures";
 
 describe("SeasonRepository", () => {
   // 1. Given persisted seasons, when querying by status and active season, then the repository returns mapped season entities.
   // 2. Given a season participant, when adding, listing, and removing it, then the repository works through the generic storage adapter only.
+  // 3. Given a write failure, when persisting a season, then the repository wraps it as an infrastructure error and preserves cause.
 
   it("returns seasons filtered by status and finds the active season", async () => {
     const adapter = new InMemoryStorageAdapter();
@@ -71,5 +74,25 @@ describe("SeasonRepository", () => {
     await repository.removeParticipant("season-1", "racer-1");
 
     expect(await repository.findParticipants("season-1")).toEqual([]);
+  });
+
+  it("wraps season write failures as repository infrastructure errors", async () => {
+    const adapter = new InMemoryStorageAdapter();
+    const repository = new SeasonRepository(adapter);
+    const season = seasons.active({ id: "season-write-failure" });
+    const rootCause = new Error("sqlite is locked");
+
+    jest.spyOn(adapter, "create").mockRejectedValueOnce(rootCause);
+
+    let thrownError: unknown;
+
+    try {
+      await repository.create(season as any);
+    } catch (error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).toBeInstanceOf(RepositoryWriteError);
+    expect((thrownError as RepositoryWriteError).cause).toBe(rootCause);
   });
 });

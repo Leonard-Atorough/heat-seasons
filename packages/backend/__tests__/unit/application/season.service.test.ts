@@ -1,6 +1,11 @@
 import { Container } from "../../../src/Infrastructure/dependency-injection/container";
-import { ConflictError, NotFoundError } from "../../../src/Infrastructure/errors/appError";
 import { SeasonCreateInput } from "../../../src/application/dtos";
+import {
+  ConflictError,
+  NotFoundError,
+  WriteError,
+} from "../../../src/domain/errors";
+import { RepositoryWriteError } from "../../../src/Infrastructure/errors";
 import { createTestContainer, InMemoryStorageAdapter } from "../../testContainer";
 import { createSeasonList, seasons } from "../../fixtures";
 
@@ -21,10 +26,11 @@ interface PersistedSeasonParticipantRecord extends Record<string, unknown> {
 
 describe("SeasonService", () => {
   // 1. Given persisted seasons, when listing or fetching them, then the service returns matching season responses and respects status filters.
-  // 2. Given no persisted seasons, when listing seasons, then the service throws a not found error.
+  // 2. Given no persisted seasons, when listing seasons, then the service returns an empty list; fetching a missing season still throws.
   // 3. Given valid season input, when creating a season, then the service persists it with the default upcoming status.
   // 4. Given an existing season, when joining and listing participants, then the service persists the participant; and when the season is missing or the racer is already joined, it throws.
-  // 5. Given an existing season, when updating it to completed without an end date, then the service assigns an end date automatically; and when the season is missing, it throws.
+  // 5. Given a repository write failure, when creating a season, then the service translates it into a season application error and preserves cause.
+  // 6. Given an existing season, when updating it to completed without an end date, then the service assigns an end date automatically; and when the season is missing, it throws.
   // 6. Given an existing season, when deleting it, then the service removes it; and when the season is missing, it throws.
 
   let container: Container;
@@ -71,10 +77,10 @@ describe("SeasonService", () => {
     );
   });
 
-  it("throws when listing or fetching missing seasons", async () => {
+  it("returns an empty list for missing seasons and throws when fetching a missing season", async () => {
     const seasonService = container.getSeasonService();
 
-    await expect(seasonService.getAll()).rejects.toBeInstanceOf(NotFoundError);
+    await expect(seasonService.getAll()).resolves.toEqual([]);
     await expect(seasonService.getById("missing-season")).rejects.toBeInstanceOf(NotFoundError);
   });
 
@@ -105,6 +111,30 @@ describe("SeasonService", () => {
         status: "upcoming",
       }),
     );
+  });
+
+  it("wraps repository write failures and preserves the original cause", async () => {
+    const seasonService = container.getSeasonService();
+    const input: SeasonCreateInput = {
+      name: "Broken Season",
+      startDate: new Date("2026-08-01T00:00:00.000Z"),
+      endDate: new Date("2026-12-01T00:00:00.000Z"),
+    };
+    const rootCause = new Error("disk full");
+
+    jest.spyOn(storageAdapter, "create").mockRejectedValueOnce(rootCause);
+
+    let thrownError: unknown;
+
+    try {
+      await seasonService.create(input);
+    } catch (error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).toBeInstanceOf(WriteError);
+    expect((thrownError as WriteError).cause).toBeInstanceOf(RepositoryWriteError);
+    expect(((thrownError as WriteError).cause as RepositoryWriteError).cause).toBe(rootCause);
   });
 
   it("adds and lists season participants, and throws for missing or duplicate registrations", async () => {

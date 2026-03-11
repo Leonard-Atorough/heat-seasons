@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
 import { Container } from "../../../src/Infrastructure/dependency-injection/container";
+import { ConflictError, NotFoundError, ValidationError, WriteError } from "../../../src/domain/errors";
+import { RepositoryWriteError } from "../../../src/Infrastructure/errors";
 import { createTestContainer, InMemoryStorageAdapter } from "../../testContainer";
 
 interface PersistedBootstrapConfigRecord extends Record<string, unknown> {
@@ -22,7 +24,8 @@ describe("BootstrapService", () => {
   // 2. Given an uninitialized system, when generating a bootstrap token, then the service returns the plain token and persists only its hash with the configured expiration.
   // 3. Given an initialized system, when generating a bootstrap token, then the service throws an already bootstrapped error.
   // 4. Given bootstrap setup preconditions are invalid, when creating the bootstrap admin, then the service throws for missing config, initialized config, expired token, and invalid token.
-  // 5. Given a valid bootstrap token, when bootstrapping the system, then the service creates an admin user and marks the system initialized.
+  // 5. Given a repository write failure, when creating bootstrap state, then the service translates it into a write error and preserves cause.
+  // 6. Given a valid bootstrap token, when bootstrapping the system, then the service creates an admin user and marks the system initialized.
 
   let container: Container;
   let storageAdapter: InMemoryStorageAdapter;
@@ -80,9 +83,7 @@ describe("BootstrapService", () => {
 
     const bootstrapService = container.getBootstrapService();
 
-    await expect(bootstrapService.generateBootstrapToken()).rejects.toThrow(
-      "System is already bootstrapped",
-    );
+    await expect(bootstrapService.generateBootstrapToken()).rejects.toBeInstanceOf(ConflictError);
   });
 
   it("throws for invalid bootstrap setup preconditions", async () => {
@@ -95,7 +96,7 @@ describe("BootstrapService", () => {
         email: "admin@test.com",
         name: "Admin User",
       }),
-    ).rejects.toThrow("Bootstrap configuration not found");
+    ).rejects.toBeInstanceOf(NotFoundError);
 
     storageAdapter.seed("bootstrapConfig", [
       {
@@ -113,7 +114,7 @@ describe("BootstrapService", () => {
         email: "expired@test.com",
         name: "Expired Admin",
       }),
-    ).rejects.toThrow("Bootstrap token has expired");
+    ).rejects.toBeInstanceOf(ValidationError);
 
     storageAdapter.seed("bootstrapConfig", [
       {
@@ -131,7 +132,7 @@ describe("BootstrapService", () => {
         email: "invalid@test.com",
         name: "Invalid Admin",
       }),
-    ).rejects.toThrow("Invalid bootstrap token");
+    ).rejects.toBeInstanceOf(ValidationError);
 
     storageAdapter.seed("bootstrapConfig", [
       {
@@ -149,7 +150,26 @@ describe("BootstrapService", () => {
         email: "used@test.com",
         name: "Used Admin",
       }),
-    ).rejects.toThrow("System is already bootstrapped");
+    ).rejects.toBeInstanceOf(ConflictError);
+  });
+
+  it("wraps bootstrap write failures and preserves the original cause", async () => {
+    const bootstrapService = container.getBootstrapService();
+    const rootCause = new Error("bootstrap write failed");
+
+    jest.spyOn(storageAdapter, "create").mockRejectedValueOnce(rootCause);
+
+    let thrownError: unknown;
+
+    try {
+      await bootstrapService.generateBootstrapToken({ expirationMinutes: 10 });
+    } catch (error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).toBeInstanceOf(WriteError);
+    expect((thrownError as WriteError).cause).toBeInstanceOf(RepositoryWriteError);
+    expect(((thrownError as WriteError).cause as RepositoryWriteError).cause).toBe(rootCause);
   });
 
   it("creates the bootstrap admin user and marks the system initialized", async () => {

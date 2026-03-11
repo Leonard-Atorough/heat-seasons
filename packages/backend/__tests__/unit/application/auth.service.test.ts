@@ -1,6 +1,8 @@
 import { Container } from "../../../src/Infrastructure/dependency-injection/container";
 import { UserResponse } from "../../../src/application/dtos/user.dto";
 import { UserCreateInput } from "../../../src/application/dtos/user.dto";
+import { NotFoundError, WriteError } from "../../../src/domain/errors";
+import { RepositoryWriteError } from "../../../src/Infrastructure/errors";
 import { createUser, createUserList, users } from "../../fixtures";
 import { createTestContainer, InMemoryStorageAdapter } from "../../testContainer";
 
@@ -23,7 +25,8 @@ describe("AuthService", () => {
   // 4. Given a new Google profile, when upserting the user, then the service creates a new persisted user with first-login metadata.
   // 5. Given an existing Google user, when upserting the user, then the service updates mutable fields, preserves the existing role, and increments login metadata.
   // 6. Given an existing user, when changing the role, then the service persists the updated role; and when the user is missing, it throws.
-  // 7. Given a valid token, when logging out, then the token is blacklisted and no longer considered valid.
+  // 7. Given a write failure, when creating a new Google user, then the service translates it into a write error and preserves cause.
+  // 8. Given a valid token, when logging out, then the token is blacklisted and no longer considered valid.
 
   let container: Container;
   let storageAdapter: InMemoryStorageAdapter;
@@ -87,7 +90,7 @@ describe("AuthService", () => {
   it("throws when the requested user does not exist", async () => {
     const authService = container.getAuthService();
 
-    await expect(authService.getMe("missing-user")).rejects.toThrow("User not found");
+    await expect(authService.getMe("missing-user")).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it("creates a new user on first Google login", async () => {
@@ -208,9 +211,37 @@ describe("AuthService", () => {
   it("throws when updating the role of a missing user", async () => {
     const authService = container.getAuthService();
 
-    await expect(authService.updateUserRole("missing-user", "admin")).rejects.toThrow(
-      "User not found",
+    await expect(authService.updateUserRole("missing-user", "admin")).rejects.toBeInstanceOf(
+      NotFoundError,
     );
+  });
+
+  it("wraps auth write failures and preserves the original cause", async () => {
+    const authService = container.getAuthService();
+    const rootCause = new Error("user write failed");
+
+    jest.spyOn(storageAdapter, "create").mockRejectedValueOnce(rootCause);
+
+    let thrownError: unknown;
+
+    try {
+      await authService.upsertUser({
+        googleId: "google-broken-user",
+        email: "broken.user@test.com",
+        name: "Broken User",
+        role: "user",
+        racerId: undefined,
+        profilePicture: undefined,
+        lastLoginAt: undefined,
+        loginCount: 0,
+      });
+    } catch (error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).toBeInstanceOf(WriteError);
+    expect((thrownError as WriteError).cause).toBeInstanceOf(RepositoryWriteError);
+    expect(((thrownError as WriteError).cause as RepositoryWriteError).cause).toBe(rootCause);
   });
 
   it("blacklists a token on logout and marks it invalid afterwards", async () => {

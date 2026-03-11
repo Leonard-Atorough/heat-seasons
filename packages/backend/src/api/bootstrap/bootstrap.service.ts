@@ -10,6 +10,8 @@ import { BootstrapEntity, UserEntity } from "src/domain/entities";
 import { randomBytes } from "crypto";
 import bcrypt from "bcrypt";
 import { UserMapper } from "src/application/mappers";
+import { ConflictError, NotFoundError, ValidationError } from "src/domain/errors";
+import { wrapWriteOperation } from "src/api/serviceWriteFailure";
 
 export class BootstrapService implements IBootstrapService {
   constructor(
@@ -26,8 +28,9 @@ export class BootstrapService implements IBootstrapService {
     config: CreateBootstrapConfig = { expirationMinutes: 60 },
   ): Promise<BootstrapConfigResponse> {
     if (await this.isSystemBootstrapped()) {
-      // TODO: Replace with a custom error class from the domain layer, will be mapped to http error in the infrastructure layer
-      throw new Error("System is already bootstrapped");
+      throw new ConflictError("System is already bootstrapped", {
+        resource: "bootstrapConfig",
+      });
     }
 
     const token = randomBytes(32).toString("hex");
@@ -40,7 +43,11 @@ export class BootstrapService implements IBootstrapService {
       isInitialized: false,
     });
 
-    const bootstrapToken = await this.bootstrapRepository.upsertBootstrapConfig(bootstrapEntity);
+    const bootstrapToken = await wrapWriteOperation(
+      () => this.bootstrapRepository.upsertBootstrapConfig(bootstrapEntity),
+      "Failed to generate bootstrap token",
+      { operation: "generateBootstrapToken" },
+    );
 
     return {
       bootstrapToken: token,
@@ -51,18 +58,21 @@ export class BootstrapService implements IBootstrapService {
     const config = await this.bootstrapRepository.getBootstrapConfig();
 
     if (!config) {
-      throw new Error(
+      throw new NotFoundError(
         "Bootstrap configuration not found. Please generate a bootstrap token first.",
+        { resource: "bootstrapConfig" },
       );
     }
     if (config.isInitialized) {
-      throw new Error("System is already bootstrapped");
+      throw new ConflictError("System is already bootstrapped", { resource: "bootstrapConfig" });
     }
     if (config.bootstrapTokenExpiresAt < new Date()) {
-      throw new Error("Bootstrap token has expired. Please generate a new one.");
+      throw new ValidationError("Bootstrap token has expired. Please generate a new one.", {
+        reason: "tokenExpired",
+      });
     }
     if (!bcrypt.compareSync(data.token, config.bootstrapTokenHash)) {
-      throw new Error("Invalid bootstrap token");
+      throw new ValidationError("Invalid bootstrap token", { reason: "tokenInvalid" });
     }
 
     // Create the admin user
@@ -74,11 +84,19 @@ export class BootstrapService implements IBootstrapService {
       googleId: data.googleId,
       racerId: undefined,
     });
-    const createdAdmin = await this.authRepository.create(adminUser);
+    const createdAdmin = await wrapWriteOperation(
+      () => this.authRepository.create(adminUser),
+      "Failed to create bootstrap admin",
+      { operation: "createBootstrapAdmin", email: data.email },
+    );
 
     // Update bootstrap config to mark system as initialized
     config.isInitialized = true;
-    await this.bootstrapRepository.upsertBootstrapConfig(config);
+    await wrapWriteOperation(
+      () => this.bootstrapRepository.upsertBootstrapConfig(config),
+      "Failed to finalize bootstrap",
+      { operation: "finalizeBootstrap" },
+    );
 
     return UserMapper.toResponse(createdAdmin);
   }

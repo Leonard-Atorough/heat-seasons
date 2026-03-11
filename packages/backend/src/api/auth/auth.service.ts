@@ -4,6 +4,8 @@ import { UserResponse, UserCreateInput } from "src/application/dtos/user.dto";
 import { User, UserRole } from "shared";
 import { JwtService } from "src/Infrastructure/security/jwt";
 import { UserMapper } from "src/application/mappers";
+import { NotFoundError } from "src/domain/errors";
+import { mapWriteFailure } from "src/api/serviceWriteFailure";
 
 export class AuthService implements IAuthService {
   constructor(private authRepository: IAuthRepository) {}
@@ -11,7 +13,7 @@ export class AuthService implements IAuthService {
   async getMe(userId: string): Promise<UserResponse> {
     const user = await this.authRepository.findById(userId);
     if (!user) {
-      throw new Error("User not found");
+      throw new NotFoundError("User not found", { resource: "user", userId });
     }
     return UserMapper.toResponse(user);
   }
@@ -23,7 +25,15 @@ export class AuthService implements IAuthService {
       // Create NEW entity (no ID yet) - mapper converts DTO to domain entity
       const newUserEntity = UserMapper.toDomain(profile);
       newUserEntity.update({ lastLoginAt: new Date(), loginCount: 1 });
-      user = await this.authRepository.create(newUserEntity);
+      try {
+        user = await this.authRepository.create(newUserEntity);
+      } catch (error) {
+        throw mapWriteFailure(
+          "Failed to create user",
+          { operation: "createUser", googleId: profile.googleId },
+          error,
+        );
+      }
     } else {
       // Update EXISTING entity (already has ID)
       user.update({
@@ -35,7 +45,15 @@ export class AuthService implements IAuthService {
         lastLoginAt: new Date(),
         loginCount: (user.loginCount ?? 0) + 1,
       });
-      user = await this.authRepository.update(user.id!, user);
+      try {
+        user = await this.authRepository.update(user.id!, user);
+      } catch (error) {
+        throw mapWriteFailure(
+          "Failed to update user",
+          { operation: "updateUser", userId: user.id },
+          error,
+        );
+      }
     }
 
     return UserMapper.toResponse(user);
@@ -51,7 +69,11 @@ export class AuthService implements IAuthService {
     if (decoded) {
       ttl = decoded.exp ? decoded.exp - Math.floor(Date.now() / 1000) : 60 * 60; // Default to 1 hour if no exp
     }
-    await this.authRepository.logout(token, ttl);
+    try {
+      await this.authRepository.logout(token, ttl);
+    } catch (error) {
+      throw mapWriteFailure("Failed to revoke token", { operation: "logout" }, error);
+    }
   }
 
   async isTokenValid(token: string): Promise<boolean> {
@@ -63,11 +85,22 @@ export class AuthService implements IAuthService {
   async updateUserRole(userId: string, role: UserRole): Promise<UserResponse> {
     const user = await this.authRepository.findById(userId);
     if (!user) {
-      throw new Error("User not found");
+      throw new NotFoundError("User not found", { resource: "user", userId });
     }
 
     user.update({ role });
-    const updated = await this.authRepository.update(userId, user);
+    let updated;
+
+    try {
+      updated = await this.authRepository.update(userId, user);
+    } catch (error) {
+      throw mapWriteFailure(
+        "Failed to update user role",
+        { operation: "updateUserRole", userId, role },
+        error,
+      );
+    }
+
     return UserMapper.toResponse(updated);
   }
 

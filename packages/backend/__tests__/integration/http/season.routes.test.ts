@@ -6,7 +6,6 @@ import { createTestContainer, InMemoryStorageAdapter } from "../../testContainer
 import { Season, SeasonParticipant, User } from "shared";
 
 describe("Season routes integration", () => {
-
   type PersistedUserRecord = User & Record<string, unknown>;
   type PersistedSeasonRecord = Season & Record<string, unknown>;
   type PersistedParticipantRecord = SeasonParticipant & Record<string, unknown>;
@@ -187,27 +186,27 @@ describe("Season routes integration", () => {
         }),
       );
     });
-  });
 
-  describe("Unhappy paths", () => {
-    it("returns 404 when no seasons exist", async () => {
+    it("returns 200 when no seasons exist", async () => {
       const { app } = setupSeasonApp();
 
       const response = await request(app).get("/api/seasons");
 
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(200);
       expect(response.body).toEqual(
         expect.objectContaining({
-          success: false,
-          status: 404,
-          statusText: "NOT_FOUND",
+          success: true,
+          status: 200,
+          statusText: "OK",
           timestamp: expect.any(String),
           message: "No seasons found",
-          data: null,
+          data: [],
         }),
       );
     });
+  });
 
+  describe("Unhappy paths", () => {
     it("returns 401 when creating a season without an auth cookie", async () => {
       const { app } = setupSeasonApp();
 

@@ -2,6 +2,7 @@ import { RacerEntity } from "src/domain/entities";
 import { StorageAdapter } from "../StorageAdapter";
 import { IRacerRepository } from "src/domain/repositories";
 import { RacerMapper } from "src/application/mappers";
+import { wrapWriteFailure } from "./repositoryWriteFailure";
 
 export class RacerRepository implements IRacerRepository {
   constructor(private storageAdapter: StorageAdapter) {}
@@ -34,8 +35,12 @@ export class RacerRepository implements IRacerRepository {
       ...RacerMapper.toPersistence(entity),
     };
 
-    const saved = await this.storageAdapter.create("racers", dataToSave);
-    return RacerMapper.toDomainFromPersistence(saved);
+    try {
+      const saved = await this.storageAdapter.create("racers", dataToSave);
+      return RacerMapper.toDomainFromPersistence(saved);
+    } catch (error) {
+      throw wrapWriteFailure("Failed to create racer", { operation: "createRacer" }, error);
+    }
   }
 
   async update(id: string, entity: RacerEntity): Promise<RacerEntity> {
@@ -43,11 +48,27 @@ export class RacerRepository implements IRacerRepository {
       ...RacerMapper.toPersistence(entity),
     };
 
-    const updated = await this.storageAdapter.update("racers", id, dataToUpdate);
-    return RacerMapper.toDomainFromPersistence(updated);
+    try {
+      const updated = await this.storageAdapter.update("racers", id, dataToUpdate);
+      return RacerMapper.toDomainFromPersistence(updated);
+    } catch (error) {
+      throw wrapWriteFailure(
+        "Failed to update racer",
+        { operation: "updateRacer", racerId: id },
+        error,
+      );
+    }
   }
 
   async delete(id: string): Promise<void> {
-    await this.storageAdapter.delete("racers", id);
+    try {
+      await this.storageAdapter.delete("racers", id);
+    } catch (error) {
+      throw wrapWriteFailure(
+        "Failed to delete racer",
+        { operation: "deleteRacer", racerId: id },
+        error,
+      );
+    }
   }
 }

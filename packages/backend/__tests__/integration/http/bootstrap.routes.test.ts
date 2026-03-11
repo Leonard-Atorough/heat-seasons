@@ -135,7 +135,7 @@ describe("Bootstrap routes integration", () => {
     ).toBe(true);
   });
 
-  it("returns the shared 500 error envelope when generating a token for an initialized system", async () => {
+  it("returns a 409 when generating a token for an initialized system", async () => {
     const { app } = setupBootstrapApp({
       bootstrapConfig: [
         {
@@ -151,14 +151,14 @@ describe("Bootstrap routes integration", () => {
       .post("/api/bootstrap/token")
       .send({ expirationMinutes: 30 });
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(409);
     expect(response.body).toEqual(
       expect.objectContaining({
         success: false,
-        status: 500,
-        statusText: "Internal Server Error",
+        status: 409,
+        statusText: "CONFLICT",
         timestamp: expect.any(String),
-        message: "An unexpected error occurred. Please try again later.",
+        message: "System is already bootstrapped",
         data: null,
       }),
     );
@@ -213,7 +213,7 @@ describe("Bootstrap routes integration", () => {
     ]);
   });
 
-  it("returns the shared 500 error envelope and preserves state when the bootstrap token is invalid", async () => {
+  it("returns 400 when the bootstrap token is invalid", async () => {
     const { app, storageAdapter } = setupBootstrapApp({
       bootstrapConfig: [
         {
@@ -235,14 +235,14 @@ describe("Bootstrap routes integration", () => {
     const persistedUsers = snapshotUsers(storageAdapter);
     const persistedConfigs = snapshotBootstrapConfig(storageAdapter);
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(400);
     expect(response.body).toEqual(
       expect.objectContaining({
         success: false,
-        status: 500,
-        statusText: "Internal Server Error",
+        status: 400,
+        statusText: "VALIDATION_ERROR",
         timestamp: expect.any(String),
-        message: "An unexpected error occurred. Please try again later.",
+        message: "Invalid bootstrap token",
         data: null,
       }),
     );
