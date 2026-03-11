@@ -1,6 +1,6 @@
 import { Application } from "express";
 import { createApp } from "./app.js";
-import { logger } from "./Infrastructure/logging/logger";
+import { logger } from "./Infrastructure/logging/logger.js";
 import { Container } from "./Infrastructure/dependency-injection/container.js";
 import { PrismaStorageAdapter } from "./Infrastructure/persistence/PrismaStorageAdapter.js";
 
