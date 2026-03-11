@@ -1,0 +1,15 @@
+[build]
+  command = "npm run build"
+  publish = "packages/frontend/dist"
+  base = "packages/frontend"
+  environment = { NODE_VERSION = "22" }
+
+# SPA Routing: redirect all non-file routes to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Disable automatic subdomain redirects
+[build.environment]
+  NPM_FLAGS = "--legacy-peer-deps"
