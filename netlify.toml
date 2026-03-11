@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
   publish = "packages/frontend/dist"
-  base = "packages/frontend"
+  base = "/"
   environment = { NODE_VERSION = "22" }
 
 # SPA Routing: redirect all non-file routes to index.html
