@@ -29,7 +29,21 @@ export class SeasonController {
   }
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
-    res.status(501).json({ error: "Not implemented" });
+    const { id } = req.params;
+    try {
+      const season = await this.seasonService.getById(id);
+      const response: ApiResponse<Season> = {
+        success: true,
+        status: 200,
+        statusText: "OK",
+        timestamp: new Date(),
+        message: "Successfully retrieved season",
+        data: season,
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -87,10 +101,40 @@ export class SeasonController {
   }
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
-    res.status(501).json({ error: "Not implemented" });
+    const { id: seasonId } = req.params;
+    const updateData = req.body;
+
+    try {
+      const updatedSeason = await this.seasonService.update(seasonId, updateData);
+      const response: ApiResponse<Season> = {
+        success: true,
+        status: 200,
+        statusText: "OK",
+        timestamp: new Date(),
+        message: "Successfully updated season",
+        data: updatedSeason,
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
-    res.status(501).json({ error: "Not implemented" });
+    const { id: seasonId } = req.params;
+    try {
+      await this.seasonService.delete(seasonId);
+      const response: ApiResponse<null> = {
+        success: true,
+        status: 204,
+        statusText: "No Content",
+        timestamp: new Date(),
+        message: "Successfully deleted season",
+        data: null,
+      };
+      res.status(204).json(response);
+    } catch (error) {
+      next(error);
+    }
   }
 }
