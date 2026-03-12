@@ -29,7 +29,7 @@ export function Card({
       onKeyDown={
         onClick
           ? (e) => {
-              if (e.key === "Enter" || e.key === " ") {
+              if (e.key === "Enter") {
                 e.preventDefault();
                 onClick(e as any);
               }
