@@ -14,7 +14,7 @@ export default function RacerCard({ racer }: RacerCardProps) {
     <Card
       variant="compact"
       className={styles.racerCard}
-      onClick={() => navigate(`/racers/${racer.id}`, { state: { racer } })}
+      onClick={() => navigate(`/racers/${racer.name.toLowerCase().replace(/\s+/g, "-")}`, { state: { racer } })}
       style={{
         backgroundImage: `linear-gradient(135deg, ${racer.teamColor || "var(--card-white)"} 0%, var(--card-white, white) 60%)`,
       }}

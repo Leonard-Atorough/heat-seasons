@@ -3,6 +3,7 @@ import { Season, User } from "shared";
 
 import styles from "./SeasonCard.module.css";
 import { Button } from "../../common";
+import { useNavigate } from "react-router-dom";
 
 export interface SeasonCardProps {
   season: Season;
@@ -40,8 +41,10 @@ export function SeasonCard({
   setEditingSeason,
   handleDelete,
 }: SeasonCardProps) {
+  const navigate = useNavigate();
+  const slug = season.name.toLowerCase().replace(/\s+/g, "-");
   return (
-    <Card key={season.id} className={styles.seasonCard}>
+    <Card key={season.id} className={styles.seasonCard} onClick={() => navigate(`/seasons/${slug}`, { state: { season } })}>
       <div className={styles.seasonCard__header}>
         <h2 className={styles.seasonCard__name}>{season.name.toUpperCase()}</h2>
         <div className={styles.seasonCard__badges}>

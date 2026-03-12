@@ -79,6 +79,10 @@ export function LinkedRacerCard({ racer, onEdit }: LinkedRacerCardProps) {
           </div>
         </div>
       }
+
+      {/*TODO: Implement details in here <Button onClick={() => navigate(`/racers/${racer.id}`, { state: { racer } })} variant="primary" type="button" className={styles.racerCard__viewButton}>
+        View Details
+      </Button> */}
     </Card>
   );
 }

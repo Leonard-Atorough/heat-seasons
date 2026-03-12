@@ -12,6 +12,8 @@ import { Teams } from "./pages/Teams.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import Results from "./pages/Results.tsx";
 import AdminPage from "./pages/AdminPage.tsx";
+import RacerDetailsPage from "./pages/RacerDetailsPage.tsx";
+import SeasonDetailsPage from "./pages/SeasonDetailsPage.tsx";
 
 function App() {
   return (
@@ -26,9 +28,11 @@ function App() {
             <Route path="/login" element={<LoginRegister />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/racers" element={<Racers />} />
+            <Route path="/racers/:name" element={<RacerDetailsPage />} />
             <Route path="/teams" element={<Teams />} />
             <Route path="/results" element={<Results />} />
             <Route path="/seasons" element={<Seasons />} />
+            <Route path="/seasons/:name" element={<SeasonDetailsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<div>404 Not Found</div>} />
