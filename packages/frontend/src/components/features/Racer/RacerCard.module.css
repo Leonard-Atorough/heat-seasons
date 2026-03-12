@@ -62,10 +62,10 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  border-radius: var(--border-radius-full);
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
   color: var(--text-primary);
-  background-color: var(--text-primary);
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .racerCard__image {

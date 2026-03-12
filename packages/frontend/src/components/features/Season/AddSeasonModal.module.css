@@ -6,5 +6,11 @@
 
 .button {
   align-self: flex-end;
-    margin-top: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+@media (max-width: 600px) {
+  .button {
+    align-self: stretch;
+  }
 }

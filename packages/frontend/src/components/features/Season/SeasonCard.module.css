@@ -109,3 +109,29 @@
   background-color: #e8e8e8;
   color: #888;
 }
+
+@media (max-width: 600px) {
+  .seasonCard {
+    min-height: unset;
+    padding: var(--spacing-md);
+  }
+
+  .seasonCard__header {
+    flex-wrap: wrap;
+  }
+
+  .seasonDetails {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .seasonCard__actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .seasonCard__actions > * {
+    flex: 1;
+  }
+}

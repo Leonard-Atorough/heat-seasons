@@ -68,3 +68,34 @@
     transform: translateY(-5px);
   }
 }
+
+@media (max-width: 600px) {
+  .hero {
+    min-height: 60vh;
+    gap: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+  }
+
+  .hero__title {
+    font-size: 2.5rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.25rem;
+  }
+
+  .hero__actions {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero__actions > * {
+    width: 100%;
+  }
+
+  .hero__scrollIndicatorText {
+    font-size: var(--font-size-1);
+  }
+}

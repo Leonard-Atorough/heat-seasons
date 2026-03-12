@@ -8,14 +8,17 @@
 }
 
 .podiumCard--gold {
+  order: 2; /* centre in row */
   min-height: 300px;
 }
 
 .podiumCard--silver {
+  order: 1; /* left in row */
   min-height: 280px;
 }
 
 .podiumCard--bronze {
+  order: 3; /* right in row */
   min-height: 260px;
 }
 
@@ -56,4 +59,30 @@
     height: 100%;
     border-radius: var(--border-radius-lg);
     object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .podiumCard--gold {
+    order: 1;
+    height: 120px;
+  }
+
+  .podiumCard--silver {
+    order: 2;
+    min-height: 120px;
+  }
+
+  .podiumCard--bronze {
+    order: 3;
+    min-height: 120px;
+  }
+
+  .podiumCard__image {
+    top: 0;
+    right: 0;
+    transform: none;
+    width: 35%;
+    height: 100%;
+    border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
+  }
 }

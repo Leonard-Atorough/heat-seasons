@@ -40,3 +40,27 @@
 .refreshButton:hover {
   background-color: var(--primary-dark);
 }
+
+@media (max-width: 600px) {
+  .seasonsPage {
+    padding: var(--spacing-sm);
+  }
+
+  .seasonsPage__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .seasonsPage__title {
+    margin-bottom: 0;
+  }
+
+  .seasonsPage__actions {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .seasonsPage__actions > * {
+    flex: 1;
+  }
+}

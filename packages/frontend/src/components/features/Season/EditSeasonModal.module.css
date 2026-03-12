@@ -40,3 +40,13 @@
   padding-top: var(--spacing-md);
   border-top: var(--border-width-thin) solid var(--border-color);
 }
+
+@media (max-width: 600px) {
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+}

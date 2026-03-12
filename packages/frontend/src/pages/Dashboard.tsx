@@ -109,67 +109,29 @@ export default function Dashboard() {
         <div className={styles.dashboard__leaderboardPreview}>
           <h3 className={styles.dashboard__sectionTitle}>Top 3 Leaderboard</h3>
           <div className={styles.dashboard__leaderboardCards}>
-            {isLoading ? (
-              <>
-                <LoadingSkeletonCard
-                  key={topRacers[0].position}
-                  includeTitle={false}
-                  lines={1}
-                  height="32px"
-                  testId="dashboard-leaderboard-1-loading-skeleton"
-                />
-                <LoadingSkeletonCard
-                  key={topRacers[1].position}
-                  includeTitle={false}
-                  lines={1}
-                  height="32px"
-                  testId="dashboard-leaderboard-2-loading-skeleton"
-                />
-                <LoadingSkeletonCard
-                  key={topRacers[2].position}
-                  includeTitle={false}
-                  lines={1}
-                  height="32px"
-                  testId="dashboard-leaderboard-3-loading-skeleton"
-                />
-              </>
-            ) : (
-              <>
-                <PodiumCard
-                  key={topRacers[1].position}
-                  medal={topRacers[1].badgeColor as "gold" | "silver" | "bronze"}
-                  medalImageEmoji={topRacers[1].medal}
-                  racerName={topRacers[1].name}
-                  racerTeam={topRacers[1].team}
-                  teamColor={topRacers[1].teamColor}
-                  racerNationality={topRacers[1].nationality}
-                  points={topRacers[1].points}
-                  imageUrl={null}
-                />
-                <PodiumCard
-                  key={topRacers[0].position}
-                  medal={topRacers[0].badgeColor as "gold" | "silver" | "bronze"}
-                  medalImageEmoji={topRacers[0].medal}
-                  racerName={topRacers[0].name}
-                  racerTeam={topRacers[0].team}
-                  teamColor={topRacers[0].teamColor}
-                  racerNationality={topRacers[0].nationality}
-                  points={topRacers[0].points}
-                  imageUrl={null}
-                />
-                <PodiumCard
-                  key={topRacers[2].position}
-                  medal={topRacers[2].badgeColor as "gold" | "silver" | "bronze"}
-                  medalImageEmoji={topRacers[2].medal}
-                  racerName={topRacers[2].name}
-                  racerTeam={topRacers[2].team}
-                  teamColor={topRacers[2].teamColor}
-                  racerNationality={topRacers[2].nationality}
-                  points={topRacers[2].points}
-                  imageUrl={null}
-                />
-              </>
-            )}
+            {isLoading
+              ? [1, 2, 3].map((i) => (
+                  <LoadingSkeletonCard
+                    key={i}
+                    includeTitle={false}
+                    lines={1}
+                    height="32px"
+                    testId={`dashboard-leaderboard-${i}-loading-skeleton`}
+                  />
+                ))
+              : topRacers.map((racer) => (
+                  <PodiumCard
+                    key={racer.position}
+                    medal={racer.badgeColor as "gold" | "silver" | "bronze"}
+                    medalImageEmoji={racer.medal}
+                    racerName={racer.name}
+                    racerTeam={racer.team}
+                    teamColor={racer.teamColor}
+                    racerNationality={racer.nationality}
+                    points={racer.points}
+                    imageUrl={null}
+                  />
+                ))}
           </div>
           <Button
             variant="primary"

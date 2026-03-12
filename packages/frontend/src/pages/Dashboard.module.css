@@ -77,4 +77,23 @@
     flex-direction: column;
     align-items: stretch;
   }
+
+  .dashboard {
+    gap: var(--spacing-xl);
+  }
+
+  .dashboard__content {
+    gap: var(--spacing-xl);
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-lg);
+  }
+
+  .dashboard__content {
+    gap: var(--spacing-lg);
+  }
 }

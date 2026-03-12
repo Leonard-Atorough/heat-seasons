@@ -148,7 +148,7 @@ describe("Header Component", () => {
       Object.defineProperty(window, "scrollY", { value: 0, writable: true });
     });
 
-    it("adds scrolled class when scrollY exceeds 50px", async () => {
+    it("adds scrolled class when scrollY exceeds 75px", async () => {
       const { container } = renderHeader();
       Object.defineProperty(window, "scrollY", { value: 100, writable: true });
       window.dispatchEvent(new Event("scroll"));
@@ -166,7 +166,7 @@ describe("Header Component", () => {
       expect(container.querySelector("header")?.className).not.toContain("header--scrolled");
     });
 
-    it("closes the hamburger menu when scrollY exceeds 50px", async () => {
+    it("closes the hamburger menu when scrollY exceeds 75px", async () => {
       const { container } = renderHeader();
       const hamburger = screen.getByRole("button", { name: "" });
       await userEvent.click(hamburger);

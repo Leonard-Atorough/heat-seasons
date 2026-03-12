@@ -29,11 +29,11 @@ export default function Hero({ title, subtitle, backgroundImage }: HeroProps) {
         <Button variant="primary" type="button" onClick={() => navigate("/results")}>
           View Standings
         </Button>
-          {!auth.isAuthenticated && (
-        <Button variant="secondary" type="button" onClick={() => navigate("/login")}>
-          Sign In
-        </Button>
-      )}
+        {!auth.isAuthenticated && (
+          <Button variant="secondary" type="button" onClick={() => navigate("/login")}>
+            Sign In
+          </Button>
+        )}
       </div>
       <div className={styles.hero__scrollIndicator}>
         <span className={styles.hero__scrollIndicatorArrow}>↓</span>

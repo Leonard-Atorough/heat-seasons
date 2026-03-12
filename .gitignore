@@ -57,3 +57,5 @@ packages/frontend/test-output.txt
 
 # Vitest timings
 .vitest-timings.json
+.bootstrap-commands.ps1
+.bootstrap-commands.sh

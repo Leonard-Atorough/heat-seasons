@@ -23,7 +23,7 @@ export default function PodiumCard({
   imageUrl,
 }: PodiumCardProps) {
   return (
-    <Card className={`${styles.podiumCard} ${styles[`podiumCard--${medal}`]}`} style={{ backgroundColor: teamColor }}>
+    <Card className={`${styles.podiumCard} ${styles[`podiumCard--${medal}`]}`} style={{ backgroundColor: teamColor || "var(--card-white)" }}>
       <div>
         <div className={styles.podiumCard__medal}>{medalImageEmoji}</div>
         <div className={styles.podiumCard__name}>{racerName}</div>

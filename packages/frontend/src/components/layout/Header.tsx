@@ -14,7 +14,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      if (window.scrollY > 75) {
         setHeaderScrolled(true);
         setHamburgerOpen(false);
       } else {
@@ -30,7 +30,7 @@ export default function Header() {
     <header className={styles.header + (headerScrolled ? ` ${styles["header--scrolled"]}` : "")}>
       <h1 className={styles.title} aria-label="Heat Seasons Home" role="heading" aria-level={1}>
         <Link to="/" onClick={() => setHamburgerOpen(false)}>
-          🏁 HEAT SEASONS
+          🏁 <p className={styles.title__text}>HEAT SEASONS</p>
         </Link>
       </h1>
       <Button

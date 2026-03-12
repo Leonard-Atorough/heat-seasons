@@ -54,3 +54,18 @@
 .pageHeader__action {
   margin-top: var(--spacing-md);
 }
+
+@media (max-width: 600px) {
+  .pageHeader--hero .pageHeader__title {
+    font-size: 2.5rem;
+  }
+
+  .pageHeader__subtitle,
+  .pageHeader--hero .pageHeader__subtitle {
+    font-size: 1.5rem;
+  }
+
+  .pageHeader--hero {
+    padding-bottom: var(--spacing-lg);
+  }
+}

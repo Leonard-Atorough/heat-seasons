@@ -55,3 +55,21 @@
   overflow-x: hidden;
   padding-right: var(--spacing-lg);
 }
+
+@media (max-width: 600px) {
+  .modalOverlay {
+    align-items: flex-end;
+  }
+
+  .modalContent {
+    max-width: 100%;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: var(--spacing-sm);
+  }
+
+  .modalBody {
+    max-height: 65vh;
+    padding-right: var(--spacing-xs);
+  }
+}

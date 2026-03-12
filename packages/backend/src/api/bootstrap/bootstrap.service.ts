@@ -75,6 +75,8 @@ export class BootstrapService implements IBootstrapService {
       throw new ValidationError("Invalid bootstrap token", { reason: "tokenInvalid" });
     }
 
+    
+
     // Create the admin user
     const adminUser = UserEntity.create({
       name: data.name,
