@@ -239,7 +239,7 @@ describe("ComponentName", () => {
 });
 ```
 
-Stubs must pass (`npm run test:run`) without errors. Never leave syntax errors or broken imports in stub files.
+Stubs must pass (`npm run test`) without errors. Never leave syntax errors or broken imports in stub files.
 
 ---
 
