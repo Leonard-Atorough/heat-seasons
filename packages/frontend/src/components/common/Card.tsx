@@ -29,8 +29,10 @@ export function Card({
       onKeyDown={
         onClick
           ? (e) => {
-              e.preventDefault();
-              if (e.key === "Enter" || e.key === " ") onClick(e as any);
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClick(e as any);
+              }
             }
           : undefined
       }
