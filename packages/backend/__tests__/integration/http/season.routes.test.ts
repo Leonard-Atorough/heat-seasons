@@ -204,6 +204,83 @@ describe("Season routes integration", () => {
         }),
       );
     });
+
+    it("returns a season by ID", async () => {
+      const activeSeason = seasons.active();
+      const { app } = setupSeasonApp({ seasons: [{ ...activeSeason }] });
+
+      const response = await request(app).get(`/api/seasons/${activeSeason.id}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          success: true,
+          status: 200,
+          statusText: "OK",
+          timestamp: expect.any(String),
+          message: "Successfully retrieved season",
+          data: expect.objectContaining({
+            id: activeSeason.id,
+            name: activeSeason.name,
+            status: activeSeason.status,
+          }),
+        }),
+      );
+    });
+
+    it("updates a season and persists the change for an admin user", async () => {
+      const persistedAdmin = users.admin();
+      const activeSeason = seasons.active();
+      const { app, container, storageAdapter } = setupSeasonApp({
+        users: [{ ...persistedAdmin }],
+        seasons: [{ ...activeSeason }],
+      });
+      const token = container.getAuthService().generateToken(persistedAdmin);
+
+      const payload = { name: "Season 1 2026 - Updated", status: "completed" };
+
+      const response = await request(app)
+        .put(`/api/seasons/${activeSeason.id}`)
+        .set("Cookie", [`token=${token}`])
+        .send(payload);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          success: true,
+          status: 200,
+          statusText: "OK",
+          timestamp: expect.any(String),
+          message: "Successfully updated season",
+          data: expect.objectContaining({
+            id: activeSeason.id,
+            name: payload.name,
+            status: payload.status,
+          }),
+        }),
+      );
+      const persisted = snapshotSeasons(storageAdapter).find((s) => s.id === activeSeason.id);
+      expect(persisted).toEqual(
+        expect.objectContaining({ name: payload.name, status: payload.status }),
+      );
+    });
+
+    it("deletes a season and removes it from storage for an admin user", async () => {
+      const persistedAdmin = users.admin();
+      const activeSeason = seasons.active();
+      const { app, container, storageAdapter } = setupSeasonApp({
+        users: [{ ...persistedAdmin }],
+        seasons: [{ ...activeSeason }],
+      });
+      const token = container.getAuthService().generateToken(persistedAdmin);
+
+      const response = await request(app)
+        .delete(`/api/seasons/${activeSeason.id}`)
+        .set("Cookie", [`token=${token}`]);
+
+      expect(response.status).toBe(204);
+      expect(snapshotSeasons(storageAdapter)).toEqual([]);
+    });
   });
 
   describe("Unhappy paths", () => {
@@ -285,31 +362,67 @@ describe("Season routes integration", () => {
       ]);
     });
 
-    it("returns 501 for the current GET, PUT, and DELETE /api/seasons/:id endpoints", async () => {
+    it("returns 404 when the requested season does not exist", async () => {
+      const { app } = setupSeasonApp();
+
+      const response = await request(app).get("/api/seasons/missing-season");
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          success: false,
+          status: 404,
+          statusText: "NOT_FOUND",
+          timestamp: expect.any(String),
+          message: "Season with ID missing-season not found",
+          data: null,
+        }),
+      );
+    });
+
+    it("returns 404 when an admin tries to update a missing season", async () => {
       const persistedAdmin = users.admin();
-      const activeSeason = seasons.active();
-      const { app, container } = setupSeasonApp({
-        users: [{ ...persistedAdmin }],
-        seasons: [{ ...activeSeason }],
-      });
+      const { app, container } = setupSeasonApp({ users: [{ ...persistedAdmin }] });
       const token = container.getAuthService().generateToken(persistedAdmin);
 
-      const getResponse = await request(app).get(`/api/seasons/${activeSeason.id}`);
-      expect(getResponse.status).toBe(501);
-      expect(getResponse.body).toEqual({ error: "Not implemented" });
-
-      const updateResponse = await request(app)
-        .put(`/api/seasons/${activeSeason.id}`)
+      const response = await request(app)
+        .put("/api/seasons/missing-season")
         .set("Cookie", [`token=${token}`])
         .send({ name: "Updated name" });
-      expect(updateResponse.status).toBe(501);
-      expect(updateResponse.body).toEqual({ error: "Not implemented" });
 
-      const deleteResponse = await request(app)
-        .delete(`/api/seasons/${activeSeason.id}`)
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          success: false,
+          status: 404,
+          statusText: "NOT_FOUND",
+          timestamp: expect.any(String),
+          message: "Season with ID missing-season not found",
+          data: null,
+        }),
+      );
+    });
+
+    it("returns 404 when an admin tries to delete a missing season", async () => {
+      const persistedAdmin = users.admin();
+      const { app, container } = setupSeasonApp({ users: [{ ...persistedAdmin }] });
+      const token = container.getAuthService().generateToken(persistedAdmin);
+
+      const response = await request(app)
+        .delete("/api/seasons/missing-season")
         .set("Cookie", [`token=${token}`]);
-      expect(deleteResponse.status).toBe(501);
-      expect(deleteResponse.body).toEqual({ error: "Not implemented" });
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          success: false,
+          status: 404,
+          statusText: "NOT_FOUND",
+          timestamp: expect.any(String),
+          message: "Season with ID missing-season not found",
+          data: null,
+        }),
+      );
     });
   });
 });
