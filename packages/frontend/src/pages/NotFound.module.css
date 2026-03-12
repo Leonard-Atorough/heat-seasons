@@ -1,0 +1,32 @@
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-3xl);
+  text-align: center;
+  flex: 1;
+}
+
+.notFound__code {
+  font-size: 8rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-primary, #e10600);
+  letter-spacing: -0.05em;
+}
+
+.notFound__title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.notFound__message {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 400px;
+}

@@ -14,6 +14,7 @@ import Results from "./pages/Results.tsx";
 import AdminPage from "./pages/AdminPage.tsx";
 import RacerDetailsPage from "./pages/RacerDetailsPage.tsx";
 import SeasonDetailsPage from "./pages/SeasonDetailsPage.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
             <Route path="/seasons/:name" element={<SeasonDetailsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admin" element={<AdminPage />} />
-            <Route path="*" element={<div>404 Not Found</div>} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
 
