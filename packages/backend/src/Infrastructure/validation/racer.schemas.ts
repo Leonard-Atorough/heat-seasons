@@ -48,9 +48,9 @@ export const createRacerSchema = z.object({
       "Team color must be a valid hex color (e.g., #FF0000) or RGB format",
     ),
 
-  badgeUrl: z.url("Badge URL must be a valid URL").optional().or(z.literal("")),
+  badgeUrl: z.url("Badge URL must be a valid URL").optional().or(z.literal("")).transform((val) => (val === "" ? undefined : val)),
 
-  profileUrl: z.url("Profile URL must be a valid URL").optional().or(z.literal("")),
+  profileUrl: z.url("Profile URL must be a valid URL").optional().or(z.literal("")).transform((val) => (val === "" ? undefined : val)),
 
   active: z.boolean().optional(),
 });

@@ -22,7 +22,7 @@ export const userRoleActionSchema = z.object({
  * for admin-level creation (assigning racers to arbitrary users)
  */
 export const createAdminRacerSchema = z.object({
-  userId: z.string().trim().min(1).optional(),
+  userId: z.string().trim().min(1).optional().or(z.literal("")).transform((val) => (val === "" ? undefined : val)),
 
   name: z
     .string("Racer name is required")
@@ -58,9 +58,9 @@ export const createAdminRacerSchema = z.object({
 
   active: z.boolean().optional().default(true),
 
-  badgeUrl: z.string().url("Badge URL must be a valid URL").optional().or(z.literal("")),
+  badgeUrl: z.string().url("Badge URL must be a valid URL").optional().or(z.literal("")).transform((val) => (val === "" ? undefined : val)),
 
-  profileUrl: z.string().url("Profile URL must be a valid URL").optional().or(z.literal("")),
+  profileUrl: z.string().url("Profile URL must be a valid URL").optional().or(z.literal("")).transform((val) => (val === "" ? undefined : val)),
 });
 
 /**
