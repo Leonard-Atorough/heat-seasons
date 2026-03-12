@@ -5,10 +5,16 @@ export class RaceMapper {
   static toDomain(dto: RaceCreateInput): RaceEntity {
     return RaceEntity.create({
       seasonId: dto.seasonId,
-       raceNumber: dto.raceNumber,
+      raceNumber: dto.raceNumber,
       name: dto.name,
       date: dto.date,
-      results: dto.results,
+      results: (dto.results ?? []).map((r) => ({
+        racerId: r.racerId,
+        position: r.position,
+        points: r.points,
+        constructorPoints: r.constructorPoints,
+        isGhostRacer: r.ghostRacer ?? false,
+      })),
     });
   }
 
@@ -37,7 +43,13 @@ export class RaceMapper {
       name: entity.name,
       date: entity.date,
       completed: entity.completed,
-      results: entity.results,
+      results: entity.results.map((r) => ({
+        racerId: r.racerId,
+        position: r.position,
+        points: r.points,
+        constructorPoints: r.constructorPoints,
+        ghostRacer: r.isGhostRacer ?? false,
+      })),
     } as RaceResponse;
   }
 
