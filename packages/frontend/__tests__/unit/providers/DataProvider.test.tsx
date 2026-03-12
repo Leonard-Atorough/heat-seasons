@@ -33,7 +33,7 @@ const TestComponent = () => {
     <div>
       <div data-testid="seasons-count">{context.seasons?.length || 0}</div>
       <div data-testid="racers-count">{context.racers?.length || 0}</div>
-      <div data-testid="loading">{context.isLoading ? "loading" : "loaded"}</div>
+      <div data-testid="loading">{context.isSeasonsLoading || context.isRacersLoading ? "loading" : "loaded"}</div>
       <div data-testid="error">{context.error ? context.error.message : "no-error"}</div>
       <button data-testid="refresh-btn" onClick={context.refresh}>
         Refresh All
