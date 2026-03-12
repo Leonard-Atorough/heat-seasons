@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { LoadingSkeletonCard } from "src/components/common";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
@@ -34,5 +35,14 @@ export default function AuthCallback() {
     authenticateUser();
   }, [navigate, auth.isAuthenticated, auth.user]);
 
-  return <div>Authenticating...</div>;
+  return (
+    <div className="container">
+      <LoadingSkeletonCard
+        lines={1}
+        height="250px"
+        includeTitle={true}
+        testId="auth-callback-loading-skeleton"
+      />
+    </div>
+  );
 }
