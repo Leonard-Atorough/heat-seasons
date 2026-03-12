@@ -30,8 +30,9 @@ function getExpectedPayload(input: AdminCreateRacerInput): AdminCreateRacerInput
     nationality: input.nationality,
     age: input.age,
     active: input.active,
-    badgeUrl: input.badgeUrl,
-    userId: input.userId,
+    // RHF submits empty-string for unfilled optional fields (no longer normalised to undefined)
+    badgeUrl: input.badgeUrl ?? "",
+    userId: input.userId ?? "",
   };
 }
 
@@ -229,13 +230,14 @@ describe("RacerManagementTab", () => {
       await user.click(screen.getByRole("button", { name: "Create Racer" }));
 
       await waitFor(() => {
-        expect(screen.getAllByText("Name must be at least 2 characters.")).toHaveLength(2);
+        // zod message has no trailing period; only one inline error node (no summary toast)
+        expect(screen.getByText("Name must be at least 2 characters")).toBeInTheDocument();
       });
 
       await user.type(screen.getByPlaceholderText("e.g. Max Verstappen"), "b");
 
       await waitFor(() => {
-        expect(screen.queryAllByText("Name must be at least 2 characters.")).toHaveLength(0);
+        expect(screen.queryByText("Name must be at least 2 characters")).not.toBeInTheDocument();
       });
       expect(mockAdminApi.adminCreateRacer).not.toHaveBeenCalled();
     });

@@ -83,7 +83,9 @@ describe("Given a Seasons page", () => {
         refresh,
       });
 
-      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: false, isAuthenticated: false }));
+      mockedUseAuth.mockReturnValue(
+        createMockAuthContext({ isAdmin: false, isAuthenticated: false }),
+      );
       mockedGetSeasonParticipants.mockResolvedValue([]);
 
       renderPage();
@@ -100,7 +102,9 @@ describe("Given a Seasons page", () => {
         error: null,
         refresh,
       });
-      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: false, isAuthenticated: false }));
+      mockedUseAuth.mockReturnValue(
+        createMockAuthContext({ isAdmin: false, isAuthenticated: false }),
+      );
       mockedGetSeasonParticipants.mockResolvedValue([]);
 
       renderPage();
@@ -176,7 +180,9 @@ describe("Given a Seasons page", () => {
         refresh,
       });
 
-      mockedUseAuth.mockReturnValue(createMockAuthContext({ isAdmin: false, isAuthenticated: false }));
+      mockedUseAuth.mockReturnValue(
+        createMockAuthContext({ isAdmin: false, isAuthenticated: false }),
+      );
       mockedGetSeasonParticipants.mockResolvedValue([]);
 
       renderPage();
@@ -224,7 +230,7 @@ describe("Given a Seasons page", () => {
       await user.click(joinButton);
 
       expect(mockedJoinSeason).toHaveBeenCalledWith("s1", "racer-42");
-      expect(await screen.findByText(/✓ joined/i)).toBeInTheDocument();
+      expect(await screen.findByText("✓ Joined")).toBeInTheDocument();
     });
 
     it("shows error toast when join fails", async () => {
@@ -250,7 +256,7 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const joinButton = await screen.findByRole("button", { name: /join season/i });
+      const joinButton = await screen.findByRole("button", { name: "Join Season" });
       await user.click(joinButton);
 
       expect(await screen.findByText(/already joined/i)).toBeInTheDocument();
@@ -277,7 +283,7 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const joinButton = await screen.findByRole("button", { name: /join season/i });
+      const joinButton = await screen.findByRole("button", { name: "Join Season" });
       await user.click(joinButton);
       expect(await screen.findByText(/failed to join season/i)).toBeInTheDocument();
     });
@@ -303,7 +309,7 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const joinButton = await screen.findByRole("button", { name: /join season/i });
+      const joinButton = await screen.findByRole("button", { name: "Join Season" });
       await user.click(joinButton);
       expect(await screen.findByText(/network error/i)).toBeInTheDocument();
     });
@@ -335,7 +341,7 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const deleteButton = await screen.findByRole("button", { name: /delete/i });
+      const deleteButton = await screen.findByRole("button", { name: "Delete" });
       await user.click(deleteButton);
 
       expect(confirmSpy).toHaveBeenCalled();
@@ -368,7 +374,7 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const deleteButton = await screen.findByRole("button", { name: /delete/i });
+      const deleteButton = await screen.findByRole("button", { name: "Delete" });
       await user.click(deleteButton);
 
       expect(await screen.findByText(/delete failed/i)).toBeInTheDocument();
@@ -400,9 +406,9 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const createButton = await screen.findByRole("button", { name: /create season/i });
+      const createButton = await screen.findByRole("button", { name: "Create Season" });
       await user.click(createButton);
-      expect(await screen.findByRole("heading", { name: /add new season/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: "Add New Season" })).toBeInTheDocument();
     });
 
     it("opens edit season modal when edit button is clicked", async () => {
@@ -425,9 +431,9 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const editButton = await screen.findByRole("button", { name: /edit/i });
+      const editButton = await screen.findByRole("button", { name: "Edit" });
       await user.click(editButton);
-      expect(await screen.findByRole("heading", { name: /edit season/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: "Edit Season" })).toBeInTheDocument();
       expect(screen.getByLabelText(/season name/i)).toHaveValue("Season 1");
       expect(screen.getByLabelText(/start date/i)).toHaveValue("2024-12-01");
     });
@@ -452,12 +458,12 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const createButton = await screen.findByRole("button", { name: /create season/i });
+      const createButton = await screen.findByRole("button", { name: "Create Season" });
       await user.click(createButton);
-      expect(await screen.findByRole("heading", { name: /add new season/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: "Add New Season" })).toBeInTheDocument();
       const cancelButton = screen.getByTestId("modal-close-button");
       await user.click(cancelButton);
-      expect(screen.queryByRole("heading", { name: /add new season/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole("heading", { name: "Add New Season" })).not.toBeInTheDocument();
 
       mockedUseSeasons.mockReturnValue({
         data: [createSeason({ id: "s1", name: "Season 1", status: "upcoming" })],
@@ -468,12 +474,12 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const editButton = await screen.findByRole("button", { name: /edit/i });
+      const editButton = await screen.findByRole("button", { name: "Edit" });
       await user.click(editButton);
-      expect(await screen.findByRole("heading", { name: /edit season/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: "Edit Season" })).toBeInTheDocument();
       const cancelButton2 = screen.getByTestId("modal-close-button");
       await user.click(cancelButton2);
-      expect(screen.queryByRole("heading", { name: /edit season/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole("heading", { name: "Edit Season" })).not.toBeInTheDocument();
     });
 
     it("calls API and refreshes list when season is created", async () => {
@@ -497,12 +503,12 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const createButton = await screen.findByRole("button", { name: /create season/i });
+      const createButton = await screen.findByRole("button", { name: "Create Season" });
       await user.click(createButton);
       const nameInput = await screen.findByLabelText(/season name/i);
       const startDateInput = screen.getByLabelText(/start date/i);
       const submitButton = screen
-        .getAllByRole("button", { name: /create season/i })
+        .getAllByRole("button", { name: "Create Season" })
         .find((button) => button.getAttribute("type") === "submit");
       expect(submitButton).toBeDefined();
       fireEvent.change(nameInput, { target: { value: "New Season" } });
@@ -543,11 +549,11 @@ describe("Given a Seasons page", () => {
       );
 
       renderPage();
-      const editButton = await screen.findByRole("button", { name: /edit/i });
+      const editButton = await screen.findByRole("button", { name: "Edit" });
       await user.click(editButton);
       const nameInput = await screen.findByLabelText(/season name/i);
       const submitButton = screen
-        .getAllByRole("button", { name: /save changes/i })
+        .getAllByRole("button", { name: "Save Changes" })
         .find((button) => button.getAttribute("type") === "submit");
       expect(submitButton).toBeDefined();
       fireEvent.change(nameInput, { target: { value: "Updated Name" } });

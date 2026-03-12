@@ -123,6 +123,18 @@ describe("Header Component", () => {
 
       expect(container.querySelector("nav")?.className).not.toContain("nav--open");
     });
+
+    it("closes hamburger when clicking the user profile badge", async () => {
+      const { container } = renderHeader({ isAuthenticated: true });
+      const hamburger = screen.getByRole("button", { name: "" });
+
+      await userEvent.click(hamburger);
+      expect(container.querySelector("nav")?.className).toContain("nav--open");
+
+      await userEvent.click(screen.getByText("Test User"));
+
+      expect(container.querySelector("nav")?.className).not.toContain("nav--open");
+    });
   });
 
   describe("Keyboard Navigation", () => {

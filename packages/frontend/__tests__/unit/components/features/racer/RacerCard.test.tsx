@@ -71,6 +71,6 @@ describe("RacerCard Component", () => {
     renderWithRouter(<RacerCard racer={racer} />);
     await userEvent.click(screen.getByText("Lewis Hamilton"));
     expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith(`/racers/${racer.id}`, { state: { racer } });
+    expect(mockNavigate).toHaveBeenCalledWith(`/racers/${racer.name.toLowerCase().replace(/\s+/g, "-")}`, { state: { racer } });
   });
 });

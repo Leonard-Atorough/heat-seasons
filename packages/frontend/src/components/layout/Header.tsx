@@ -88,6 +88,7 @@ export default function Header() {
             <UserProfileBadge
               name={auth.user.name}
               profilePicture={auth.user.profilePicture || ""}
+              onNavigate={() => setHamburgerOpen(false)}
             />
           </>
         )}
@@ -96,7 +97,15 @@ export default function Header() {
   );
 }
 
-function UserProfileBadge({ name, profilePicture }: { name: string; profilePicture: string }) {
+function UserProfileBadge({
+  name,
+  profilePicture,
+  onNavigate,
+}: {
+  name: string;
+  profilePicture: string;
+  onNavigate?: () => void;
+}) {
   const [imageSrc, setImageSrc] = useState(profilePicture);
 
   const navigate = useNavigate();
@@ -111,7 +120,10 @@ function UserProfileBadge({ name, profilePicture }: { name: string; profilePictu
       className={styles["user-profile"]}
       variant="ghost"
       type="button"
-      onClick={() => navigate(`/profile`)}
+      onClick={() => {
+        onNavigate?.();
+        navigate(`/profile`);
+      }}
     >
       {imageSrc ? (
         <img

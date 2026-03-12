@@ -1,62 +1,75 @@
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createRacerSchema } from "shared";
 import { AdminCreateRacerInput, AdminUser } from "../../../../models";
 import { Button, FormGroup, LoadingSkeletonCard } from "../../../common";
-import { FormErrors } from "./racerValidation";
 import styles from "../RacerManagementTab.module.css";
 
 interface RacerFormProps {
-  form: AdminCreateRacerInput;
-  errors: FormErrors;
+  defaultValues: AdminCreateRacerInput;
   users: AdminUser[];
   isLoadingUsers: boolean;
   isSubmitting: boolean;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onValidSubmit: (data: AdminCreateRacerInput) => Promise<void>;
   onReset?: () => void;
   submitButtonText?: string;
   showResetButton?: boolean;
 }
 
 export function RacerForm({
-  form,
-  errors,
+  defaultValues,
   users,
   isLoadingUsers,
   isSubmitting,
-  onChange,
-  onSubmit,
+  onValidSubmit,
   onReset,
   submitButtonText = "Submit",
   showResetButton = true,
 }: RacerFormProps) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } = useForm<AdminCreateRacerInput>({ resolver: zodResolver(createRacerSchema) as any, defaultValues });
+
+  const teamColor = watch("teamColor");
+
+  const onSubmit: SubmitHandler<AdminCreateRacerInput> = async (data) => {
+    await onValidSubmit(data);
+    reset(defaultValues);
+  };
+
+  const handleReset = () => {
+    reset(defaultValues);
+    onReset?.();
+  };
+
   return (
-    <form onSubmit={onSubmit} className={styles.form} noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
       {/* -- Basic info ------------------------------------------ */}
       <div className={styles.row}>
         <FormGroup
           element="input"
           id="racer-name"
-          name="name"
           type="text"
           label="Name"
           placeholder="e.g. Max Verstappen"
-          value={form.name}
-          onChange={onChange}
           required
-          error={errors.name}
+          error={errors.name?.message}
+          {...register("name")}
         />
         <FormGroup
           element="input"
           id="racer-nationality"
-          name="nationality"
           type="text"
           label="Nationality"
           placeholder="e.g. Dutch"
-          value={form.nationality}
-          onChange={onChange}
           required
-          error={errors.nationality}
+          error={errors.nationality?.message}
+          {...register("nationality")}
         />
       </div>
 
@@ -64,29 +77,25 @@ export function RacerForm({
         <FormGroup
           element="input"
           id="racer-team"
-          name="team"
           type="text"
           label="Team"
           placeholder="e.g. Red Bull Racing"
-          value={form.team}
-          onChange={onChange}
           required
-          error={errors.team}
+          error={errors.team?.message}
+          {...register("team")}
         />
 
         <FormGroup element="default" id="racer-teamColor" label="Team Colour" required>
           <div className={styles.colorRow}>
             <input
               id="racer-teamColor"
-              name="teamColor"
               type="color"
               className={styles.colorPicker}
-              value={form.teamColor}
-              onChange={onChange}
               aria-label="Team colour picker"
+              {...register("teamColor")}
             />
             <span className={styles.colorHex} aria-hidden="true">
-              {form.teamColor}
+              {teamColor}
             </span>
           </div>
         </FormGroup>
@@ -96,26 +105,22 @@ export function RacerForm({
         <FormGroup
           element="input"
           id="racer-age"
-          name="age"
           type="number"
           label="Age"
-          value={form.age}
-          onChange={onChange}
           required
-          min={16}
-          max={80}
-          error={errors.age}
+          min={8}
+          max={120}
+          error={errors.age?.message}
+          {...register("age", { valueAsNumber: true })}
         />
         <FormGroup
           element="input"
           id="racer-badgeUrl"
-          name="badgeUrl"
           type="url"
           label="Badge URL (optional)"
           placeholder="https://..."
-          value={form.badgeUrl}
-          onChange={onChange}
-          error={errors.badgeUrl}
+          error={errors.badgeUrl?.message}
+          {...register("badgeUrl")}
         />
       </div>
 
@@ -126,10 +131,8 @@ export function RacerForm({
         ) : (
           <select
             id="racer-userId"
-            name="userId"
             className={styles.select}
-            value={form.userId}
-            onChange={onChange}
+            {...register("userId")}
           >
             <option value="">None (unassigned)</option>
             {users.map((u) => (
@@ -146,16 +149,14 @@ export function RacerForm({
         <input
           id="racer-active"
           type="checkbox"
-          name="active"
-          checked={form.active ?? true}
-          onChange={onChange}
           className={styles.checkbox}
+          {...register("active")}
         />
       </FormGroup>
 
       <div className={styles.formActions}>
         {showResetButton && (
-          <Button type="button" variant="ghost" onClick={onReset} disabled={isSubmitting}>
+          <Button type="button" variant="ghost" onClick={handleReset} disabled={isSubmitting}>
             Reset
           </Button>
         )}
