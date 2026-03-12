@@ -90,15 +90,15 @@ export default function Dashboard() {
             </>
           ) : (
             <>
-              <StatCard title="Current Leader" value={topRacers[0].name} />
+              <StatCard title="Current Leader" value={topRacers[0]?.name ?? ""} />
               <StatCard
                 title="Recent Race"
-                value={races && races.length > 1 ? races[races.length - 2].name : "N/A"}
+                value={races && races.length > 1 ? races[races.length - 2]?.name ?? "N/A" : "N/A"}
                 backgroundImage="/images/previous-race-bg.jpg"
               />
               <StatCard
                 title="Next Race"
-                value={races && races.length > 0 ? races[races.length - 1].name : "N/A"}
+                value={races && races.length > 0 ? races[races.length - 1]?.name ?? "N/A" : "N/A"}
                 backgroundImage="/images/next-race-bg.jpg"
               />
             </>
@@ -119,7 +119,7 @@ export default function Dashboard() {
                     testId={`dashboard-leaderboard-${i}-loading-skeleton`}
                   />
                 ))
-              : topRacers.map((racer) => (
+              : topRacers && topRacers.map((racer) => (
                   <PodiumCard
                     key={racer.position}
                     medal={racer.badgeColor as "gold" | "silver" | "bronze"}
