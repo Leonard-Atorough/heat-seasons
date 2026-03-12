@@ -34,18 +34,24 @@ export default function ResultsTable({
           </tr>
         </thead>
         <tbody>
-          {results.map((result) => {
-            const racer = racersMap.get(result.racerId);
-            return (
-              <tr key={result.racerId}>
-                <td>{result.position}</td>
-                <td>{racer ? racer.name : "Unknown Racer"}</td>
-                <td>{racer ? racer.team : "Unknown Team"}</td>
-                <td>{result.points}</td>
-                <td>{result.constructorPoints}</td>
-              </tr>
-            );
-          })}
+          {results.length > 0 ? (
+            results.map((result) => {
+              const racer = racersMap.get(result.racerId);
+              return (
+                <tr key={result.racerId}>
+                  <td>{result.position}</td>
+                  <td>{racer ? racer.name : "Unknown Racer"}</td>
+                  <td>{racer ? racer.team : "Unknown Team"}</td>
+                  <td>{result.points}</td>
+                  <td>{result.constructorPoints}</td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan={5}>No results available.</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
