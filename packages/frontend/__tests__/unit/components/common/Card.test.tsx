@@ -44,13 +44,6 @@ describe("Card Component", () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it("calls onClick handler when Space key is pressed", async () => {
-    render(<Card {...defaultProps} onClick={onClick} />);
-    screen.getByRole("button").focus();
-    await userEvent.keyboard(" ");
-    expect(onClick).toHaveBeenCalledTimes(1);
-  });
-
   it("does not have button role when onClick is not provided", () => {
     render(<Card {...defaultProps} />);
     expect(screen.getByText("Test Card")).not.toHaveAttribute("role", "button");

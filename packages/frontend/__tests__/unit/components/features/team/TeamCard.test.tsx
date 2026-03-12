@@ -18,7 +18,7 @@ describe("TeamCard Component", () => {
     render(<TeamCard {...defaultProps} racers={[racer]} />);
     expect(screen.getByText("Test Team")).toBeInTheDocument();
     expect(screen.getByText("Test Team").parentElement?.parentElement).toHaveStyle(
-      `background-image: linear-gradient(135deg, ${defaultProps.teamColor} 55%, white 100%)`,
+      `background-image: linear-gradient(135deg, ${defaultProps.teamColor} 0%, var(--card-white, white) 60%)`,
     );
   });
 
@@ -27,7 +27,7 @@ describe("TeamCard Component", () => {
     render(<TeamCard teamName="No Color Team" racers={[racer]} />);
     expect(screen.getByText("No Color Team")).toBeInTheDocument();
     expect(screen.getByText("No Color Team").parentElement?.parentElement).toHaveStyle(
-      `background-image: linear-gradient(135deg, var(--card-white) 55%, white 100%)`,
+      `background-image: linear-gradient(135deg, var(--card-white) 0%, var(--card-white, white) 60%)`,
     );
   });
 

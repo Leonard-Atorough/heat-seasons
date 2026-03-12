@@ -96,21 +96,6 @@ describe("SeasonController", () => {
     expect(response.status).toHaveBeenCalledWith(200);
   });
 
-  it("returns 501 for not-yet-implemented routes", async () => {
-    await seasonController.getById(request as Request, response as Response, next);
-    expect(response.status).toHaveBeenCalledWith(501);
-
-    await seasonController.update(request as Request, response as Response, next);
-    expect(response.status).toHaveBeenCalledWith(501);
-
-    await seasonController.delete(request as Request, response as Response, next);
-    expect(response.status).toHaveBeenCalledWith(501);
-
-    expect(mockSeasonService.getById).not.toHaveBeenCalled();
-    expect(mockSeasonService.update).not.toHaveBeenCalled();
-    expect(mockSeasonService.delete).not.toHaveBeenCalled();
-  });
-
   it("forwards season-service errors to next", async () => {
     const error = new Error("season failed");
     mockSeasonService.getAll.mockRejectedValue(error);

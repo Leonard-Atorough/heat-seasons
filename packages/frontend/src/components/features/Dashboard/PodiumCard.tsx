@@ -4,7 +4,7 @@ import styles from "./PodiumCard.module.css";
 export interface PodiumCardProps {
   medal: "gold" | "silver" | "bronze";
   medalImageEmoji: string;
-    teamColor: string;
+  teamColor: string;
   racerName: string;
   racerTeam: string;
   racerNationality: string;
@@ -23,7 +23,12 @@ export default function PodiumCard({
   imageUrl,
 }: PodiumCardProps) {
   return (
-    <Card className={`${styles.podiumCard} ${styles[`podiumCard--${medal}`]}`} style={{ backgroundColor: teamColor || "var(--card-white)" }}>
+    <Card
+      className={`${styles.podiumCard} ${styles[`podiumCard--${medal}`]}`}
+      style={{
+        backgroundImage: `linear-gradient(135deg, ${teamColor || "var(--card-white)"} 0%, var(--card-white, white) 60%)`,
+      }}
+    >
       <div>
         <div className={styles.podiumCard__medal}>{medalImageEmoji}</div>
         <div className={styles.podiumCard__name}>{racerName}</div>
