@@ -88,14 +88,20 @@ export class RaceEntity extends EntityRoot {
         position: number;
         points: number;
         constructorPoints: number;
-        isGhostRacer?: boolean;
+        ghostRacer?: boolean;
       }[];
     }>,
   ): void {
     if (data.name !== undefined) this.name = data.name;
     if (data.date !== undefined) this.date = data.date;
     if (data.completed !== undefined) this.completed = data.completed;
-    if (data.results !== undefined) this.results = data.results;
+    if (data.results !== undefined)
+      this.results = data.results.map((r) => ({
+        racerId: r.racerId,
+        position: r.position,
+        points: r.points,
+        constructorPoints: r.constructorPoints,
+        isGhostRacer: r.ghostRacer ?? false,
+      }));
   }
 }
-

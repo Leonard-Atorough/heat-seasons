@@ -103,7 +103,10 @@ export default function Results() {
             isUpdateMode ? selectAllParticipants(results, selectedRaceId) : selectedRacerIds
           }
           selectedRaceId={isUpdateMode ? (selectedRaceId ?? undefined) : undefined}
-          onSubmit={() => setSelectedRacerIds([])}
+          onSubmit={() => {
+            setSelectedRacerIds([]);
+            setSelectedSeasonId("");
+          }}
           onRacerSelect={handleRacerSelect}
         />
       )}
