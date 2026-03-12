@@ -226,7 +226,7 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      const joinButton = await screen.findByRole("button", { name: /join season/i });
+      const joinButton = await screen.findByRole("button", { name: "Join Season" });
       await user.click(joinButton);
 
       expect(mockedJoinSeason).toHaveBeenCalledWith("s1", "racer-42");

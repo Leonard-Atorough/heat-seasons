@@ -39,7 +39,7 @@ describe("Header Component", () => {
   describe("Rendering", () => {
     it("renders logo and navigation links", () => {
       renderHeader();
-      expect(screen.getByText("🏁 HEAT SEASONS")).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /heat seasons home/i })).toBeInTheDocument();
       expect(screen.getByText("Dashboard")).toBeInTheDocument();
       expect(screen.getByText("Racers")).toBeInTheDocument();
       expect(screen.getByText("Teams")).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe("Header Component", () => {
 
     it("renders logo with proper attributes", () => {
       renderHeader();
-      const logo = screen.getByText("🏁 HEAT SEASONS").parentElement;
+      const logo = screen.getByRole("heading", { name: /heat seasons home/i });
       expect(logo).toHaveAttribute("aria-label", "Heat Seasons Home");
       expect(logo).toHaveAttribute("role", "heading");
       expect(logo).toHaveAttribute("aria-level", "1");
@@ -118,7 +118,7 @@ describe("Header Component", () => {
       await userEvent.click(hamburger);
       expect(container.querySelector("nav")?.className).toContain("nav--open");
 
-      const logo = screen.getByText("🏁 HEAT SEASONS");
+      const logo = screen.getByRole("link", { name: /heat seasons/i });
       await userEvent.click(logo);
 
       expect(container.querySelector("nav")?.className).not.toContain("nav--open");

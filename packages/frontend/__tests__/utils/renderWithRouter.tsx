@@ -14,5 +14,8 @@ export function renderWithRouter(
   ui: ReactElement,
   { routerProps, ...renderOptions }: RenderWithRouterOptions = {},
 ) {
-  return render(<MemoryRouter {...routerProps}>{ui}</MemoryRouter>, renderOptions);
+  return render(ui, {
+    ...renderOptions,
+    wrapper: ({ children }) => <MemoryRouter {...routerProps}>{children}</MemoryRouter>,
+  });
 }
