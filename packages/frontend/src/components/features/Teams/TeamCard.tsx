@@ -12,7 +12,7 @@ export default function TeamCard({ teamName, teamColor, racers }: TeamCardProps)
       variant="default"
       className={styles.teamCard}
       style={{
-        backgroundImage: `linear-gradient(135deg, ${teamColor || "var(--card-white)"} 55%, white 100%)`,
+        backgroundImage: `linear-gradient(135deg, ${teamColor || "var(--card-white)"} 0%, var(--card-white, white) 60%)`,
       }}
     >
       <div className={styles.teamCard__info}>
