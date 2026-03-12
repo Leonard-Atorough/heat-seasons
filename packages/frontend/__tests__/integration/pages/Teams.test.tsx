@@ -35,9 +35,8 @@ describe("Given the Teams page", () => {
         </MemoryRouter>,
       );
 
-      const uniqueTeams = new Set(createRacerWithStatsList(2).map((r) => r.team));
-      expect(screen.getByText(/Heat Teams: Winter 2026/i)).toBeInTheDocument();
-      expect(uniqueTeams.size).toBeGreaterThan(0);
+      expect(screen.getByText("Mercedes AMG")).toBeInTheDocument();
+      expect(screen.getByText("Red Bull Racing")).toBeInTheDocument();
     });
 
     it("shows empty state when no racers exist", () => {
@@ -53,7 +52,8 @@ describe("Given the Teams page", () => {
         </MemoryRouter>,
       );
 
-      expect(screen.getByText(/Heat Teams: Winter 2026/i)).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /teams/i })).toBeInTheDocument();
+      expect(screen.queryByText("Mercedes AMG")).not.toBeInTheDocument();
     });
   });
 

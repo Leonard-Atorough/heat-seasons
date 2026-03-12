@@ -43,7 +43,7 @@ describe("EditRacerModal Component", () => {
     render(<EditRacerModal racer={racer} isOpen={true} onClose={onClose} onUpdated={onUpdated} />);
     await user.clear(screen.getByDisplayValue("Lewis Hamilton"));
     await user.click(screen.getByRole("button", { name: /^save changes$/i }));
-    expect(await screen.findByText("All fields are required.")).toBeInTheDocument();
+    expect(await screen.findByText("Racer name is required")).toBeInTheDocument();
     expect(mockedUpdateRacer).not.toHaveBeenCalled();
   });
 
@@ -51,7 +51,7 @@ describe("EditRacerModal Component", () => {
     render(<EditRacerModal racer={racer} isOpen={true} onClose={onClose} onUpdated={onUpdated} />);
     fireEvent.change(screen.getByDisplayValue("39"), { target: { value: "0" } });
     await user.click(screen.getByRole("button", { name: /^save changes$/i }));
-    expect(await screen.findByText("Please enter a valid age.")).toBeInTheDocument();
+    expect(await screen.findByText("Age must be at least 8")).toBeInTheDocument();
     expect(mockedUpdateRacer).not.toHaveBeenCalled();
   });
 

@@ -49,7 +49,7 @@ describe("CreateRacerModal Component", () => {
   it("shows validation error when submitting with empty required fields", async () => {
     render(<CreateRacerModal isOpen={true} onClose={onClose} onCreated={onCreated} />);
     await user.click(screen.getByRole("button", { name: /^create racer$/i }));
-    expect(await screen.findByText("All fields are required.")).toBeInTheDocument();
+    expect(await screen.findByText("Racer name is required")).toBeInTheDocument();
     expect(mockedCreateRacer).not.toHaveBeenCalled();
   });
 
@@ -59,7 +59,7 @@ describe("CreateRacerModal Component", () => {
     mockRacer.age = 999;
     await fillForm(mockRacer);
     await user.click(screen.getByRole("button", { name: /^create racer$/i }));
-    expect(await screen.findByText("Please enter a valid age.")).toBeInTheDocument();
+    expect(await screen.findByText("Age cannot exceed 120")).toBeInTheDocument();
     expect(mockedCreateRacer).not.toHaveBeenCalled();
   });
 

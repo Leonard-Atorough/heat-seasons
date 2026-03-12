@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Season, SeasonStatus } from "shared";
 import { updateSeason } from "../../../services/api/season";
 import { FormGroup, Modal, Button, Toast } from "../../common";
@@ -11,6 +14,21 @@ const STATUS_OPTIONS: { value: SeasonStatus; label: string }[] = [
   { value: "archived", label: "Archived" },
 ];
 
+const schema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "Season name is required")
+    .min(2, "Season name must be at least 2 characters"),
+  startDate: z
+    .string()
+    .min(1, "Start date is required")
+    .refine((d) => !isNaN(Date.parse(d)), "Invalid date"),
+  status: z.enum(["upcoming", "active", "completed", "archived"] as const),
+});
+
+type FormValues = z.infer<typeof schema>;
+
 export interface EditSeasonModalProps {
   season: Season;
   isOpen: boolean;
@@ -19,61 +37,64 @@ export interface EditSeasonModalProps {
 }
 
 export function EditSeasonModal({ season, isOpen, onClose, onSubmit }: EditSeasonModalProps) {
-  const [name, setName] = useState(season.name);
-  const [startDate, setStartDate] = useState(
-    new Date(season.startDate).toISOString().split("T")[0],
-  );
-  const [status, setStatus] = useState<SeasonStatus>(season.status);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<{title: string; message: string} | null>(null);
+  const [apiError, setApiError] = useState<{ title: string; message: string } | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: season.name,
+      startDate: new Date(season.startDate).toISOString().split("T")[0],
+      status: season.status,
+    },
+  });
+
+  const watchedStatus = watch("status");
+  const willAutoSetEndDate =
+    (watchedStatus === "completed" || watchedStatus === "archived") && !season.endDate;
+
+  const handleFormSubmit = async (data: FormValues) => {
+    setApiError(null);
     try {
       await updateSeason(season.id, {
-        name,
-        startDate: new Date(startDate).toISOString(),
-        status,
+        name: data.name,
+        startDate: new Date(data.startDate).toISOString(),
+        status: data.status,
       });
       onSubmit();
-    } catch (err) {
-      setError({ title: "Update Failed", message: "Failed to update season. Please try again." });
-    } finally {
-      setIsSubmitting(false);
+    } catch {
+      setApiError({
+        title: "Update Failed",
+        message: "Failed to update season. Please try again.",
+      });
     }
   };
 
-  const willAutoSetEndDate = (status === "completed" || status === "archived") && !season.endDate;
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Season">
-      <form className={styles.form} onSubmit={handleSubmit}>
-        {error && <Toast title={error.title} message={error.message} type="error" />}
+      <form className={styles.form} onSubmit={handleSubmit(handleFormSubmit)}>
+        {apiError && <Toast title={apiError.title} message={apiError.message} type="error" />}
         <FormGroup
           element="input"
           label="Season Name"
           id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          error={errors.name?.message}
+          {...register("name")}
         />
         <FormGroup
           element="input"
           type="date"
           label="Start Date"
           id="startDate"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
+          error={errors.startDate?.message}
+          {...register("startDate")}
         />
         <FormGroup element="default" label="Status" id="status">
-          <select
-            id="status"
-            name="status"
-            className={styles.select}
-            value={status}
-            onChange={(e) => setStatus(e.target.value as SeasonStatus)}
-          >
+          <select id="status" className={styles.select} {...register("status")}>
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}

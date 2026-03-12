@@ -23,21 +23,17 @@ afterEach(() => {
 
 describe("AdminPage", () => {
   it("renders the Admin Panel heading for admin users", async () => {
-    mockUseAuth.mockReturnValue(
-      createMockAuthContext({ user: createUser({ role: "admin" }) }),
-    );
+    mockUseAuth.mockReturnValue(createMockAuthContext({ user: createUser({ role: "admin" }) }));
     render(
       <MemoryRouter>
         <AdminPage />
       </MemoryRouter>,
     );
-    expect(screen.getByText("Admin Panel")).toBeInTheDocument();
+    expect(screen.getByText("Admin Dashboard")).toBeInTheDocument();
   });
 
   it("renders all three tab labels", async () => {
-    mockUseAuth.mockReturnValue(
-      createMockAuthContext({ user: createUser({ role: "admin" }) }),
-    );
+    mockUseAuth.mockReturnValue(createMockAuthContext({ user: createUser({ role: "admin" }) }));
     render(
       <MemoryRouter>
         <AdminPage />
@@ -49,9 +45,7 @@ describe("AdminPage", () => {
   });
 
   it("defaults to the User Management tab", async () => {
-    mockUseAuth.mockReturnValue(
-      createMockAuthContext({ user: createUser({ role: "admin" }) }),
-    );
+    mockUseAuth.mockReturnValue(createMockAuthContext({ user: createUser({ role: "admin" }) }));
     render(
       <MemoryRouter>
         <AdminPage />

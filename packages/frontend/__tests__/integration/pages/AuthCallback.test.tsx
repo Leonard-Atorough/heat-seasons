@@ -122,7 +122,7 @@ describe("Given the AuthCallback page", () => {
         </MemoryRouter>,
       );
 
-      expect(screen.getByText("Authenticating...")).toBeInTheDocument();
+      expect(screen.getByTestId("auth-callback-loading-skeleton")).toBeInTheDocument();
       expect(screen.queryByText("Login Page")).not.toBeInTheDocument();
       expect(screen.queryByText("Dashboard Page")).not.toBeInTheDocument();
     });

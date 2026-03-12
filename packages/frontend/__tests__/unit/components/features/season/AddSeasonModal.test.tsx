@@ -47,7 +47,7 @@ describe("AddSeasonModal Component", () => {
     fireEvent.change(screen.getByLabelText(/start date/i), { target: { value: "2026-06-01" } });
     await user.click(screen.getByText(/create season/i));
     expect(
-      await screen.findByText("Please fill in all required fields (Season Name and Start Date)."),
+      await screen.findByText("Season name is required"),
     ).toBeInTheDocument();
     expect(mockedCreateSeason).not.toHaveBeenCalled();
   });
@@ -60,7 +60,7 @@ describe("AddSeasonModal Component", () => {
     });
     await user.click(screen.getByText(/create season/i));
     expect(
-      await screen.findByText("Please fill in all required fields (Season Name and Start Date)."),
+      await screen.findByText("Start date is required"),
     ).toBeInTheDocument();
     expect(mockedCreateSeason).not.toHaveBeenCalled();
   });

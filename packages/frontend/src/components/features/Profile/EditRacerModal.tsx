@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { RacerWithStats } from "shared";
-import { FormGroup, Modal, Button } from "../../common";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RacerWithStats, createRacerSchema, CreateRacerInput } from "shared";
+import { FormGroup, Modal, Button, Toast } from "../../common";
 import { updateRacer } from "../../../services/api/racer";
 import styles from "./CreateRacerModal.module.css"; // same shape — reuse styles
 
@@ -23,80 +25,109 @@ export interface EditRacerModalProps {
 }
 
 export function EditRacerModal({ racer, isOpen, onClose, onUpdated }: EditRacerModalProps) {
-  const [name, setName] = useState(racer.name);
-  const [team, setTeam] = useState(racer.team);
-  const [teamColor, setTeamColor] = useState(
-    TEAM_COLORS.some((c) => c.value === racer.teamColor) ? racer.teamColor : TEAM_COLORS[0].value,
-  );
-  const [nationality, setNationality] = useState(racer.nationality);
-  const [age, setAge] = useState(String(racer.age));
-  const [active, setActive] = useState(racer.active);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<{ title: string; message: string } | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<CreateRacerInput>({
+    resolver: zodResolver(createRacerSchema) as any,
+    defaultValues: {
+      name: racer.name,
+      team: racer.team,
+      teamColor: TEAM_COLORS.some((c) => c.value === racer.teamColor)
+        ? racer.teamColor
+        : TEAM_COLORS[0].value,
+      nationality: racer.nationality,
+      age: racer.age,
+      active: racer.active,
+    },
+  });
 
-    if (!name.trim() || !team.trim() || !nationality.trim() || !age) {
-      setError("All fields are required.");
-      return;
-    }
-
-    const parsedAge = parseInt(age, 10);
-    if (isNaN(parsedAge) || parsedAge < 1 || parsedAge > 120) {
-      setError("Please enter a valid age.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await updateRacer(racer.id, {
-        name: name.trim(),
-        team: team.trim(),
-        teamColor,
-        nationality: nationality.trim(),
-        age: parsedAge,
-        active,
+  useEffect(() => {
+    if (isOpen) {
+      reset({
+        name: racer.name,
+        team: racer.team,
+        teamColor: TEAM_COLORS.some((c) => c.value === racer.teamColor)
+          ? racer.teamColor
+          : TEAM_COLORS[0].value,
+        nationality: racer.nationality,
+        age: racer.age,
+        active: racer.active,
       });
+      setApiError(null);
+    }
+  }, [isOpen, racer.id]);
+
+  const watchedColor = watch("teamColor");
+  const watchedActive = watch("active");
+
+  const handleFormSubmit = async (data: CreateRacerInput) => {
+    setApiError(null);
+    try {
+      await updateRacer(racer.id, data);
       onUpdated();
     } catch (err: any) {
-      setError(err?.data?.message ?? err?.message ?? "Failed to update racer.");
-    } finally {
-      setIsSubmitting(false);
+      setApiError({
+        title: "Error",
+        message: err?.data?.message ?? err?.message ?? "Failed to update racer.",
+      });
     }
   };
 
+  const handleClose = () => {
+    setApiError(null);
+    onClose();
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Edit Racer Profile">
-      <form className={styles.form} onSubmit={handleSubmit}>
+    <Modal isOpen={isOpen} onClose={handleClose} title="Edit Racer Profile">
+      <form className={styles.form} onSubmit={handleSubmit(handleFormSubmit)}>
+        {apiError && (
+          <Toast
+            type="error"
+            title={apiError.title}
+            message={apiError.message}
+            onClose={() => setApiError(null)}
+          />
+        )}
         <FormGroup
           element="input"
           label="Racer Name"
           id="editRacerName"
           type="text"
-          value={name}
-          onChange={(e) => setName((e.target as HTMLInputElement).value)}
+          error={errors.name?.message}
+          {...register("name")}
         />
         <FormGroup
           element="input"
           label="Team"
           id="editRacerTeam"
           type="text"
-          value={team}
-          onChange={(e) => setTeam((e.target as HTMLInputElement).value)}
+          error={errors.team?.message}
+          {...register("team")}
         />
-        <FormGroup element="default" label="Team Colour" id="editRacerTeamColor">
+        <FormGroup
+          element="default"
+          label="Team Colour"
+          id="editRacerTeamColor"
+          error={errors.teamColor?.message}
+        >
           <div className={styles.colorPicker}>
             {TEAM_COLORS.map((c) => (
               <button
                 key={c.value}
                 type="button"
-                className={`${styles.colorSwatch} ${teamColor === c.value ? styles["colorSwatch--selected"] : ""}`}
+                className={`${styles.colorSwatch} ${watchedColor === c.value ? styles["colorSwatch--selected"] : ""}`}
                 style={{ backgroundColor: c.value }}
                 title={c.label}
-                onClick={() => setTeamColor(c.value)}
-                aria-label={`${c.label}${teamColor === c.value ? " (selected)" : ""}`}
+                onClick={() => setValue("teamColor", c.value, { shouldValidate: true })}
+                aria-label={`${c.label}${watchedColor === c.value ? " (selected)" : ""}`}
               />
             ))}
           </div>
@@ -106,30 +137,25 @@ export function EditRacerModal({ racer, isOpen, onClose, onUpdated }: EditRacerM
           label="Nationality"
           id="editRacerNationality"
           type="text"
-          value={nationality}
-          onChange={(e) => setNationality((e.target as HTMLInputElement).value)}
+          error={errors.nationality?.message}
+          {...register("nationality")}
         />
         <FormGroup
           element="input"
           label="Age"
           id="editRacerAge"
           type="number"
-          value={age}
-          onChange={(e) => setAge((e.target as HTMLInputElement).value)}
+          error={errors.age?.message}
+          {...register("age", { valueAsNumber: true })}
         />
         <FormGroup element="default" label="Status" id="editRacerActive">
           <label className={styles.toggle}>
-            <input
-              type="checkbox"
-              checked={active}
-              onChange={(e) => setActive(e.target.checked)}
-            />
-            <span>{active ? "Active" : "Inactive"}</span>
+            <input type="checkbox" {...register("active")} />
+            <span>{watchedActive ? "Active" : "Inactive"}</span>
           </label>
         </FormGroup>
-        {error && <p className={styles.error}>{error}</p>}
         <div className={styles.actions}>
-          <Button type="button" variant="ghost" onClick={onClose} disabled={isSubmitting}>
+          <Button type="button" variant="ghost" onClick={handleClose} disabled={isSubmitting}>
             Cancel
           </Button>
           <Button type="submit" disabled={isSubmitting}>

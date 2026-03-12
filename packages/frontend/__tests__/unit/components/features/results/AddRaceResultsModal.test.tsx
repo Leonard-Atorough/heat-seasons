@@ -108,6 +108,7 @@ describe("AddRaceResultsModal Component", () => {
         onSubmit={onSubmit}
       />,
     );
+    fireEvent.change(screen.getByLabelText(/race name/i), { target: { value: "Test Race" } });
     await user.click(screen.getByText(/save results/i));
     expect(await screen.findByText("Please select at least one racer.")).toBeInTheDocument();
     expect(mockedCreateRace).not.toHaveBeenCalled();
@@ -125,6 +126,7 @@ describe("AddRaceResultsModal Component", () => {
         onSubmit={onSubmit}
       />,
     );
+    fireEvent.change(screen.getByLabelText(/race name/i), { target: { value: "Test Race" } });
     await user.click(screen.getByText(/save results/i));
     expect(await screen.findByText("Please select all racers.")).toBeInTheDocument();
     expect(mockedCreateRace).not.toHaveBeenCalled();
@@ -143,7 +145,7 @@ describe("AddRaceResultsModal Component", () => {
       />,
     );
     await user.click(screen.getByText(/save results/i));
-    expect(await screen.findByText("Race name is required.")).toBeInTheDocument();
+    expect(await screen.findByText("Race name is required")).toBeInTheDocument();
     expect(mockedCreateRace).not.toHaveBeenCalled();
   });
 
