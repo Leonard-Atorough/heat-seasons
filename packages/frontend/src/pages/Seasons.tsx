@@ -26,13 +26,6 @@ export default function Seasons() {
     await refresh();
   };
 
-  // Refresh on mount and every 10 minutes
-  useEffect(() => {
-    handleRefresh();
-    const intervalId = setInterval(handleRefresh, 10 * 60 * 1000);
-    return () => clearInterval(intervalId);
-  }, []);
-
   // When seasons load and the user is authenticated, fetch participants for
   // all joinable (non-archived) seasons so we can show the correct join state.
   useEffect(() => {

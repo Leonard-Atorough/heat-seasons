@@ -4,7 +4,8 @@ import { createContext } from "react";
 export interface DataContextType {
   racers: RacerWithStats[];
   seasons: Season[] | undefined;
-  isLoading: boolean;
+  isSeasonsLoading: boolean;
+  isRacersLoading: boolean;
   error: Error | null;
   refresh: () => Promise<void>;
   refreshRacers: () => Promise<void>;

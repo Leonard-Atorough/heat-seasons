@@ -168,9 +168,9 @@ describe("Given a Seasons page", () => {
   });
 
   describe("When refreshing seasons", () => {
-    // 4. Calls refresh on mount and when user clicks refresh
+    // 4. Calls refresh when user clicks refresh button (DataProvider handles initial load)
 
-    it("calls refresh on mount and when refresh button is clicked", async () => {
+    it("calls refresh when refresh button is clicked", async () => {
       const user = userEvent.setup();
 
       mockedUseSeasons.mockReturnValue({
@@ -187,11 +187,11 @@ describe("Given a Seasons page", () => {
 
       renderPage();
 
-      expect(refresh).toHaveBeenCalledTimes(1);
+      expect(refresh).not.toHaveBeenCalled();
 
       await user.click(screen.getByRole("button", { name: /refresh/i }));
 
-      expect(refresh).toHaveBeenCalledTimes(2);
+      expect(refresh).toHaveBeenCalledTimes(1);
     });
   });
 

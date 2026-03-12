@@ -39,7 +39,8 @@ describe("useSeasons hook", () => {
 
     it("returns loading state when fetching", () => {
       const mockContextValue: DataContextType = createMockDataContext({
-        isLoading: true,
+        isSeasonsLoading: true,
+        isRacersLoading: false,
       });
 
       const wrapper = ({ children }: { children: ReactNode }) => (

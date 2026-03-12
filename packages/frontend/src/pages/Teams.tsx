@@ -1,5 +1,5 @@
 import { Racer } from "shared";
-import { useEffect, useMemo } from "react";
+import {  useMemo } from "react";
 import { Team } from "../models";
 import { TeamCard } from "../components/features";
 import styles from "./Teams.module.css";
@@ -7,19 +7,7 @@ import { useRacers } from "../hooks/data/useRacer";
 import { LoadingSkeletonCard } from "../components/common";
 
 export function Teams() {
-  const { data: racers, refresh, isLoading } = useRacers();
-
-  const handleRefresh = async () => {
-    await refresh();
-  };
-
-  // we could periodically refresh the racers data every 10 minutes to ensure it's up to date
-  useEffect(() => {
-    handleRefresh();
-    const intervalId = setInterval(handleRefresh, 10 * 60 * 1000); // refresh every 10 minutes
-    return () => clearInterval(intervalId); // cleanup on unmount
-  }, []);
-
+  const { data: racers, isLoading } = useRacers();
   const teams = useMemo<Team[]>(() => {
     if (!racers) return [];
     const teamMap: { [key: string]: Team } = {};

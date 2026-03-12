@@ -38,51 +38,88 @@ const createWithLoading =
 export function DataProvider({ children }: DataProviderProps) {
   const [racers, setRacers] = useState<RacerWithStats[]>([]);
   const [seasons, setSeasons] = useState<Season[]>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRacersLoading, setIsRacersLoading] = useState<boolean>(false);
+  const [isSeasonsLoading, setIsSeasonsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
-  // Create the loading wrapper with our state setters
-  const executeWithLoading = useCallback(createWithLoading(setIsLoading, setError), []);
+  // Concrete loading wrappers — state setters from useState are stable references
+  const withRacersLoading = useCallback(createWithLoading(setIsRacersLoading, setError), []);
+  const withSeasonsLoading = useCallback(createWithLoading(setIsSeasonsLoading, setError), []);
 
-  // Fetch all data
-  const fetchAllData = useCallback(async () => {
+  const refresh = useCallback(async () => {
     const [newRacers, newSeasons] = await Promise.all([
-      executeWithLoading(() => getAllRacers()),
-      executeWithLoading(() => getSeasons()),
+      withRacersLoading(() => getAllRacers()),
+      withSeasonsLoading(() => getSeasons()),
     ]);
 
     if (newRacers) setRacers(newRacers);
     if (newSeasons) setSeasons(newSeasons);
-  }, [executeWithLoading]);
+  }, [withRacersLoading, withSeasonsLoading]);
 
-  // Fetch individual data sources
   const refreshRacers = useCallback(async () => {
-    const data = await executeWithLoading(() => getAllRacers());
+    const data = await withRacersLoading(() => getAllRacers());
     if (data) setRacers(data);
-  }, [executeWithLoading]);
+  }, [withRacersLoading]);
 
   const refreshSeasons = useCallback(async () => {
-    const data = await executeWithLoading(() => getSeasons());
+    const data = await withSeasonsLoading(() => getSeasons());
     if (data) setSeasons(data);
-  }, [executeWithLoading]);
+  }, [withSeasonsLoading]);
 
   const value: DataContextType = useMemo(
     () => ({
       racers,
       seasons,
-      isLoading,
+      isRacersLoading,
+      isSeasonsLoading,
       error,
-      refresh: fetchAllData,
+      refresh,
       refreshRacers,
       refreshSeasons,
     }),
-    [racers, seasons, isLoading, error, fetchAllData, refreshRacers, refreshSeasons],
+    [
+      racers,
+      seasons,
+      isRacersLoading,
+      isSeasonsLoading,
+      error,
+      refresh,
+      refreshRacers,
+      refreshSeasons,
+    ],
   );
 
   // Fetch all data on mount
   useEffect(() => {
-    fetchAllData();
-  }, [fetchAllData]);
+    refresh();
+  }, [refresh]);
+
+  // fetch all data on focus change (e.g. when user returns to tab)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        refresh();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("focus", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("focus", handleVisibilityChange);
+    };
+  }, [refresh]);
+
+  useEffect(() => {
+    const interval = setInterval(
+      () => {
+        refresh();
+      },
+      30 * 60 * 1000,
+    ); // 30 minutes
+
+    return () => clearInterval(interval);
+  }, [refresh]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

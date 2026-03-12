@@ -35,7 +35,7 @@ describe("useRacers hook", () => {
 
     it("returns loading state when fetching", () => {
       const mockContextValue: DataContextType = createMockDataContext({
-        isLoading: true,
+        isRacersLoading: true,
       });
 
       const wrapper = ({ children }: { children: ReactNode }) => (

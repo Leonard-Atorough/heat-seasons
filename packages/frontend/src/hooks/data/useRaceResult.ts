@@ -12,19 +12,20 @@ export function useRaceResult(seasonId: string, raceId: string) {
 
   useEffect(() => {
     if (!seasonId) return;
-    setIsLoading(true);
-    try {
-      const fetchRaces = async () => {
+
+    const fetchRaces = async () => {
+      setIsLoading(true);
+      try {
         const res = await GetRacesBySeason(seasonId);
         setRaces(res);
+      } catch (err) {
+        setError("Failed to fetch races");
+      } finally {
         setIsLoading(false);
-      };
-      fetchRaces();
-    } catch (err) {
-      setError("Failed to fetch races");
-    } finally {
-      setIsLoading(false);
-    }
+      }
+    };
+
+    fetchRaces();
   }, [seasonId]);
 
   useEffect(() => {
@@ -43,34 +44,28 @@ export function useRaceResult(seasonId: string, raceId: string) {
           aggregatedResults[result.racerId].points += result.points;
           aggregatedResults[result.racerId].constructorPoints += result.constructorPoints;
         });
-
-        const sortedRacers = Object.entries(aggregatedResults)
-          .sort((a, b) => b[1].points - a[1].points)
-          .map(
-            ([racerId, data], index) =>
-              ({
-                racerId,
-                position: index + 1,
-                points: data.points,
-                constructorPoints: data.constructorPoints || 0,
-              }) as RaceResult,
-          );
-        setResults(sortedRacers);
       });
+
+      const sortedRacers = Object.entries(aggregatedResults)
+        .sort((a, b) => b[1].points - a[1].points)
+        .map(
+          ([racerId, data], index) =>
+            ({
+              racerId,
+              position: index + 1,
+              points: data.points,
+              constructorPoints: data.constructorPoints || 0,
+            }) as RaceResult,
+        );
+      setResults(sortedRacers);
       return;
     }
+
     const selectedRace = races.find((race) => race.id === raceId);
-    setIsLoading(true);
-    try {
-      if (selectedRace) {
-        setResults(selectedRace.results.sort((a, b) => a.position - b.position));
-      } else {
-        setError("Race not found");
-      }
-    } catch (err) {
-      setError("Failed to fetch race results");
-    } finally {
-      setIsLoading(false);
+    if (selectedRace) {
+      setResults(selectedRace.results.sort((a, b) => a.position - b.position));
+    } else if (races.length > 0) {
+      setError("Race not found");
     }
   }, [raceId, races, racersLoading]);
 

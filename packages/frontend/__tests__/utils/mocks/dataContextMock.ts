@@ -3,7 +3,8 @@ import { DataContextType } from "src/contexts";
 export const createMockDataContext = (overrides?: Partial<DataContextType>): DataContextType => ({
   seasons: [],
   racers: [],
-  isLoading: false,
+  isSeasonsLoading: false,
+  isRacersLoading: false,
   error: null,
   refreshSeasons: vi.fn(),
   refreshRacers: vi.fn(),
