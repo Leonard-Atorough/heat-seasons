@@ -15,8 +15,9 @@ export const createRaceSchema = z.object({
     .max(RACE_NAME_MAX, `Race name cannot exceed ${RACE_NAME_MAX} characters`),
 
   date: z
-    .string("Race date is required")
-    .refine((date) => !isNaN(Date.parse(date)), "Invalid race date format"),
+    .string({ message: "Race date is required" })
+    .refine((date) => !isNaN(Date.parse(date)), "Invalid race date format")
+    .transform((date) => new Date(date)),
 
   completed: z.boolean().optional().default(false),
 

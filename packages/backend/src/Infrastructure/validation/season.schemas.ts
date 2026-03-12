@@ -19,12 +19,14 @@ export const createSeasonSchema = z.object({
   status: z.enum(["upcoming", "active", "completed", "archived"] as const).default("upcoming"),
 
   startDate: z
-    .string("Start date is required")
-    .refine((date) => !isNaN(Date.parse(date)), "Invalid start date format"),
+    .string({ message: "Start date is required" })
+    .refine((date) => !isNaN(Date.parse(date)), "Invalid start date format")
+    .transform((date) => new Date(date)),
 
   endDate: z
-    .string("End date is required")
+    .string({ message: "End date is required" })
     .refine((date) => !isNaN(Date.parse(date)), "Invalid end date format")
+    .transform((date) => new Date(date))
     .optional(),
 });
 

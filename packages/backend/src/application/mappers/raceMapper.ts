@@ -47,7 +47,7 @@ export class RaceMapper {
       seasonId: entity.seasonId,
       raceNumber: entity.raceNumber,
       name: entity.name,
-      date: entity.date,
+      date: entity.date instanceof Date ? entity.date : new Date(entity.date),
       completed: entity.completed,
       results: entity.results,
       createdAt: entity.createdAt,

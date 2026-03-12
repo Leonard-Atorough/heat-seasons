@@ -41,8 +41,12 @@ export class SeasonMapper {
       id: entity.id,
       name: entity.name,
       status: entity.status,
-      startDate: entity.startDate,
-      endDate: entity.endDate,
+      startDate: entity.startDate instanceof Date ? entity.startDate : new Date(entity.startDate),
+      endDate: entity.endDate
+        ? entity.endDate instanceof Date
+          ? entity.endDate
+          : new Date(entity.endDate)
+        : undefined,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     };
