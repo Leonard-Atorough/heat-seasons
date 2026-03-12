@@ -1,8 +1,25 @@
 import { useState, useEffect } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import type { UseFormRegister, UseFormSetValue, FieldErrors } from "react-hook-form";
 import { Button, FormGroup, Modal, Toast } from "../../common";
 import styles from "./AddRaceResultsModal.module.css";
 import { Racer, RaceResult } from "shared";
 import { CreateRace, UpdateRace, GetRaceById } from "../../../services/api/races";
+
+const raceResultsSchema = z.object({
+  raceName: z.string().trim().min(1, "Race name is required"),
+  raceDate: z.string().refine((d) => !isNaN(Date.parse(d)), "Invalid date"),
+  rows: z.array(
+    z.object({
+      points: z.number().min(0, "Points must be 0 or more"),
+      isGhost: z.boolean(),
+    }),
+  ),
+});
+
+type RaceResultsFormValues = z.infer<typeof raceResultsSchema>;
 
 interface RaceResultFormGroupProps {
   racers: Racer[];
@@ -10,9 +27,9 @@ interface RaceResultFormGroupProps {
   selectedRacerId: string;
   onRacerSelect: (racerId: string, prevRacerId?: string) => void;
   index: number;
-  points: number;
-  onPointsChange: (index: number, points: number) => void;
-  onGhostRacerChange: (index: number, isGhost: boolean) => void;
+  register: UseFormRegister<RaceResultsFormValues>;
+  setValue: UseFormSetValue<RaceResultsFormValues>;
+  errors?: FieldErrors<RaceResultsFormValues["rows"][number]>;
   isLoading: boolean;
 }
 
@@ -22,21 +39,18 @@ function RaceResultFormGroup({
   selectedRacerId,
   onRacerSelect,
   index,
-  points,
-  onPointsChange,
-  onGhostRacerChange,
+  register,
+  setValue,
+  errors,
   isLoading,
 }: RaceResultFormGroupProps) {
-  const [currentValue, setCurrentValue] = useState(
-    racers.filter((r) => r.id === selectedRacerId).map((r) => r.id)[0] || "",
-  );
+  const [currentValue, setCurrentValue] = useState(selectedRacerId || "");
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const next = e.target.value;
     onRacerSelect(next, currentValue || undefined);
     setCurrentValue(next);
-    // Reset points for this index when racer changes
-    onPointsChange(index, 0);
+    setValue(`rows.${index}.points`, 0);
   };
 
   return (
@@ -45,7 +59,7 @@ function RaceResultFormGroup({
         <select
           id={`racerSelect-${index}`}
           name={`racerSelect-${index}`}
-          className={styles.raceResultForm__select}
+          className={`${styles.raceResultForm__select} ${styles.raceResultForm__racerSelect}`}
           value={currentValue}
           onChange={handleChange}
           disabled={isLoading}
@@ -67,20 +81,24 @@ function RaceResultFormGroup({
         type="number"
         label="Points"
         id={`pointsInput-${index}`}
-        onChange={(e) => onPointsChange(index, Number(e.target.value) || 0)}
-        value={points}
         disabled={isLoading || !currentValue}
         className={styles.raceResultForm__input}
+        error={errors?.points?.message}
+        {...register(`rows.${index}.points`, { valueAsNumber: true })}
       />
       <FormGroup
-        element="input"
-        type="checkbox"
+        element="default"
         label="isGhost"
         id={`ghostCheckbox-${index}`}
-        disabled={isLoading}
-        onChange={(e) => onGhostRacerChange(index, (e.target as HTMLInputElement).checked)}
         className={styles.raceResultForm__checkbox}
-      />
+      >
+        <input
+          id={`ghostCheckbox-${index}`}
+          type="checkbox"
+          disabled={isLoading}
+          {...register(`rows.${index}.isGhost`)}
+        />
+      </FormGroup>
     </div>
   );
 }
@@ -106,119 +124,110 @@ export default function AddRaceResultsModal({
   onRacerSelect,
   onSubmit,
 }: AddRaceResultsModalProps) {
-  const [raceName, setRaceName] = useState("");
-  const [raceDate, setRaceDate] = useState(new Date().toISOString().split("T")[0]);
-  const [points, setPoints] = useState<number[]>(Array(racers.length).fill(0));
-  const [isGhostRacer, setIsGhostRacer] = useState<boolean[]>(Array(racers.length).fill(false));
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<{title: string; message: string} | null>(null);
+  const [isDataLoading, setIsDataLoading] = useState(false);
+  const [apiError, setApiError] = useState<{ title: string; message: string } | null>(null);
 
   const isUpdateMode = Boolean(selectedRaceId);
 
-  // Load race data when in update mode
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<RaceResultsFormValues>({
+    resolver: zodResolver(raceResultsSchema),
+    defaultValues: {
+      raceName: "",
+      raceDate: new Date().toISOString().split("T")[0],
+      rows: racers.map(() => ({ points: 0, isGhost: false })),
+    },
+  });
+
+  const { fields } = useFieldArray({ control, name: "rows" });
+
+  const isLoading = isDataLoading || isSubmitting;
+
   useEffect(() => {
     if (isUpdateMode && selectedRaceId && isOpen) {
       loadRaceData(selectedRaceId);
     } else if (!isUpdateMode && isOpen) {
-      // Reset form for create mode
-      setRaceName("");
-      setRaceDate(new Date().toISOString().split("T")[0]);
-      setPoints(Array(racers.length).fill(0));
-      setIsGhostRacer(Array(racers.length).fill(false));
-      setError(null);
+      reset({
+        raceName: "",
+        raceDate: new Date().toISOString().split("T")[0],
+        rows: racers.map(() => ({ points: 0, isGhost: false })),
+      });
+      setApiError(null);
     }
   }, [isUpdateMode, selectedRaceId, isOpen, racers.length]);
 
   const loadRaceData = async (raceId: string) => {
-    setIsLoading(true);
-    setError(null);
+    setIsDataLoading(true);
+    setApiError(null);
     try {
       const race = await GetRaceById(raceId);
-      setRaceName(race.name);
-      setRaceDate(new Date(race.date).toISOString().split("T")[0]);
-
-      // Initialize points arrays from race results
-      const newPoints = Array(racers.length).fill(0);
-      const newIsGhostRacer = Array(racers.length).fill(false);
-      selectedRacerIds.forEach((racerId, idx) => {
+      const newRows = selectedRacerIds.map((racerId) => {
         const result = race.results.find((r) => r.racerId === racerId);
-        if (result) {
-          newPoints[idx] = result.points;
-          newIsGhostRacer[idx] = result.ghostRacer || false;
-        }
+        return {
+          points: result?.points ?? 0,
+          isGhost: result?.ghostRacer ?? false,
+        };
       });
-      setPoints(newPoints);
-      setIsGhostRacer(newIsGhostRacer);
+      reset({
+        raceName: race.name,
+        raceDate: new Date(race.date).toISOString().split("T")[0],
+        rows: newRows,
+      });
     } catch (err) {
-      setError({ title: "Error", message: "Failed to load race data. Please try again." });
+      setApiError({ title: "Error", message: "Failed to load race data. Please try again." });
     } finally {
-      setIsLoading(false);
+      setIsDataLoading(false);
     }
   };
 
-  const handlePointsChange = (index: number, value: number) => {
-    const newPoints = [...points];
-    newPoints[index] = value;
-    setPoints(newPoints);
-  };
-
-  const handleGhostRacerChange = (index: number, value: boolean) => {
-    const newIsGhostRacer = [...isGhostRacer];
-    newIsGhostRacer[index] = value;
-    setIsGhostRacer(newIsGhostRacer);
-  };
-
-  const validateAndSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
+  const handleFormSubmit = async (data: RaceResultsFormValues) => {
+    setApiError(null);
 
     if (selectedRacerIds.length === 0) {
-      setError({ title: "Validation Error", message: "Please select at least one racer." });
+      setApiError({ title: "Validation Error", message: "Please select at least one racer." });
       return;
     }
 
     const allSelected = racers.every((r) => selectedRacerIds.includes(r.id));
     if (!allSelected) {
-      setError({ title: "Validation Error", message: "Please select all racers." });
-      return;
-    }
-
-    if (!raceName.trim()) {
-      setError({ title: "Validation Error", message: "Race name is required." });
+      setApiError({ title: "Validation Error", message: "Please select all racers." });
       return;
     }
 
     try {
-      setIsLoading(true);
-
-      // Combine racer IDs with their points and constructorPoints
       const results = selectedRacerIds.map((racerId, idx) => ({
         racerId,
-        points: isGhostRacer[idx] ? 0 : points[idx],
-        constructorPoints: isGhostRacer[idx] ? Math.max(4, points[idx]) : points[idx],
-        ghostRacer: isGhostRacer[idx],
+        points: data.rows[idx].isGhost ? 0 : data.rows[idx].points,
+        constructorPoints: data.rows[idx].isGhost
+          ? Math.max(4, data.rows[idx].points)
+          : data.rows[idx].points,
+        ghostRacer: data.rows[idx].isGhost,
       }));
 
-      // Sort by points descending and assign positions
       const finalResults = results
         .sort((a, b) => b.points - a.points)
-        .map((r, i) => ({
-          ...r,
-          position: i + 1,
-        })) as RaceResult[];
+        .map((r, i) => ({ ...r, position: i + 1 })) as RaceResult[];
 
       if (isUpdateMode && selectedRaceId) {
-        await UpdateRace(selectedRaceId, raceName, raceDate, finalResults);
+        await UpdateRace(selectedRaceId, data.raceName, data.raceDate, finalResults);
       } else {
-        await CreateRace(seasonId, raceName, raceDate, finalResults);
+        await CreateRace(seasonId, data.raceName, data.raceDate, finalResults);
       }
 
       onClose();
       onSubmit();
     } catch (err) {
-      setError(err instanceof Error ? { title: "Error", message: err.message } : { title: "Error", message: "Failed to save race results." });
-    } finally {
-      setIsLoading(false);
+      setApiError(
+        err instanceof Error
+          ? { title: "Error", message: err.message }
+          : { title: "Error", message: "Failed to save race results." },
+      );
     }
   };
 
@@ -228,8 +237,19 @@ export default function AddRaceResultsModal({
       onClose={onClose}
       title={isUpdateMode ? "Update Race Results" : "Add Race Results"}
     >
-      <form className={styles.raceResultForm} onSubmit={validateAndSubmit}>
-        {error && <Toast title={error.title} message={error.message} type="error" />}
+      <form className={styles.raceResultForm} onSubmit={handleSubmit(handleFormSubmit)}>
+        {apiError && <Toast title={apiError.title} message={apiError.message} type="error" />}
+        {Object.keys(errors).length > 0 && (
+          <Toast
+            title="Validation Error"
+            message={`Please fix the following errors in the form before submitting:
+              ${Object.values(errors)
+                .map((err) => (err?.message ? `- ${err.message}` : ""))
+                .filter(Boolean)
+                .join("\n")}`}
+            type="error"
+          />
+        )}
         <FormGroup
           element="input"
           label="Race Name"
@@ -237,8 +257,8 @@ export default function AddRaceResultsModal({
           type="text"
           className={styles.raceResultForm__nameInput}
           placeholder="Enter race name"
-          value={raceName}
-          onChange={(e) => setRaceName(e.target.value)}
+          error={errors.raceName?.message}
+          {...register("raceName")}
         />
 
         <FormGroup
@@ -247,21 +267,21 @@ export default function AddRaceResultsModal({
           id="raceDateInput"
           type="date"
           className={styles.raceResultForm__nameInput}
-          value={raceDate}
-          onChange={(e) => setRaceDate(e.target.value)}
+          error={errors.raceDate?.message}
+          {...register("raceDate")}
         />
 
-        {racers.map((_, index) => (
+        {fields.map((field, index) => (
           <RaceResultFormGroup
-            key={index}
+            key={field.id}
             racers={racers}
             selectedRacerId={selectedRacerIds[index] || ""}
             selectedRacerIds={selectedRacerIds}
             onRacerSelect={onRacerSelect}
             index={index}
-            points={points[index] ?? 0}
-            onPointsChange={handlePointsChange}
-            onGhostRacerChange={handleGhostRacerChange}
+            register={register}
+            setValue={setValue}
+            errors={errors.rows?.[index]}
             isLoading={isLoading}
           />
         ))}

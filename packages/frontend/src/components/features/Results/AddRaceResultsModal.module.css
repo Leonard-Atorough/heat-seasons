@@ -39,6 +39,15 @@
   display: none;
 }
 
+.raceResultForm__select:disabled {
+  background-color: var(--asphalt-gray);
+  cursor: not-allowed;
+}
+
+.raceResultForm__racerSelect {
+  max-width: 600px;
+}
+
 .raceResultForm__input {
   max-width: 80px;
   width: 100%;
