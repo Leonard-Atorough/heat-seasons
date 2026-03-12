@@ -24,8 +24,7 @@ function App() {
 
         <main className="main">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard?" element={<Dashboard />} />
             <Route path="/login" element={<LoginRegister />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/racers" element={<Racers />} />

@@ -27,7 +27,7 @@ export default function Dashboard() {
           team: racer?.team ?? "N/A",
           points: result.points,
           nationality: racer?.nationality ?? "N/A",
-          teamColor: racer?.teamColor ?? "#888", // Default color if team color is not available
+          teamColor: racer?.teamColor ?? "#222222", // Default color if team color is not available
         };
       })
       .sort((a, b) => b.points - a.points)
@@ -38,7 +38,7 @@ export default function Dashboard() {
       name: standingsWithDetails?.[i]?.name ?? "N/A",
       team: standingsWithDetails?.[i]?.team ?? "N/A",
       nationality: standingsWithDetails?.[i]?.nationality ?? "N/A",
-      teamColor: standingsWithDetails?.[i]?.teamColor ?? "#888", // Default color if team color is not available
+      teamColor: standingsWithDetails?.[i]?.teamColor ?? "#222222", // Default color if team color is not available
       races: 0, // Not computed from results, can be calculated if needed
       points: standingsWithDetails?.[i]?.points ?? 0,
       medal: MEDALS[i],
