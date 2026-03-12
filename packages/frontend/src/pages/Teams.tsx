@@ -1,5 +1,5 @@
 import { Racer } from "shared";
-import {  useMemo } from "react";
+import { useMemo } from "react";
 import { Team } from "../models";
 import { TeamCard } from "../components/features";
 import styles from "./Teams.module.css";
@@ -25,24 +25,34 @@ export function Teams() {
       <h1 className={styles.teamsPage__title}>Heat Teams: Winter 2026</h1>
       <p>Explore the teams competing in the current winter season.</p>
       <div className={styles.teamsGrid}>
-        {teams.map((team: Team) =>
-          isLoading ? (
-            <LoadingSkeletonCard
-              key={team.name}
-              lines={1}
-              height="300px"
-              includeTitle={true}
-              testId={`teams-page-loading-skeleton-${team.name}`}
-            />
-          ) : (
-            <TeamCard
-              key={team.name}
-              teamName={team.name}
-              teamColor={team.color}
-              racers={team.racers.map((racer: Racer) => racer.name)}
-            />
-          ),
-        )}
+        {isLoading
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <LoadingSkeletonCard
+                key={i}
+                lines={1}
+                height="300px"
+                includeTitle={true}
+                testId={`teams-page-loading-skeleton-${i}`}
+              />
+            ))
+          : teams.map((team: Team) =>
+              isLoading ? (
+                <LoadingSkeletonCard
+                  key={team.name}
+                  lines={1}
+                  height="300px"
+                  includeTitle={true}
+                  testId={`teams-page-loading-skeleton-${team.name}`}
+                />
+              ) : (
+                <TeamCard
+                  key={team.name}
+                  teamName={team.name}
+                  teamColor={team.color}
+                  racers={team.racers.map((racer: Racer) => racer.name)}
+                />
+              ),
+            )}
       </div>
     </div>
   );
