@@ -3,6 +3,13 @@ import rateLimit from "express-rate-limit";
 import { Container } from "../../Infrastructure/dependency-injection/container.js";
 import { authMiddleware, requireRole } from "../../Infrastructure/http/middleware/index.js";
 import { AdminController } from "./admin.controller.js";
+import { validateRequestBody, validateParams } from "../../Infrastructure/validation/validateRequest.js";
+import {
+  userRoleActionSchema,
+  createAdminRacerSchema,
+  updateAdminRacerSchema,
+  adminRacerParamSchema,
+} from "../../Infrastructure/validation/admin.schemas.js";
 
 const adminLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -38,7 +45,11 @@ export function createAdminRouter(options: CreateAdminRouterOptions = {}): Route
  *
  * Body: { userId: string }
  */
-  adminRouter.post("/promote", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+  adminRouter.post(
+    "/promote",
+    adminLimiter,
+    validateRequestBody(userRoleActionSchema),
+    (req: Request, res: Response, next: NextFunction) => {
     req.log.info(
       { userId: (req.user as { id: string })?.id, promoteUserId: req.body.userId },
       "Promoting user to contributor",
@@ -52,7 +63,11 @@ export function createAdminRouter(options: CreateAdminRouterOptions = {}): Route
  *
  * Body: { userId: string }
  */
-  adminRouter.post("/demote", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+  adminRouter.post(
+    "/demote",
+    adminLimiter,
+    validateRequestBody(userRoleActionSchema),
+    (req: Request, res: Response, next: NextFunction) => {
     req.log.info(
       { userId: (req.user as { id: string })?.id, demoteUserId: req.body.userId },
       "Demoting user to regular",
@@ -66,7 +81,11 @@ export function createAdminRouter(options: CreateAdminRouterOptions = {}): Route
  *
  * Body: racer fields + optional userId
  */
-  adminRouter.post("/racers", adminLimiter, (req: Request, res: Response, next: NextFunction) => {
+  adminRouter.post(
+    "/racers",
+    adminLimiter,
+    validateRequestBody(createAdminRacerSchema),
+    (req: Request, res: Response, next: NextFunction) => {
     req.log.info(
       { adminId: (req.user as { id: string })?.id, assignedUserId: req.body.userId },
       "Admin creating racer",
@@ -90,6 +109,8 @@ export function createAdminRouter(options: CreateAdminRouterOptions = {}): Route
   adminRouter.put(
     "/racers/:racerId",
     adminLimiter,
+    validateParams(adminRacerParamSchema),
+    validateRequestBody(updateAdminRacerSchema),
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info(
         { adminId: (req.user as { id: string })?.id, racerId: req.params.racerId },
@@ -106,6 +127,7 @@ export function createAdminRouter(options: CreateAdminRouterOptions = {}): Route
   adminRouter.delete(
     "/racers/:racerId",
     adminLimiter,
+    validateParams(adminRacerParamSchema),
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info(
         { adminId: (req.user as { id: string })?.id, racerId: req.params.racerId },

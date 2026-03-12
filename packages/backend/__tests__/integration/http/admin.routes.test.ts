@@ -491,8 +491,8 @@ describe("Admin routes integration", () => {
         expect.objectContaining({
           status: 400,
           success: false,
-          statusText: "Bad Request",
-          message: "name, team, teamColor, nationality and age are required",
+          statusText: "VALIDATION_ERROR",
+          message: "Request validation failed",
           data: null,
         }),
       );

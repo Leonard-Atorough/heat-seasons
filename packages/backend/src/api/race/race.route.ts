@@ -2,6 +2,12 @@ import { authMiddleware, requireRole } from "../../Infrastructure/http/middlewar
 import { Request, Response, NextFunction, Router } from "express";
 import { Container } from "../../Infrastructure/dependency-injection/container.js";
 import { RaceController } from "./race.controller.js";
+import { validateRequestBody, validateParams } from "../../Infrastructure/validation/validateRequest.js";
+import {
+  createRaceSchema,
+  updateRaceSchema,
+  raceIdSchema,
+} from "../../Infrastructure/validation/race.schemas.js";
 
 export interface CreateRaceRouterOptions {
   raceController?: RaceController;
@@ -16,14 +22,19 @@ export function createRaceRouter(options: CreateRaceRouterOptions = {}): Router 
     raceController.getBySeasonId(req, res, next);
   });
 
-  router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
-    raceController.getById(req, res, next);
-  });
+  router.get(
+    "/:id",
+    validateParams(raceIdSchema),
+    (req: Request, res: Response, next: NextFunction) => {
+      raceController.getById(req, res, next);
+    },
+  );
 
   router.post(
     "/",
     authMiddleware,
     requireRole("contributor", "admin"),
+    validateRequestBody(createRaceSchema),
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info({ userId: (req.user as { id: string })?.id }, "Creating a new race");
       raceController.create(req, res, next);
@@ -34,6 +45,8 @@ export function createRaceRouter(options: CreateRaceRouterOptions = {}): Router 
     "/:id",
     authMiddleware,
     requireRole("contributor", "admin"),
+    validateParams(raceIdSchema),
+    validateRequestBody(updateRaceSchema),
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info(
         { userId: (req.user as { id: string })?.id, raceId: req.params.id },
@@ -47,6 +60,7 @@ export function createRaceRouter(options: CreateRaceRouterOptions = {}): Router 
     "/:id",
     authMiddleware,
     requireRole("contributor", "admin"),
+    validateParams(raceIdSchema),
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info(
         { userId: (req.user as { id: string })?.id, raceId: req.params.id },

@@ -2,6 +2,12 @@ import { Request, Response, NextFunction, Router } from "express";
 import { Container } from "../../Infrastructure/dependency-injection/container.js";
 import { authMiddleware, requireRole } from "../../Infrastructure/http/middleware/index.js";
 import { SeasonController } from "./season.controller.js";
+import { validateRequestBody, validateParams } from "../../Infrastructure/validation/validateRequest.js";
+import {
+  createSeasonSchema,
+  updateSeasonSchema,
+  seasonIdSchema,
+} from "../../Infrastructure/validation/season.schemas.js";
 
 export interface CreateSeasonRouterOptions {
   seasonController?: SeasonController;
@@ -17,15 +23,20 @@ export function createSeasonRouter(options: CreateSeasonRouterOptions = {}): Rou
     seasonController.getAll(req, res, next);
   });
 
-  router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
-    req.log.info({ seasonId: req.params.id }, "Fetching season by ID");
-    seasonController.getById(req, res, next);
-  });
+  router.get(
+    "/:id",
+    validateParams(seasonIdSchema),
+    (req: Request, res: Response, next: NextFunction) => {
+      req.log.info({ seasonId: req.params.id }, "Fetching season by ID");
+      seasonController.getById(req, res, next);
+    },
+  );
 
   router.post(
     "/",
     authMiddleware,
     requireRole("admin"),
+    validateRequestBody(createSeasonSchema),
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info({ userId: (req.user as { id: string })?.id }, "Creating a new season");
       seasonController.create(req, res, next);
@@ -35,6 +46,7 @@ export function createSeasonRouter(options: CreateSeasonRouterOptions = {}): Rou
   router.get(
     "/:id/participants",
     authMiddleware,
+    validateParams(seasonIdSchema),
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info({ seasonId: req.params.id }, "Fetching season participants");
       seasonController.getParticipants(req, res, next);
@@ -61,6 +73,8 @@ export function createSeasonRouter(options: CreateSeasonRouterOptions = {}): Rou
     "/:id",
     authMiddleware,
     requireRole("admin"),
+    validateParams(seasonIdSchema),
+    validateRequestBody(updateSeasonSchema),
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info(
         { userId: (req.user as { id: string })?.id, seasonId: req.params.id },
@@ -74,6 +88,7 @@ export function createSeasonRouter(options: CreateSeasonRouterOptions = {}): Rou
     "/:id",
     authMiddleware,
     requireRole("admin"),
+    validateParams(seasonIdSchema),
     (req: Request, res: Response, next: NextFunction) => {
       req.log.info(
         { userId: (req.user as { id: string })?.id, seasonId: req.params.id },

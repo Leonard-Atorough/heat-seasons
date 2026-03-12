@@ -75,7 +75,7 @@ export function SeasonCard({
             <Button
               type="button"
               variant="secondary"
-              onClick={() => handleJoin(season)}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleJoin(season); }}
               disabled={isJoining}
             >
               {isJoining ? "Joining..." : "Join Season"}
@@ -83,10 +83,10 @@ export function SeasonCard({
           )}
           {isAdmin && (
             <>
-              <Button type="button" variant="secondary" onClick={() => setEditingSeason(season)}>
+              <Button type="button" variant="secondary" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setEditingSeason(season); }}>
                 Edit
               </Button>
-              <Button type="button" variant="danger" onClick={() => handleDelete(season)}>
+              <Button type="button" variant="danger" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDelete(season); }}>
                 Delete
               </Button>
             </>

@@ -289,7 +289,7 @@ describe("Race routes integration", () => {
         .post("/api/races")
         .query({ seasonId: "missing-season" })
         .set("Cookie", [`token=${token}`])
-        .send({ name: "Missing Season Race", results: [] });
+        .send({ name: "Missing Season Race", date: "2026-01-01", results: [] });
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual(
