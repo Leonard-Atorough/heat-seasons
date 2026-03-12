@@ -13,8 +13,6 @@
 
 .modalContent {
   padding: var(--spacing-md);
-  width: 100%;
-  max-width: 720px;
   position: relative;
   display: flex;
   flex-direction: column;
