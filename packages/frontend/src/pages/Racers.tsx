@@ -2,7 +2,7 @@ import { RacerCard } from "../components/features/Racer";
 import styles from "./Racers.module.css";
 import { useMemo } from "react";
 import { useRacers } from "../hooks/data/useRacer";
-import { LoadingSkeletonCard, Toast } from "src/components/common";
+import { LoadingSkeletonCard, PageHeader, Toast } from "src/components/common";
 
 export default function Racers() {
   const { data: racers, isLoading } = useRacers();
@@ -19,7 +19,7 @@ export default function Racers() {
 
   return (
     <div className={styles.racersPage}>
-      <h1 className={styles.racersPage__title}>Racers</h1>
+      <PageHeader title="Racers" subtitle="Meet the athletes competing in the current season." />
       <div className={styles.racersGrid}>
         {isLoading ? (
           Array.from({ length: 6 }).map((_, i) => (

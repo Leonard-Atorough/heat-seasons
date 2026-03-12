@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Season } from "shared";
 import styles from "./Seasons.module.css";
 import { useSeasons } from "../hooks/data/useSeason";
-import { Button, LoadingSkeletonCard, Toast } from "../components/common";
+import { Button, LoadingSkeletonCard, PageHeader, Toast } from "../components/common";
 import { useAuth } from "../hooks/useAuth";
 import { AddSeasonModal, EditSeasonModal, SeasonCard } from "../components/features/Season";
 import { deleteSeason, getSeasonParticipants, joinSeason } from "../services/api/season";
@@ -103,7 +103,7 @@ export default function Seasons() {
   return (
     <div className={styles.seasonsPage}>
       <div className={styles.seasonsPage__header}>
-        <h1 className={styles.seasonsPage__title}>Seasons</h1>
+        <PageHeader title="Seasons" subtitle="Explore and manage racing seasons." />
         <div className={styles.seasonsPage__actions}>
           {isAdmin && (
             <Button

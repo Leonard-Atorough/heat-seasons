@@ -3,6 +3,7 @@ import { useSeasons, useRaceResult } from "../hooks/data";
 import { AddRaceResultsModal, ResultsHeader, ResultsTable } from "../components/features/Results";
 import { useAuth } from "../hooks/useAuth";
 import { RaceResult } from "shared";
+import { PageHeader } from "src/components/common/PageHeader";
 
 export default function Results() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,6 +67,7 @@ export default function Results() {
 
   return (
     <div className="container">
+      <PageHeader variant="minimal" title="Results" />
       <ResultsHeader
         seasons={seasons ?? []}
         races={races}

@@ -4,7 +4,7 @@ import { Team } from "../models";
 import { TeamCard } from "../components/features";
 import styles from "./Teams.module.css";
 import { useRacers } from "../hooks/data/useRacer";
-import { LoadingSkeletonCard } from "../components/common";
+import { LoadingSkeletonCard, PageHeader } from "../components/common";
 
 export function Teams() {
   const { data: racers, isLoading } = useRacers();
@@ -22,8 +22,7 @@ export function Teams() {
 
   return (
     <div className="container">
-      <h1 className={styles.teamsPage__title}>Heat Teams: Winter 2026</h1>
-      <p>Explore the teams competing in the current winter season.</p>
+      <PageHeader title="Teams" subtitle="Explore the teams competing in the current season." />
       <div className={styles.teamsGrid}>
         {isLoading
           ? Array.from({ length: 4 }).map((_, i) => (

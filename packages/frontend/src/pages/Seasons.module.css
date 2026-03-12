@@ -7,6 +7,7 @@
 
 .seasonsPage__header {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-md);
@@ -27,6 +28,9 @@
 
 .seasonsPage__actions {
   display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
 }

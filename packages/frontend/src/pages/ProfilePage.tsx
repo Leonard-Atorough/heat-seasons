@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { RacerWithStats } from "shared";
 import { useAuth } from "../hooks/useAuth";
 import { useProtectedPage } from "../hooks/useProtectedPage";
-import { LoadingSkeletonCard, Button, Card } from "../components/common";
+import { LoadingSkeletonCard, Button, Card, PageHeader } from "../components/common";
 import { CreateRacerModal, EditRacerModal, LinkedRacerCard } from "../components/features/Profile";
 import { getMyRacer } from "../services/api/racer";
 import styles from "./ProfilePage.module.css";
@@ -70,8 +70,10 @@ export default function ProfilePage() {
 
   return (
     <div className={styles.profile}>
-      <h1 className={styles.profile__heading}>Welcome, {user?.name}!</h1>
-
+      <PageHeader
+        title={`Welcome, ${user?.name}!`}
+        subtitle="Manage your account and racer profile."
+      />
       {/* ── Account card ──────────────────────────────────────────── */}
       <Card className={styles.profileCard}>
         <div className={styles.profileCard__avatar}>
@@ -118,7 +120,13 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {isRacerLoading && <LoadingSkeletonCard includeTitle={false} maxWidth="600px" testId="profile-page-racer-loading-skeleton" />}
+        {isRacerLoading && (
+          <LoadingSkeletonCard
+            includeTitle={false}
+            maxWidth="600px"
+            testId="profile-page-racer-loading-skeleton"
+          />
+        )}
 
         {!isRacerLoading && racerError && (
           <p className={styles.racerSection__error}>{racerError}</p>
@@ -141,11 +149,7 @@ export default function ProfilePage() {
       {/* ── Account actions ───────────────────────────────────────── */}
       <div className={styles.profileActions}>
         {user?.role === "admin" && (
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => navigate("/admin")}
-          >
+          <Button type="button" variant="secondary" onClick={() => navigate("/admin")}>
             Admin Panel
           </Button>
         )}

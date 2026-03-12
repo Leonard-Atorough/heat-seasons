@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useProtectedPage } from "../hooks/useProtectedPage";
-import { Tabs, Button, LoadingSkeletonCard } from "../components/common";
+import { Tabs, Button, LoadingSkeletonCard, PageHeader } from "../components/common";
 import { UserManagementTab, RacerManagementTab, AnalyticsTab } from "../components/features/Admin";
 import styles from "./AdminPage.module.css";
 
@@ -36,12 +36,7 @@ export default function AdminPage() {
   return (
     <div className={styles.admin}>
       <div className={styles.admin__headerRow}>
-        <div>
-          <h1 className={styles.admin__heading}>Admin Panel</h1>
-          <p className={styles.admin__subheading}>
-            Manage players, racers, and view platform analytics.
-          </p>
-        </div>
+        <PageHeader title="Admin Dashboard" variant="minimal" />
         <Button type="button" variant="ghost" onClick={() => navigate("/profile")}>
           ← Back to Profile
         </Button>

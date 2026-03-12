@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-md);
+  width: 100%;
 }
 
 .pageHeader--hero {
@@ -19,6 +20,7 @@
   text-align: center;
   padding-bottom: var(--spacing-md);
   border-bottom: var(--border-width-medium) solid var(--border-color);
+  Margin-bottom: var(--spacing-lg);
 }
 
 .pageHeader--minimal {
